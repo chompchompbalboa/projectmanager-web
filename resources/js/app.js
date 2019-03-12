@@ -1,33 +1,61 @@
+//-----------------------------------------------------------------------------
+// Imports
+//-----------------------------------------------------------------------------
+import React, { Component } from 'react'
+import styled from 'styled-components'
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+import { colors, enums } from './config'
 
-require('./bootstrap');
+import AppBusiness from './content/AppBusiness'
+import AppContent from './content/AppContent'
+import AppMe from './content/AppMe'
+import AppProjects from './content/AppProjects'
+import AppSettings from './content/AppSettings'
+import AppSidebar from './content/AppSidebar'
 
-window.Vue = require('vue');
+//-----------------------------------------------------------------------------
+// Component
+//-----------------------------------------------------------------------------
+class App extends Component {
+	state = {
+    activeContent: 'PROJECTS'
+  }
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
+  changeActiveContent = (nextActiveContent) => {
+    this.setState({
+      activeContent: nextActiveContent
+    })
+  }
 
-// const files = require.context('./', true, /\.vue$/i);
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
+	render() {
+    const { activeContent } = this.state
+		return (
+        <Container>
+          <AppSidebar
+            activeContent={activeContent}
+            activeContentChoices={enums.CONTENT}
+            changeActiveContent={this.changeActiveContent}/>
+          <AppContent>
+            <AppMe 
+              isActive={activeContent === 'ME'}/>
+            <AppProjects 
+              isActive={activeContent === 'PROJECTS'}/>
+            <AppBusiness 
+              isActive={activeContent === 'BUSINESS'}/>
+            <AppSettings 
+              isActive={activeContent === 'SETTINGS'}/>
+          </AppContent>
+        </Container>
+    )
+	}
+}
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
+const Container = styled.div`
+	z-index: 1000;
+	color: ${colors.TEXT_DARK};
+`
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-const app = new Vue({
-    el: '#app'
-});
+export default App

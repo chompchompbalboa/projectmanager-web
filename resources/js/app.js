@@ -2,60 +2,39 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import styled from 'styled-components'
+import ReactDOM from 'react-dom'
+import { Provider as ReduxProvider } from 'react-redux'
+import { applyMiddleware, createStore } from 'redux'
+import thunkMiddleware from 'redux-thunk'
+import reducers from './app/reducers/reducers'
 
-import { colors, enums } from './config'
-
-import AppBusiness from './content/AppBusiness'
-import AppContent from './content/AppContent'
-import AppMe from './content/AppMe'
-import AppProjects from './content/AppProjects'
-import AppSettings from './content/AppSettings'
-import AppSidebar from './content/AppSidebar'
-
+import App from './app/App'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class App extends Component {
-	state = {
-    activeContent: 'PROJECTS'
-  }
+export default class Root extends Component {
 
-  changeActiveContent = (nextActiveContent) => {
-    this.setState({
-      activeContent: nextActiveContent
-    })
-  }
-
-	render() {
-    const { activeContent } = this.state
-		return (
-        <Container>
-          <AppSidebar
-            activeContent={activeContent}
-            activeContentChoices={enums.CONTENT}
-            changeActiveContent={this.changeActiveContent}/>
-          <AppContent>
-            <AppMe 
-              isActive={activeContent === 'ME'}/>
-            <AppProjects 
-              isActive={activeContent === 'PROJECTS'}/>
-            <AppBusiness 
-              isActive={activeContent === 'BUSINESS'}/>
-            <AppSettings 
-              isActive={activeContent === 'SETTINGS'}/>
-          </AppContent>
-        </Container>
+  store = createStore(
+    reducers,
+    applyMiddleware(
+      thunkMiddleware
     )
-	}
+  )
+
+  render() {
+
+    return (
+      <ReduxProvider store={this.store}>
+        <App />
+      </ReduxProvider>
+    )
+  }
 }
-
 //-----------------------------------------------------------------------------
-// Styled Components
+// Mount to DOM
 //-----------------------------------------------------------------------------
-const Container = styled.div`
-	z-index: 1000;
-	color: ${colors.TEXT_DARK};
-`
-
-export default App
+if (document.getElementById('react-container')) {
+    ReactDOM.render(
+      <Root />,
+    document.getElementById('react-container'));
+}

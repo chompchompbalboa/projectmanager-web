@@ -10,6 +10,6 @@
   </head>
   <body>
     <section id="react-container"></section>
-    <script src="{{ mix('js/react.js') }}"></script>
+    <script src="{{ mix('js/site.js') }}"></script>
   </body>
 </html>

@@ -6,7 +6,7 @@ import { array } from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 
-import { colors } from '../../config'
+import { colors } from '../../../config'
 
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'

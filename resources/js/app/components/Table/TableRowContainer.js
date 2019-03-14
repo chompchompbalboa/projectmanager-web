@@ -5,7 +5,7 @@ import React from 'react'
 import { bool, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout } from '../../config'
+import { colors, layout } from '../../../config'
 
 //-----------------------------------------------------------------------------
 // Component

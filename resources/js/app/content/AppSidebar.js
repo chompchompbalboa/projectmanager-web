@@ -5,7 +5,7 @@ import React from 'react'
 import { array, func, oneOf } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, enums, layout } from '../config'
+import { colors, enums, layout } from '../../config'
 
 import Icon from '../components/Icon/Icon'
 

@@ -5,7 +5,7 @@ import React from 'react'
 import { array, func, object } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout, timing } from '../config'
+import { colors, layout, timing } from '../../config'
 
 import AppProjectsChooseProject from './AppProjectsChooseProject'
 import HiddenScrollbarContainer from '../components/HiddenScrollbarContainer'

@@ -4,7 +4,7 @@
 import React from 'react'
 import { arrayOf, func, number, oneOf, shape, string } from 'prop-types'
 
-import { colors } from '../../config'
+import { colors } from '../../../config'
 
 import TableCell from './TableCell'
 import TableRowContainer from './TableRowContainer'

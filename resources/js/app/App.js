@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import { colors, enums } from './config'
+import { colors, enums } from '../config'
 
 import AppBusiness from './content/AppBusiness'
 import AppContent from './content/AppContent'

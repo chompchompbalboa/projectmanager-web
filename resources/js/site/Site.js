@@ -4,21 +4,30 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { colors } from './config'
+import { colors } from '../config'
 
+import Button from '../_lib/components/Button'
 import Logo from '../_lib/components/Logo'
+import Spacer from '../_lib/components/Spacer'
+import Tagline from '../_lib/components/Tagline'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const BoilerplateStateless = () => {
+const Site = () => {
   return (
     <Container>
       <LeftColumn>
         <Logo/>
       </LeftColumn>
       <RightColumn>
-        Right
+        <Spacer
+          height="12vh"/>
+        <Tagline/>
+        <Spacer/>
+        <Button 
+          onClick={() => window.location = './app'}
+          text="Give it a try&nbsp;&nbsp;&rarr;"/>
       </RightColumn>
     </Container>
   )
@@ -46,6 +55,8 @@ const LeftColumn = styled(Column)`
 `
 
 const RightColumn = styled(Column)`
+  display: flex;
+  flex-direction: column;
 `
 
-export default BoilerplateStateless
+export default Site

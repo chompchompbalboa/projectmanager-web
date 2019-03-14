@@ -2,27 +2,17 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { bool, string } from 'prop-types'
+import { string } from 'prop-types'
 import styled from 'styled-components'
-
-import Tagline from './Tagline'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const Logo = ({ fontSize, showTagline }) => {
+const Tagline = ({ fontSize }) => {
   return (
-    <Container>
-      <Name
-        fontSize={fontSize}>
-        <Build>build</Build><That>that</That>
-      </Name>
-      {showTagline && 
-        <Tagline
-          fontSize={fontSize}>
-          Project management for people who build things
-        </Tagline>
-      }
+    <Container
+      fontSize={fontSize}>
+      Project management for people who build things
     </Container>
   )
 }
@@ -30,35 +20,20 @@ const Logo = ({ fontSize, showTagline }) => {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-Logo.propTypes = {
-  fontSize: string,
-  showTagline: bool
+Tagline.propTypes = {
+  fontSize: string
 }
 
-Logo.defaultProps = {
-  fontSize: '3em',
-  showTagline: false
+Tagline.defaultProps = {
+  fontSize: '3em'
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.h1`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const Container = styled.div`
+  font-family: Open Sans, sans-serif;
+  font-size: calc(${ props => props.fontSize } / 2.25);
 `
 
-const Name = styled.div`
-  display: flex;
-  font-size: ${ props => props.fontSize };
-`
-
-const Build = styled.div`
-`
-
-const That = styled.div`
-  font-weight: normal;
-`
-
-export default Logo
+export default Tagline

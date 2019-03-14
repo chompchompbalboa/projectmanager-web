@@ -2,27 +2,19 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { bool, string } from 'prop-types'
+import { func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import Tagline from './Tagline'
+import { colors } from '../../config'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const Logo = ({ fontSize, showTagline }) => {
+const Button = ({ text, onClick }) => {
   return (
-    <Container>
-      <Name
-        fontSize={fontSize}>
-        <Build>build</Build><That>that</That>
-      </Name>
-      {showTagline && 
-        <Tagline
-          fontSize={fontSize}>
-          Project management for people who build things
-        </Tagline>
-      }
+    <Container
+      onClick={() => onClick()}>
+      {text}
     </Container>
   )
 }
@@ -30,35 +22,26 @@ const Logo = ({ fontSize, showTagline }) => {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-Logo.propTypes = {
-  fontSize: string,
-  showTagline: bool
+Button.propTypes = {
+  onClick: func,
+  text: string
 }
 
-Logo.defaultProps = {
-  fontSize: '3em',
-  showTagline: false
+Button.defaultProps = {
+  onClick: () => null,
+  text: "Button"
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.h1`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+const Container = styled.div`
+  cursor: pointer;
+  padding: 1.5vh 3vh;
+  border-radius: 5px;
+  background-color: ${ colors.PRIMARY };
+  color: ${ colors.PRIMARY_BACKGROUND_TEXT_COLOR };
+  font-family: Open Sans, sans-serif;
 `
 
-const Name = styled.div`
-  display: flex;
-  font-size: ${ props => props.fontSize };
-`
-
-const Build = styled.div`
-`
-
-const That = styled.div`
-  font-weight: normal;
-`
-
-export default Logo
+export default Button

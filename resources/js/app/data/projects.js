@@ -20,7 +20,7 @@ const endDate = moment(startDate).add(100, 'd')
 
 const tables = [
 	{
-		name: 'Elements',
+		name: 'Parts',
 		structure: [
 			//prettier-ignore
 			{ id: 1, header: 'Job Code', width: 0.15, defaultSortOrder: 'ASC', value: (pN, pI, tI, rI, cI) => { return '19-' + ('000' + (pI + 1)).slice(- 3) + '-' + ('00' + (rI + 1)).slice(- 2)} },

@@ -1,5 +1,6 @@
 export default {
-	PRIMARY: 'rgb(41, 46, 52)',
+  PRIMARY: 'rgb(41, 46, 52)',
+  PRIMARY_BACKGROUND_TEXT_COLOR: 'rgb(240, 240, 240)',
 	ACCENT: 'rgb(250, 250, 250)',
 
 	BACKGROUND: 'rgb(225, 225, 225)',

@@ -5,13 +5,14 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import styled from 'styled-components'
 
+import Site from './site/Site'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const Root = () => {
   return (
     <Container>
-      Site
+      <Site />
     </Container>
   )
 }

@@ -1,5 +1,5 @@
 {
-    "name": "thisismodularity",
+    "name": "projectmanager-web",
     "private": true,
     "scripts": {
         "dev": "npm run development",

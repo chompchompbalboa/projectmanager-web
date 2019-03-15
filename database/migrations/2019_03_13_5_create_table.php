@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCell extends Migration
+class CreateTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,13 @@ class CreateCell extends Migration
      */
     public function up()
     {
-        Schema::create('cells', function (Blueprint $table) {
+        Schema::create('tables', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('structure_id');
-            $table->json('payload');
+            $table->unsignedInteger('project_id');
+            $table->string('name');
             $table->timestamps();
 
-            $table->foreign('structure_id')->references('id')->on('structures');
+            $table->foreign('project_id')->references('id')->on('projects');
         });
     }
 
@@ -30,6 +30,6 @@ class CreateCell extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cells');
+        Schema::dropIfExists('tables');
     }
 }

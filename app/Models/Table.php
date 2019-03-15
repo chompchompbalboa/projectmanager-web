@@ -7,6 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Table extends Model
 {
   /**
+   * Define which attributes will be visible
+   */
+  protected $visible = ['id', 'name', 'rows', 'structure'];
+
+  /**
    * Build custom attributes
    */
   protected $appends = ['rows', 'structure'];
@@ -26,6 +31,7 @@ class Table extends Model
   }
   public function getRowsAttribute() {
     return $this->rows()->get();
+  }
   
   /**
    * Get all the structures that belong to this table

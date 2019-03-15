@@ -13,10 +13,13 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Models\Project::class, function (Faker $faker) {
+$factory->define(App\Models\Cell::class, function (Faker $faker) {
     return [
-        'organization_id' => 1,
-        'name' => $faker->company,
-        'unique_id' => $faker->numberBetween(100000,999999)
+      'column_id' => 1,
+      'row_id' => 1,
+      'string' => '',
+      'number' => 1,
+      'boolean' => true,
+      'datetime' => now(),
     ];
 });

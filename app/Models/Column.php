@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Cell extends Model
+class Column extends Model
 {
   /**
    * Define which attributes will be visible

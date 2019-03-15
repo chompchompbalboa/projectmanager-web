@@ -15,10 +15,10 @@ class CreateRow extends Migration
     {
         Schema::create('rows', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('project_id');
+            $table->unsignedInteger('table_id');
             $table->timestamps();
 
-            $table->foreign('project_id')->references('id')->on('projects');
+            $table->foreign('table_id')->references('id')->on('tables');
         });
     }
 

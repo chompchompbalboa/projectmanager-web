@@ -31,4 +31,5 @@ class Row extends Model
   }
   public function getCellsAttribute() {
     return $this->cells()->get();
+  }
 }

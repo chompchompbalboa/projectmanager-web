@@ -11,6 +11,41 @@ class OrganizationTableSeeder extends Seeder
      */
     public function run()
     {
-      factory(App\Models\Organization::class, 5)->create();
+      $organizations = factory(App\Models\Organization::class, 1)->create();
+      $organizations->each(function($organization) {
+
+        $projects = factory(App\Models\Project::class, 5)->create();
+        $projects->each(function($project) use ($organization) {
+          $project->organization_id = $organization->id;
+          $project->save();
+          print('Project: '.$project->id.', ');
+
+          $tables = factory(App\Models\Table::class, 5)->create();
+          $tables->each(function($table) use ($project, $tables) {
+            $table->project_id = $project->id;
+            $table->save();
+            
+            $columns = factory(App\Models\Column::class, 5)->create();
+            $columns->each(function($column, $key) use ($table, $tables) {
+              $column->table_id = $table->id;
+              $column->position = $key;
+              $column->save();
+            });
+
+            $rows = factory(App\Models\Row::class, 50)->create();
+            $rows->each(function($row) use($columns, $table, $tables) {
+              $row->table_id = $table->id;
+              $columns->each(function($column) use($row) {
+                $cell = factory(App\Models\Cell::class)->create();
+                $cell->row_id = $row->id;
+                $cell->column_id = $column->id;
+                $cell->save();
+              });
+            });
+          });
+        });
+
+        $organization->save();
+      });
     }
 }

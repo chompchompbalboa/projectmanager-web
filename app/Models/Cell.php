@@ -31,4 +31,5 @@ class Cell extends Model
   }
   public function getStructureAttribute() {
     return $this->cells()->first();
+  }
 }

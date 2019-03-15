@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ProjectTableSeeder extends Seeder
+class RowTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class ProjectTableSeeder extends Seeder
      */
     public function run()
     {
-      $projects = factory(App\Models\Project::class, 30)->create();
+      factory(App\Models\Row::class, 30)->create();
     }
 }

@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import { layout } from '../../_config'
 
+import AppProjectsActions from './AppProjectsActions'
 import AppProjectsChooseProject from './AppProjectsChooseProject'
 //-----------------------------------------------------------------------------
 // Component
@@ -18,6 +19,7 @@ const AppProjectsHeader = ({ activeProject, changeActiveProject, projects}) => {
         activeProject={activeProject}
         changeActiveProject={changeActiveProject}
         projects={projects}/>
+      <AppProjectsActions/>
     </Container>
   )
 }
@@ -42,6 +44,7 @@ const Container = styled.div`
   width: calc(100vw - ${ layout.SIDEBAR_WIDTH });
   padding: ${ layout.PADDING };
   display: flex;
+  justify-content: space-between;
   align-items: center;
 `
 

@@ -5,7 +5,9 @@ import React, { Component } from 'react'
 import { array, func, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout } from '../../config'
+import { colors, layout } from '../../_config'
+
+import Icon from '../components/Icon'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -139,7 +141,10 @@ export default class AppProjectsChooseProject extends Component {
 			<Container>
 				<CurrentProjectContainer>
 					<CurrentProjectName onClick={() => this.toggleDropdownVisible()}>
-						{activeProject && activeProject.name}
+            {activeProject && activeProject.name}&nbsp;&nbsp;
+            <Icon 
+              icon="DROPDOWN"
+              size="20px"/>
 					</CurrentProjectName>
 				</CurrentProjectContainer>
 				<DropdownContainer
@@ -184,7 +189,7 @@ AppProjectsChooseProject.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.div`
 	z-index: 10000;
-	padding: ${layout.PADDING} 0 ${layout.PADDING} calc(${layout.PADDING} / 1.5);
+	padding: ${layout.PADDING} 0 ${layout.PADDING} calc(${layout.PADDING} / 2);
 `
 
 const CurrentProjectContainer = styled.div`
@@ -199,7 +204,7 @@ const CurrentProjectName = styled.div`
 	font-weight: bold;
 	font-size: 22px;
 	display: flex;
-	align-items: flex-end;
+  align-items: center;
 	&:hover {
 		color: ${colors.PRIMARY};
 	}
@@ -210,8 +215,8 @@ const DropdownContainer = styled.div`
 	display: ${props => (props.isDropdownVisible ? 'block' : 'none')};
 	position: absolute;
 	margin-left: calc(-${layout.PADDING} / 1.5);
-	max-height: 50%;
-	min-width: 100%;
+	max-height: 50vh;
+	min-width: 20vw;;
 	background-color: white;
 	border-top: 1.25px solid ${colors.BACKGROUND};
 	border-left: 1.25px solid ${colors.BACKGROUND};

@@ -18,7 +18,7 @@ class OrganizationTableSeeder extends Seeder
         $projects->each(function($project) use ($organization) {
           $project->organization_id = $organization->id;
           $project->save();
-          print('Project: '.$project->id.', ');
+          print('Project: '.$project->id.PHP_EOL);
 
           $tables = factory(App\Models\Table::class, 5)->create();
           $tables->each(function($table) use ($project, $tables) {
@@ -35,8 +35,11 @@ class OrganizationTableSeeder extends Seeder
             $rows = factory(App\Models\Row::class, 50)->create();
             $rows->each(function($row) use($columns, $table, $tables) {
               $row->table_id = $table->id;
-              $columns->each(function($column) use($row) {
+              $row->save();
+              
+              $columns->each(function($column) use($row, $table) {
                 $cell = factory(App\Models\Cell::class)->create();
+                $cell->table_id = $table->id;
                 $cell->row_id = $row->id;
                 $cell->column_id = $column->id;
                 $cell->save();

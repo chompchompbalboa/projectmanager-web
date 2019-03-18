@@ -9,12 +9,12 @@ class Row extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'table', 'cells'];
+  protected $visible = ['id', 'table_id', 'cells'];
   
   /**
    * Build custom attributes
    */
-  protected $appends = ['cells'];
+  protected $with = ['cells'];
   
   /**
    * Get the table this row belongs to
@@ -28,8 +28,5 @@ class Row extends Model
    */
   public function cells() {
     return $this->hasMany('App\Models\Cell');
-  }
-  public function getCellsAttribute() {
-    return $this->cells()->get();
   }
 }

@@ -15,11 +15,12 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Cell::class, function (Faker $faker) {
     return [
+      'table_id' => 1,
       'column_id' => 1,
       'row_id' => 1,
-      'string' => '',
-      'number' => 1,
-      'boolean' => true,
-      'datetime' => now(),
+      'string' => $faker->text($faker->numberBetween(10, 100)),
+      'number' => $faker->numberBetween(1, 100),
+      'boolean' => $faker->randomElement([0, 1]),
+      'datetime' => $faker->dateTimeThisYear($max = 'now'),
     ];
 });

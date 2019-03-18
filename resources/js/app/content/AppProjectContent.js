@@ -5,9 +5,9 @@ import React, { Component } from 'react'
 import { array, shape } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout } from '../../config'
+import { colors, layout } from '../../_config'
 
-import Table from '../components/Table/Table'
+import Table from '../components/Table'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -20,9 +20,7 @@ export default class AppProjectContent extends Component {
 		return (
 			<Container>
         {activeTable &&
-          <Table 
-            rows={activeTable.rows} 
-            structure={activeTable.structure} />
+          <Table id={activeTable.id} />
         }
 			</Container>
 		)
@@ -44,13 +42,12 @@ AppProjectContent.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.div`
 	position: fixed;
-	top: 0;
-	left: calc(${layout.SIDEBAR_WIDTH} + ${layout.PROJECT_SIDEBAR_WIDTH});
-	width: calc(
-		100vw - ${layout.SIDEBAR_WIDTH} - ${layout.PROJECT_SIDEBAR_WIDTH}
-	);
-	height: 100vh;
+	top: ${layout.HEADER_HEIGHT};
+	left: ${layout.SIDEBAR_WIDTH};
+	width: calc(100vw - ${layout.SIDEBAR_WIDTH});
+	height: calc(100vh - ${layout.HEADER_HEIGHT});
 	padding: ${layout.PADDING};
-	background-color: ${colors.BACKGROUND};
+  background-color: ${colors.BACKGROUND};
+  box-shadow: 0px 0px 2px ${colors.BOX_SHADOW};
 	overflow-y: scroll;
 `

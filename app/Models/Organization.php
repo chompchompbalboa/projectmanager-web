@@ -9,26 +9,14 @@ class Organization extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'users', 'name', 'projects'];
-  
-  /**
-   * Build custom attributes
-   */
-  protected $appends = ['users'];
+  protected $visible = ['id', 'name'];
   
   
   public function users() {
     return $this->hasMany('App\Models\User');
   }
-  public function getUsersAttribute() {
-    return $this->users()->get();
-  }
   
   public function projects() {
     return $this->hasMany('App\Models\Project');
   }
-  public function getProjectAttribute() {
-    return $this->projects()->get();
-  }
-  
 }

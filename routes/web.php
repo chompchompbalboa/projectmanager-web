@@ -1,26 +1,42 @@
 <?php
+//-----------------------------------------------------------------------------
+// Use
+//-----------------------------------------------------------------------------
+use App\Models\Project;
+use App\Models\Table;
+use App\Models\Row;
+use App\Models\Column;
+use App\Models\Cell;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
+//-----------------------------------------------------------------------------
 // App
-Route::get('/app', function () {
-  return view('app');
+//-----------------------------------------------------------------------------
+Route::prefix('app')->group(function () {
+
+  Route::get('/', function () {
+    return view('app')->with([
+      'organizationId' => 1,
+      'userId' => 1
+    ]);
+  });
+
+  Route::get('initial-data', 'AppInitialData');
+
+  Route::get('organizations/{organization}/projects', 'OrganizationController@projects');
+
+  Route::resources([
+    'tables' => 'TableController'
+  ]);
 });
 
+//-----------------------------------------------------------------------------
 // Site
+//-----------------------------------------------------------------------------
 Route::get('/', function () {
   return view('site');
 });
 
+//-----------------------------------------------------------------------------
 // Authentication
+//-----------------------------------------------------------------------------
 Auth::routes();

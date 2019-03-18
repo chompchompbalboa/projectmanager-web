@@ -4,7 +4,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 
-import { colors, enums } from '../config'
+import { colors, enums } from '../_config'
 
 import AppBusiness from './content/AppBusiness'
 import AppContent from './content/AppContent'
@@ -18,7 +18,8 @@ import AppSidebar from './content/AppSidebar'
 //-----------------------------------------------------------------------------
 class App extends Component {
 	state = {
-    activeContent: 'PROJECTS'
+    activeContent: 'PROJECTS',
+    userId: userId
   }
 
   changeActiveContent = (nextActiveContent) => {
@@ -28,24 +29,26 @@ class App extends Component {
   }
 
 	render() {
-    const { activeContent } = this.state
+    const { activeContent, userId } = this.state
+    
 		return (
-        <Container>
-          <AppSidebar
-            activeContent={activeContent}
-            activeContentChoices={enums.CONTENT}
-            changeActiveContent={this.changeActiveContent}/>
-          <AppContent>
-            <AppMe 
-              isActive={activeContent === 'ME'}/>
-            <AppProjects 
-              isActive={activeContent === 'PROJECTS'}/>
-            <AppBusiness 
-              isActive={activeContent === 'BUSINESS'}/>
-            <AppSettings 
-              isActive={activeContent === 'SETTINGS'}/>
-          </AppContent>
-        </Container>
+      <Container>
+        <AppSidebar
+          activeContent={activeContent}
+          activeContentChoices={enums.CONTENT}
+          changeActiveContent={this.changeActiveContent}/>
+        <AppContent>
+          <AppMe 
+            isActive={activeContent === 'ME'}/>
+          <AppProjects
+            isActive={activeContent === 'PROJECTS'}
+            userId={userId}/>
+          <AppBusiness 
+            isActive={activeContent === 'BUSINESS'}/>
+          <AppSettings 
+            isActive={activeContent === 'SETTINGS'}/>
+        </AppContent>
+      </Container>
     )
 	}
 }

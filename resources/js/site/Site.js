@@ -4,12 +4,12 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { colors } from '../config'
+import { colors } from '../_config'
 
-import Button from '../_lib/components/Button'
-import Logo from '../_lib/components/Logo'
-import Spacer from '../_lib/components/Spacer'
-import Tagline from '../_lib/components/Tagline'
+import Button from '../_components/Button'
+import Logo from '../_components/Logo'
+import Spacer from '../_components/Spacer'
+import Tagline from '../_components/Tagline'
 
 //-----------------------------------------------------------------------------
 // Component

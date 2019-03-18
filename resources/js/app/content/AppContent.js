@@ -4,7 +4,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { layout } from '../../config'
+import { layout } from '../../_config'
 
 //-----------------------------------------------------------------------------
 // Component

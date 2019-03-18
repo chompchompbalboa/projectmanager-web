@@ -9,12 +9,12 @@ class Table extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name', 'rows', 'structure'];
+  protected $visible = ['id', 'name'];
 
   /**
    * Build custom attributes
    */
-  protected $appends = ['rows', 'structure'];
+  protected $appends = ['rows', 'columns'];
   
   /**
    * Get the project this table belongs to
@@ -34,12 +34,12 @@ class Table extends Model
   }
   
   /**
-   * Get all the structures that belong to this table
+   * Get all the columns that belong to this table
    */
-  public function structures() {
-    return $this->hasMany('App\Models\Structure');
+  public function columns() {
+    return $this->hasMany('App\Models\Column');
   }
-  public function getStructuresAttribute() {
-    return $this->structures()->get();
+  public function getColumnsAttribute() {
+    return $this->columns()->get();
   }
 }

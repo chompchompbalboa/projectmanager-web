@@ -15,6 +15,7 @@ class CreateCell extends Migration
     {
         Schema::create('cells', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('table_id');
             $table->unsignedInteger('column_id');
             $table->unsignedInteger('row_id');
             $table->string('string');

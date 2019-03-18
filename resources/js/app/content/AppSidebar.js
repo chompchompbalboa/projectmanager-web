@@ -5,9 +5,9 @@ import React from 'react'
 import { array, func, oneOf } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, enums, layout } from '../../config'
+import { colors, enums, layout } from '../../_config'
 
-import Icon from '../components/Icon/Icon'
+import Icon from '../components/Icon'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -30,7 +30,9 @@ const AppSidebar = ({
 						isActive={activeContentChoice === activeContent}
 						onClick={() => changeActiveContent(activeContentChoice)}>
 						<NameAndIconContainer>
-							<Icon icon={activeContentChoice} />
+              <Icon 
+                icon={activeContentChoice} 
+                size={"calc(" + layout.SIDEBAR_WIDTH + " / 2.25)"}/>
 							<ActiveContentChoiceName>
 								{activeContentChoiceName}
 							</ActiveContentChoiceName>
@@ -60,7 +62,8 @@ const Container = styled.div`
 	left: 0;
 	width: ${layout.SIDEBAR_WIDTH};
 	height: 100vh;
-	background-color: ${colors.PRIMARY};
+  background-color: ${colors.BACKGROUND_SECONDARY};
+  box-shadow: 0px 0px 2px ${ colors.BOX_SHADOW }
 `
 
 const ActiveContentChoice = styled.div`
@@ -70,8 +73,9 @@ const ActiveContentChoice = styled.div`
 	height: ${layout.SIDEBAR_WIDTH};
 	background-color: ${props =>
 		props.isActive ? colors.BACKGROUND_SECONDARY : 'transparent'};
-	color: ${props => (props.isActive ? colors.TEXT_DARK : colors.TEXT_INACTIVE)};
-	display: flex;
+	color: ${props => (props.isActive ? colors.PRIMARY : colors.TEXT_INACTIVE)};
+  display: flex;
+  border-right: 3px solid ${props => props.isActive ? colors.PRIMARY : 'transparent'};
 `
 
 const NameAndIconContainer = styled.div`

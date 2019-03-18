@@ -17,14 +17,22 @@
     "eslint:recommended",
     "plugin:react/recommended"
   ],
+  "globals": {
+    "organizationId": true,
+    "userId": true
+  },
   "plugins": [
     "react",
     "jest"
   ],
+  "rules": {
+    "react/prop-types": ["error", { "ignore": ["children"] }]
+  },
   "settings": {
     "react": {
       "pragma": "React", 
-      "version": "16.4"
+      "version": "16.4",
+      "globals": ["children"]
     }
   }
 }

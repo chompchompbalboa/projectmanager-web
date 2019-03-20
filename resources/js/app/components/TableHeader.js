@@ -73,9 +73,9 @@ const Container = styled.div`
   top: calc(-1*${ layout.PADDING });
 	padding: calc(${ layout.TABLE_PADDING }/2) 0;
   width: 100%;
+  background-color: ${colors.ACCENT};
   display: flex;
   justify-content: space-around;
-  background-color: ${colors.ACCENT};
   border-right: 3px solid transparent;
   border-bottom: 1px solid ${colors.TEXT_LIGHT};
 `

@@ -7,9 +7,10 @@ import styled from 'styled-components'
 import _ from 'lodash'
 
 import { query } from '../../_api'
-import { colors } from '../../_config'
+import { colors, layout } from '../../_config'
 
 import Loading from '../components/Loading'
+import TableActions from './TableActions'
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'
 
@@ -109,20 +110,23 @@ export default class Table extends Component {
     if (rows && columns) {
       return (
         <Container>
-          <TableHeader
-            columns={columns}
-            name={name}
-            onHeaderClick={this.onHeaderClick}
-            sortColumn={sortColumn}
-            sortOrder={sortOrder}/>
-          {this.sortRows(sortColumn, sortOrder).map(row => {
-            return (
-              <TableRow 
-                key={row.id} 
-                columns={columns}
-                row={row} />
-            )
-          })}
+          <TableData>
+            <TableHeader
+              columns={columns}
+              name={name}
+              onHeaderClick={this.onHeaderClick}
+              sortColumn={sortColumn}
+              sortOrder={sortOrder}/>
+            {this.sortRows(sortColumn, sortOrder).map(row => {
+              return (
+                <TableRow 
+                  key={row.id} 
+                  columns={columns}
+                  row={row} />
+              )
+            })}
+          </TableData>
+          <TableActions />
         </Container>
       )
     }
@@ -143,9 +147,18 @@ Table.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
+  width: 100%;
+	display: flex;
+`
+
+const TableData = styled.div`
+  width: 100%;
+  margin-right: calc(${ layout.PADDING } / 2);
 	background-color: ${colors.BACKGROUND_SECONDARY};
 	color: ${colors.TEXT_DARK};
 	box-shadow: 1px 1px 4px ${colors.BOX_SHADOW};
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 `

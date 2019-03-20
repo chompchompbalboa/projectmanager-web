@@ -10,9 +10,29 @@ import Icon from '../components/Icon'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppProjectsActions = () => {
+const TableActions = () => {
   return (
     <Container>
+      <ActionContainer>
+        <Icon 
+          icon="ACTION_ADD"
+          size="1.25em"/>
+      </ActionContainer>
+      <ActionContainer>
+        <Icon 
+          icon="ACTION_ADD"
+          size="1.25em"/>
+      </ActionContainer>
+      <ActionContainer>
+        <Icon 
+          icon="ACTION_ADD"
+          size="1.25em"/>
+      </ActionContainer>
+      <ActionContainer>
+        <Icon 
+          icon="ACTION_ADD"
+          size="1.25em"/>
+      </ActionContainer>
       <ActionContainer>
         <Icon 
           icon="ACTION_ADD"
@@ -26,13 +46,19 @@ const AppProjectsActions = () => {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  padding-right: ${ layout.PADDING };
+  position: fixed;
+  top: calc(${ layout.HEADER_HEIGHT} + (${ layout.PADDING } / 2));
+  padding-left: calc(${ layout.PADDING } / 2);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 `
 
 const ActionContainer = styled.div`
   cursor: pointer;
-  color: ${ colors.PRIMARY };
-  margin-left: 0.5vw;
+  background-color: ${ colors.PRIMARY };
+  color: white;
   padding: 0.25vw;
   display: flex;
   flex-direction: column;
@@ -47,4 +73,4 @@ const ActionText = styled.div`
   font-weight: bold;
 `
 
-export default AppProjectsActions
+export default TableActions

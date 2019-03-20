@@ -7,7 +7,6 @@ import styled from 'styled-components'
 
 import { layout } from '../../_config'
 
-import AppProjectsActions from './AppProjectsActions'
 import AppProjectsChooseProject from './AppProjectsChooseProject'
 //-----------------------------------------------------------------------------
 // Component
@@ -19,7 +18,6 @@ const AppProjectsHeader = ({ activeProject, changeActiveProject, projects}) => {
         activeProject={activeProject}
         changeActiveProject={changeActiveProject}
         projects={projects}/>
-      <AppProjectsActions/>
     </Container>
   )
 }

@@ -2,23 +2,38 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, number } from 'prop-types'
+import { array, func, number } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
 
 import { query } from '../../_api'
 import { colors, layout } from '../../_config'
 
+import { setStatusMessage as setStatusMessageAction } from '../actions/statusActions'
+
 import Loading from '../components/Loading'
-import TableActions from './TableActions'
+import TableAction from './TableAction'
+import TableAddRow from './TableAddRow'
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+@connect(
+  null,
+  dispatch => ({
+    setStatusMessage: (nextStatusMessage) => dispatch(setStatusMessageAction(nextStatusMessage))
+  })
+)
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 export default class Table extends Component {
 	state = {
+    isAddingRow: false,
     isLoading: true,
     columns: null,
     name: null,
@@ -26,6 +41,10 @@ export default class Table extends Component {
 		sortOrder: null,
 		sortColumn: null
   }
+
+  actions = [
+    { icon: "ACTION_ADD", onClick: () => this.addRow() }
+  ]
   
   componentDidMount = () => {
     this.setState({
@@ -37,12 +56,23 @@ export default class Table extends Component {
   componentDidUpdate = (prevProps) => {
     if(prevProps.id !== this.props.id) {
       this.setState({
+        isAddingRow: false,
         activeId: this.props.id,
         columns: null,
         rows: null
       })
       this.fetchTable()
     }
+  }
+
+  addRow = () => {
+    const {
+      setStatusMessage
+    } = this.props
+    this.setState({
+      isAddingRow: true
+    })
+    setStatusMessage('ADDING_ROW')
   }
 
   fetchTable = () => {
@@ -100,8 +130,9 @@ export default class Table extends Component {
 	}
 
 	render() {
-    const { 
-      columns, 
+    const {
+      columns,
+      isAddingRow, 
       name,
       rows, 
       sortOrder, 
@@ -117,16 +148,26 @@ export default class Table extends Component {
               onHeaderClick={this.onHeaderClick}
               sortColumn={sortColumn}
               sortOrder={sortOrder}/>
+            {isAddingRow && 
+              <TableAddRow 
+                columns={columns}/>}
             {this.sortRows(sortColumn, sortOrder).map(row => {
               return (
                 <TableRow 
                   key={row.id} 
                   columns={columns}
                   row={row} />
-              )
-            })}
+            )})}
           </TableData>
-          <TableActions />
+          <TableActions>
+            {this.actions.map(action => {
+              return (
+                <TableAction
+                  key={action.icon}
+                  icon={action.icon}
+                  onClick={action.onClick}/>
+            )})}
+          </TableActions>
         </Container>
       )
     }
@@ -139,8 +180,9 @@ export default class Table extends Component {
 //-----------------------------------------------------------------------------
 Table.propTypes = {
   id: number,
-	rows: array,
-	columns: array
+	columns: array,
+  rows: array,
+  setStatusMessage: func
 }
 
 //-----------------------------------------------------------------------------
@@ -157,6 +199,17 @@ const TableData = styled.div`
 	background-color: ${colors.BACKGROUND_SECONDARY};
 	color: ${colors.TEXT_DARK};
 	box-shadow: 1px 1px 4px ${colors.BOX_SHADOW};
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+`
+
+const TableActions = styled.div`
+  position: sticky;
+  top: calc(-1 * (${ layout.PADDING } / 2));
+  height: 100%;
+  padding-left: calc(${ layout.PADDING } / 2);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

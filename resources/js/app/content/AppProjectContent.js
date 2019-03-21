@@ -19,9 +19,7 @@ export default class AppProjectContent extends Component {
     } = this.props
 		return (
 			<Container>
-        {activeTable &&
-          <Table id={activeTable.id} />
-        }
+        <Table id={activeTable.id} />
 			</Container>
 		)
 	}

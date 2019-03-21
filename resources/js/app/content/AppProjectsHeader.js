@@ -18,6 +18,9 @@ const AppProjectsHeader = ({ activeProject, changeActiveProject, projects}) => {
         activeProject={activeProject}
         changeActiveProject={changeActiveProject}
         projects={projects}/>
+      <AppProjectsStatus>
+        Waiting to save...
+      </AppProjectsStatus>
     </Container>
   )
 }
@@ -44,6 +47,12 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+`
+
+const AppProjectsStatus = styled.div`
+  margin-right: calc(2 * ${ layout.PADDING });
+  font-size: 0.9em;
+  font-color: rgb(240,240,240)
 `
 
 export default AppProjectsHeader

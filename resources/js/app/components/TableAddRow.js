@@ -17,12 +17,13 @@ const TableAddRow = ({ columns }) => {
 
   return (
     <TableRowContainer>
-      {columns.map(column => {
+      {columns.map((column, index) => {
         return (
           <TableCell 
             key={column.id}
             value={
-              <StyledTextarea 
+              <StyledTextarea
+                autoFocus={index === 0}
                 rows="1"
                 placeholder={column.header + '...'}/>
             }

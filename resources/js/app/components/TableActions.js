@@ -68,9 +68,4 @@ const ActionContainer = styled.div`
   border-radius: 5px;
 `
 
-const ActionText = styled.div`
-  font-size: 0.75em;
-  font-weight: bold;
-`
-
 export default TableActions

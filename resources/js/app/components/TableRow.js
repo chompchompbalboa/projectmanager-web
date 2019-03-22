@@ -11,14 +11,17 @@ import TableCell from './TableCell'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableRow = ({ columns, row: { cells } }) => {
+const TableRow = ({ columns, row }) => {
 	return (
 		<TableRowContainer>
-			{cells.map(cell => {
+			{row.cells.map((cell, index) => {
         const column = _.find(columns, ['id', cell.column_id])
 				return (
 					<TableCell
             key={cell.id}
+            autofocus={index === 0}
+            isEditable={row.isEditable}
+            placeholder={column.header + '...'}
             type={cell.type}
 						value={cell[column.type.toLowerCase()]}
 						width={column.width}

@@ -3,52 +3,43 @@
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
 import { array, func, number } from 'prop-types'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
 
 import { query } from '../../_api'
 import { colors, layout } from '../../_config'
 
-import { setStatusMessage as setStatusMessageAction } from '../actions/statusActions'
-
 import Loading from '../components/Loading'
 import TableAction from './TableAction'
-import TableAddRow from './TableAddRow'
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'
-
-//-----------------------------------------------------------------------------
-// Redux
-//-----------------------------------------------------------------------------
-@connect(
-  null,
-  dispatch => ({
-    setStatusMessage: (nextStatusMessage) => dispatch(setStatusMessageAction(nextStatusMessage))
-  })
-)
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 export default class Table extends Component {
+
+  constructor(props) {
+    super(props)
+  }
+
 	state = {
-    isAddingRow: false,
     isLoading: true,
     columns: null,
     name: null,
-    row: null,
+    rows: null,
 		sortOrder: null,
-		sortColumn: null
+		sortColumn: null,
+    tableId: null
   }
 
   actions = [
-    { icon: "ACTION_ADD", onClick: () => this.addRow() }
+    { icon: "ACTION_ADD_ROW", onClick: () => this.createRow() }
   ]
   
   componentDidMount = () => {
     this.setState({
-      activeId: this.props.id
+      tableId: this.props.id
     })
     this.fetchTable()
   }
@@ -57,7 +48,7 @@ export default class Table extends Component {
     if(prevProps.id !== this.props.id) {
       this.setState({
         isAddingRow: false,
-        activeId: this.props.id,
+        tableId: this.props.id,
         columns: null,
         rows: null
       })
@@ -65,14 +56,33 @@ export default class Table extends Component {
     }
   }
 
-  addRow = () => {
+  createRow = () => {
     const {
-      setStatusMessage
-    } = this.props
-    this.setState({
-      isAddingRow: true
+      tableId,
+      columns,
+      rows
+    } = this.state
+    const newRowCells = columns.map((column, index) => {
+      return {
+        id: -1 * index,
+        table_id: tableId,
+        column_id: column.id,
+        row_id: null,
+        string: null,
+        number: null,
+        boolean: null,
+        datetime: null
+      }
     })
-    setStatusMessage('ADDING_ROW')
+    const newRow = {
+      id: _.random(-5000, -1),
+      table_id: tableId,
+      cells: newRowCells,
+      isEditable: true
+    }
+    this.setState({
+      rows: [newRow, ...rows]
+    })
   }
 
   fetchTable = () => {
@@ -81,23 +91,24 @@ export default class Table extends Component {
     } = this.props
     query.getTable(id).then(table => {
       const {
-        activeId
+        tableId
       } = this.state
-      if(table.id === activeId) {
+      if(table.id === tableId) {
+        const sortOrder = table.columns[0].default_sort_order
+        const sortColumn = table.columns[0]
         this.setState({
           isLoading: false,
           columns: table.columns,
           name: table.name,
-          rows: table.rows,
-          sortOrder: table.columns[0].default_sort_order,
-          sortColumn: table.columns[0]
+          rows: this.sortRows(table.rows, sortColumn, sortOrder),
+          sortOrder: sortOrder,
+          sortColumn: sortColumn
         })
       }
     })
   }
 
-	sortRows = (sortColumn, sortOrder) => {
-    const { rows } = this.state
+	sortRows = (rows, sortColumn, sortOrder) => {
 		const rowValue = row => {
 			const sortCell = _.find(row.cells, cell => {
 				return cell.column_id === sortColumn.id
@@ -115,24 +126,29 @@ export default class Table extends Component {
 		return rows.sort(compareRowValues)
 	}
 
-	onHeaderClick = column => {
-		const { sortOrder, sortColumn } = this.state
+	onHeaderClick = nextSortColumn => {
+		const { 
+      rows, 
+      sortOrder, 
+      sortColumn 
+    } = this.state
 		let nextSortOrder
-		if (column.id === sortColumn.id) {
+		if (nextSortColumn.id === sortColumn.id) {
 			nextSortOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC'
 		} else {
-			nextSortOrder = column.default_sort_order
-		}
+			nextSortOrder = nextSortColumn.default_sort_order
+    }
+    const nextRows = this.sortRows(rows, nextSortColumn, nextSortOrder)
 		this.setState({
+      rows: nextRows,
 			sortOrder: nextSortOrder,
-			sortColumn: column
+			sortColumn: nextSortColumn
 		})
-	}
+  }
 
 	render() {
     const {
       columns,
-      isAddingRow, 
       name,
       rows, 
       sortOrder, 
@@ -148,14 +164,12 @@ export default class Table extends Component {
               onHeaderClick={this.onHeaderClick}
               sortColumn={sortColumn}
               sortOrder={sortOrder}/>
-            {isAddingRow && 
-              <TableAddRow 
-                columns={columns}/>}
-            {this.sortRows(sortColumn, sortOrder).map(row => {
+            {rows.map(row => {
               return (
                 <TableRow 
                   key={row.id} 
                   columns={columns}
+                  isEditable={row.isEditable}
                   row={row} />
             )})}
           </TableData>

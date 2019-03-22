@@ -1,54 +1,69 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React from 'react'
-import { func, node, number, oneOfType, string } from 'prop-types'
+import React, { Component } from 'react'
+import { bool, node, number, oneOfType, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { layout } from '../../_config'
+import { layout, timing } from '../../_config'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCell = ({
-	fontWeight,
-	justifyContent,
-  onClick,
-	value,
-	valueCursor,
-	width
-}) => {
-	return (
-		<Container
-			fontWeight={fontWeight}
-			justifyContent={justifyContent}
-			widthPercentage={width}>
-			<Value
-				onClick={onClick}
-				valueCursor={valueCursor}>
-        {value}
-			</Value>
-		</Container>
-	)
+export default class TableCell extends Component {
+
+  state = {
+    value: this.props.value === null ? "" : this.props.value
+  }
+
+  updateValue = (nextValue) => {
+    this.setState({
+      value: nextValue
+    })
+  }
+
+  render() {
+    const {
+      autofocus,
+      isEditable,
+      placeholder,
+      type,
+      width
+    } = this.props
+    const {
+      value
+    } = this.state
+    return (
+      <Container
+        widthPercentage={width}>
+        {isEditable 
+          ?<StyledTextarea
+              autoFocus={autofocus}
+              rows="1"
+              onChange={(e) => this.updateValue(e.target.value)}
+              placeholder={placeholder}
+              value={value}/>
+          :<Value>{value}</Value>
+        }
+      </Container>
+    )
+  }
 }
 
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
 TableCell.propTypes = {
-	fontWeight: string,
-	justifyContent: string,
-  onClick: func,
+  autofocus: bool,
+  isEditable: bool,
+  placeholder: string,
   type: string,
 	value: oneOfType([node, number, string]),
-	valueCursor: string,
 	width: number
 }
 
 TableCell.defaultProps = {
-	fontWeight: 'inherit',
-	justifyContent: 'center',
-	valueCursor: 'auto',
+  autofocus: false,
 	width: 1
 }
 
@@ -69,4 +84,24 @@ const Value = styled.div`
 	width: 100%;
 `
 
-export default TableCell
+const StyledTextarea = styled.textarea`
+cursor: pointer;
+margin: 0;
+padding: 0;
+width: 100%;
+height: 100%;
+font-size: inherit;
+border: none;
+outline: none;
+resize: none;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: transparent;
+transition: all ${ timing.TRANSITION_DURATION };
+&:hover {
+  &::placeholder {
+    color: black;
+  }
+}
+`

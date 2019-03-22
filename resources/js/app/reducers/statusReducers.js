@@ -1,8 +1,21 @@
 //-----------------------------------------------------------------------------
+// Imports
+//-----------------------------------------------------------------------------
+import _ from 'lodash'
+
+//-----------------------------------------------------------------------------
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  MESSAGE: null
+  message: null
+}
+
+//-----------------------------------------------------------------------------
+// Messages
+//-----------------------------------------------------------------------------
+const messages = {
+  SAVING: "Saving...",
+  WAITING_TO_SAVE: "Waiting to save..."
 }
 
 //-----------------------------------------------------------------------------
@@ -12,8 +25,9 @@ const projectReducers = (state = defaultState, action) => {
   switch(action.type) {
 
     case 'SET_STATUS_MESSAGE': {
-      console.log('SET_STATUS_MESSAGE')
-      return state
+      const nextState = _.cloneDeep(state)
+      nextState.message = messages[action.status]
+      return nextState
     }
 
     default:

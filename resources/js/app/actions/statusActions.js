@@ -1,4 +1,4 @@
-export const setStatusMessage = (nextMessage) => ({
+export const setStatusMessage = (status) => ({
   type: 'SET_STATUS_MESSAGE',
-  nextMessage: nextMessage
+  status: status
 })

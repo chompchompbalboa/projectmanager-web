@@ -2,16 +2,27 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, func, object } from 'prop-types'
+import { array, func, object, string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { layout } from '../../_config'
 
 import AppProjectsChooseProject from './AppProjectsChooseProject'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => {
+  return {
+    statusMessage: state.status.message
+  }
+}
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppProjectsHeader = ({ activeProject, changeActiveProject, projects}) => {
+const AppProjectsHeader = ({ activeProject, changeActiveProject, projects, statusMessage }) => {
   return (
     <Container>
       <AppProjectsChooseProject
@@ -19,7 +30,7 @@ const AppProjectsHeader = ({ activeProject, changeActiveProject, projects}) => {
         changeActiveProject={changeActiveProject}
         projects={projects}/>
       <AppProjectsStatus>
-        Waiting to save...
+        { statusMessage }
       </AppProjectsStatus>
     </Container>
   )
@@ -31,7 +42,8 @@ const AppProjectsHeader = ({ activeProject, changeActiveProject, projects}) => {
 AppProjectsHeader.propTypes = {
   activeProject: object,
   changeActiveProject: func,
-  projects: array
+  projects: array,
+  statusMessage: string
 }
 //-----------------------------------------------------------------------------
 // Styled Components
@@ -55,4 +67,6 @@ const AppProjectsStatus = styled.div`
   font-color: rgb(240,240,240)
 `
 
-export default AppProjectsHeader
+export default connect(
+  mapStateToProps
+)(AppProjectsHeader)

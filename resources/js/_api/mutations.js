@@ -1,11 +1,11 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import * as mutations from './mutations'
-import * as queries from './queries'
+import axios from './axios'
 
 //-----------------------------------------------------------------------------
-// Export
+// Queries
 //-----------------------------------------------------------------------------
-export const mutation = mutations
-export const query = queries
+export const addTableRow = async () => {
+  console.log('addTableRow')
+}

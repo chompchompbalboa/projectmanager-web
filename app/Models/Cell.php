@@ -9,5 +9,19 @@ class Cell extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'table_id', 'column_id', 'row_id', 'string', 'number', 'boolean', 'datetime'];
+  protected $visible = ['id', 'tableId', 'columnId', 'rowId', 'string', 'number', 'boolean', 'datetime'];
+
+  /**
+   * Rename table columns from snake case to camel case
+   */
+  protected $appends = [ 'tableId', 'columnId', 'rowId' ];
+  public function getTableIdAttribute() {
+    return $this->attributes['table_id'];
+  }
+  public function getColumnIdAttribute() {
+    return $this->attributes['column_id'];
+  }
+  public function getRowIdAttribute() {
+    return $this->attributes['row_id'];
+  }
 }

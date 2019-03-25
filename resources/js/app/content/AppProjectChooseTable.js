@@ -2,24 +2,41 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, func, object } from 'prop-types'
+import { array, func, number } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors, timing } from '../../_config'
 
+import {
+  setActiveTableId as setActiveTableIdAction
+} from '../actions/projectActions'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeTableId: state.project.activeTableId,
+  activeTables: state.project.activeProject.tables
+})
+
+const mapDispatchToProps = dispatch => ({
+  setActiveTableId: nextActiveTableId => dispatch(setActiveTableIdAction(nextActiveTableId))
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppProjectChooseTable = ({ activeTable, changeActiveTable, tables }) => {
+const AppProjectChooseTable = ({ activeTables, activeTableId, setActiveTableId }) => {
   return (
     <Container>
-      {tables.map((table, index) => {
+      {activeTables.map(activeTable => {
         return (
           <ContentChoiceContainer
-            key={index}
-            isActiveTable={activeTable.id === table.id}
-            onClick={() => changeActiveTable(table)}>
-            {table.name}
+            key={activeTable.id}
+            isActiveTable={activeTableId === activeTable.id}
+            onClick={() => setActiveTableId(activeTable.id)}>
+            {activeTable.name}
           </ContentChoiceContainer>
         )
       })}
@@ -31,9 +48,9 @@ const AppProjectChooseTable = ({ activeTable, changeActiveTable, tables }) => {
 // Props
 //-----------------------------------------------------------------------------
 AppProjectChooseTable.propTypes = {
-  activeTable: object,
-  changeActiveTable: func,
-  tables: array,
+  activeTables: array,
+  activeTableId: number,
+  setActiveTableId: func
 }
 
 //-----------------------------------------------------------------------------
@@ -58,4 +75,7 @@ const ContentChoiceContainer = styled.div`
   }
 `
 
-export default AppProjectChooseTable
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppProjectChooseTable)

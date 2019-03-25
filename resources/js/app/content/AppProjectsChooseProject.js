@@ -3,16 +3,27 @@
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
 import { array, func, shape, string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors, layout } from '../../_config'
 
+import {
+  setActiveProject as setActiveProjectAction
+} from '../actions/projectActions'
+
 import Icon from '../components/Icon'
 
 //-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapDispatchToProps = dispatch => ({
+  setActiveProject: nextActiveProject => dispatch(setActiveProjectAction(nextActiveProject))
+})
+//-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class AppProjectsChooseProject extends Component {
+class AppProjectsChooseProject extends Component {
 	state = {
 		dropdownInputValue: '',
 		eventListenersRegistered: false,
@@ -22,8 +33,8 @@ export default class AppProjectsChooseProject extends Component {
 	}
 
 	changeActiveProject = nextActiveProject => {
-		const { changeActiveProject } = this.props
-		changeActiveProject(nextActiveProject)
+		const { setActiveProject } = this.props
+		setActiveProject(nextActiveProject)
 		this.toggleDropdownVisible()
 		this.removeEventListeners()
 	}
@@ -180,7 +191,7 @@ AppProjectsChooseProject.propTypes = {
 		name: string,
 		uniqueId: string
 	}),
-	changeActiveProject: func,
+	setActiveProject: func,
 	projects: array
 }
 
@@ -258,3 +269,8 @@ const DropdownProjectContainer = styled.div`
 `
 
 const DropdownProjectName = styled.div``
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AppProjectsChooseProject)

@@ -1,35 +1,96 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React from 'react'
-import { array, shape } from 'prop-types'
+import React, { PureComponent } from 'react'
+import { array, bool, func, number, shape } from 'prop-types'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
 import _ from 'lodash'
 
-import TableRowContainer from './TableRowContainer'
+import { colors } from '../../_config'
+
+import {
+  deleteRow as deleteRowAction
+} from '../actions/projectActions'
+
 import TableCell from './TableCell'
+import TableRowContextMenu from './TableRowContextMenu'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapDispatchToProps = dispatch => ({
+  deleteRow: rowId => dispatch(deleteRowAction(rowId))
+})
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableRow = ({ columns, row }) => {
-	return (
-		<TableRowContainer>
-			{row.cells.map((cell, index) => {
-        const column = _.find(columns, ['id', cell.column_id])
-				return (
-					<TableCell
-            key={cell.id}
-            autofocus={index === 0}
-            isEditable={row.isEditable}
-            placeholder={column.header + '...'}
-            type={cell.type}
-						value={cell[column.type.toLowerCase()]}
-						width={column.width}
-					/>
-				)
-			})}
-		</TableRowContainer>
-	)
+class TableRow extends PureComponent {
+
+  state = {
+    contextMenuOpen: false,
+    contextMenuTop: null,
+    contextMenuLeft: null
+  }
+
+  closeContextMenu = () => {
+    this.setState({
+      contextMenuOpen: false
+    })
+  }
+
+  onRightClick = e => {
+    e.preventDefault()
+    this.setState({
+      contextMenuOpen: true,
+      contextMenuTop: e.clientY,
+      contextMenuLeft: e.clientX
+    })
+  }
+
+  render() {
+    const { 
+      columns, 
+      deleteRow,
+      isEditable, 
+      row
+    } = this.props
+    const {
+      contextMenuOpen,
+      contextMenuTop,
+      contextMenuLeft
+    } = this.state
+    return (
+      <Container
+        onContextMenu={e => this.onRightClick(e)}>
+        {row.cells.map((cell, index) => {
+          const column = _.find(columns, ['id', cell.columnId])
+          return (
+            <TableCell
+              key={cell.id}
+              autofocus={index === 0}
+              cellId={cell.id}
+              isEditable={isEditable}
+              placeholder={column.header + '...'}
+              rowId={row.id}
+              type={column.type}
+              value={cell[column.type.toLowerCase()]}
+              width={column.width}
+            />
+          )
+        })}
+        {contextMenuOpen && 
+          <TableRowContextMenu
+            closeContextMenu={this.closeContextMenu}
+            deleteRow={deleteRow}
+            rowId={row.id}
+            top={contextMenuTop}
+            left={contextMenuLeft}/>
+        }
+      </Container>
+    )
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -37,9 +98,34 @@ const TableRow = ({ columns, row }) => {
 //-----------------------------------------------------------------------------
 TableRow.propTypes = {
   columns: array,
+  deleteRow: func,
+  isEditable: bool,
 	row: shape({
+    id: number,
 		cells: array
-	})
+  })
 }
 
-export default TableRow
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
+const Container = styled.div`
+	width: 100%;
+	padding: 2vh 0;
+	background-color: ${colors.BACKGROUND_SECONDARY};
+	font-size: 13px;
+	display: flex;
+  justify-content: flex-start;
+  align-items: center;
+	border-right: 3px solid ${colors.BACKGROUND_SECONDARY};
+	border-bottom: 1px solid ${colors.TEXT_LIGHT};
+	&:hover {
+		border-right: 3px solid ${colors.PRIMARY};
+		background-color: ${colors.ACCENT};
+	}
+`
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(TableRow)

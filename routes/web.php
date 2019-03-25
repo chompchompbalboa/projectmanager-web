@@ -20,12 +20,12 @@ Route::prefix('app')->group(function () {
     ]);
   });
 
-  Route::get('initial-data', 'AppInitialData');
-
   Route::get('organizations/{organization}/projects', 'OrganizationController@projects');
 
   Route::resources([
-    'tables' => 'TableController'
+    'cells' => 'CellController',
+    'rows' => 'RowController',
+    'tables' => 'TableController',
   ]);
 });
 

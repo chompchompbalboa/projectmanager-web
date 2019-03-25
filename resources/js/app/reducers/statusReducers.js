@@ -7,27 +7,36 @@ import _ from 'lodash'
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  message: null
+  status: 'LOADING',
+  message: ""
 }
 
 //-----------------------------------------------------------------------------
 // Messages
 //-----------------------------------------------------------------------------
 const messages = {
-  SAVING: "Saving...",
-  WAITING_TO_SAVE: "Waiting to save..."
+  ADDING_ROW: "Saving...",
+  ADDED_ROW: "Saved",
+  DELETED: "Deleted",
+  DELETING: "Deleting...",
+  LOADING: "Loading...",
+  READY: "",
+  UPDATING_CELL: "Saving...",
+  UPDATED_CELL: "Saved"
 }
 
 //-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
-const projectReducers = (state = defaultState, action) => {
+const statusReducers = (state = defaultState, action) => {
   switch(action.type) {
 
-    case 'SET_STATUS_MESSAGE': {
-      const nextState = _.cloneDeep(state)
-      nextState.message = messages[action.status]
-      return nextState
+    case 'SET_STATUS': {
+      return {
+        ...state,
+        status: action.status,
+        message: messages[action.status]
+      }
     }
 
     default:
@@ -35,4 +44,4 @@ const projectReducers = (state = defaultState, action) => {
   }
 }
 
-export default projectReducers
+export default statusReducers

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cell;
+use App\Models\Column;
 use Illuminate\Http\Request;
 
 class CellController extends Controller
@@ -69,7 +70,12 @@ class CellController extends Controller
      */
     public function update(Request $request, Cell $cell)
     {
-        //
+      $value = $request->input('value');
+      $column = Column::find($cell->columnId);
+      $type = strtolower($column->type);
+      $cell->$type = $value;
+      $cell->save();
+      return $cell;
     }
 
     /**

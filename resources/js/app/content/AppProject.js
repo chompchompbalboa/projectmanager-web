@@ -1,49 +1,71 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
-import { func, object } from 'prop-types'
+import React from 'react'
+import { func, number, object } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors, layout } from '../../_config'
+
+import { 
+  createRow as createRowAction,
+  setActiveTable as setActiveTableAction,
+  updateCell as updateCellAction 
+} from '../actions/projectActions'
 
 import AppProjectChooseTable from './AppProjectChooseTable'
 import Table from '../components/Table'
 
 //-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeTable: state.project.activeTable,
+  activeTableId: state.project.activeTableId
+})
+
+const mapDispatchToProps = dispatch => ({
+  createRow: () => dispatch(createRowAction()),
+  setActiveTable: nextActiveTable => dispatch(setActiveTableAction(nextActiveTable)),
+  updateCell: nextCell => dispatch(updateCellAction(nextCell))
+})
+
+//-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class AppProject extends Component {
+const AppProject = ({ activeTable, activeTableId, createRow, setActiveTable, updateCell }) => {
 
-  render() {
-    const {
-      activeProject,
-      activeTable,
-      changeActiveTable
-    } = this.props
-    
-    return (
-      <Container>
-        <LeftColumn>
-          <AppProjectChooseTable
-            activeTable={activeTable}
-            changeActiveTable={changeActiveTable}
-            tables={activeProject.tables}/>
-        </LeftColumn>
-        <RightColumn>
-          <Table id={activeTable.id} />
-        </RightColumn>
-      </Container>
-    )
-  }
+  const tableActions = [
+    { icon: "ACTION_CREATE_ROW", onClick: createRow }
+  ]
+
+  return (
+    <Container>
+      <LeftColumn>
+        <AppProjectChooseTable />
+      </LeftColumn>
+      <RightColumn>
+        <Table
+          id={activeTableId}
+          actions={tableActions}
+          table={activeTable}
+          setTable={setActiveTable}
+          updateCell={updateCell}/>
+      </RightColumn>
+    </Container>
+  )
 }
+
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
 AppProject.propTypes = {
-  activeProject: object,
   activeTable: object,
-  changeActiveTable: func
+  activeTableId: number,
+  createRow: func,
+  setActiveTable: func,
+  updateCell: func
 }
 
 //-----------------------------------------------------------------------------
@@ -72,3 +94,8 @@ const LeftColumn = styled.div`
 const RightColumn = styled.div`
   width: calc(87% - (${layout.PADDING} / 1.5));
 `
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(React.memo(AppProject))

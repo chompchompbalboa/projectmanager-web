@@ -16,7 +16,7 @@ const TableHeader = ({ columns, onHeaderClick, sortOrder, sortColumn }) => {
 
   const getSortDirection = (column) => {
     if (column.id === sortColumn.id) {
-      return sortOrder === column.default_sort_order ? 'DOWN' : 'UP'
+      return sortOrder === column.defaultSortOrder ? 'DOWN' : 'UP'
     }
     return "BOTH"
   }
@@ -62,7 +62,7 @@ TableHeader.propTypes = {
 	sortColumn: shape({
     id: number
   }),
-	sortOrder: oneOf(['ASC', 'DESC']),
+	sortOrder: oneOf(['ASC', 'DESC'])
 }
 
 //-----------------------------------------------------------------------------

@@ -8,6 +8,8 @@ import styled from 'styled-components'
 
 import { layout } from '../../_config'
 
+import { setActiveProject as setActiveProjectAction } from '../actions/projectActions'
+
 import AppProjectsChooseProject from './AppProjectsChooseProject'
 
 //-----------------------------------------------------------------------------
@@ -15,14 +17,23 @@ import AppProjectsChooseProject from './AppProjectsChooseProject'
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => {
   return {
-    statusMessage: state.status.message
+    activeProject: state.project.activeProject,
+    activeTable: state.project.activeTable,
+    projects: state.project.projects,
+    status: state.status.message
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    setActiveProject: nextActiveProject => dispatch(setActiveProjectAction(nextActiveProject))
   }
 }
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppProjectsHeader = ({ activeProject, changeActiveProject, projects, statusMessage }) => {
+const AppProjectsHeader = ({ activeProject, changeActiveProject, projects, status }) => {
   return (
     <Container>
       <AppProjectsChooseProject
@@ -30,7 +41,7 @@ const AppProjectsHeader = ({ activeProject, changeActiveProject, projects, statu
         changeActiveProject={changeActiveProject}
         projects={projects}/>
       <AppProjectsStatus>
-        { statusMessage }
+        {status}
       </AppProjectsStatus>
     </Container>
   )
@@ -43,7 +54,7 @@ AppProjectsHeader.propTypes = {
   activeProject: object,
   changeActiveProject: func,
   projects: array,
-  statusMessage: string
+  status: string
 }
 //-----------------------------------------------------------------------------
 // Styled Components
@@ -68,5 +79,6 @@ const AppProjectsStatus = styled.div`
 `
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(AppProjectsHeader)

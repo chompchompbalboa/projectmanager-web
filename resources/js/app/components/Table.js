@@ -1,8 +1,8 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
-import { array, func, number } from 'prop-types'
+import React, { PureComponent } from 'react'
+import { array, arrayOf, func, number, oneOf, shape } from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 
@@ -17,42 +17,27 @@ import TableRow from './TableRow'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class Table extends Component {
-
-  constructor(props) {
-    super(props)
+export default class Table extends PureComponent {
+  
+  state = {
+    isGettingTable: false,
+    sortColumn: this.props.table ? this.props.table.columns[0] : null,
+    sortOrder: this.props.table ? this.props.table.columns[0].defaultSortOrder : null
   }
-
-	state = {
-    isLoading: true,
-    columns: null,
-    name: null,
-    rows: null,
-		sortOrder: null,
-		sortColumn: null,
-    tableId: null
-  }
-
-  actions = [
-    { icon: "ACTION_ADD_ROW", onClick: () => this.createRow() }
-  ]
   
   componentDidMount = () => {
-    this.setState({
-      tableId: this.props.id
-    })
-    this.fetchTable()
+    const {
+      table
+    } = this.props
+    table === null && this.getTable()
   }
 
-  componentDidUpdate = (prevProps) => {
-    if(prevProps.id !== this.props.id) {
-      this.setState({
-        isAddingRow: false,
-        tableId: this.props.id,
-        columns: null,
-        rows: null
-      })
-      this.fetchTable()
+  componentDidUpdate = () => {
+    const {
+      table
+    } = this.props
+    if(table === null) {
+      this.getTable()
     }
   }
 
@@ -85,33 +70,35 @@ export default class Table extends Component {
     })
   }
 
-  fetchTable = () => {
+  getTable = () => {
     const { 
-      id 
+      id,
+      setTable
     } = this.props
-    query.getTable(id).then(table => {
-      const {
-        tableId
-      } = this.state
-      if(table.id === tableId) {
-        const sortOrder = table.columns[0].default_sort_order
-        const sortColumn = table.columns[0]
+    const {
+      isGettingTable
+    } = this.state
+    if(!isGettingTable) {
+      this.setState({
+        isGettingTable: true
+      })
+      id !== null && query.getTable(id).then(nextTable => {
         this.setState({
-          isLoading: false,
-          columns: table.columns,
-          name: table.name,
-          rows: this.sortRows(table.rows, sortColumn, sortOrder),
-          sortOrder: sortOrder,
-          sortColumn: sortColumn
+          sortColumn: nextTable.columns[0],
+          sortOrder: nextTable.columns[0].defaultSortOrder
         })
-      }
-    })
+        setTable(nextTable)
+        this.setState({
+          isGettingTable: false
+        })
+      })
+    }
   }
 
 	sortRows = (rows, sortColumn, sortOrder) => {
 		const rowValue = row => {
 			const sortCell = _.find(row.cells, cell => {
-				return cell.column_id === sortColumn.id
+				return cell.columnId === sortColumn.id
       })
 			return sortCell[sortColumn.type.toLowerCase()]
 		}
@@ -121,26 +108,33 @@ export default class Table extends Component {
 			if (row1Value < row2Value) return sortOrder === 'ASC' ? -1 : 1
 			if (row1Value > row2Value) return sortOrder === 'ASC' ? 1 : -1
 			return 0
-		}
+    }
+    let sortableRows = []
+    let nonSortableRows = []
+    rows.map(row => {
+      if (row.isSortable === false) {
+        nonSortableRows.push(row)
+      } else {
+        sortableRows.push(row)
+      }
+    })
 
-		return rows.sort(compareRowValues)
+		return nonSortableRows.concat(sortableRows.sort(compareRowValues))
 	}
 
 	onHeaderClick = nextSortColumn => {
 		const { 
-      rows, 
       sortOrder, 
       sortColumn 
     } = this.state
-		let nextSortOrder
+    let nextSortOrder
+    
 		if (nextSortColumn.id === sortColumn.id) {
 			nextSortOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC'
 		} else {
-			nextSortOrder = nextSortColumn.default_sort_order
+			nextSortOrder = nextSortColumn.defaultSortOrder
     }
-    const nextRows = this.sortRows(rows, nextSortColumn, nextSortOrder)
 		this.setState({
-      rows: nextRows,
 			sortOrder: nextSortOrder,
 			sortColumn: nextSortColumn
 		})
@@ -148,13 +142,19 @@ export default class Table extends Component {
 
 	render() {
     const {
-      columns,
-      name,
-      rows, 
-      sortOrder, 
-      sortColumn 
+      actions,
+      table
+    } = this.props
+    const {
+      sortColumn,
+      sortOrder
     } = this.state
-    if (rows && columns) {
+    if (table !== null) {
+      const {
+        rows,
+        columns
+      } = table
+      const sortedRows = this.sortRows(rows, sortColumn, sortOrder)
       return (
         <Container>
           <TableData>
@@ -164,22 +164,22 @@ export default class Table extends Component {
               onHeaderClick={this.onHeaderClick}
               sortColumn={sortColumn}
               sortOrder={sortOrder}/>
-            {rows.map(row => {
+            {sortedRows.map(row => {
               return (
                 <TableRow 
                   key={row.id} 
                   columns={columns}
                   isEditable={row.isEditable}
-                  row={row} />
+                  row={row}/>
             )})}
           </TableData>
           <TableActions>
-            {this.actions.map(action => {
+            {actions.map(action => {
               return (
                 <TableAction
                   key={action.icon}
                   icon={action.icon}
-                  onClick={action.onClick}/>
+                  onClick={() => action.onClick()}/>
             )})}
           </TableActions>
         </Container>
@@ -194,9 +194,14 @@ export default class Table extends Component {
 //-----------------------------------------------------------------------------
 Table.propTypes = {
   id: number,
-	columns: array,
-  rows: array,
-  setStatusMessage: func
+  actions: array,
+  setTable: func,
+  table: shape({
+    rows: array,
+    columns: arrayOf(shape({
+      defaultSortOrder: oneOf(['ASC', 'DESC'])
+    })),
+  })
 }
 
 //-----------------------------------------------------------------------------

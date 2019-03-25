@@ -9,12 +9,20 @@ class Row extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'table_id', 'cells'];
+  protected $visible = ['id', 'tableId', 'cells'];
   
   /**
    * Build custom attributes
    */
   protected $with = ['cells'];
+
+  /**
+   * Rename table columns from snake case to camel case
+   */
+  protected $appends = [ 'tableId' ];
+  public function getTableIdAttribute() {
+    return $this->attributes['table_id'];
+  }
   
   /**
    * Get the table this row belongs to

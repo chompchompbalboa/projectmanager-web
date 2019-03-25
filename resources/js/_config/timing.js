@@ -1,4 +1,4 @@
 export default {
-  SAVE_INTERVAL: 500,
+  SAVE_INTERVAL: 1000,
 	TRANSITION_DURATION: '0.15s'
 }

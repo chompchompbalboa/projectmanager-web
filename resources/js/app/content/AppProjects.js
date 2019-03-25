@@ -2,45 +2,53 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { bool, string } from 'prop-types'
+import { bool, func } from 'prop-types'
+import { connect } from 'react-redux'
 
 import { query } from '../../_api'
+
+import { 
+  setActiveProject as setActiveProjectAction,
+  setActiveTableId as setActiveTableIdAction,
+  setProjects as setProjectsAction
+} from '../actions/projectActions'
 
 import AppContentContainer from './AppContentContainer'
 import AppProject from './AppProject'
 import AppProjectsHeader from './AppProjectsHeader'
 import Loading from '../components/Loading'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapDispatchToProps = dispatch => ({
+  setActiveProject: nextActiveProject => dispatch(setActiveProjectAction(nextActiveProject)),
+  setActiveTableId: nextActiveTableId => dispatch(setActiveTableIdAction(nextActiveTableId)),
+  setProjects: nextProjects => dispatch(setProjectsAction(nextProjects))
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class AppProjects extends Component {
+class AppProjects extends Component {
 
   state = {
-    activeProject: null,
-    activeTable: null,
-    projects: null
+    isLoading: true
   }
 
   componentDidMount = () => {
+    const {
+      setActiveProject,
+      setActiveTableId,
+      setProjects
+    } = this.props
     query.getOrganizationProjects(organizationId).then(projects => {
+      setActiveProject(projects[0])
+      setActiveTableId(projects[0].tables[0].id)
+      setProjects(projects)
       this.setState({
-        activeProject: projects[0],
-        activeTable: projects[0].tables[0],
-        projects: projects 
+        isLoading: false
       })
-    })
-  }
-
-  changeActiveProject = (nextActiveProject) => {
-    this.setState({
-      activeProject: nextActiveProject,
-      activeTable: nextActiveProject.tables[0]
-    })
-  }
-
-  changeActiveTable = (nextActiveTable) => {
-    this.setState({
-      activeTable: nextActiveTable
     })
   }
 
@@ -49,28 +57,18 @@ export default class AppProjects extends Component {
       isActive
     } = this.props
     const {
-      activeProject,
-      activeTable,
-      projects
+      isLoading
     } = this.state
 
     return (
       <AppContentContainer
         isActive={isActive}>
-        {projects === null
+        {isLoading
           ? <Loading 
               height="100vh"/>
           : <>
-              <AppProjectsHeader
-                  activeProject={activeProject}
-                  changeActiveProject={this.changeActiveProject}
-                  projects={projects}/>
-              <AppProject
-                  activeProject={activeProject}
-                  activeTable={activeTable}
-                  changeActiveProject={this.changeActiveProject}
-                  changeActiveTable={this.changeActiveTable}
-                  projects={projects}/>
+              <AppProjectsHeader/>
+              <AppProject/>
             </>}
       </AppContentContainer>
     )
@@ -81,6 +79,13 @@ export default class AppProjects extends Component {
 // Props
 //-----------------------------------------------------------------------------
 AppProjects.propTypes = {
-  organizationId: string,
-  isActive: bool
+  isActive: bool,
+  setActiveProject: func,
+  setActiveTableId: func,
+  setProjects: func
 }
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AppProjects)

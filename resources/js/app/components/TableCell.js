@@ -2,19 +2,32 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { bool, node, number, oneOfType, string } from 'prop-types'
+import { bool, func, node, number, oneOfType, string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { layout, timing } from '../../_config'
 
+import {
+  updateCell as updateCellAction
+} from '../actions/projectActions'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapDispatchToProps = dispatch => ({
+  updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value))
+})
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class TableCell extends Component {
+class TableCell extends Component {
 
   state = {
     value: this.props.value === null ? "" : this.props.value
   }
+
+  saveTimeout = null
 
   updateValue = (nextValue) => {
     this.setState({
@@ -22,12 +35,31 @@ export default class TableCell extends Component {
     })
   }
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if(prevState.value !== this.state.value) {
+      clearTimeout(this.saveTimeout)
+      this.saveTimeout = window.setTimeout(() => this.saveCell(), timing.SAVE_INTERVAL)
+    }
+  }
+
+  saveCell = () => {
+    const {
+      cellId,
+      rowId,
+      type,
+      updateCell
+    } = this.props
+    const {
+      value
+    } = this.state
+    updateCell(rowId, cellId, type, value === "" ? null : value)
+  }
+
   render() {
     const {
       autofocus,
       isEditable,
       placeholder,
-      type,
       width
     } = this.props
     const {
@@ -55,9 +87,12 @@ export default class TableCell extends Component {
 //-----------------------------------------------------------------------------
 TableCell.propTypes = {
   autofocus: bool,
+  cellId: number,
   isEditable: bool,
   placeholder: string,
+  rowId: number,
   type: string,
+  updateCell: func,
 	value: oneOfType([node, number, string]),
 	width: number
 }
@@ -105,3 +140,8 @@ transition: all ${ timing.TRANSITION_DURATION };
   }
 }
 `
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(TableCell)

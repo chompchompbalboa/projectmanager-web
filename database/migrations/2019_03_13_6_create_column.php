@@ -18,6 +18,7 @@ class CreateColumn extends Migration
             $table->unsignedInteger('table_id');
             $table->string('header');
             $table->string('type');
+            $table->boolean('required');
             $table->string('default_sort_order');
             $table->unsignedInteger('position');
             $table->float('width');

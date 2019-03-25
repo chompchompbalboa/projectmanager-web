@@ -14,7 +14,7 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Models\Column::class, function (Faker $faker) {
-  
+
     $type = $faker->randomElement([
       [
         'type' => 'STRING',
@@ -33,11 +33,13 @@ $factory->define(App\Models\Column::class, function (Faker $faker) {
         'default_sort_order' => 'DESC',
       ]
     ]);
+
     return [
       'table_id' => 1,
       'position' => 1,
       'width' => 0.2,
       'header' => $faker->streetSuffix,
+      'required' => $faker->boolean($chanceOfGettingTrue = 50),
       'type' => $type['type'],
       'default_sort_order' => $type['default_sort_order'],
     ];

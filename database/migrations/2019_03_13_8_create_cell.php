@@ -18,10 +18,10 @@ class CreateCell extends Migration
             $table->unsignedInteger('table_id');
             $table->unsignedInteger('column_id');
             $table->unsignedInteger('row_id');
-            $table->string('string');
-            $table->float('number');
-            $table->boolean('boolean');
-            $table->dateTime('datetime');
+            $table->string('string')->nullable();
+            $table->float('number')->nullable();
+            $table->boolean('boolean')->nullable();
+            $table->dateTime('datetime')->nullable();
             $table->timestamps();
 
             $table->foreign('column_id')->references('id')->on('columns');

@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { bool, func, node, number, oneOfType, string } from 'prop-types'
+import { bool, func, number, oneOfType, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
@@ -11,6 +11,11 @@ import { layout, timing } from '../../_config'
 import {
   updateCell as updateCellAction
 } from '../actions/projectActions'
+
+import TableCellBoolean from './TableCellBoolean'
+import TableCellDatetime from './TableCellDatetime'
+import TableCellNumber from './TableCellNumber'
+import TableCellString from './TableCellString'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -25,6 +30,13 @@ class TableCell extends Component {
 
   state = {
     value: this.props.value === null ? "" : this.props.value
+  }
+
+  tableCellTypeComponents = {
+    BOOLEAN: TableCellBoolean,
+    DATETIME: TableCellDatetime,
+    NUMBER: TableCellNumber,
+    STRING: TableCellString,
   }
 
   saveTimeout = null
@@ -60,23 +72,22 @@ class TableCell extends Component {
       autofocus,
       isEditable,
       placeholder,
+      type,
       width
     } = this.props
     const {
       value
     } = this.state
+    const TableCellType = this.tableCellTypeComponents[type]
     return (
       <Container
         widthPercentage={width}>
-        {isEditable 
-          ?<StyledTextarea
-              autoFocus={autofocus}
-              rows="1"
-              onChange={(e) => this.updateValue(e.target.value)}
-              placeholder={placeholder}
-              value={value}/>
-          :<Value>{value}</Value>
-        }
+        <TableCellType
+          autofocus={autofocus}
+          isEditable={isEditable}
+          placeholder={placeholder}
+          updateValue={this.updateValue}
+          value={value}/>
       </Container>
     )
   }
@@ -93,7 +104,7 @@ TableCell.propTypes = {
   rowId: number,
   type: string,
   updateCell: func,
-	value: oneOfType([node, number, string]),
+	value: oneOfType([bool, number, string]),
 	width: number
 }
 
@@ -112,33 +123,6 @@ const Container = styled.div`
 	display: flex;
 	justify-content: ${props => props.justifyContent};
   align-items: flex-start;
-`
-
-const Value = styled.div`
-	cursor: ${props => props.valueCursor};
-	width: 100%;
-`
-
-const StyledTextarea = styled.textarea`
-cursor: pointer;
-margin: 0;
-padding: 0;
-width: 100%;
-height: 100%;
-font-size: inherit;
-border: none;
-outline: none;
-resize: none;
-display: flex;
-justify-content: center;
-align-items: center;
-background-color: transparent;
-transition: all ${ timing.TRANSITION_DURATION };
-&:hover {
-  &::placeholder {
-    color: black;
-  }
-}
 `
 
 export default connect(

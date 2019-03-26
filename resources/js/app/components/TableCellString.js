@@ -7,21 +7,19 @@ import styled from 'styled-components'
 
 import { timing } from '../../_config'
 
+import AutosizeTextArea from 'react-autosize-textarea'
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellString = ({ autofocus, isEditable, placeholder, updateValue, value }) => {
+const TableCellString = ({ autofocus, placeholder, updateValue, value }) => {
   return (
     <Container>
-        {isEditable 
-          ?<StyledTextarea
-              autoFocus={autofocus}
-              rows="1"
-              onChange={(e) => updateValue(e.target.value)}
-              placeholder={placeholder}
-              value={value}/>
-          :<Value>{value}</Value>
-        }
+      <StyledTextarea
+        autoFocus={autofocus}
+        onChange={(e) => updateValue(e.target.value)}
+        placeholder={placeholder}
+        value={value}/>
     </Container>
   )
 }
@@ -31,7 +29,6 @@ const TableCellString = ({ autofocus, isEditable, placeholder, updateValue, valu
 //-----------------------------------------------------------------------------
 TableCellString.propTypes = {
   autofocus: bool,
-  isEditable: bool,
   placeholder: string,
   updateValue: func,
   value: string
@@ -44,16 +41,10 @@ const Container = styled.div`
   width: 100%;
 `
 
-const Value = styled.div`
-	width: 100%;
-`
-
-const StyledTextarea = styled.textarea`
-cursor: pointer;
+const StyledTextarea = styled(AutosizeTextArea)`
 margin: 0;
 padding: 0;
 width: 100%;
-height: 100%;
 font-size: inherit;
 border: none;
 outline: none;
@@ -62,12 +53,6 @@ display: flex;
 justify-content: center;
 align-items: center;
 background-color: transparent;
-transition: all ${ timing.TRANSITION_DURATION };
-&:hover {
-  &::placeholder {
-    color: black;
-  }
-}
 `
 
 export default TableCellString

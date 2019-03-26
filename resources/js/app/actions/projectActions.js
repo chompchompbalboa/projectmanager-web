@@ -148,6 +148,14 @@ export const updateCellId = (rowIndex, cellIndex, nextCellId) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Column Widths
+//-----------------------------------------------------------------------------
+export const updateColumnWidths = nextColumnWidths => ({
+  type: 'UPDATE_COLUMN_WIDTHS',
+  nextColumnWidths: nextColumnWidths
+})
+
+//-----------------------------------------------------------------------------
 // Update Row ID
 //-----------------------------------------------------------------------------
 export const updateRowId = (rowIndex, nextRowId) => ({

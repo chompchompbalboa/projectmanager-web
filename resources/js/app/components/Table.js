@@ -66,10 +66,13 @@ export default class Table extends PureComponent {
 	render() {
     const {
       actions,
+      deleteRow,
       table,
       sortColumn,
       sortOrder,
-      sortRows
+      sortRows,
+      updateCell,
+      updateColumnWidths
     } = this.props
     if (table !== null) {
       const {
@@ -84,14 +87,17 @@ export default class Table extends PureComponent {
               name={name}
               sortColumn={sortColumn}
               sortOrder={sortOrder}
-              sortRows={sortRows}/>
+              sortRows={sortRows}
+              updateColumnWidths={updateColumnWidths}/>
             {rows.map(row => {
               return (
                 <TableRow 
                   key={row.id} 
                   columns={columns}
+                  deleteRow={deleteRow}
                   isEditable={row.isEditable}
-                  row={row}/>
+                  row={row}
+                  updateCell={updateCell}/>
             )})}
           </TableData>
           <TableActions>
@@ -116,6 +122,7 @@ export default class Table extends PureComponent {
 Table.propTypes = {
   id: number,
   actions: array,
+  deleteRow: func,
   setTable: func,
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),
@@ -125,7 +132,9 @@ Table.propTypes = {
     columns: arrayOf(shape({
       defaultSortOrder: oneOf(['ASC', 'DESC'])
     })),
-  })
+  }),
+  updateCell: func,
+  updateColumnWidths: func
 }
 
 //-----------------------------------------------------------------------------

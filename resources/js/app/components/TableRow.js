@@ -3,25 +3,13 @@
 //-----------------------------------------------------------------------------
 import React, { PureComponent } from 'react'
 import { array, bool, func, number, shape } from 'prop-types'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
 
 import { colors } from '../../_config'
 
-import {
-  deleteRow as deleteRowAction
-} from '../actions/projectActions'
-
 import TableCell from './TableCell'
 import TableRowContextMenu from './TableRowContextMenu'
-
-//-----------------------------------------------------------------------------
-// Redux
-//-----------------------------------------------------------------------------
-const mapDispatchToProps = dispatch => ({
-  deleteRow: rowId => dispatch(deleteRowAction(rowId))
-})
 
 //-----------------------------------------------------------------------------
 // Component
@@ -54,7 +42,8 @@ class TableRow extends PureComponent {
       columns, 
       deleteRow,
       isEditable, 
-      row
+      row,
+      updateCell
     } = this.props
     const {
       contextMenuOpen,
@@ -75,6 +64,7 @@ class TableRow extends PureComponent {
               placeholder={column.header + '...'}
               rowId={row.id}
               type={column.type}
+              updateCell={updateCell}
               value={cell[column.type.toLowerCase()]}
               width={column.width}
             />
@@ -103,7 +93,8 @@ TableRow.propTypes = {
 	row: shape({
     id: number,
 		cells: array
-  })
+  }),
+  updateCell: func
 }
 
 //-----------------------------------------------------------------------------
@@ -125,7 +116,4 @@ const Container = styled.div`
 	}
 `
 
-export default connect(
-  null,
-  mapDispatchToProps
-)(TableRow)
+export default TableRow

@@ -23,6 +23,7 @@ import TableCellString from './TableCellString'
 const mapDispatchToProps = dispatch => ({
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value))
 })
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------

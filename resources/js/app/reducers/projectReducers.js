@@ -177,6 +177,18 @@ const projectReducers = (state = defaultState, action) => {
       return nextState
     }
 
+    case 'UPDATE_COLUMN_WIDTHS': {
+      const {
+        nextColumnWidths
+      } = action
+      const nextState = clone(state)
+      nextColumnWidths.forEach(columnWidth => {
+        const columnIndex = state.activeTable.columns.findIndex(column => column.id === columnWidth.id)
+        nextState.activeTable.columns[columnIndex].width = columnWidth.nextWidth
+      })
+      return nextState
+    }
+
       case 'UPDATE_ROW_ID': {
         const {
           nextRowId,

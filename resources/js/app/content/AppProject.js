@@ -10,9 +10,11 @@ import { colors, layout } from '../../_config'
 
 import { 
   createRow as createRowAction,
+  deleteRow as deleteRowAction,
   setActiveTable as setActiveTableAction,
   sortRows as sortRowsAction,
-  updateCell as updateCellAction 
+  updateCell as updateCellAction,
+  updateColumnWidths as updateColumnWidthsAction
 } from '../actions/projectActions'
 
 import AppProjectChooseTable from './AppProjectChooseTable'
@@ -30,9 +32,11 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   createRow: () => dispatch(createRowAction()),
+  deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setActiveTable: nextActiveTable => dispatch(setActiveTableAction(nextActiveTable)),
   sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
-  updateCell: nextCell => dispatch(updateCellAction(nextCell))
+  updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
+  updateColumnWidths: nextColumnWidths => dispatch(updateColumnWidthsAction(nextColumnWidths))
 })
 
 //-----------------------------------------------------------------------------
@@ -44,9 +48,11 @@ const AppProject = ({
   activeTableSortColumn,
   activeTableSortOrder,
   createRow, 
+  deleteRow,
   setActiveTable, 
   sortRows, 
-  updateCell 
+  updateCell,
+  updateColumnWidths
 }) => {
 
   const tableActions = [
@@ -62,12 +68,14 @@ const AppProject = ({
         <Table
           id={activeTableId}
           actions={tableActions}
+          deleteRow={deleteRow}
           table={activeTable}
           setTable={setActiveTable}
           sortColumn={activeTableSortColumn}
           sortOrder={activeTableSortOrder}
           sortRows={sortRows}
-          updateCell={updateCell}/>
+          updateCell={updateCell}
+          updateColumnWidths={updateColumnWidths}/>
       </RightColumn>
     </Container>
   )
@@ -82,9 +90,11 @@ AppProject.propTypes = {
   activeTableSortColumn: object,
   activeTableSortOrder: oneOf(['ASC', 'DESC']),
   createRow: func,
+  deleteRow: func,
   sortRows: func,
   setActiveTable: func,
-  updateCell: func
+  updateCell: func,
+  updateColumnWidths: func
 }
 
 //-----------------------------------------------------------------------------

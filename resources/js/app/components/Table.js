@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { PureComponent } from 'react'
-import { array, arrayOf, func, number, oneOf, shape } from 'prop-types'
+import { array, arrayOf, func, number, object, oneOf, shape } from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 
@@ -13,16 +13,13 @@ import Loading from '../components/Loading'
 import TableAction from './TableAction'
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'
-
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 export default class Table extends PureComponent {
   
   state = {
-    isGettingTable: false,
-    sortColumn: this.props.table ? this.props.table.columns[0] : null,
-    sortOrder: this.props.table ? this.props.table.columns[0].defaultSortOrder : null
+    isGettingTable: false
   }
   
   componentDidMount = () => {
@@ -39,35 +36,6 @@ export default class Table extends PureComponent {
     if(table === null) {
       this.getTable()
     }
-  }
-
-  createRow = () => {
-    const {
-      tableId,
-      columns,
-      rows
-    } = this.state
-    const newRowCells = columns.map((column, index) => {
-      return {
-        id: -1 * index,
-        table_id: tableId,
-        column_id: column.id,
-        row_id: null,
-        string: null,
-        number: null,
-        boolean: null,
-        datetime: null
-      }
-    })
-    const newRow = {
-      id: _.random(-5000, -1),
-      table_id: tableId,
-      cells: newRowCells,
-      isEditable: true
-    }
-    this.setState({
-      rows: [newRow, ...rows]
-    })
   }
 
   getTable = () => {
@@ -95,76 +63,29 @@ export default class Table extends PureComponent {
     }
   }
 
-	sortRows = (rows, sortColumn, sortOrder) => {
-		const rowValue = row => {
-			const sortCell = _.find(row.cells, cell => {
-				return cell.columnId === sortColumn.id
-      })
-			return sortCell[sortColumn.type.toLowerCase()]
-		}
-		const compareRowValues = (row1, row2) => {
-			const row1Value = rowValue(row1)
-			const row2Value = rowValue(row2)
-			if (row1Value < row2Value) return sortOrder === 'ASC' ? -1 : 1
-			if (row1Value > row2Value) return sortOrder === 'ASC' ? 1 : -1
-			return 0
-    }
-    let sortableRows = []
-    let nonSortableRows = []
-    rows.map(row => {
-      if (row.isSortable === false) {
-        nonSortableRows.push(row)
-      } else {
-        sortableRows.push(row)
-      }
-    })
-
-		return nonSortableRows.concat(sortableRows.sort(compareRowValues))
-	}
-
-	onHeaderClick = nextSortColumn => {
-		const { 
-      sortOrder, 
-      sortColumn 
-    } = this.state
-    let nextSortOrder
-    
-		if (nextSortColumn.id === sortColumn.id) {
-			nextSortOrder = sortOrder === 'ASC' ? 'DESC' : 'ASC'
-		} else {
-			nextSortOrder = nextSortColumn.defaultSortOrder
-    }
-		this.setState({
-			sortOrder: nextSortOrder,
-			sortColumn: nextSortColumn
-		})
-  }
-
 	render() {
     const {
       actions,
-      table
-    } = this.props
-    const {
+      table,
       sortColumn,
-      sortOrder
-    } = this.state
+      sortOrder,
+      sortRows
+    } = this.props
     if (table !== null) {
       const {
         rows,
         columns
       } = table
-      const sortedRows = this.sortRows(rows, sortColumn, sortOrder)
       return (
         <Container>
           <TableData>
             <TableHeader
               columns={columns}
               name={name}
-              onHeaderClick={this.onHeaderClick}
               sortColumn={sortColumn}
-              sortOrder={sortOrder}/>
-            {sortedRows.map(row => {
+              sortOrder={sortOrder}
+              sortRows={sortRows}/>
+            {rows.map(row => {
               return (
                 <TableRow 
                   key={row.id} 
@@ -196,6 +117,9 @@ Table.propTypes = {
   id: number,
   actions: array,
   setTable: func,
+  sortColumn: object,
+  sortOrder: oneOf(['ASC', 'DESC']),
+  sortRows: func,
   table: shape({
     rows: array,
     columns: arrayOf(shape({

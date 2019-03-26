@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { func, number, object } from 'prop-types'
+import { func, number, object, oneOf } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
@@ -11,6 +11,7 @@ import { colors, layout } from '../../_config'
 import { 
   createRow as createRowAction,
   setActiveTable as setActiveTableAction,
+  sortRows as sortRowsAction,
   updateCell as updateCellAction 
 } from '../actions/projectActions'
 
@@ -22,19 +23,31 @@ import Table from '../components/Table'
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
   activeTable: state.project.activeTable,
-  activeTableId: state.project.activeTableId
+  activeTableId: state.project.activeTableId,
+  activeTableSortColumn: state.project.activeTableSortColumn,
+  activeTableSortOrder: state.project.activeTableSortOrder
 })
 
 const mapDispatchToProps = dispatch => ({
   createRow: () => dispatch(createRowAction()),
   setActiveTable: nextActiveTable => dispatch(setActiveTableAction(nextActiveTable)),
+  sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
   updateCell: nextCell => dispatch(updateCellAction(nextCell))
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppProject = ({ activeTable, activeTableId, createRow, setActiveTable, updateCell }) => {
+const AppProject = ({ 
+  activeTable, 
+  activeTableId, 
+  activeTableSortColumn,
+  activeTableSortOrder,
+  createRow, 
+  setActiveTable, 
+  sortRows, 
+  updateCell 
+}) => {
 
   const tableActions = [
     { icon: "ACTION_CREATE_ROW", onClick: createRow }
@@ -51,6 +64,9 @@ const AppProject = ({ activeTable, activeTableId, createRow, setActiveTable, upd
           actions={tableActions}
           table={activeTable}
           setTable={setActiveTable}
+          sortColumn={activeTableSortColumn}
+          sortOrder={activeTableSortOrder}
+          sortRows={sortRows}
           updateCell={updateCell}/>
       </RightColumn>
     </Container>
@@ -63,7 +79,10 @@ const AppProject = ({ activeTable, activeTableId, createRow, setActiveTable, upd
 AppProject.propTypes = {
   activeTable: object,
   activeTableId: number,
+  activeTableSortColumn: object,
+  activeTableSortOrder: oneOf(['ASC', 'DESC']),
   createRow: func,
+  sortRows: func,
   setActiveTable: func,
   updateCell: func
 }

@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import moment from 'moment'
 import { mutation } from '../../_api'
 
 import { setStatus } from '../actions/statusActions'
@@ -98,6 +99,14 @@ export const setProjects = nextProjects => ({
 })
 
 //-----------------------------------------------------------------------------
+// Set Projects
+//-----------------------------------------------------------------------------
+export const sortRows = nextSortColumn => ({
+  type: 'SORT_ROWS',
+  nextSortColumn: nextSortColumn
+})
+
+//-----------------------------------------------------------------------------
 // Update Cell
 //-----------------------------------------------------------------------------
 export const updateCell = (rowId, cellId, type, value) => {
@@ -105,16 +114,13 @@ export const updateCell = (rowId, cellId, type, value) => {
     const state = getState()
     const rowIndex = state.project.activeTable.rows.findIndex(row => row.id === rowId)
     const cellIndex = state.project.activeTable.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
-    console.log(rowIndex, cellIndex, value)
-    console.log(state.project.activeTable.rows[rowIndex].cells[cellIndex][type.toLowerCase()])
-    console.log(type)
+    // Make sure the value has changed
     if (state.project.activeTable.rows[rowIndex].cells[cellIndex][type.toLowerCase()] !== value) {
       dispatch(updateCellServer(cellId, rowIndex, cellIndex, value))
     }
   }
 
 }
-
 const updateCellReducer = (rowIndex, cellIndex, nextCell) => ({
   type: 'UPDATE_CELL',
   cellIndex: cellIndex,

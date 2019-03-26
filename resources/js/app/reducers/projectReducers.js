@@ -1,13 +1,32 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
+import moment from 'moment'
 import _ from 'lodash'
+import { date as dateConfig } from '../../_config'
 
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
 const clone = object => {
   return JSON.parse(JSON.stringify(object))
+}
+
+const sortRows = (rows, sortColumn, sortOrder) => {
+  const getRowValue = row => {
+    const sortCell = _.find(row.cells, cell => {
+      return cell.columnId === sortColumn.id
+    })
+    return sortCell[sortColumn.type.toLowerCase()]
+  }
+  const compareRowValues = (row1, row2) => {
+    const row1Value = getRowValue(row1)
+    const row2Value = getRowValue(row2)
+    if (row1Value < row2Value) return sortOrder === 'ASC' ? -1 : 1
+    if (row1Value > row2Value) return sortOrder === 'ASC' ? 1 : -1
+    return 0
+  }
+  return rows.sort(compareRowValues)
 }
 
 //-----------------------------------------------------------------------------
@@ -17,6 +36,8 @@ const defaultState = {
   activeProject: null,
   activeTableId: null,
   activeTable: null,
+  activeTableSortColumn: null,
+  activeTableSortOrder: null,
   projects: null
 }
 
@@ -36,15 +57,14 @@ const projectReducers = (state = defaultState, action) => {
           string: null,
           number: null,
           boolean: null,
-          datetime: null
+          datetime: moment().format(dateConfig.format)
         }
       })
       const newRow = {
         id: _.random(-100000, -999999),
         tableId: state.activeTableId,
         cells: newRowCells,
-        isEditable: true,
-        isSortable: false
+        isEditable: true
       }
       return {
         ...state,
@@ -77,17 +97,23 @@ const projectReducers = (state = defaultState, action) => {
         activeTable: null
       }
 
-    case 'SET_ACTIVE_TABLE':
+    case 'SET_ACTIVE_TABLE': {
+      const sortColumn = action.nextActiveTable.columns[0]
+      const sortOrder = action.nextActiveTable.columns[0].defaultSortOrder
+      const sortedRows = sortRows(action.nextActiveTable.rows, sortColumn, sortOrder)
       if(state.activeTableId === action.nextActiveTable.id) {
         return {
           ...state, 
           activeTable: {
             columns: action.nextActiveTable.columns,
-            rows: action.nextActiveTable.rows
-          }
+            rows: sortedRows
+          },
+          activeTableSortColumn: sortColumn,
+          activeTableSortOrder: sortOrder
         }
       }
       return state
+    }
 
     case 'SET_ACTIVE_TABLE_ID': 
       return {
@@ -101,6 +127,33 @@ const projectReducers = (state = defaultState, action) => {
         ...state, 
         projects: action.nextProjects
       }
+
+    case 'SORT_ROWS': {
+      const {
+        activeTable,
+        activeTableSortColumn,
+        activeTableSortOrder
+      } = state
+      const {
+        nextSortColumn
+      } = action
+
+      const nextActiveTableSortOrder = nextSortColumn.id === activeTableSortColumn.id
+        ? activeTableSortOrder === 'ASC' ? 'DESC' : 'ASC' 
+        : nextSortColumn.defaultSortOrder
+
+      const nextActiveTableRows = sortRows(activeTable.rows, nextSortColumn, nextActiveTableSortOrder)
+
+      return {
+        ...state,
+        activeTable: {
+          ...state.activeTable,
+          rows: nextActiveTableRows
+        },
+        activeTableSortColumn: nextSortColumn,
+        activeTableSortOrder: nextActiveTableSortOrder
+      }
+    }
 
     case 'UPDATE_CELL': {
       const {

@@ -2,17 +2,33 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import moment from 'moment'
+import { func, string } from 'prop-types'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
+
+import { date as dateConfig } from '../../_config'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellDatetime = ({ value }) => {
+const TableCellDatetime = ({ updateValue, value }) => {
   return (
     <Container>
-      Dt: {value}
+      <DatePicker
+        selected={new Date(value)}
+        onChange={date => updateValue(moment(date).format(dateConfig.format))}/>
     </Container>
   )
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+TableCellDatetime.propTypes = {
+  value: string,
+  updateValue: func
 }
 
 //-----------------------------------------------------------------------------

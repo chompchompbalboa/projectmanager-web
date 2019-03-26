@@ -12,7 +12,7 @@ import Icon from '../components/Icon'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableHeader = ({ columns, onHeaderClick, sortOrder, sortColumn }) => {
+const TableHeader = ({ columns, sortOrder, sortColumn, sortRows }) => {
 
   const getSortDirection = (column) => {
     if (column.id === sortColumn.id) {
@@ -29,7 +29,7 @@ const TableHeader = ({ columns, onHeaderClick, sortOrder, sortColumn }) => {
         return (
           <TableHeaderCell
             key={index}
-            onClick={() => onHeaderClick(column)}
+            onClick={() => sortRows(column)}
             sortDirection={sortDirection}
             widthPercentage={column.width}>
             <TableHeaderCellValue>
@@ -57,12 +57,12 @@ TableHeader.propTypes = {
 		})
   ),
   name: string,
-  onHeaderClick: func,
   isLoading: bool,
 	sortColumn: shape({
     id: number
   }),
-	sortOrder: oneOf(['ASC', 'DESC'])
+  sortOrder: oneOf(['ASC', 'DESC']),
+  sortRows: func,
 }
 
 //-----------------------------------------------------------------------------

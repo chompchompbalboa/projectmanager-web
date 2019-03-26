@@ -2,9 +2,10 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { layout, timing } from '../../_config'
+import { timing } from '../../_config'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -23,6 +24,17 @@ const TableCellString = ({ autofocus, isEditable, placeholder, updateValue, valu
         }
     </Container>
   )
+}
+
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
+TableCellString.propTypes = {
+  autofocus: bool,
+  isEditable: bool,
+  placeholder: string,
+  updateValue: func,
+  value: string
 }
 
 //-----------------------------------------------------------------------------

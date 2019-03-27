@@ -4,7 +4,6 @@
 import React, { PureComponent } from 'react'
 import { array, arrayOf, func, number, object, oneOf, shape } from 'prop-types'
 import styled from 'styled-components'
-import _ from 'lodash'
 
 import { query } from '../../_api'
 import { colors, layout } from '../../_config'
@@ -67,10 +66,11 @@ export default class Table extends PureComponent {
     const {
       actions,
       deleteRow,
-      table,
+      insertColumn,
       sortColumn,
       sortOrder,
       sortRows,
+      table,
       updateCell,
       updateColumnWidths
     } = this.props
@@ -84,6 +84,7 @@ export default class Table extends PureComponent {
           <TableData>
             <TableHeader
               columns={columns}
+              insertColumn={insertColumn}
               name={name}
               sortColumn={sortColumn}
               sortOrder={sortOrder}
@@ -123,6 +124,7 @@ Table.propTypes = {
   id: number,
   actions: array,
   deleteRow: func,
+  insertColumn: func,
   setTable: func,
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),

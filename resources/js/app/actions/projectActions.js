@@ -1,6 +1,7 @@
 import _ from 'lodash'
-import moment from 'moment'
+
 import { mutation } from '../../_api'
+import { timing } from '../../_config'
 
 import { setStatus } from '../actions/statusActions'
 
@@ -150,10 +151,39 @@ export const updateCellId = (rowIndex, cellIndex, nextCellId) => ({
 //-----------------------------------------------------------------------------
 // Update Column Widths
 //-----------------------------------------------------------------------------
-export const updateColumnWidths = nextColumnWidths => ({
+let updateColumnWidthsTimeout
+export const updateColumnWidths = nextColumnWidths => {
+  return dispatch => {
+    clearTimeout(updateColumnWidthsTimeout)
+    dispatch(updateColumnWidthsReducer(nextColumnWidths))
+    updateColumnWidthsTimeout = window.setTimeout(() => dispatch(updateColumnWidthsServer(nextColumnWidths)), timing.SAVE_INTERVAL)
+  }
+}
+const updateColumnWidthsReducer = nextColumnWidths => ({
   type: 'UPDATE_COLUMN_WIDTHS',
   nextColumnWidths: nextColumnWidths
 })
+const updateColumnWidthsServer = nextColumnWidths => {
+  return (dispatch, getState) => {
+    dispatch(setStatus('SAVING'))
+    let numberOfColumnsToSave = nextColumnWidths.length
+    let numberOfColumnsSaved = 0
+    const columns = getState().project.activeTable.columns
+    nextColumnWidths.map(columnWidth => {
+      const columnToSave = columns.find(column => column.id === columnWidth.id)
+      mutation.updateColumn(columnToSave.id, columnToSave).then(success => {
+        if(success) {
+          numberOfColumnsSaved < numberOfColumnsToSave - 1 
+            ? numberOfColumnsSaved++ 
+            : dispatch(setStatus('SAVED'))
+        }
+        else {
+          dispatch(setStatus('ERROR'))
+        }
+      })
+    })
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Update Row ID

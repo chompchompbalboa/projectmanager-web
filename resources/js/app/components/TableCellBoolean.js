@@ -21,6 +21,11 @@ const TableCellBoolean = ({ isEditable, updateValue, value }) => {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div``
+const Container = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 export default TableCellBoolean

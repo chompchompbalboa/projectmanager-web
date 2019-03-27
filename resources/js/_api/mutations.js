@@ -28,3 +28,12 @@ export const updateCell = async (id, value) => {
     return response.data
   })
 }
+
+export const updateColumn = async (id, column) => {  
+  return axios.patch('/app/columns/' + id, {
+    id: id,
+    column: column
+  }).then(response => {
+    return response.data
+  })
+}

@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import { colors, layout } from '../../_config'
 
 import Icon from '../components/Icon'
+import TableContextMenu from './TableContextMenu'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -25,6 +26,12 @@ class TableHeader extends PureComponent {
     mouseDownColumnId: null,
     mouseDownColumnWidth: null,
     mouseDownColumnPageX: null
+  }
+
+  closeContextMenu = () => {
+    this.setState({
+      contextMenuOpen: false
+    })
   }
   
   getSortDirection = column => {
@@ -73,7 +80,7 @@ class TableHeader extends PureComponent {
   }
   
   handleResizeMouseUp = () => {
-    window.removeEventListener('mousemove', () => this.handleResizeMouseMove(columnId))
+    window.removeEventListener('mousemove', () => this.handleResizeMouseMove())
     window.removeEventListener('mouseup', () => this.handleResizeMouseUp())
     this.setState({
       mouseDownAdjacentColumnId: null,
@@ -81,21 +88,33 @@ class TableHeader extends PureComponent {
       mouseDownColumnPageX: null
     })
   }
+
+  onRightClick = e => {
+    e.preventDefault()
+    this.setState({
+      contextMenuOpen: true,
+      contextMenuTop: e.clientY,
+      contextMenuLeft: e.clientX
+    })
+  }
   
   render() {
     const { 
-      columns, 
-      sortOrder, 
-      sortColumn, 
+      columns,
+      insertColumn,
       sortRows 
     } = this.props
     const {
+      contextMenuLeft,
+      contextMenuOpen,
+      contextMenuTop,
       mouseDownColumnId
     } = this.state
     return (
       <Container 
-        ref={this.tableHeaderContainer}
-        backgroundColor={colors.ACCENT}>
+        backgroundColor={colors.ACCENT}
+        onContextMenu={e => this.onRightClick(e)}
+        ref={this.tableHeaderContainer}>
         {columns.map((column, index) => {
           const sortDirection = this.getSortDirection(column)
           return (
@@ -121,6 +140,14 @@ class TableHeader extends PureComponent {
             </React.Fragment>
           )
         })}
+        {contextMenuOpen && 
+          <TableContextMenu
+            closeContextMenu={this.closeContextMenu}
+            insertColumn={insertColumn}
+            isHeader={true}
+            top={contextMenuTop}
+            left={contextMenuLeft}/>
+        }
       </Container>
     )
   }
@@ -136,6 +163,7 @@ TableHeader.propTypes = {
 		})
   ),
   name: string,
+  insertColumn: func,
   isLoading: bool,
 	sortColumn: shape({
     id: number
@@ -152,7 +180,7 @@ const Container = styled.div`
   z-index: 10000;
   position: sticky;
   top: calc(-1*${ layout.PADDING });
-	padding: calc(${ layout.TABLE_PADDING }/2) 0;
+	padding: calc(${ layout.TABLE_PADDING }/2);
   width: 100%;
   background-color: ${colors.ACCENT};
   display: flex;
@@ -163,7 +191,7 @@ const Container = styled.div`
 
 const TableHeaderCell = styled.div`
   cursor: ${ props => props.isColumnResizing ? 'col-resize' : 'pointer' };
-	padding: 0 ${ layout.TABLE_PADDING };
+	padding: 0 calc(${ layout.TABLE_PADDING } / 2);
 	width: calc(100% * ${props => props.widthPercentage});
   opacity: ${ props => props.sortDirection === "BOTH" ? '0.65' : '1'};
   font-weight: bold;

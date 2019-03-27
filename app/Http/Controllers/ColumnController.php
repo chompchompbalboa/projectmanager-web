@@ -69,7 +69,16 @@ class ColumnController extends Controller
      */
     public function update(Request $request, Column $column)
     {
-        //
+      $nextWidth = $request->input('column')['width'];
+      $column->width = $nextWidth;
+      if ($column->save()) {
+        return $column;
+      }
+      else {
+        return [
+          "success" => false
+        ];
+      }
     }
 
     /**

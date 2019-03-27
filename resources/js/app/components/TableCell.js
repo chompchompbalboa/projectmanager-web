@@ -118,7 +118,7 @@ TableCell.defaultProps = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-	padding: 0 ${ layout.TABLE_PADDING };
+  padding: 0 calc(${ layout.TABLE_PADDING } / 2);
 	width: calc(100% * ${props => props.widthPercentage});
 	font-weight: ${props => props.fontWeight};
 	display: flex;

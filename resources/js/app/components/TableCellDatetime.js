@@ -17,7 +17,7 @@ const TableCellDatetime = ({ updateValue, value }) => {
   return (
     <Container>
       <DatePicker
-        selected={new Date(value)}
+        selected={moment(value).toDate()}
         onChange={date => updateValue(moment(date).format(dateConfig.format))}/>
     </Container>
   )

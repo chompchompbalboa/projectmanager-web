@@ -2,17 +2,40 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { PureComponent } from 'react'
-import { func, number } from 'prop-types'
+import { bool, func, number } from 'prop-types'
 import styled from 'styled-components'
+
+import { colors } from '../../_config'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class TableRowContextMenu extends PureComponent {
+class TableContextMenu extends PureComponent {
 
   constructor(props) {
     super(props)
     this.contextMenuContainer = React.createRef()
+  }
+  
+  columnActions = () => {
+    const {
+      columnId,
+      insertColumn
+    } = this.props
+    return [
+      { text: 'Insert Before', action: () => insertColumn(columnId, 'BEFORE') },
+      { text: 'Insert After', action: () => insertColumn(columnId, 'AFTER') },
+    ]
+  }
+
+  rowActions = () => {
+    const {
+      deleteRow,
+      rowId
+    } = this.props
+    return [
+      { text: 'Delete', action: () => deleteRow(rowId) }
+    ]
   }
 
   componentDidMount = () => {
@@ -35,20 +58,25 @@ class TableRowContextMenu extends PureComponent {
 
   render() {
     const {
-      deleteRow,
-      rowId,
+      isHeader,
       top, 
       left
     } = this.props
+    const actions = isHeader ? this.columnActions() : this.rowActions()
     return (
       <Container
         ref={this.contextMenuContainer}
         contextMenuTop={top}
         contextMenuLeft={left}>
-        <Action
-          onClick={() => deleteRow(rowId)}>
-          Delete
-        </Action>
+        {actions.map((action, index) => {
+          return (
+            <Action
+              key={index}
+              onClick={action.action}>
+              {action.text}
+            </Action>
+          )
+        })}
       </Container>
     )
   }
@@ -57,9 +85,12 @@ class TableRowContextMenu extends PureComponent {
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-TableRowContextMenu.propTypes = {
+TableContextMenu.propTypes = {
+  columnId: number,
   closeContextMenu: func,
   deleteRow: func,
+  insertColumn: func,
+  isHeader: bool,
   rowId: number,
   top: number,
   left: number
@@ -84,6 +115,12 @@ const Action = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 14px;
+  border-right: 3px solid transparent;
+  &:hover {
+    color: ${ colors.PRIMARY };
+    border-right: 3px solid ${ colors.PRIMARY };
+  }
 `
 
-export default TableRowContextMenu
+export default TableContextMenu

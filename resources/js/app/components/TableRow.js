@@ -6,10 +6,10 @@ import { array, bool, func, number, shape } from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 
-import { colors } from '../../_config'
+import { colors, layout } from '../../_config'
 
 import TableCell from './TableCell'
-import TableRowContextMenu from './TableRowContextMenu'
+import TableContextMenu from './TableContextMenu'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -71,7 +71,7 @@ class TableRow extends PureComponent {
           )
         })}
         {contextMenuOpen && 
-          <TableRowContextMenu
+          <TableContextMenu
             closeContextMenu={this.closeContextMenu}
             deleteRow={deleteRow}
             rowId={row.id}
@@ -102,7 +102,7 @@ TableRow.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.div`
 	width: 100%;
-	padding: 2vh 0;
+	padding: calc(${ layout.TABLE_PADDING }/2);
 	background-color: ${colors.BACKGROUND_SECONDARY};
 	font-size: 13px;
 	display: flex;

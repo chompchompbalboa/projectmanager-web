@@ -33,6 +33,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createRow: () => dispatch(createRowAction()),
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
+  insertColumn: (columnId, beforeOrAfter) => dispatch(insertColumnAction(columnId, beforeOrAfter)),
   setActiveTable: nextActiveTable => dispatch(setActiveTableAction(nextActiveTable)),
   sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
@@ -49,6 +50,7 @@ const AppProject = ({
   activeTableSortOrder,
   createRow, 
   deleteRow,
+  insertColumn,
   setActiveTable, 
   sortRows, 
   updateCell,
@@ -69,11 +71,12 @@ const AppProject = ({
           id={activeTableId}
           actions={tableActions}
           deleteRow={deleteRow}
-          table={activeTable}
+          insertColumn={insertColumn}
           setTable={setActiveTable}
           sortColumn={activeTableSortColumn}
           sortOrder={activeTableSortOrder}
           sortRows={sortRows}
+          table={activeTable}
           updateCell={updateCell}
           updateColumnWidths={updateColumnWidths}/>
       </RightColumn>
@@ -91,6 +94,7 @@ AppProject.propTypes = {
   activeTableSortOrder: oneOf(['ASC', 'DESC']),
   createRow: func,
   deleteRow: func,
+  insertColumn: func,
   sortRows: func,
   setActiveTable: func,
   updateCell: func,

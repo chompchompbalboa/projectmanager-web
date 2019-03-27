@@ -24,6 +24,7 @@ Route::prefix('app')->group(function () {
 
   Route::resources([
     'cells' => 'CellController',
+    'columns' => 'ColumnController',
     'rows' => 'RowController',
     'tables' => 'TableController',
   ]);

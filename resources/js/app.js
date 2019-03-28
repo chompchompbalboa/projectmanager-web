@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom'
 import { Provider as ReduxProvider } from 'react-redux'
 import { applyMiddleware, createStore } from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import reducers from './app/reducers/reducers'
+import reducers from './app/redux/reducers'
 
 import App from './app/App'
 //-----------------------------------------------------------------------------

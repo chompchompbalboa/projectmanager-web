@@ -1,9 +1,9 @@
 import _ from 'lodash'
 
-import { mutation } from '../../_api'
-import { timing } from '../../_config'
+import { mutation } from '../../../_api'
+import { timing } from '../../../_config'
 
-import { setStatus } from '../actions/statusActions'
+import { setStatus } from '../status/statusActions'
 
 //-----------------------------------------------------------------------------
 // Create Column
@@ -76,39 +76,25 @@ const deleteRowServer = rowId => {
 }
 
 //-----------------------------------------------------------------------------
-// Set Active Project
+// Set Table
 //-----------------------------------------------------------------------------
-export const setActiveProject = nextActiveProject => ({
-  type: 'SET_ACTIVE_PROJECT',
-  nextActiveProject: nextActiveProject
+export const setTable = nextTable => ({
+  type: 'SET_TABLE',
+  id: nextTable.id,
+  rows: nextTable.rows,
+  columns: nextTable.columns
 })
 
 //-----------------------------------------------------------------------------
-// Set Active Table
+// Set Table ID
 //-----------------------------------------------------------------------------
-export const setActiveTable = nextActiveTable => ({
-  type: 'SET_ACTIVE_TABLE',
-  nextActiveTable: nextActiveTable
+export const setTableId = nextTableId => ({
+  type: 'SET_TABLE_ID',
+  nextTableId: nextTableId
 })
 
 //-----------------------------------------------------------------------------
-// Set Active Table ID
-//-----------------------------------------------------------------------------
-export const setActiveTableId = nextActiveTableId => ({
-  type: 'SET_ACTIVE_TABLE_ID',
-  nextActiveTableId: nextActiveTableId
-})
-
-//-----------------------------------------------------------------------------
-// Set Projects
-//-----------------------------------------------------------------------------
-export const setProjects = nextProjects => ({
-  type: 'SET_PROJECTS',
-  nextProjects: nextProjects
-})
-
-//-----------------------------------------------------------------------------
-// Set Projects
+// Sort Rows
 //-----------------------------------------------------------------------------
 export const sortRows = nextSortColumn => ({
   type: 'SORT_ROWS',

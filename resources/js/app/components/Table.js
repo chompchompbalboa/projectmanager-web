@@ -3,41 +3,83 @@
 //-----------------------------------------------------------------------------
 import React, { PureComponent } from 'react'
 import { array, arrayOf, func, number, object, oneOf, shape } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { query } from '../../_api'
 import { colors, layout } from '../../_config'
 
+import { 
+  createColumn as createColumnAction,
+  createRow as createRowAction,
+  deleteRow as deleteRowAction,
+  setTable as setTableAction,
+  sortRows as sortRowsAction,
+  updateCell as updateCellAction,
+  updateColumnWidths as updateColumnWidthsAction
+} from '../redux/table/tableActions'
+
 import Loading from '../components/Loading'
 import TableAction from './TableAction'
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  id: state.table.id,
+  columms: state.table.columns,
+  rows: state.table.rows,
+  sortColumn: state.table.sortColumn,
+  sortOrder: state.table.sortOrder
+})
+
+const mapDispatchToProps = dispatch => ({
+  createColumn: (columnId, beforeOrAfter) => dispatch(createColumnAction(columnId, beforeOrAfter)),
+  createRow: () => dispatch(createRowAction()),
+  deleteRow: rowId => dispatch(deleteRowAction(rowId)),
+  setTable: nextTable => dispatch(setTableAction(nextTable)),
+  sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
+  updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
+  updateColumnWidths: nextColumnWidths => dispatch(updateColumnWidthsAction(nextColumnWidths))
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class Table extends PureComponent {
+class Table extends PureComponent {
   
   state = {
     isGettingTable: false
   }
+
+  actions = [
+    { icon: "ACTION_CREATE_ROW", onClick: this.props.createRow }
+  ]
   
   componentDidMount = () => {
     const {
-      table
+      columns,
+      rows
     } = this.props
-    table === null && this.getTable()
-  }
-
-  componentDidUpdate = () => {
-    const {
-      table
-    } = this.props
-    if(table === null) {
+    if(rows === null || columns === null) {
       this.getTable()
     }
   }
 
+  componentDidUpdate = () => {
+    const {
+      columns,
+      rows
+    } = this.props
+    if(rows === null || columns === null) {
+      //this.getTable()
+    }
+  }
+
   getTable = () => {
+    console.log('getTable')
     const { 
       id,
       setTable
@@ -50,10 +92,6 @@ export default class Table extends PureComponent {
         isGettingTable: true
       })
       id !== null && query.getTable(id).then(nextTable => {
-        this.setState({
-          sortColumn: nextTable.columns[0],
-          sortOrder: nextTable.columns[0].defaultSortOrder
-        })
         setTable(nextTable)
         this.setState({
           isGettingTable: false
@@ -64,21 +102,18 @@ export default class Table extends PureComponent {
 
 	render() {
     const {
-      actions,
+      columns,
       createColumn,
       deleteRow,
+      rows,
       sortColumn,
       sortOrder,
       sortRows,
-      table,
       updateCell,
       updateColumnWidths
     } = this.props
-    if (table !== null) {
-      const {
-        rows,
-        columns
-      } = table
+    if (rows !== null && columns !== null) {
+      console.log(this.props)
       return (
         <Container>
           <TableData>
@@ -102,7 +137,7 @@ export default class Table extends PureComponent {
             )})}
           </TableData>
           <TableActions>
-            {actions.map(action => {
+            {this.actions.map(action => {
               return (
                 <TableAction
                   key={action.icon}
@@ -123,18 +158,17 @@ export default class Table extends PureComponent {
 Table.propTypes = {
   id: number,
   actions: array,
+  columns: arrayOf(shape({
+    defaultSortOrder: oneOf(['ASC', 'DESC'])
+  })),
   createColumn: func,
+  createRow: func,
   deleteRow: func,
+  rows: array,
   setTable: func,
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),
   sortRows: func,
-  table: shape({
-    rows: array,
-    columns: arrayOf(shape({
-      defaultSortOrder: oneOf(['ASC', 'DESC'])
-    })),
-  }),
   updateCell: func,
   updateColumnWidths: func
 }
@@ -169,3 +203,8 @@ const TableActions = styled.div`
   justify-content: flex-start;
   align-items: center;
 `
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Table)

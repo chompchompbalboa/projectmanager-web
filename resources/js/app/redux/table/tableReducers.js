@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 import moment from 'moment'
 import _ from 'lodash'
-import { date as dateConfig } from '../../_config'
+import { date as dateConfig } from '../../../_config'
 
 //-----------------------------------------------------------------------------
 // Helper functions
@@ -33,12 +33,11 @@ const sortRows = (rows, sortColumn, sortOrder) => {
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  activeProject: null,
-  activeTableId: null,
-  activeTable: null,
-  activeTableSortColumn: null,
-  activeTableSortOrder: null,
-  projects: null
+  id: null,
+  rows: null,
+  columns: null,
+  sortColumn: null,
+  sortOrder: null
 }
 
 //-----------------------------------------------------------------------------
@@ -53,7 +52,7 @@ const projectReducers = (state = defaultState, action) => {
     }
 
     case 'CREATE_ROW': {
-      const newRowCells = state.activeTable.columns.map(column => {
+      const newRowCells = state.columns.map(column => {
         return {
           id: _.random(-100000, -999999),
           tableId: state.activeTableId,
@@ -73,10 +72,7 @@ const projectReducers = (state = defaultState, action) => {
       }
       return {
         ...state,
-        activeTable: {
-          ...state.activeTable,
-          rows: [newRow, ...state.activeTable.rows]
-        }
+        rows: [newRow, ...state.rows]
       }
     }
 
@@ -84,79 +80,71 @@ const projectReducers = (state = defaultState, action) => {
       const {
         rowId
       } = action
-      const nextRows = state.activeTable.rows.filter(row => row.id !== rowId)
+      const nextRows = state.rows.filter(row => row.id !== rowId)
       return {
         ...state,
-        activeTable: {
-          ...state.activeTable,
-          rows: nextRows
-        }
+        rows: nextRows
       }
     }
 
-    case 'SET_ACTIVE_PROJECT': 
-      return {
-        ...state, 
-        activeProject: action.nextActiveProject,
-        activeTableId: action.nextActiveProject.tables[0].id,
-        activeTable: null
-      }
-
-    case 'SET_ACTIVE_TABLE': {
-      const sortColumn = action.nextActiveTable.columns[0]
-      const sortOrder = action.nextActiveTable.columns[0].defaultSortOrder
-      const sortedRows = sortRows(action.nextActiveTable.rows, sortColumn, sortOrder)
-      if(state.activeTableId === action.nextActiveTable.id) {
+    case 'SET_TABLE': {
+      const {
+        id,
+        columns, 
+        rows
+      } = action
+      console.log('SET_TABLE')
+      const sortColumn = columns[0]
+      const sortOrder = columns[0].defaultSortOrder
+      const sortedRows = sortRows(rows, sortColumn, sortOrder)
+      if(state.activeTableId === id) {
         return {
           ...state, 
-          activeTable: {
-            columns: action.nextActiveTable.columns,
-            rows: sortedRows
-          },
-          activeTableSortColumn: sortColumn,
-          activeTableSortOrder: sortOrder
+          id: id,
+          columns: columns,
+          rows: sortedRows,
+          sortColumn: sortColumn,
+          sortOrder: sortOrder
         }
       }
       return state
     }
 
-    case 'SET_ACTIVE_TABLE_ID': 
-      return {
-        ...state, 
-        activeTable: null,
-        activeTableId: action.nextActiveTableId
-      }
-
-    case 'SET_PROJECTS': 
-      return {
-        ...state, 
-        projects: action.nextProjects
-      }
+    case 'SET_TABLE_ID': {
+      const {
+        nextTableId,
+      } = action
+        return {
+          ...state, 
+          id: nextTableId,
+          rows: null,
+          columns: null,
+          sortColumn: null,
+          sortOrder: null
+        }
+    }
 
     case 'SORT_ROWS': {
       const {
-        activeTable,
-        activeTableSortColumn,
-        activeTableSortOrder
+        rows,
+        sortColumn,
+        sortOrder
       } = state
       const {
         nextSortColumn
       } = action
 
-      const nextActiveTableSortOrder = nextSortColumn.id === activeTableSortColumn.id
-        ? activeTableSortOrder === 'ASC' ? 'DESC' : 'ASC' 
+      const nextSortOrder = nextSortColumn.id === sortColumn.id
+        ? sortOrder === 'ASC' ? 'DESC' : 'ASC' 
         : nextSortColumn.defaultSortOrder
 
-      const nextActiveTableRows = sortRows(activeTable.rows, nextSortColumn, nextActiveTableSortOrder)
+      const nextRows = sortRows(rows, nextSortColumn, nextSortOrder)
 
       return {
         ...state,
-        activeTable: {
-          ...state.activeTable,
-          rows: nextActiveTableRows
-        },
-        activeTableSortColumn: nextSortColumn,
-        activeTableSortOrder: nextActiveTableSortOrder
+        rows: nextRows,
+        sortColumn: nextSortColumn,
+        sortOrder: nextSortOrder
       }
     }
 
@@ -167,7 +155,7 @@ const projectReducers = (state = defaultState, action) => {
         rowIndex
       } = action
       const nextState = clone(state)
-      nextState.activeTable.rows[rowIndex].cells[cellIndex] = nextCell
+      nextState.rows[rowIndex].cells[cellIndex] = nextCell
       return nextState
     }
 
@@ -178,7 +166,7 @@ const projectReducers = (state = defaultState, action) => {
         rowIndex
       } = action
       const nextState = clone(state)
-      nextState.activeTable.rows[rowIndex].cells[cellIndex].id = nextCellId
+      nextState.rows[rowIndex].cells[cellIndex].id = nextCellId
       return nextState
     }
 
@@ -188,8 +176,8 @@ const projectReducers = (state = defaultState, action) => {
       } = action
       const nextState = clone(state)
       nextColumnWidths.forEach(columnWidth => {
-        const columnIndex = state.activeTable.columns.findIndex(column => column.id === columnWidth.id)
-        nextState.activeTable.columns[columnIndex].width = columnWidth.nextWidth
+        const columnIndex = state.columns.findIndex(column => column.id === columnWidth.id)
+        nextState.columns[columnIndex].width = columnWidth.nextWidth
       })
       return nextState
     }
@@ -200,7 +188,7 @@ const projectReducers = (state = defaultState, action) => {
           rowIndex
         } = action
         const nextState = clone(state)
-        nextState.activeTable.rows[rowIndex].id = nextRowId
+        nextState.rows[rowIndex].id = nextRowId
         return nextState
       }
   

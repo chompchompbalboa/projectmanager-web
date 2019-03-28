@@ -10,7 +10,7 @@ import { layout, timing } from '../../_config'
 
 import {
   updateCell as updateCellAction
-} from '../actions/projectActions'
+} from '../redux/project/projectActions'
 
 import TableCellBoolean from './TableCellBoolean'
 import TableCellDatetime from './TableCellDatetime'

@@ -9,9 +9,11 @@ import { query } from '../../_api'
 
 import { 
   setActiveProject as setActiveProjectAction,
-  setActiveTableId as setActiveTableIdAction,
   setProjects as setProjectsAction
-} from '../actions/projectActions'
+} from '../redux/project/projectActions'
+import { 
+  setTableId as setTableIdAction,
+} from '../redux/table/tableActions'
 
 import AppContentContainer from './AppContentContainer'
 import AppProject from './AppProject'
@@ -23,7 +25,7 @@ import Loading from '../components/Loading'
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
   setActiveProject: nextActiveProject => dispatch(setActiveProjectAction(nextActiveProject)),
-  setActiveTableId: nextActiveTableId => dispatch(setActiveTableIdAction(nextActiveTableId)),
+  setTableId: nextTableId => dispatch(setTableIdAction(nextTableId)),
   setProjects: nextProjects => dispatch(setProjectsAction(nextProjects))
 })
 
@@ -39,12 +41,12 @@ class AppProjects extends Component {
   componentDidMount = () => {
     const {
       setActiveProject,
-      setActiveTableId,
+      setTableId,
       setProjects
     } = this.props
     query.getOrganizationProjects(organizationId).then(projects => {
       setActiveProject(projects[0])
-      setActiveTableId(projects[0].tables[0].id)
+      setTableId(projects[0].tables[0].id)
       setProjects(projects)
       this.setState({
         isLoading: false
@@ -81,7 +83,7 @@ class AppProjects extends Component {
 AppProjects.propTypes = {
   isActive: bool,
   setActiveProject: func,
-  setActiveTableId: func,
+  setTableId: func,
   setProjects: func
 }
 

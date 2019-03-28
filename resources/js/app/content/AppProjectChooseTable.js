@@ -10,7 +10,7 @@ import { colors, timing } from '../../_config'
 
 import {
   setActiveTableId as setActiveTableIdAction
-} from '../actions/projectActions'
+} from '../redux/project/projectActions'
 
 //-----------------------------------------------------------------------------
 // Redux

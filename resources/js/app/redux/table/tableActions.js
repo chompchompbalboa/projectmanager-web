@@ -21,7 +21,7 @@ export const createRow = () => {
     // Add the row
     dispatch(createRowReducer())
     // Get the newly created row from state
-    const newRow = getState().project.activeTable.rows[0]
+    const newRow = getState().table.rows[0]
     // Save the row
     dispatch(createRowServer(newRow))
   }
@@ -40,12 +40,12 @@ const createRowServer = newRow => {
       } = savedRow
       const state = getState()
       // Get the row index
-      const rowIndex = _.findIndex(state.project.activeTable.rows, ['id', rowId])
+      const rowIndex = _.findIndex(state.table.rows, ['id', rowId])
       // Update the row id
       dispatch(updateRowId(rowIndex, nextRowId))
       // Update the cell ids
       nextCellIds.forEach(({ cellId, nextCellId }) => {
-        const cellIndex = _.findIndex(state.project.activeTable.rows[rowIndex].cells, ['id', cellId])
+        const cellIndex = _.findIndex(state.table.rows[rowIndex].cells, ['id', cellId])
         dispatch(updateCellId(rowIndex, cellIndex, nextCellId))
       })
       dispatch(setStatus('ADDED_ROW'))
@@ -107,10 +107,10 @@ export const sortRows = nextSortColumn => ({
 export const updateCell = (rowId, cellId, type, value) => {
   return (dispatch, getState) => {
     const state = getState()
-    const rowIndex = state.project.activeTable.rows.findIndex(row => row.id === rowId)
-    const cellIndex = state.project.activeTable.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
+    const rowIndex = state.table.rows.findIndex(row => row.id === rowId)
+    const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
     // Make sure the value has changed
-    if (state.project.activeTable.rows[rowIndex].cells[cellIndex][type.toLowerCase()] !== value) {
+    if (state.table.rows[rowIndex].cells[cellIndex][type.toLowerCase()] !== value) {
       dispatch(updateCellServer(cellId, rowIndex, cellIndex, value))
     }
   }
@@ -162,7 +162,7 @@ const updateColumnWidthsServer = nextColumnWidths => {
     dispatch(setStatus('SAVING'))
     let numberOfColumnsToSave = nextColumnWidths.length
     let numberOfColumnsSaved = 0
-    const columns = getState().project.activeTable.columns
+    const columns = getState().table.columns
     nextColumnWidths.map(columnWidth => {
       const columnToSave = columns.find(column => column.id === columnWidth.id)
       mutation.updateColumn(columnToSave.id, columnToSave).then(success => {

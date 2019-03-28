@@ -16,8 +16,6 @@ const projectReducers = (state = defaultState, action) => {
       return {
         ...state, 
         activeProject: action.nextActiveProject,
-        activeTableId: action.nextActiveProject.tables[0].id,
-        activeTable: null
       }
 
     case 'SET_PROJECTS': 

@@ -9,34 +9,34 @@ import styled from 'styled-components'
 import { colors, timing } from '../../_config'
 
 import {
-  setActiveTableId as setActiveTableIdAction
-} from '../redux/project/projectActions'
+  setTableId as setTableIdAction
+} from '../redux/table/tableActions'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  activeTableId: state.project.activeTableId,
-  activeTables: state.project.activeProject.tables
+  tableId: state.table.id,
+  tables: state.project.activeProject.tables
 })
 
 const mapDispatchToProps = dispatch => ({
-  setActiveTableId: nextActiveTableId => dispatch(setActiveTableIdAction(nextActiveTableId))
+  setTableId: nextTableId => dispatch(setTableIdAction(nextTableId))
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppProjectChooseTable = ({ activeTables, activeTableId, setActiveTableId }) => {
+const AppProjectChooseTable = ({ tables, tableId, setTableId }) => {
   return (
     <Container>
-      {activeTables.map(activeTable => {
+      {tables.map(table => {
         return (
           <ContentChoiceContainer
-            key={activeTable.id}
-            isActiveTable={activeTableId === activeTable.id}
-            onClick={() => setActiveTableId(activeTable.id)}>
-            {activeTable.name}
+            key={table.id}
+            isActiveTable={tableId === table.id}
+            onClick={() => setTableId(table.id)}>
+            {table.name}
           </ContentChoiceContainer>
         )
       })}
@@ -48,9 +48,9 @@ const AppProjectChooseTable = ({ activeTables, activeTableId, setActiveTableId }
 // Props
 //-----------------------------------------------------------------------------
 AppProjectChooseTable.propTypes = {
-  activeTables: array,
-  activeTableId: number,
-  setActiveTableId: func
+  tables: array,
+  tableId: number,
+  setTableId: func
 }
 
 //-----------------------------------------------------------------------------

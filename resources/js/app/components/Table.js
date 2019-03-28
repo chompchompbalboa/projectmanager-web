@@ -29,7 +29,7 @@ import TableRow from './TableRow'
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
   id: state.table.id,
-  columms: state.table.columns,
+  columns: state.table.columns,
   rows: state.table.rows,
   sortColumn: state.table.sortColumn,
   sortOrder: state.table.sortOrder
@@ -74,12 +74,11 @@ class Table extends PureComponent {
       rows
     } = this.props
     if(rows === null || columns === null) {
-      //this.getTable()
+      this.getTable()
     }
   }
 
   getTable = () => {
-    console.log('getTable')
     const { 
       id,
       setTable
@@ -113,7 +112,6 @@ class Table extends PureComponent {
       updateColumnWidths
     } = this.props
     if (rows !== null && columns !== null) {
-      console.log(this.props)
       return (
         <Container>
           <TableData>

@@ -10,7 +10,7 @@ import { colors, layout } from '../../_config'
 
 import {
   setActiveProject as setActiveProjectAction
-} from '../actions/projectActions'
+} from '../redux/project/projectActions'
 
 import Icon from '../components/Icon'
 

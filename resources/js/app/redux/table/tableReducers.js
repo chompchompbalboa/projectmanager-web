@@ -55,7 +55,7 @@ const projectReducers = (state = defaultState, action) => {
       const newRowCells = state.columns.map(column => {
         return {
           id: _.random(-100000, -999999),
-          tableId: state.activeTableId,
+          tableId: state.id,
           columnId: column.id,
           rowId: null,
           string: null,
@@ -66,7 +66,7 @@ const projectReducers = (state = defaultState, action) => {
       })
       const newRow = {
         id: _.random(-100000, -999999),
-        tableId: state.activeTableId,
+        tableId: state.id,
         cells: newRowCells,
         isEditable: true
       }
@@ -93,11 +93,10 @@ const projectReducers = (state = defaultState, action) => {
         columns, 
         rows
       } = action
-      console.log('SET_TABLE')
       const sortColumn = columns[0]
       const sortOrder = columns[0].defaultSortOrder
       const sortedRows = sortRows(rows, sortColumn, sortOrder)
-      if(state.activeTableId === id) {
+      if(state.id === id) {
         return {
           ...state, 
           id: id,

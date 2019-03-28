@@ -8,7 +8,9 @@ import styled from 'styled-components'
 
 import { layout } from '../../_config'
 
-import { setActiveProject as setActiveProjectAction } from '../actions/projectActions'
+import { 
+  setActiveProject as setActiveProjectAction 
+} from '../redux/project/projectActions'
 
 import AppProjectsChooseProject from './AppProjectsChooseProject'
 

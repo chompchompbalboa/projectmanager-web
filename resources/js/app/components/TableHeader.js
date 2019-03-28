@@ -28,6 +28,11 @@ class TableHeader extends PureComponent {
     mouseDownColumnPageX: null
   }
 
+  componentWillUnmount = () => {
+    window.removeEventListener('mousemove', () => this.handleResizeMouseMove())
+    window.removeEventListener('mouseup', () => this.handleResizeMouseUp())
+  }
+
   closeContextMenu = () => {
     this.setState({
       contextMenuOpen: false
@@ -101,7 +106,7 @@ class TableHeader extends PureComponent {
   render() {
     const { 
       columns,
-      insertColumn,
+      createColumn,
       sortRows 
     } = this.props
     const {
@@ -143,7 +148,7 @@ class TableHeader extends PureComponent {
         {contextMenuOpen && 
           <TableContextMenu
             closeContextMenu={this.closeContextMenu}
-            insertColumn={insertColumn}
+            createColumn={createColumn}
             isHeader={true}
             top={contextMenuTop}
             left={contextMenuLeft}/>
@@ -162,8 +167,8 @@ TableHeader.propTypes = {
 			header: string
 		})
   ),
+  createColumn: func,
   name: string,
-  insertColumn: func,
   isLoading: bool,
 	sortColumn: shape({
     id: number

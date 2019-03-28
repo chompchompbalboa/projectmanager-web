@@ -6,6 +6,14 @@ import { timing } from '../../_config'
 import { setStatus } from '../actions/statusActions'
 
 //-----------------------------------------------------------------------------
+// Create Column
+//-----------------------------------------------------------------------------
+export const createColumn = newColumn => ({
+  type: 'CREATE_COLUMN',
+  newColumn: newColumn
+})
+
+//-----------------------------------------------------------------------------
 // Create Row
 //-----------------------------------------------------------------------------
 export const createRow = () => {

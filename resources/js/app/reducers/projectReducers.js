@@ -47,6 +47,11 @@ const defaultState = {
 const projectReducers = (state = defaultState, action) => {
   switch(action.type) {
 
+    case 'CREATE_COLUMN': {
+      console.log('CREATE_COLUMN')
+      return state
+    }
+
     case 'CREATE_ROW': {
       const newRowCells = state.activeTable.columns.map(column => {
         return {

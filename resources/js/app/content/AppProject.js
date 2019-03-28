@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { colors, layout } from '../../_config'
 
 import { 
+  createColumn as createColumnAction,
   createRow as createRowAction,
   deleteRow as deleteRowAction,
   setActiveTable as setActiveTableAction,
@@ -31,9 +32,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  createColumn: (columnId, beforeOrAfter) => dispatch(createColumnAction(columnId, beforeOrAfter)),
   createRow: () => dispatch(createRowAction()),
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
-  insertColumn: (columnId, beforeOrAfter) => dispatch(insertColumnAction(columnId, beforeOrAfter)),
   setActiveTable: nextActiveTable => dispatch(setActiveTableAction(nextActiveTable)),
   sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
@@ -48,9 +49,9 @@ const AppProject = ({
   activeTableId, 
   activeTableSortColumn,
   activeTableSortOrder,
+  createColumn,
   createRow, 
   deleteRow,
-  insertColumn,
   setActiveTable, 
   sortRows, 
   updateCell,
@@ -70,8 +71,9 @@ const AppProject = ({
         <Table
           id={activeTableId}
           actions={tableActions}
+          createColumn={createColumn}
           deleteRow={deleteRow}
-          insertColumn={insertColumn}
+          createColumn={createColumn}
           setTable={setActiveTable}
           sortColumn={activeTableSortColumn}
           sortOrder={activeTableSortOrder}
@@ -92,9 +94,9 @@ AppProject.propTypes = {
   activeTableId: number,
   activeTableSortColumn: object,
   activeTableSortOrder: oneOf(['ASC', 'DESC']),
+  createColumn: func,
   createRow: func,
   deleteRow: func,
-  insertColumn: func,
   sortRows: func,
   setActiveTable: func,
   updateCell: func,

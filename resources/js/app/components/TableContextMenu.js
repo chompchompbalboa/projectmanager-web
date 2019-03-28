@@ -20,11 +20,11 @@ class TableContextMenu extends PureComponent {
   columnActions = () => {
     const {
       columnId,
-      insertColumn
+      createColumn
     } = this.props
     return [
-      { text: 'Insert Before', action: () => insertColumn(columnId, 'BEFORE') },
-      { text: 'Insert After', action: () => insertColumn(columnId, 'AFTER') },
+      { text: 'Insert Before', action: () => createColumn(columnId, 'BEFORE') },
+      { text: 'Insert After', action: () => createColumn(columnId, 'AFTER') },
     ]
   }
 
@@ -88,8 +88,8 @@ class TableContextMenu extends PureComponent {
 TableContextMenu.propTypes = {
   columnId: number,
   closeContextMenu: func,
+  createColumn: func,
   deleteRow: func,
-  insertColumn: func,
   isHeader: bool,
   rowId: number,
   top: number,

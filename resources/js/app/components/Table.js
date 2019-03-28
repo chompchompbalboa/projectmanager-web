@@ -65,8 +65,8 @@ export default class Table extends PureComponent {
 	render() {
     const {
       actions,
+      createColumn,
       deleteRow,
-      insertColumn,
       sortColumn,
       sortOrder,
       sortRows,
@@ -84,7 +84,7 @@ export default class Table extends PureComponent {
           <TableData>
             <TableHeader
               columns={columns}
-              insertColumn={insertColumn}
+              createColumn={createColumn}
               name={name}
               sortColumn={sortColumn}
               sortOrder={sortOrder}
@@ -123,8 +123,8 @@ export default class Table extends PureComponent {
 Table.propTypes = {
   id: number,
   actions: array,
+  createColumn: func,
   deleteRow: func,
-  insertColumn: func,
   setTable: func,
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),

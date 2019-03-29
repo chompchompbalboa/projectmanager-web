@@ -168,7 +168,6 @@ TableHeader.propTypes = {
 		})
   ),
   createColumn: func,
-  name: string,
   isLoading: bool,
 	sortColumn: shape({
     id: number

@@ -43,7 +43,7 @@ const defaultState = {
 //-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
-const projectReducers = (state = defaultState, action) => {
+const tableReducers = (state = defaultState, action) => {
   switch(action.type) {
 
     case 'CREATE_COLUMN': {
@@ -197,4 +197,4 @@ const projectReducers = (state = defaultState, action) => {
   }
 }
 
-export default projectReducers
+export default tableReducers

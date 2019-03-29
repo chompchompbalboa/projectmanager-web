@@ -10,10 +10,6 @@ class Row extends Model
    * Define which attributes will be visible
    */
   protected $visible = ['id', 'tableId', 'cells'];
-  
-  /**
-   * Build custom attributes
-   */
   protected $with = ['cells'];
 
   /**

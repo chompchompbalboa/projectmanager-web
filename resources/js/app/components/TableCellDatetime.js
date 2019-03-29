@@ -17,6 +17,7 @@ const TableCellDatetime = ({ updateValue, value }) => {
   return (
     <Container>
       <DatePicker
+        customInput={<StyledInput />}
         selected={moment(value).toDate()}
         onChange={date => updateValue(moment(date).format(dateConfig.format))}/>
     </Container>
@@ -35,6 +36,17 @@ TableCellDatetime.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
+  width: 100%;
+`
+
+const StyledInput = styled.input`
+  cursor: pointer;
+  width: 100%;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  font-size: inherit;
+  font-weight: 600;
 `
 
 export default TableCellDatetime

@@ -71,7 +71,6 @@ class TableCell extends Component {
   render() {
     const {
       autofocus,
-      isEditable,
       placeholder,
       type,
       width
@@ -85,7 +84,6 @@ class TableCell extends Component {
         widthPercentage={width}>
         <TableCellType
           autofocus={autofocus}
-          isEditable={isEditable}
           placeholder={placeholder}
           updateValue={this.updateValue}
           value={value}/>

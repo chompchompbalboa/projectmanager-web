@@ -60,10 +60,10 @@ class TableContextMenu extends PureComponent {
     const {
       closeContextMenu
     } = this.props
-    closeContextMenu().then(
-      action()
-    )
+    closeContextMenu()
+    action()
   }
+  
   render() {
     const {
       isHeader,
@@ -108,6 +108,7 @@ TableContextMenu.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
+  z-index: 10000;
   position: fixed;
   top: ${ props => props.contextMenuTop + 'px' };
   left: ${ props => (props.contextMenuLeft + 2) + 'px' };

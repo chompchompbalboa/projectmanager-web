@@ -5,6 +5,5 @@ export default {
 
   SIDEBAR_WIDTH: '4vw',
 
-  TABLE_CELL_WIDTH: '10vw',
   TABLE_PADDING: '1.5vw'
 }

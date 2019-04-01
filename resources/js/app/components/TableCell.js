@@ -6,7 +6,7 @@ import { bool, func, number, oneOfType, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { layout, timing } from '../../_config'
+import { colors, layout, timing } from '../../_config'
 
 import {
   updateCell as updateCellAction
@@ -72,16 +72,14 @@ class TableCell extends Component {
     const {
       autofocus,
       placeholder,
-      type,
-      width
+      type
     } = this.props
     const {
       value
     } = this.state
     const TableCellType = this.tableCellTypeComponents[type]
     return (
-      <Container
-        widthPercentage={width}>
+      <Container>
         <TableCellType
           autofocus={autofocus}
           placeholder={placeholder}
@@ -103,8 +101,7 @@ TableCell.propTypes = {
   rowId: number,
   type: string,
   updateCell: func,
-	value: oneOfType([bool, number, string]),
-	width: number
+	value: oneOfType([bool, number, string])
 }
 
 TableCell.defaultProps = {
@@ -115,13 +112,11 @@ TableCell.defaultProps = {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div`
-  padding: 0 calc(${ layout.TABLE_PADDING } / 2);
-	width: calc(100% * ${props => props.widthPercentage});
+const Container = styled.td`
+  height: 100%;
+	padding: calc(${ layout.TABLE_PADDING }/2) calc(${ layout.TABLE_PADDING }/4);
+  border: 0.25px solid ${ colors.TABLE_BORDER };
 	font-weight: ${props => props.fontWeight};
-	display: flex;
-	justify-content: ${props => props.justifyContent};
-  align-items: flex-start;
 `
 
 export default connect(

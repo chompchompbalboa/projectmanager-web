@@ -9,20 +9,13 @@ import styled from 'styled-components'
 //-----------------------------------------------------------------------------
 const TableCellNumber = ({ autofocus, placeholder, updateValue, value }) => {
   return (
-    <Container>
       <StyledInput
         type="number"
         onChange={(e) => updateValue(e.target.value)}
         placeholder={placeholder}
         value={value}/>
-    </Container>
   )
 }
-
-//-----------------------------------------------------------------------------
-// Styled Components
-//-----------------------------------------------------------------------------
-const Container = styled.div``
 
 const StyledInput = styled.input`
   margin: 0;

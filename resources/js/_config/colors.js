@@ -8,8 +8,7 @@ export default {
 
 	BOX_SHADOW: 'rgba(0, 0, 0, 0.4)',
 
-	SPREADSHEET_BACKGROUND: 'white',
-	SPREADSHEET_BORDER_COLOR: 'gray',
+	TABLE_BORDER: 'rgb(210, 210, 210)',
 
 	TEXT_DARK: 'rgb(23, 35, 62)',
 	TEXT_LIGHT: 'rgb(151, 151, 151)',

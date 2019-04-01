@@ -9,20 +9,17 @@ import styled from 'styled-components'
 //-----------------------------------------------------------------------------
 const TableCellBoolean = ({ isEditable, updateValue, value }) => {
   return (
-    <Container>
-      <input 
-         type="checkbox"
-         checked={value}
-         onChange={(e) => updateValue(e.target.checked)}/>
-    </Container>
+    <StyledInput 
+       type="checkbox"
+       checked={value}
+       onChange={(e) => updateValue(e.target.checked)}/>
   )
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div`
-  width: 100%;
+const StyledInput = styled.input`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -14,13 +14,11 @@ import AutosizeTextArea from 'react-autosize-textarea'
 //-----------------------------------------------------------------------------
 const TableCellString = ({ autofocus, placeholder, updateValue, value }) => {
   return (
-    <Container>
-      <StyledTextarea
-        autoFocus={autofocus}
-        onChange={(e) => updateValue(e.target.value)}
-        placeholder={placeholder}
-        value={value}/>
-    </Container>
+    <StyledTextarea
+      autoFocus={autofocus}
+      onChange={(e) => updateValue(e.target.value)}
+      placeholder={placeholder}
+      value={value}/>
   )
 }
 
@@ -37,10 +35,6 @@ TableCellString.propTypes = {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div`
-  width: 100%;
-`
-
 const StyledTextarea = styled(AutosizeTextArea)`
 margin: 0;
 padding: 0;

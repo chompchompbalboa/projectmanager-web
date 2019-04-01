@@ -21,6 +21,7 @@ import {
 
 import Loading from '../components/Loading'
 import TableAction from './TableAction'
+import TableContextMenu from './TableContextMenu'
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'
 
@@ -51,6 +52,10 @@ const mapDispatchToProps = dispatch => ({
 class Table extends PureComponent {
   
   state = {
+    contextMenuColumnId: null,
+    contextMenuTop: null,
+    contextMenuLeft: null,
+    isContextMenuOpen: false,
     isGettingTable: false
   }
 
@@ -78,6 +83,12 @@ class Table extends PureComponent {
     }
   }
 
+  closeContextMenu = async () => {
+    this.setState({
+      isContextMenuOpen: false
+    })
+  }
+
   getTable = () => {
     const { 
       id,
@@ -99,6 +110,16 @@ class Table extends PureComponent {
     }
   }
 
+  openContextMenu = (e, columnId) => {
+    e.preventDefault()
+    this.setState({
+      contextMenuColumnId: columnId,
+      isContextMenuOpen: true,
+      contextMenuTop: e.clientY,
+      contextMenuLeft: e.clientX
+    })
+  }
+
 	render() {
     const {
       columns,
@@ -111,28 +132,37 @@ class Table extends PureComponent {
       updateCell,
       updateColumnWidths
     } = this.props
+    const {
+      contextMenuColumnId,
+      contextMenuTop,
+      contextMenuLeft,
+      isContextMenuOpen
+    } = this.state
     if (rows !== null && columns !== null) {
       return (
         <Container>
           <TableData>
-            <TableHeader
-              columns={columns}
-              createColumn={createColumn}
-              name={name}
-              sortColumn={sortColumn}
-              sortOrder={sortOrder}
-              sortRows={sortRows}
-              updateColumnWidths={updateColumnWidths}/>
-            {rows.map(row => {
-              return (
-                <TableRow 
-                  key={row.id} 
-                  columns={columns}
-                  deleteRow={deleteRow}
-                  isEditable={row.isEditable}
-                  row={row}
-                  updateCell={updateCell}/>
-            )})}
+            <TableBody>
+              <TableHeader
+                columns={columns}
+                name={name}
+                openContextMenu={this.openContextMenu}
+                sortColumn={sortColumn}
+                sortOrder={sortOrder}
+                sortRows={sortRows}
+                updateColumnWidths={updateColumnWidths}/>
+              {rows.map(row => {
+                return (
+                  <TableRow 
+                    key={row.id} 
+                    columns={columns}
+                    deleteRow={deleteRow}
+                    isEditable={row.isEditable}
+                    openContextMenu={this.openContextMenu}
+                    row={row}
+                    updateCell={updateCell}/>
+              )})}
+            </TableBody>
           </TableData>
           <TableActions>
             {this.actions.map(action => {
@@ -143,6 +173,15 @@ class Table extends PureComponent {
                   onClick={() => action.onClick()}/>
             )})}
           </TableActions>
+          {isContextMenuOpen && 
+            <TableContextMenu
+              closeContextMenu={this.closeContextMenu}
+              columnId={contextMenuColumnId}
+              createColumn={createColumn}
+              isHeader={true}
+              top={contextMenuTop}
+              left={contextMenuLeft}/>
+          }
         </Container>
       )
     }
@@ -179,16 +218,20 @@ const Container = styled.div`
 	display: flex;
 `
 
-const TableData = styled.div`
+const TableData = styled.table`
+  table-layout: fixed;
   width: 100%;
+  height: 100%;
   margin-right: calc(${ layout.PADDING } / 2);
 	background-color: ${colors.BACKGROUND_SECONDARY};
 	color: ${colors.TEXT_DARK};
+  border-spacing: 0;
 	box-shadow: 1px 1px 4px ${colors.BOX_SHADOW};
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+`
+
+const TableBody = styled.tbody`
+  width: 100%;
+  height: 100%;
 `
 
 const TableActions = styled.div`

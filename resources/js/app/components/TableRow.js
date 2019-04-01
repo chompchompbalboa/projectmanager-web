@@ -16,48 +16,20 @@ import TableContextMenu from './TableContextMenu'
 //-----------------------------------------------------------------------------
 class TableRow extends PureComponent {
 
-  state = {
-    contextMenuOpen: false,
-    contextMenuTop: null,
-    contextMenuLeft: null
-  }
-
-  closeContextMenu = async () => {
-    this.setState({
-      contextMenuOpen: false
-    })
-  }
-
-  onRightClick = e => {
-    e.preventDefault()
-    this.setState({
-      contextMenuOpen: true,
-      contextMenuTop: e.clientY,
-      contextMenuLeft: e.clientX
-    })
-  }
-
   render() {
     const { 
       columns, 
       deleteRow,
       isEditable, 
+      openContextMenu,
       row,
       updateCell
     } = this.props
-    const {
-      contextMenuOpen,
-      contextMenuTop,
-      contextMenuLeft
-    } = this.state
     return (
       <Container
-        onContextMenu={e => this.onRightClick(e)}>
+        onContextMenu={e => openContextMenu(e, null)}>
         {columns.map((column, index) => {
-          let cell = _.find(row.cells, ['columnId', column.id])
-          if (typeof cell === 'undefined') {
-            cell = column.defaultCell
-          }
+          const cell = _.find(row.cells, ['columnId', column.id])
           return (
             <TableCell
               key={cell.id}
@@ -69,18 +41,9 @@ class TableRow extends PureComponent {
               type={column.type}
               updateCell={updateCell}
               value={cell[column.type.toLowerCase()]}
-              width={column.width}
             />
           )
         })}
-        {contextMenuOpen && 
-          <TableContextMenu
-            closeContextMenu={this.closeContextMenu}
-            deleteRow={deleteRow}
-            rowId={row.id}
-            top={contextMenuTop}
-            left={contextMenuLeft}/>
-        }
       </Container>
     )
   }
@@ -103,18 +66,11 @@ TableRow.propTypes = {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div`
+const Container = styled.tr`
 	width: 100%;
-	padding: calc(${ layout.TABLE_PADDING }/2);
 	background-color: ${colors.BACKGROUND_SECONDARY};
 	font-size: 13px;
-	display: flex;
-  justify-content: flex-start;
-  align-items: center;
-	border-right: 3px solid ${colors.BACKGROUND_SECONDARY};
-	border-bottom: 1px solid ${colors.TEXT_LIGHT};
 	&:hover {
-		border-right: 3px solid ${colors.PRIMARY};
 		background-color: ${colors.ACCENT};
 	}
 `

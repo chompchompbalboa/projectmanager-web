@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react'
 import { arrayOf, bool, func, number, oneOf, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout } from '../../_config'
+import { colors, layout, timing } from '../../_config'
 
 import Icon from '../components/Icon'
 import TableContextMenu from './TableContextMenu'
@@ -33,7 +33,7 @@ class TableHeader extends PureComponent {
     window.removeEventListener('mouseup', () => this.handleResizeMouseUp())
   }
 
-  closeContextMenu = () => {
+  closeContextMenu = async () => {
     this.setState({
       contextMenuOpen: false
     })
@@ -94,9 +94,10 @@ class TableHeader extends PureComponent {
     })
   }
 
-  onRightClick = e => {
+  onRightClick = (e, columnId) => {
     e.preventDefault()
     this.setState({
+      contextMenuColumnId: columnId,
       contextMenuOpen: true,
       contextMenuTop: e.clientY,
       contextMenuLeft: e.clientX
@@ -110,6 +111,7 @@ class TableHeader extends PureComponent {
       sortRows 
     } = this.props
     const {
+      contextMenuColumnId,
       contextMenuLeft,
       contextMenuOpen,
       contextMenuTop,
@@ -118,7 +120,6 @@ class TableHeader extends PureComponent {
     return (
       <Container 
         backgroundColor={colors.ACCENT}
-        onContextMenu={e => this.onRightClick(e)}
         ref={this.tableHeaderContainer}>
         {columns.map((column, index) => {
           const sortDirection = this.getSortDirection(column)
@@ -128,6 +129,7 @@ class TableHeader extends PureComponent {
                 key={column.id}
                 isColumnResizing={mouseDownColumnId !== null}
                 onClick={() => sortRows(column)}
+                onContextMenu={e => this.onRightClick(e, column.id)}
                 sortDirection={sortDirection}
                 widthPercentage={column.width}>
                 <TableHeaderCellValue
@@ -139,15 +141,16 @@ class TableHeader extends PureComponent {
                     icon={"SORT_" + sortDirection}
                     size="1.2em"/>
                 </SortArrowContainer>
-              </TableHeaderCell>
               <ResizeContainer 
                 onMouseDown={e => this.handleResizeMouseDown(e, column.id, column.width, columns[index + 1].id, columns[index + 1].width)}/>
+              </TableHeaderCell>
             </React.Fragment>
           )
         })}
         {contextMenuOpen && 
           <TableContextMenu
             closeContextMenu={this.closeContextMenu}
+            columnId={contextMenuColumnId}
             createColumn={createColumn}
             isHeader={true}
             top={contextMenuTop}
@@ -188,7 +191,6 @@ const Container = styled.div`
   width: 100%;
   background-color: ${colors.ACCENT};
   display: flex;
-  justify-content: space-around;
   border-right: 3px solid transparent;
   border-bottom: 1px solid ${colors.TEXT_LIGHT};
 `
@@ -222,6 +224,10 @@ const ResizeContainer = styled.div`
   width: 10px;
   height: calc(100% + ${ layout.TABLE_PADDING });
   margin-top: calc(-1 * (${ layout.TABLE_PADDING } / 2));
+  transition: all ${timing.TRANSITION_DURATION}
+  &:hover {
+    background-color: ${colors.PRIMARY};
+  }
 `
 
 export default TableHeader

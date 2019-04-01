@@ -22,7 +22,7 @@ class TableRow extends PureComponent {
     contextMenuLeft: null
   }
 
-  closeContextMenu = () => {
+  closeContextMenu = async () => {
     this.setState({
       contextMenuOpen: false
     })
@@ -53,8 +53,11 @@ class TableRow extends PureComponent {
     return (
       <Container
         onContextMenu={e => this.onRightClick(e)}>
-        {row.cells.map((cell, index) => {
-          const column = _.find(columns, ['id', cell.columnId])
+        {columns.map((column, index) => {
+          let cell = _.find(row.cells, ['columnId', column.id])
+          if (typeof cell === 'undefined') {
+            cell = column.defaultCell
+          }
           return (
             <TableCell
               key={cell.id}

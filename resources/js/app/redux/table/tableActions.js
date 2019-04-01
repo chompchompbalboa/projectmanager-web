@@ -8,9 +8,15 @@ import { setStatus } from '../status/statusActions'
 //-----------------------------------------------------------------------------
 // Create Column
 //-----------------------------------------------------------------------------
-export const createColumn = newColumn => ({
+export const createColumn = (columnId, beforeOrAfter) => {
+  return (dispatch, getState) => {
+    dispatch(createColumnReducer(columnId, beforeOrAfter))
+  }
+}
+const createColumnReducer = (columnId, beforeOrAfter) => ({
   type: 'CREATE_COLUMN',
-  newColumn: newColumn
+  beforeOrAfter: beforeOrAfter,
+  columnId: columnId
 })
 
 //-----------------------------------------------------------------------------

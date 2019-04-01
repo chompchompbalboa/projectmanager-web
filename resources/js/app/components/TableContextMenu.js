@@ -56,6 +56,14 @@ class TableContextMenu extends PureComponent {
     }
   }
 
+  handleClick = action => {
+    const {
+      closeContextMenu
+    } = this.props
+    closeContextMenu().then(
+      action()
+    )
+  }
   render() {
     const {
       isHeader,
@@ -72,7 +80,7 @@ class TableContextMenu extends PureComponent {
           return (
             <Action
               key={index}
-              onClick={action.action}>
+              onClick={() => this.handleClick(action.action)}>
               {action.text}
             </Action>
           )

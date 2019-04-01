@@ -12,6 +12,21 @@ const clone = object => {
   return JSON.parse(JSON.stringify(object))
 }
 
+const defaultCell = (id, columnId) => ({
+  id: _.random(-100000, -999999),
+  tableId: id,
+  columnId: columnId,
+  rowId: null,
+  string: null,
+  number: null,
+  boolean: null,
+  datetime: moment().format(dateConfig.format)
+})
+
+const sortColumns = columns => {
+  return columns.sort((a, b) => a.position - b.position)
+}
+
 const sortRows = (rows, sortColumn, sortOrder) => {
   const getRowValue = row => {
     const sortCell = _.find(row.cells, cell => {
@@ -47,22 +62,39 @@ const tableReducers = (state = defaultState, action) => {
   switch(action.type) {
 
     case 'CREATE_COLUMN': {
-      console.log('CREATE_COLUMN')
-      return state
+      const {
+        beforeOrAfter,
+        columnId
+      } = action
+      const insertWidth = 0.1
+      const newColumn = {
+        id: _.random(-100000, -999999),
+        tableId: state.id,
+        header: "",
+        required: true,
+        position: null,
+        type: 'STRING',
+        width: insertWidth,
+        defaultCell: defaultCell(state.id, columnId)
+      }
+      const columnIndex = state.columns.findIndex(column => column.id === columnId)
+      const insertIndex = beforeOrAfter === 'BEFORE' ? columnIndex : columnIndex + 1
+      const columns = clone(state.columns)
+      columns.splice(insertIndex, 0, newColumn)
+      const nextColumns = columns.map((column, index) => {
+        column.position = index
+        column.width = column.width - (insertWidth / columns.length)
+        return column
+      })
+      return {
+        ...state,
+        columns: nextColumns
+      }
     }
 
     case 'CREATE_ROW': {
       const newRowCells = state.columns.map(column => {
-        return {
-          id: _.random(-100000, -999999),
-          tableId: state.id,
-          columnId: column.id,
-          rowId: null,
-          string: null,
-          number: null,
-          boolean: null,
-          datetime: moment().format(dateConfig.format)
-        }
+        return defaultCell(state.id, column.id)
       })
       const newRow = {
         id: _.random(-100000, -999999),
@@ -95,12 +127,13 @@ const tableReducers = (state = defaultState, action) => {
       } = action
       const sortColumn = columns[0]
       const sortOrder = columns[0].defaultSortOrder
+      const sortedColumns = sortColumns(columns)
       const sortedRows = sortRows(rows, sortColumn, sortOrder)
       if(state.id === id) {
         return {
           ...state, 
           id: id,
-          columns: columns,
+          columns: sortedColumns,
           rows: sortedRows,
           sortColumn: sortColumn,
           sortOrder: sortOrder

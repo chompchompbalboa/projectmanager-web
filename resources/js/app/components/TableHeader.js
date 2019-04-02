@@ -126,7 +126,7 @@ class TableHeader extends PureComponent {
                   </TableHeaderCellValue>
                   {index !== columns.length - 1 &&
                     <ResizeContainer 
-                      onMouseDown={e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width)}/>
+                      onMouseDown={e => this.handleResizeMouseDown(e, column.id, column.width, columns[index + 1].id, columns[index + 1].width)}/>
                   }
                   </ContentContainer>
                   {column.isEditable && 

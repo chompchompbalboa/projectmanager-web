@@ -6,10 +6,9 @@ import { array, bool, func, number, shape } from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 
-import { colors, layout } from '../../_config'
+import { colors } from '../../_config'
 
 import TableCell from './TableCell'
-import TableContextMenu from './TableContextMenu'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -19,7 +18,6 @@ class TableRow extends PureComponent {
   render() {
     const { 
       columns, 
-      deleteRow,
       isEditable, 
       openContextMenu,
       row,
@@ -27,7 +25,7 @@ class TableRow extends PureComponent {
     } = this.props
     return (
       <Container
-        onContextMenu={e => openContextMenu(e, null)}>
+        onContextMenu={e => openContextMenu(e, 'ROW', row.id)}>
         {columns.map((column, index) => {
           const cell = _.find(row.cells, ['columnId', column.id])
           return (
@@ -56,6 +54,7 @@ TableRow.propTypes = {
   columns: array,
   deleteRow: func,
   isEditable: bool,
+  openContextMenu: func,
 	row: shape({
     id: number,
 		cells: array

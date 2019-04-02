@@ -185,6 +185,22 @@ const tableReducers = (state = defaultState, action) => {
       }
     }
 
+    case 'TOGGLE_COLUMN_IS_EDITABLE': {
+      const {
+        columnId
+      } = action
+      const nextColumns = state.columns.map(column => {
+        if(column.id === columnId) {
+          column.isEditable = true
+        }
+        return column
+      })
+      return {
+        ...state,
+        columns: nextColumns
+      }
+    }
+
     case 'UPDATE_CELL': {
       const {
         cellIndex,

@@ -2,12 +2,13 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { bool, func, number, oneOfType } from 'prop-types'
 import styled from 'styled-components'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellBoolean = ({ isEditable, updateValue, value }) => {
+const TableCellBoolean = ({ updateValue, value }) => {
   return (
     <StyledInput 
        type="checkbox"
@@ -17,9 +18,18 @@ const TableCellBoolean = ({ isEditable, updateValue, value }) => {
 }
 
 //-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+TableCellBoolean.propTypes = {
+  updateValue: func,
+  value: oneOfType([bool, number])
+}
+
+//-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
 const StyledInput = styled.input`
+  margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;

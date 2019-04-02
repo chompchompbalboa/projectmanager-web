@@ -15,6 +15,7 @@ import {
   deleteRow as deleteRowAction,
   setTable as setTableAction,
   sortRows as sortRowsAction,
+  toggleColumnIsEditable as toggleColumnIsEditableAction,
   updateCell as updateCellAction,
   updateColumnWidths as updateColumnWidthsAction
 } from '../redux/table/tableActions'
@@ -42,6 +43,7 @@ const mapDispatchToProps = dispatch => ({
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setTable: nextTable => dispatch(setTableAction(nextTable)),
   sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
+  toggleColumnIsEditable: columnId => dispatch(toggleColumnIsEditableAction(columnId)),
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
   updateColumnWidths: nextColumnWidths => dispatch(updateColumnWidthsAction(nextColumnWidths))
 })
@@ -52,7 +54,8 @@ const mapDispatchToProps = dispatch => ({
 class Table extends PureComponent {
   
   state = {
-    contextMenuColumnId: null,
+    contextMenuColumnOrRow: null,
+    contextMenuId: null,
     contextMenuTop: null,
     contextMenuLeft: null,
     isContextMenuOpen: false,
@@ -110,11 +113,12 @@ class Table extends PureComponent {
     }
   }
 
-  openContextMenu = (e, columnId) => {
+  openContextMenu = (e, columnOrRow, id) => {
     e.preventDefault()
     this.setState({
-      contextMenuColumnId: columnId,
+      contextMenuId: id,
       isContextMenuOpen: true,
+      contextMenuColumnOrRow: columnOrRow,
       contextMenuTop: e.clientY,
       contextMenuLeft: e.clientX
     })
@@ -129,11 +133,13 @@ class Table extends PureComponent {
       sortColumn,
       sortOrder,
       sortRows,
+      toggleColumnIsEditable,
       updateCell,
       updateColumnWidths
     } = this.props
     const {
-      contextMenuColumnId,
+      contextMenuId,
+      contextMenuColumnOrRow,
       contextMenuTop,
       contextMenuLeft,
       isContextMenuOpen
@@ -175,10 +181,12 @@ class Table extends PureComponent {
           </TableActions>
           {isContextMenuOpen && 
             <TableContextMenu
+              id={contextMenuId}
               closeContextMenu={this.closeContextMenu}
-              columnId={contextMenuColumnId}
+              columnOrRow={contextMenuColumnOrRow}
               createColumn={createColumn}
-              isHeader={true}
+              deleteRow={deleteRow}
+              toggleColumnIsEditable={toggleColumnIsEditable}
               top={contextMenuTop}
               left={contextMenuLeft}/>
           }
@@ -206,6 +214,7 @@ Table.propTypes = {
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),
   sortRows: func,
+  toggleColumnIsEditable: func,
   updateCell: func,
   updateColumnWidths: func
 }

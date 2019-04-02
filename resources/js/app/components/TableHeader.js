@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react'
 import { arrayOf, bool, func, number, oneOf, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout, timing } from '../../_config'
+import { colors, layout } from '../../_config'
 
 import Icon from '../components/Icon'
 
@@ -40,7 +40,7 @@ class TableHeader extends PureComponent {
     if (column.id === sortColumn.id) {
       return sortOrder === column.defaultSortOrder ? 'DOWN' : 'UP'
     }
-    return "BOTH"
+    return 'BOTH'
   }
   
   handleResizeMouseDown = (e, columnId, columnWidth, adjacentColumnId, adjacentColumnWidth) => {
@@ -90,15 +90,10 @@ class TableHeader extends PureComponent {
   render() {
     const { 
       columns,
-      createColumn,
       openContextMenu,
       sortRows 
     } = this.props
     const {
-      contextMenuColumnId,
-      contextMenuLeft,
-      contextMenuOpen,
-      contextMenuTop,
       mouseDownColumnId
     } = this.state
     return (
@@ -112,13 +107,16 @@ class TableHeader extends PureComponent {
               <TableHeaderCell
                 key={column.id}
                 isColumnResizing={mouseDownColumnId !== null}
-                onContextMenu={e => openContextMenu(e, column.id)}
+                onContextMenu={e => openContextMenu(e, 'COLUMN', column.id)}
                 sortDirection={sortDirection}
                 widthPercentage={column.width}>
                 <ContentContainer>
-                  <ResizeContainer 
-                    onMouseDown={e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width)}/>
+                  {index !== 0 &&
+                    <ResizeContainer 
+                      onMouseDown={e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width)}/>
+                  }
                   <TableHeaderCellValue
+                    isCentered={column.type === 'BOOLEAN'}
                     isColumnResizing={mouseDownColumnId !== null}
                     onClick={() => sortRows(column)}>
                     {column.header}&nbsp;&nbsp;
@@ -126,9 +124,16 @@ class TableHeader extends PureComponent {
                       icon={"SORT_" + sortDirection}
                       size="1.2em"/>
                   </TableHeaderCellValue>
-                  <ResizeContainer 
-                    onMouseDown={e => this.handleResizeMouseDown(e, column.id, column.width, columns[index + 1].id, columns[index + 1].width)}/>
-                </ContentContainer>
+                  {index !== columns.length - 1 &&
+                    <ResizeContainer 
+                      onMouseDown={e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width)}/>
+                  }
+                  </ContentContainer>
+                  {column.isEditable && 
+                    <DropdownContainer>
+                      Dropdown
+                    </DropdownContainer>
+                  }
               </TableHeaderCell>
             )
           })}
@@ -191,7 +196,7 @@ const ContentContainer = styled.div`
 const TableHeaderCellValue = styled.div`
   cursor: ${ props => props.isColumnResizing ? 'col-resize' : 'pointer' };
 	padding: calc(${ layout.TABLE_PADDING }/2) 0;
-  margin-right: auto;
+  margin-right: ${ props => props.isCentered ? '0' : 'auto' };
   user-select: none;
 `
 
@@ -199,9 +204,27 @@ const ResizeContainer = styled.div`
   cursor: col-resize;
   width: calc(${ layout.TABLE_PADDING }/4);
   height: 100%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+`
+
+const DropdownContainer = styled.div`
+	z-index: 1000;
+	display: block;
+	position: absolute;
+	max-height: 50vh;
+	min-width: 20vw;;
+  background-color: white;
+  color: black;
+	border-top: 1.25px solid ${colors.BACKGROUND};
+	border-left: 1.25px solid ${colors.BACKGROUND};
+	box-shadow: 1.25px 1.25px 1.25px rgba(0, 0, 0, 0.16);
+	font-size: 14px;
+	overflow-y: scroll;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	&::-webkit-scrollbar {
+		width: 0;
+		height: 0;
+	}
 `
 
 export default TableHeader

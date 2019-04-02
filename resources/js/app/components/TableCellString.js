@@ -5,8 +5,6 @@ import React from 'react'
 import { bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { timing } from '../../_config'
-
 import AutosizeTextArea from 'react-autosize-textarea'
 
 //-----------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { PureComponent } from 'react'
-import { bool, func, number } from 'prop-types'
+import { bool, func, number, oneOf } from 'prop-types'
 import styled from 'styled-components'
 
 import { colors } from '../../_config'
@@ -19,22 +19,24 @@ class TableContextMenu extends PureComponent {
   
   columnActions = () => {
     const {
-      columnId,
-      createColumn
+      createColumn,
+      id,
+      toggleColumnIsEditable
     } = this.props
     return [
-      { text: 'Insert Before', action: () => createColumn(columnId, 'BEFORE') },
-      { text: 'Insert After', action: () => createColumn(columnId, 'AFTER') },
+      { text: 'Insert Before', action: () => createColumn(id, 'BEFORE') },
+      { text: 'Insert After', action: () => createColumn(id, 'AFTER') },
+      { text: 'Edit Column', action: () => toggleColumnIsEditable(id) },
     ]
   }
 
   rowActions = () => {
     const {
       deleteRow,
-      rowId
+      id
     } = this.props
     return [
-      { text: 'Delete', action: () => deleteRow(rowId) }
+      { text: 'Delete', action: () => deleteRow(id) }
     ]
   }
 
@@ -66,11 +68,11 @@ class TableContextMenu extends PureComponent {
   
   render() {
     const {
-      isHeader,
+      columnOrRow,
       top, 
       left
     } = this.props
-    const actions = isHeader ? this.columnActions() : this.rowActions()
+    const actions = columnOrRow === 'COLUMN' ? this.columnActions() : this.rowActions()
     return (
       <Container
         ref={this.contextMenuContainer}
@@ -94,12 +96,14 @@ class TableContextMenu extends PureComponent {
 // Props
 //-----------------------------------------------------------------------------
 TableContextMenu.propTypes = {
-  columnId: number,
+  columnOrRow: oneOf(['COLUMN', 'ROW']),
   closeContextMenu: func,
   createColumn: func,
   deleteRow: func,
+  id: number,
   isHeader: bool,
   rowId: number,
+  toggleColumnIsEditable: func,
   top: number,
   left: number
 }

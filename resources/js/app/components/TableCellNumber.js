@@ -2,12 +2,13 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { func, number, oneOfType, string } from 'prop-types'
 import styled from 'styled-components'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellNumber = ({ autofocus, placeholder, updateValue, value }) => {
+const TableCellNumber = ({ placeholder, updateValue, value }) => {
   return (
       <StyledInput
         type="number"
@@ -17,6 +18,18 @@ const TableCellNumber = ({ autofocus, placeholder, updateValue, value }) => {
   )
 }
 
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+TableCellNumber.propTypes = {
+  placeholder: string,
+  updateValue: func,
+  value: oneOfType([string, number])
+}
+
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
 const StyledInput = styled.input`
   margin: 0;
   padding: 0;

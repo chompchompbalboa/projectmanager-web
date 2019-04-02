@@ -116,7 +116,7 @@ const Container = styled.td`
   height: 100%;
 	padding: calc(${ layout.TABLE_PADDING }/2) calc(${ layout.TABLE_PADDING }/4);
   border: 0.25px solid ${ colors.TABLE_BORDER };
-	font-weight: ${props => props.fontWeight};
+  font-weight: ${props => props.fontWeight};
 `
 
 export default connect(

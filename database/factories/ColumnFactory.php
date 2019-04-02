@@ -38,7 +38,7 @@ $factory->define(App\Models\Column::class, function (Faker $faker) {
       'table_id' => 1,
       'position' => 1,
       'width' => 0.2,
-      'header' => $faker->streetSuffix,
+      'name' => $faker->streetSuffix,
       'required' => $faker->boolean($chanceOfGettingTrue = 50),
       'type' => $type['type'],
       'default_sort_order' => $type['default_sort_order'],

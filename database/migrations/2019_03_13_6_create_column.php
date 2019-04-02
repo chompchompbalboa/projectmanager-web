@@ -16,7 +16,7 @@ class CreateColumn extends Migration
         Schema::create('columns', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('table_id');
-            $table->string('header');
+            $table->string('name');
             $table->string('type');
             $table->boolean('required');
             $table->string('default_sort_order');

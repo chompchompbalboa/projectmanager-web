@@ -1,18 +1,19 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { arrayOf, bool, func, number, oneOf, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
 import { colors, layout } from '../../_config'
 
-import Icon from '../components/Icon'
+import TableHeaderDropdown from './TableHeaderDropdown'
+import Icon from './Icon'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class TableHeader extends PureComponent {
+class TableHeader extends Component {
   
   constructor(props) {
     super(props)
@@ -91,7 +92,8 @@ class TableHeader extends PureComponent {
     const { 
       columns,
       openContextMenu,
-      sortRows 
+      sortRows,
+      toggleColumnIsEditable
     } = this.props
     const {
       mouseDownColumnId
@@ -119,7 +121,7 @@ class TableHeader extends PureComponent {
                     isCentered={column.type === 'BOOLEAN'}
                     isColumnResizing={mouseDownColumnId !== null}
                     onClick={() => sortRows(column)}>
-                    {column.header}&nbsp;&nbsp;
+                    {column.name}&nbsp;&nbsp;
                     <Icon 
                       icon={"SORT_" + sortDirection}
                       size="1.2em"/>
@@ -129,11 +131,11 @@ class TableHeader extends PureComponent {
                       onMouseDown={e => this.handleResizeMouseDown(e, column.id, column.width, columns[index + 1].id, columns[index + 1].width)}/>
                   }
                   </ContentContainer>
-                  {column.isEditable && 
-                    <DropdownContainer>
-                      Dropdown
-                    </DropdownContainer>
-                  }
+                  <TableHeaderDropdown
+                    column={column}
+                    name={column.name}
+                    isDropdownVisible={column.isEditable}>
+                  </TableHeaderDropdown>
               </TableHeaderCell>
             )
           })}
@@ -149,7 +151,7 @@ class TableHeader extends PureComponent {
 TableHeader.propTypes = {
 	columns: arrayOf(
 		shape({
-			header: string
+			name: string
 		})
   ),
   createColumn: func,
@@ -204,27 +206,6 @@ const ResizeContainer = styled.div`
   cursor: col-resize;
   width: calc(${ layout.TABLE_PADDING }/4);
   height: 100%;
-`
-
-const DropdownContainer = styled.div`
-	z-index: 1000;
-	display: block;
-	position: absolute;
-	max-height: 50vh;
-	min-width: 20vw;;
-  background-color: white;
-  color: black;
-	border-top: 1.25px solid ${colors.BACKGROUND};
-	border-left: 1.25px solid ${colors.BACKGROUND};
-	box-shadow: 1.25px 1.25px 1.25px rgba(0, 0, 0, 0.16);
-	font-size: 14px;
-	overflow-y: scroll;
-	scrollbar-width: none;
-	-ms-overflow-style: none;
-	&::-webkit-scrollbar {
-		width: 0;
-		height: 0;
-	}
 `
 
 export default TableHeader

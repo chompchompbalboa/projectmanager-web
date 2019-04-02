@@ -157,6 +157,20 @@ export const updateCellId = (rowIndex, cellIndex, nextCellId) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Column Name
+//-----------------------------------------------------------------------------
+export const updateColumnName = (columnId, nextName) => {
+  return dispatch => {
+    dispatch(updateColumnNameReducer(columnId, nextName))
+  }
+}
+const updateColumnNameReducer = (columnId, nextName) => ({
+  type: 'UPDATE_COLUMN_NAME',
+  columnId: columnId,
+  nextName: nextName
+})
+
+//-----------------------------------------------------------------------------
 // Update Column Widths
 //-----------------------------------------------------------------------------
 let updateColumnWidthsTimeout

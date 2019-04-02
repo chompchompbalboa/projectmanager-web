@@ -9,7 +9,7 @@ class Column extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'tableId', 'header', 'position', 'width', 'defaultSortOrder', 'type'];
+  protected $visible = ['id', 'tableId', 'name', 'position', 'width', 'defaultSortOrder', 'type'];
 
   /**
    * Rename table columns from snake case to camel case

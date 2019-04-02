@@ -71,7 +71,7 @@ const tableReducers = (state = defaultState, action) => {
       const newColumn = {
         id: newColumnId,
         tableId: state.id,
-        header: "",
+        name: "",
         required: true,
         position: null,
         type: 'STRING',
@@ -191,7 +191,10 @@ const tableReducers = (state = defaultState, action) => {
       } = action
       const nextColumns = state.columns.map(column => {
         if(column.id === columnId) {
-          column.isEditable = true
+          column.isEditable = column.isEditable ? false : true
+        }
+        else {
+          column.isEditable = false
         }
         return column
       })
@@ -221,6 +224,23 @@ const tableReducers = (state = defaultState, action) => {
       const nextState = clone(state)
       nextState.rows[rowIndex].cells[cellIndex].id = nextCellId
       return nextState
+    }
+
+    case 'UPDATE_COLUMN_NAME': {
+      const {
+        columnId,
+        nextName
+      } = action
+      const nextColumns = state.columns.map(column => {
+        if(column.id === columnId) {
+          column.name = nextName
+        }
+        return column
+      })
+      return {
+        ...state,
+        columns: nextColumns
+      }
     }
 
     case 'UPDATE_COLUMN_WIDTHS': {

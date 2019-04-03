@@ -31,9 +31,7 @@ class TableRow extends PureComponent {
           return (
             <TableCell
               key={cell.id}
-              autofocus={index === 0}
               cell={cell}
-              isEditable={isEditable}
               rowId={row.id}
               type={column.type}
               updateCell={updateCell}

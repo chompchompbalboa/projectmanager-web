@@ -236,8 +236,22 @@ const tableReducers = (state = defaultState, action) => {
         nextColumnId,
         columnIndex
       } = action
+      const columnId = state.columns[columnIndex].id
       const nextState = clone(state)
+      const nextRows = nextState.rows.map(row => {
+        const nextCells = row.cells.map(cell => {
+          if (cell.columnId === columnId) {
+            cell.columnId = nextColumnId
+          }
+          return cell
+        })
+        return {
+          ...row,
+          cells: nextCells
+        }
+      })
       nextState.columns[columnIndex].id = nextColumnId
+      nextState.rows = nextRows
       return nextState
     }
 

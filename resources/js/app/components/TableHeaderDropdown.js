@@ -43,7 +43,7 @@ const TableHeaderDropdown = ({
           <StyledTextarea
             autoFocus={isDropdownVisible}
             onChange={e => updateColumnName(column.id, e.target.value)}
-            value={column.name}/>
+            value={column.name === null ? "" : column.name}/>
         </EditContainer>
       </Container>
     </Dropdown>

@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Column;
 use Illuminate\Http\Request;
+
+use App\Models\Cell;
+use App\Models\Column;
 
 class ColumnController extends Controller
 {
@@ -45,29 +47,36 @@ class ColumnController extends Controller
       $newColumn->default_sort_order = $newColumnInput['defaultSortOrder'];
       $newColumn->width = $newColumnInput['width'];
       if ($newColumn->save()) {
-        $newCellInputs = $request->input('cells');
-        $newCellIds = [];
-        foreach($newCellInputs as $newCellInput) {
-          $newCell = new Cell;
-          $newCell->table_id = $newCellInput['tableId'];
-          $newCell->column_id = $newCellInput['columnId'];
-          $newCell->row_id = $newCellInput['rowId'];
-          $newCell->string = $newCellInput['string'];
-          $newCell->number = $newCellInput['number'];
-          $newCell->boolean = $newCellInput['boolean'];
-          $newCell->datetime = $newCellInput['datetime'];
-          if($newCell->save()) {
-            array_push($newCellIds, [
-              'cellId' => $newCellInput['id'],
-              'nextCellId' => $newCell->id,
-            ]);
+        try {
+          $rowIds = $request->input('rowIds');
+          $newCellIds = [];
+          foreach($rowIds as $rowId) {
+            $newCell = new Cell;
+            $newCell->table_id = $newColumnInput['tableId'];
+            $newCell->column_id = $newColumn->id;
+            $newCell->row_id = $rowId;
+            $newCell->string = null;
+            $newCell->number = null;
+            $newCell->boolean = null;
+            $newCell->datetime = null;
+            if($newCell->save()) {
+              array_push($newCellIds, [
+                'rowId' =>  $rowId,
+                'nextCellId' => $newCell->id,
+              ]);
+            }
           }
+          return [
+            'columnId' => $newColumnInput['id'],
+            'nextColumnId' => $newColumn->id,
+            'nextCellIds' => $newCellIds
+          ];
+        } catch (Exception $e) {
+          $newColumn->delete();
+          return [
+            "success" => false
+          ];
         }
-        return [
-          'columnId' => $newColumnInput['id'],
-          'nextColumnId' => $newColumn->id,
-          'newCellIds' => $newCellIds
-        ];
       }
       else {
         return [
@@ -129,6 +138,6 @@ class ColumnController extends Controller
      */
     public function destroy(Column $column)
     {
-        //
+      return Column::destroy($row->id);
     }
 }

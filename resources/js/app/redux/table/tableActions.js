@@ -14,9 +14,9 @@ export const createColumn = (columnId, beforeOrAfter) => {
     // Get the newly created column from state
     const state = getState()
     const newColumn = state.table.columns.find(column => column.id < 0)
-    const rows = state.table.rows
+    const rowIds = state.table.rows.map(row => {return row.id})
     // Save the column
-    dispatch(createColumnServer(newColumn, rows))
+    dispatch(createColumnServer(newColumn, rowIds))
   }
 }
 const createColumnReducer = (columnId, beforeOrAfter) => ({
@@ -24,22 +24,22 @@ const createColumnReducer = (columnId, beforeOrAfter) => ({
   beforeOrAfter: beforeOrAfter,
   columnId: columnId
 })
-const createColumnServer = (newColumn, rows) => {
+const createColumnServer = (newColumn, rowIds) => {
   return (dispatch, getState) => {
     dispatch(setStatus('SAVING'))
-    mutation.createColumn(newColumn, rows).then(saveResults => {
+    mutation.createColumn(newColumn, rowIds).then(saveResults => {
       const {
         nextCellIds,
         nextColumnId,
         columnId
       } = saveResults
-      const state = getState()
       const columnIndex = getState().table.columns.findIndex(column => column.id === columnId)
       dispatch(updateColumnId(columnIndex, nextColumnId))
+      const state = getState()
       // Update the cell ids
-      nextCellIds.forEach(({ rowId, cellId, nextCellId }) => {
+      nextCellIds.forEach(({ rowId, nextCellId }) => {
         const rowIndex = state.table.rows.findIndex(row => row.id === rowId)
-        const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
+        const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.columnId === nextColumnId)
         dispatch(updateCellId(rowIndex, cellIndex, nextCellId))
       })
       dispatch(setStatus('SAVED'))

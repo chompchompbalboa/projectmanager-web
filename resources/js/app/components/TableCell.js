@@ -72,7 +72,6 @@ class TableCell extends Component {
 
   render() {
     const {
-      autofocus,
       type
     } = this.props
     const {
@@ -82,7 +81,6 @@ class TableCell extends Component {
     return (
       <Container>
         <TableCellType
-          autofocus={autofocus}
           updateValue={this.updateValue}
           value={value}/>
       </Container>
@@ -94,9 +92,7 @@ class TableCell extends Component {
 // Props
 //-----------------------------------------------------------------------------
 TableCell.propTypes = {
-  autofocus: bool,
   cell: object,
-  isEditable: bool,
   rowId: number,
   type: string,
   updateCell: func,

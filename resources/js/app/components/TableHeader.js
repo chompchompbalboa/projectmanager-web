@@ -92,8 +92,7 @@ class TableHeader extends Component {
     const { 
       columns,
       openContextMenu,
-      sortRows,
-      toggleColumnIsEditable
+      sortRows
     } = this.props
     const {
       mouseDownColumnId
@@ -113,10 +112,9 @@ class TableHeader extends Component {
                 sortDirection={sortDirection}
                 widthPercentage={column.width}>
                 <ContentContainer>
-                  {index !== 0 &&
-                    <ResizeContainer 
-                      onMouseDown={e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width)}/>
-                  }
+                  <ResizeContainer
+                    cursor={index!== 0 ? 'col-resize' : 'pointer'} 
+                    onMouseDown={index!== 0 ? e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width) : null}/>
                   <TableHeaderCellValue
                     isCentered={column.type === 'BOOLEAN'}
                     isColumnResizing={mouseDownColumnId !== null}
@@ -126,14 +124,12 @@ class TableHeader extends Component {
                       icon={"SORT_" + sortDirection}
                       size="1.2em"/>
                   </TableHeaderCellValue>
-                  {index !== columns.length - 1 &&
-                    <ResizeContainer 
-                      onMouseDown={e => this.handleResizeMouseDown(e, column.id, column.width, columns[index + 1].id, columns[index + 1].width)}/>
-                  }
+                  <ResizeContainer 
+                    cursor={index !== columns.length - 1 ? 'col-resize' : 'pointer'} 
+                    onMouseDown={index !== columns.length - 1 ? e => this.handleResizeMouseDown(e, column.id, column.width, columns[index + 1].id, columns[index + 1].width) : null}/>
                   </ContentContainer>
                   <TableHeaderDropdown
                     column={column}
-                    name={column.name}
                     isDropdownVisible={column.isEditable}>
                   </TableHeaderDropdown>
               </TableHeaderCell>
@@ -197,13 +193,13 @@ const ContentContainer = styled.div`
 
 const TableHeaderCellValue = styled.div`
   cursor: ${ props => props.isColumnResizing ? 'col-resize' : 'pointer' };
-	padding: calc(${ layout.TABLE_PADDING }/2) 0;
+  padding: calc(${ layout.TABLE_PADDING }/2) 0;
   margin-right: ${ props => props.isCentered ? '0' : 'auto' };
   user-select: none;
 `
 
 const ResizeContainer = styled.div`
-  cursor: col-resize;
+  cursor: ${ props => props.cursor };
   width: calc(${ layout.TABLE_PADDING }/4);
   height: 100%;
 `

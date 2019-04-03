@@ -6,6 +6,15 @@ import axios from './axios'
 //-----------------------------------------------------------------------------
 // Queries
 //-----------------------------------------------------------------------------
+export const createColumn = async (newColumn, rows) => {  
+  return axios.post('/app/columns', {
+    newColumn: newColumn,
+    rows: rows
+  }).then(response => {
+    return response.data
+  })
+}
+
 export const createRow = async (newRow) => {  
   return axios.post('/app/rows', {
     newRow: newRow

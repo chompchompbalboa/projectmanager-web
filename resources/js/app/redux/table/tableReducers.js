@@ -75,7 +75,9 @@ const tableReducers = (state = defaultState, action) => {
         required: true,
         position: null,
         type: 'STRING',
-        width: insertWidth
+        defaultSortOrder: 'ASC',
+        width: insertWidth,
+        isEditable: true
       }
       const columnIndex = state.columns.findIndex(column => column.id === columnId)
       const insertIndex = beforeOrAfter === 'BEFORE' ? columnIndex : columnIndex + 1
@@ -191,12 +193,15 @@ const tableReducers = (state = defaultState, action) => {
       } = action
       const nextColumns = state.columns.map(column => {
         if(column.id === columnId) {
-          column.isEditable = column.isEditable ? false : true
+          return {
+            ...column,
+            isEditable: column.isEditable ? false : true
+          }
         }
-        else {
-          column.isEditable = false
+        return {
+          ...column,
+          isEditable: false
         }
-        return column
       })
       return {
         ...state,
@@ -226,6 +231,16 @@ const tableReducers = (state = defaultState, action) => {
       return nextState
     }
 
+    case 'UPDATE_COLUMN_ID': {
+      const {
+        nextColumnId,
+        columnIndex
+      } = action
+      const nextState = clone(state)
+      nextState.columns[columnIndex].id = nextColumnId
+      return nextState
+    }
+
     case 'UPDATE_COLUMN_NAME': {
       const {
         columnId,
@@ -233,7 +248,10 @@ const tableReducers = (state = defaultState, action) => {
       } = action
       const nextColumns = state.columns.map(column => {
         if(column.id === columnId) {
-          column.name = nextName
+          return {
+            ...column,
+            name: nextName
+          }
         }
         return column
       })

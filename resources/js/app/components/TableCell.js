@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { bool, func, number, oneOfType, string } from 'prop-types'
+import { bool, func, number, object, oneOfType, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
@@ -57,7 +57,9 @@ class TableCell extends Component {
 
   saveCell = () => {
     const {
-      cellId,
+      cell: {
+        id
+      },
       rowId,
       type,
       updateCell
@@ -65,13 +67,12 @@ class TableCell extends Component {
     const {
       value
     } = this.state
-    updateCell(rowId, cellId, type, value === "" ? null : value)
+    updateCell(rowId, id, type, value === "" ? null : value)
   }
 
   render() {
     const {
       autofocus,
-      placeholder,
       type
     } = this.props
     const {
@@ -82,7 +83,6 @@ class TableCell extends Component {
       <Container>
         <TableCellType
           autofocus={autofocus}
-          placeholder={placeholder}
           updateValue={this.updateValue}
           value={value}/>
       </Container>
@@ -95,9 +95,8 @@ class TableCell extends Component {
 //-----------------------------------------------------------------------------
 TableCell.propTypes = {
   autofocus: bool,
-  cellId: number,
+  cell: object,
   isEditable: bool,
-  placeholder: string,
   rowId: number,
   type: string,
   updateCell: func,

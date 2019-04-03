@@ -11,6 +11,12 @@ import { setStatus } from '../status/statusActions'
 export const createColumn = (columnId, beforeOrAfter) => {
   return (dispatch, getState) => {
     dispatch(createColumnReducer(columnId, beforeOrAfter))
+    // Get the newly created column from state
+    const state = getState()
+    const newColumn = state.table.columns.find(column => column.id < 0)
+    const rows = state.table.rows
+    // Save the column
+    dispatch(createColumnServer(newColumn, rows))
   }
 }
 const createColumnReducer = (columnId, beforeOrAfter) => ({
@@ -18,6 +24,28 @@ const createColumnReducer = (columnId, beforeOrAfter) => ({
   beforeOrAfter: beforeOrAfter,
   columnId: columnId
 })
+const createColumnServer = (newColumn, rows) => {
+  return (dispatch, getState) => {
+    dispatch(setStatus('SAVING'))
+    mutation.createColumn(newColumn, rows).then(saveResults => {
+      const {
+        nextCellIds,
+        nextColumnId,
+        columnId
+      } = saveResults
+      const state = getState()
+      const columnIndex = getState().table.columns.findIndex(column => column.id === columnId)
+      dispatch(updateColumnId(columnIndex, nextColumnId))
+      // Update the cell ids
+      nextCellIds.forEach(({ rowId, cellId, nextCellId }) => {
+        const rowIndex = state.table.rows.findIndex(row => row.id === rowId)
+        const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
+        dispatch(updateCellId(rowIndex, cellIndex, nextCellId))
+      })
+      dispatch(setStatus('SAVED'))
+    })
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Create Row
@@ -157,11 +185,23 @@ export const updateCellId = (rowIndex, cellIndex, nextCellId) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Column ID
+//-----------------------------------------------------------------------------
+export const updateColumnId = (columnIndex, nextColumnId) => ({
+  type: 'UPDATE_COLUMN_ID',
+  columnIndex: columnIndex,
+  nextColumnId: nextColumnId
+})
+
+//-----------------------------------------------------------------------------
 // Update Column Name
 //-----------------------------------------------------------------------------
+let updateColumnNameTimeout
 export const updateColumnName = (columnId, nextName) => {
   return dispatch => {
+    clearTimeout(updateColumnNameTimeout)
     dispatch(updateColumnNameReducer(columnId, nextName))
+    updateColumnNameTimeout = window.setTimeout(() => dispatch(updateColumnNameServer(columnId)), timing.SAVE_INTERVAL)
   }
 }
 const updateColumnNameReducer = (columnId, nextName) => ({
@@ -169,6 +209,23 @@ const updateColumnNameReducer = (columnId, nextName) => ({
   columnId: columnId,
   nextName: nextName
 })
+const updateColumnNameServer = columnId => {
+  return (dispatch, getState) => {
+    dispatch(setStatus('SAVING'))
+    const columns = getState().table.columns
+    const columnToSave = columns.find(column => column.id === columnId)
+    if(columnToSave.name !== "") {
+      mutation.updateColumn(columnToSave.id, columnToSave).then(success => {
+        if(success) {
+          dispatch(setStatus('SAVED'))
+        }
+        else {
+          dispatch(setStatus('ERROR'))
+        }
+      })
+    }
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Update Column Widths

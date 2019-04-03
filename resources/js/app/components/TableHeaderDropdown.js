@@ -2,6 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { bool, func, number, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
@@ -28,12 +29,10 @@ const mapDispatchToProps = dispatch => ({
 //-----------------------------------------------------------------------------
 const TableHeaderDropdown = ({ 
   column, 
-  name,
   isDropdownVisible, 
   toggleColumnIsEditable, 
   updateColumnName 
 }) => {
-  console.log(isDropdownVisible && column)
   return (
     <Dropdown
       closeDropdown={() => toggleColumnIsEditable(column.id)}
@@ -44,11 +43,24 @@ const TableHeaderDropdown = ({
           <StyledTextarea
             autoFocus={isDropdownVisible}
             onChange={e => updateColumnName(column.id, e.target.value)}
-            value={name}/>
+            value={column.name}/>
         </EditContainer>
       </Container>
     </Dropdown>
   )
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+TableHeaderDropdown.propTypes = {
+  column: shape({
+    id: number,
+    name: string
+  }),
+  isDropdownVisible: bool,
+  toggleColumnIsEditable: func,
+  updateColumnName: func
 }
 
 //-----------------------------------------------------------------------------

@@ -35,7 +35,45 @@ class ColumnController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $newColumnInput = $request->input('newColumn');
+      $newColumn = new Column;
+      $newColumn->table_id = $newColumnInput['tableId'];
+      $newColumn->name = $newColumnInput['name'];
+      $newColumn->required = $newColumnInput['required'];
+      $newColumn->position = $newColumnInput['position'];
+      $newColumn->type = $newColumnInput['type'];
+      $newColumn->default_sort_order = $newColumnInput['defaultSortOrder'];
+      $newColumn->width = $newColumnInput['width'];
+      if ($newColumn->save()) {
+        $newCellInputs = $request->input('cells');
+        $newCellIds = [];
+        foreach($newCellInputs as $newCellInput) {
+          $newCell = new Cell;
+          $newCell->table_id = $newCellInput['tableId'];
+          $newCell->column_id = $newCellInput['columnId'];
+          $newCell->row_id = $newCellInput['rowId'];
+          $newCell->string = $newCellInput['string'];
+          $newCell->number = $newCellInput['number'];
+          $newCell->boolean = $newCellInput['boolean'];
+          $newCell->datetime = $newCellInput['datetime'];
+          if($newCell->save()) {
+            array_push($newCellIds, [
+              'cellId' => $newCellInput['id'],
+              'nextCellId' => $newCell->id,
+            ]);
+          }
+        }
+        return [
+          'columnId' => $newColumnInput['id'],
+          'nextColumnId' => $newColumn->id,
+          'newCellIds' => $newCellIds
+        ];
+      }
+      else {
+        return [
+          "success" => false
+        ];
+      }
     }
 
     /**
@@ -71,6 +109,8 @@ class ColumnController extends Controller
     {
       $nextWidth = $request->input('column')['width'];
       $column->width = $nextWidth;
+      $nextName = $request->input('column')['name'];
+      $column->name = $nextName;
       if ($column->save()) {
         return $column;
       }

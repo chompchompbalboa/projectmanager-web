@@ -3,15 +3,13 @@
 //-----------------------------------------------------------------------------
 import moment from 'moment'
 import _ from 'lodash'
+
 import { date as dateConfig } from '../../../_config'
+import clone from '../../../_utils/clone'
 
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
-const clone = object => {
-  return JSON.parse(JSON.stringify(object))
-}
-
 const defaultCell = (id, columnId) => ({
   id: _.random(-100000, -999999),
   tableId: id,
@@ -287,15 +285,25 @@ const tableReducers = (state = defaultState, action) => {
       return nextState
     }
 
-      case 'UPDATE_ROW_ID': {
-        const {
-          nextRowId,
-          rowIndex
-        } = action
-        const nextState = clone(state)
-        nextState.rows[rowIndex].id = nextRowId
-        return nextState
+    case 'UPDATE_ROW_ID': {
+      const {
+        nextRowId,
+        rowIndex
+      } = action
+      const nextState = clone(state)
+      nextState.rows[rowIndex].id = nextRowId
+      return nextState
+    }
+
+    case 'UPDATE_ROWS': {
+      const {
+        nextRows
+      } = action
+      return {
+        ...state,
+        rows: nextRows
       }
+    }
   
 
     default:

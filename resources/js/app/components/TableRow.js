@@ -18,7 +18,6 @@ class TableRow extends PureComponent {
   render() {
     const { 
       columns, 
-      isEditable, 
       openContextMenu,
       row,
       updateCell
@@ -26,7 +25,7 @@ class TableRow extends PureComponent {
     return (
       <Container
         onContextMenu={e => openContextMenu(e, 'ROW', row.id)}>
-        {columns.map((column, index) => {
+        {columns.map((column) => {
           const cell = _.find(row.cells, ['columnId', column.id])
           return (
             <TableCell

@@ -2,6 +2,7 @@ import _ from 'lodash'
 
 import { mutation } from '../../../_api'
 import { timing } from '../../../_config'
+import clone from '../../../_utils/clone'
 
 import { setStatus } from '../status/statusActions'
 
@@ -36,11 +37,13 @@ const createColumnServer = (newColumn, rowIds) => {
       const columnIndex = getState().table.columns.findIndex(column => column.id === columnId)
       dispatch(updateColumnId(columnIndex, nextColumnId))
       const state = getState()
+      const nextRows = clone(state.table.rows)
       // Update the cell ids
       nextCellIds.forEach(({ rowId, nextCellId }) => {
         const rowIndex = state.table.rows.findIndex(row => row.id === rowId)
         const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.columnId === nextColumnId)
-        dispatch(updateCellId(rowIndex, cellIndex, nextCellId))
+        nextRows[rowIndex].cells[cellIndex].id = nextCellId
+        dispatch(updateRows(nextRows))
       })
       dispatch(setStatus('SAVED'))
     })
@@ -271,4 +274,12 @@ export const updateRowId = (rowIndex, nextRowId) => ({
   type: 'UPDATE_ROW_ID',
   rowIndex: rowIndex,
   nextRowId: nextRowId
+})
+
+//-----------------------------------------------------------------------------
+// Update Rows
+//-----------------------------------------------------------------------------
+export const updateRows = nextRows => ({
+  type: 'UPDATE_ROWS',
+  nextRows: nextRows
 })

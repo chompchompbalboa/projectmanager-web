@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { bool, func, number, object, oneOfType, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => ({
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class TableCell extends Component {
+class TableCell extends PureComponent {
 
   state = {
     value: this.props.value === null ? "" : this.props.value

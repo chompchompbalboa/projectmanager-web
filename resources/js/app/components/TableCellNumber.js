@@ -8,12 +8,11 @@ import styled from 'styled-components'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellNumber = ({ placeholder, updateValue, value }) => {
+const TableCellNumber = ({ updateValue, value }) => {
   return (
       <StyledInput
         type="number"
         onChange={(e) => updateValue(e.target.value)}
-        placeholder={placeholder}
         value={value}/>
   )
 }
@@ -22,7 +21,6 @@ const TableCellNumber = ({ placeholder, updateValue, value }) => {
 // Props
 //-----------------------------------------------------------------------------
 TableCellNumber.propTypes = {
-  placeholder: string,
   updateValue: func,
   value: oneOfType([string, number])
 }

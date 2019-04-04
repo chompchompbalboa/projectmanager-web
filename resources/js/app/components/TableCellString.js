@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { bool, func, string } from 'prop-types'
+import { func, string } from 'prop-types'
 import styled from 'styled-components'
 
 import AutosizeTextArea from 'react-autosize-textarea'
@@ -10,12 +10,10 @@ import AutosizeTextArea from 'react-autosize-textarea'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellString = ({ autofocus, placeholder, updateValue, value }) => {
+const TableCellString = ({ updateValue, value }) => {
   return (
     <StyledTextarea
-      autoFocus={autofocus}
       onChange={(e) => updateValue(e.target.value)}
-      placeholder={placeholder}
       value={value}/>
   )
 }
@@ -24,8 +22,6 @@ const TableCellString = ({ autofocus, placeholder, updateValue, value }) => {
 // Styled Components
 //-----------------------------------------------------------------------------
 TableCellString.propTypes = {
-  autofocus: bool,
-  placeholder: string,
   updateValue: func,
   value: string
 }

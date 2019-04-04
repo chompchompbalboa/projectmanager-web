@@ -16,8 +16,13 @@ export const createColumn = (columnId, beforeOrAfter) => {
     const state = getState()
     const newColumn = state.table.columns.find(column => column.id < 0)
     const rowIds = state.table.rows.map(row => {return row.id})
+    const columnPositions = state.table.columns.map(column => {
+      if (column.id > 0) {
+        return {id: column.id, position: column.position}
+      }
+    })
     // Save the column
-    dispatch(createColumnServer(newColumn, rowIds))
+    dispatch(createColumnServer(newColumn, rowIds, columnPositions))
   }
 }
 const createColumnReducer = (columnId, beforeOrAfter) => ({
@@ -25,10 +30,10 @@ const createColumnReducer = (columnId, beforeOrAfter) => ({
   beforeOrAfter: beforeOrAfter,
   columnId: columnId
 })
-const createColumnServer = (newColumn, rowIds) => {
+const createColumnServer = (newColumn, rowIds, columnPositions) => {
   return (dispatch, getState) => {
     dispatch(setStatus('SAVING'))
-    mutation.createColumn(newColumn, rowIds).then(saveResults => {
+    mutation.createColumn(newColumn, rowIds, columnPositions).then(saveResults => {
       const {
         nextCellIds,
         nextColumnId,

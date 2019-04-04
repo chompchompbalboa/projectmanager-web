@@ -135,6 +135,7 @@ class TableHeader extends PureComponent {
                   isCentered={column.type === 'BOOLEAN'}>
                   <TableHeaderCellValue
                     isColumnResizing={mouseDownAdjacentColumnId !== null}
+                    isFirst={index === 0}
                     onClick={() => sortRows(column)}>
                     {column.name}&nbsp;&nbsp;
                     <Icon 
@@ -208,6 +209,7 @@ const ContentContainer = styled.div`
 const TableHeaderCellValue = styled.div`
   cursor: ${ props => props.isColumnResizing ? 'col-resize' : 'pointer' };
   padding: calc(${ layout.TABLE_PADDING }/2) 0;
+  padding-left: ${ props => props.isFirst ? 'calc(' + layout.TABLE_PADDING + '/3)' : '0' };
   user-select: none;
 `
 

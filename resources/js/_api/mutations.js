@@ -6,10 +6,11 @@ import axios from './axios'
 //-----------------------------------------------------------------------------
 // Queries
 //-----------------------------------------------------------------------------
-export const createColumn = async (newColumn, rowIds) => {  
+export const createColumn = async (newColumn, rowIds, columnPositions) => {  
   return axios.post('/app/columns', {
     newColumn: newColumn,
-    rowIds: rowIds
+    rowIds: rowIds,
+    columnPositions: columnPositions
   }).then(response => {
     return response.data
   })

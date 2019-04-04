@@ -47,36 +47,39 @@ class ColumnController extends Controller
       $newColumn->default_sort_order = $newColumnInput['defaultSortOrder'];
       $newColumn->width = $newColumnInput['width'];
       if ($newColumn->save()) {
-        try {
-          $rowIds = $request->input('rowIds');
-          $newCellIds = [];
-          foreach($rowIds as $rowId) {
-            $newCell = new Cell;
-            $newCell->table_id = $newColumnInput['tableId'];
-            $newCell->column_id = $newColumn->id;
-            $newCell->row_id = $rowId;
-            $newCell->string = null;
-            $newCell->number = null;
-            $newCell->boolean = null;
-            $newCell->datetime = null;
-            if($newCell->save()) {
-              array_push($newCellIds, [
-                'rowId' =>  $rowId,
-                'nextCellId' => $newCell->id,
-              ]);
-            }
+        // Update the column positions for the table
+        $columnPositions = $request->input('columnPositions');
+        foreach ($columnPositions as $columnPosition) {
+          $nextColumn = Column::find($columnPosition['id']);
+          if ($nextColumn) {
+            $nextColumn->position = $columnPosition['position'];
+            $nextColumn->save();
           }
-          return [
-            'columnId' => $newColumnInput['id'],
-            'nextColumnId' => $newColumn->id,
-            'nextCellIds' => $newCellIds
-          ];
-        } catch (Exception $e) {
-          $newColumn->delete();
-          return [
-            "success" => false
-          ];
         }
+        // Get the new cell ids
+        $rowIds = $request->input('rowIds');
+        $newCellIds = [];
+        foreach($rowIds as $rowId) {
+          $newCell = new Cell;
+          $newCell->table_id = $newColumnInput['tableId'];
+          $newCell->column_id = $newColumn->id;
+          $newCell->row_id = $rowId;
+          $newCell->string = null;
+          $newCell->number = null;
+          $newCell->boolean = null;
+          $newCell->datetime = null;
+          if($newCell->save()) {
+            array_push($newCellIds, [
+              'rowId' =>  $rowId,
+              'nextCellId' => $newCell->id,
+            ]);
+          }
+        }
+        return [
+          'columnId' => $newColumnInput['id'],
+          'nextColumnId' => $newColumn->id,
+          'nextCellIds' => $newCellIds
+        ];
       }
       else {
         return [
@@ -116,10 +119,9 @@ class ColumnController extends Controller
      */
     public function update(Request $request, Column $column)
     {
-      $nextWidth = $request->input('column')['width'];
-      $column->width = $nextWidth;
-      $nextName = $request->input('column')['name'];
-      $column->name = $nextName;
+      $column->width = $request->input('column')['width'];
+      $column->name = $request->input('column')['name'];
+      $column->position = $request->input('column')['position'];
       if ($column->save()) {
         return $column;
       }

@@ -20,6 +20,7 @@ class TableContextMenu extends PureComponent {
   columnActions = () => {
     const {
       createColumn,
+      deleteColumn,
       id,
       toggleColumnIsEditable
     } = this.props
@@ -27,6 +28,7 @@ class TableContextMenu extends PureComponent {
       { text: 'Insert Before', action: () => createColumn(id, 'BEFORE') },
       { text: 'Insert After', action: () => createColumn(id, 'AFTER') },
       { text: 'Edit Column', action: () => toggleColumnIsEditable(id) },
+      { text: 'Delete Column', action: () => deleteColumn(id) },
     ]
   }
 
@@ -99,6 +101,7 @@ TableContextMenu.propTypes = {
   columnOrRow: oneOf(['COLUMN', 'ROW']),
   closeContextMenu: func,
   createColumn: func,
+  deleteColumn: func,
   deleteRow: func,
   id: number,
   isHeader: bool,

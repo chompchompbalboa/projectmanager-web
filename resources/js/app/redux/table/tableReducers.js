@@ -113,6 +113,25 @@ const tableReducers = (state = defaultState, action) => {
       }
     }
 
+    case 'DELETE_COLUMN': {
+      const {
+        columnId
+      } = action
+      const nextColumns = state.columns.filter(column => column.id !== columnId)
+      const nextRows = state.rows.map(row => {
+        const nextCells = row.cells.filter(cell => cell.columnId !== columnId)
+        return {
+          ...row,
+          cells: nextCells
+        }
+      })
+      return {
+        ...state,
+        columns: nextColumns,
+        rows: nextRows
+      }
+    }
+
     case 'DELETE_ROW': {
       const {
         rowId

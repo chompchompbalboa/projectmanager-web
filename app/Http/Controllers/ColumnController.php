@@ -140,6 +140,8 @@ class ColumnController extends Controller
      */
     public function destroy(Column $column)
     {
-      return Column::destroy($row->id);
+      // Delete all of the cells
+      $deletedRows = Cell::where('column_id', $column->id)->delete();
+      return Column::destroy($column->id);
     }
 }

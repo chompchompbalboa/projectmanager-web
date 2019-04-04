@@ -12,6 +12,7 @@ import { colors, layout } from '../../_config'
 import { 
   createColumn as createColumnAction,
   createRow as createRowAction,
+  deleteColumn as deleteColumnAction,
   deleteRow as deleteRowAction,
   setTable as setTableAction,
   sortRows as sortRowsAction,
@@ -40,6 +41,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createColumn: (columnId, beforeOrAfter) => dispatch(createColumnAction(columnId, beforeOrAfter)),
   createRow: () => dispatch(createRowAction()),
+  deleteColumn: columnId => dispatch(deleteColumnAction(columnId)),
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setTable: nextTable => dispatch(setTableAction(nextTable)),
   sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
@@ -128,6 +130,7 @@ class Table extends PureComponent {
     const {
       columns,
       createColumn,
+      deleteColumn,
       deleteRow,
       rows,
       sortColumn,
@@ -185,6 +188,7 @@ class Table extends PureComponent {
               closeContextMenu={this.closeContextMenu}
               columnOrRow={contextMenuColumnOrRow}
               createColumn={createColumn}
+              deleteColumn={deleteColumn}
               deleteRow={deleteRow}
               toggleColumnIsEditable={toggleColumnIsEditable}
               top={contextMenuTop}

@@ -24,6 +24,12 @@ export const createRow = async (newRow) => {
   })
 }
 
+export const deleteColumn = async (columnId) => {  
+  return axios.delete('/app/columns/' + columnId).then(response => {
+    return response.data
+  })
+}
+
 export const deleteRow = async (rowId) => {  
   return axios.delete('/app/rows/' + rowId).then(response => {
     return response.data

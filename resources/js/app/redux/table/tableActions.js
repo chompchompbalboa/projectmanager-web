@@ -96,6 +96,47 @@ const createRowServer = newRow => {
 }
 
 //-----------------------------------------------------------------------------
+// Delete Column
+//-----------------------------------------------------------------------------
+export const deleteColumn = columnId => {
+  return (dispatch, getState) => {
+    const columns = getState().table.columns
+    const columnIndex = columns.findIndex(column => column.id === columnId)
+    console.log(columnIndex)
+    const deletedColumnWidth = columns[columnIndex].width
+    const nextColumnWidths = columns.map((column, index) => {
+      console.log(index)
+      if(index === columnIndex - 1 || index === columnIndex + 1) {
+      const isDeletedColumnFirstOrLast = (columnIndex === 0 || columnIndex === columns.length - 1)
+      const widthModifier = isDeletedColumnFirstOrLast ? deletedColumnWidth : (deletedColumnWidth / 2)
+      console.log(index)
+      console.log(isDeletedColumnFirstOrLast)
+      console.log(widthModifier)
+        return {
+          id: column.id,
+          nextWidth: Number((column.width + widthModifier).toFixed(2))
+        }
+      }
+    }).filter(nextColumnWidth => {return nextColumnWidth}) // Filter out undefineds
+    dispatch(setStatus('DELETING'))
+    dispatch(deleteColumnReducer(columnId))
+    dispatch(updateColumnWidths(nextColumnWidths))
+    dispatch(deleteColumnServer(columnId))
+  }
+}
+const deleteColumnReducer = columnId => ({
+  type: 'DELETE_COLUMN',
+  columnId: columnId
+})
+const deleteColumnServer = columnId => {
+  return async dispatch => {
+    return mutation.deleteColumn(columnId).then(success => {
+      success && dispatch(setStatus('DELETED'))
+    })
+  }
+}
+
+//-----------------------------------------------------------------------------
 // Delete Row
 //-----------------------------------------------------------------------------
 export const deleteRow = rowId => {

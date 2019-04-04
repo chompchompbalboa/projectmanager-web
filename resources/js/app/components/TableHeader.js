@@ -208,8 +208,7 @@ const ContentContainer = styled.div`
 
 const TableHeaderCellValue = styled.div`
   cursor: ${ props => props.isColumnResizing ? 'col-resize' : 'pointer' };
-  padding: calc(${ layout.TABLE_PADDING }/2) 0;
-  padding-left: ${ props => props.isFirst ? 'calc(' + layout.TABLE_PADDING + '/3)' : '0' };
+  padding: calc(${ layout.TABLE_PADDING }/2) calc(${ layout.TABLE_PADDING }/4);
   user-select: none;
 `
 

@@ -102,16 +102,11 @@ export const deleteColumn = columnId => {
   return (dispatch, getState) => {
     const columns = getState().table.columns
     const columnIndex = columns.findIndex(column => column.id === columnId)
-    console.log(columnIndex)
     const deletedColumnWidth = columns[columnIndex].width
     const nextColumnWidths = columns.map((column, index) => {
-      console.log(index)
       if(index === columnIndex - 1 || index === columnIndex + 1) {
       const isDeletedColumnFirstOrLast = (columnIndex === 0 || columnIndex === columns.length - 1)
       const widthModifier = isDeletedColumnFirstOrLast ? deletedColumnWidth : (deletedColumnWidth / 2)
-      console.log(index)
-      console.log(isDeletedColumnFirstOrLast)
-      console.log(widthModifier)
         return {
           id: column.id,
           nextWidth: Number((column.width + widthModifier).toFixed(2))

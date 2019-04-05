@@ -17,8 +17,8 @@ const defaultCell = (id, columnId) => ({
   rowId: null,
   string: null,
   number: null,
-  boolean: null,
-  datetime: moment().format(dateConfig.format)
+  boolean: false,
+  datetime: null
 })
 
 const sortColumns = columns => {

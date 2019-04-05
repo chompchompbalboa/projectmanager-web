@@ -17,7 +17,7 @@ const TableCellDatetime = ({ updateValue, value }) => {
   return (
     <DatePicker
       customInput={<StyledInput />}
-      selected={moment(value).toDate()}
+      selected={value !== "" ? moment(value).toDate() : null}
       onChange={date => updateValue(moment(date).format(dateConfig.format))}/>
   )
 }

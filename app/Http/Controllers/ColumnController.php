@@ -122,6 +122,7 @@ class ColumnController extends Controller
       $column->width = $request->input('column')['width'];
       $column->name = $request->input('column')['name'];
       $column->position = $request->input('column')['position'];
+      $column->type = $request->input('column')['type'];
       if ($column->save()) {
         return $column;
       }

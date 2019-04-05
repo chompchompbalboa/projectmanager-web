@@ -8,7 +8,6 @@ import styled from 'styled-components'
 import { colors, layout } from '../../_config'
 
 import TableHeaderDropdown from './TableHeaderDropdown'
-import Icon from './Icon'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -138,9 +137,6 @@ class TableHeader extends PureComponent {
                     isFirst={index === 0}
                     onClick={() => sortRows(column)}>
                     {column.name}&nbsp;&nbsp;
-                    <Icon 
-                      icon={"SORT_" + sortDirection}
-                      size="1.2em"/>
                   </TableHeaderCellValue>
                   </ContentContainer>
                   <TableHeaderDropdown

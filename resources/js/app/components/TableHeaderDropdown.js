@@ -11,6 +11,7 @@ import { colors } from '../../_config'
 import {
   toggleColumnIsEditable as toggleColumnIsEditableAction,
   updateColumnName as updateColumnNameAction,
+  updateColumnType as updateColumnTypeAction,
 } from '../redux/table/tableActions'
 
 import AutosizeTextArea from 'react-autosize-textarea'
@@ -21,7 +22,8 @@ import Dropdown from './Dropdown'
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
   toggleColumnIsEditable: columnId => dispatch(toggleColumnIsEditableAction(columnId)),
-  updateColumnName: (columnId, nextName) => dispatch(updateColumnNameAction(columnId, nextName))
+  updateColumnName: (columnId, nextName) => dispatch(updateColumnNameAction(columnId, nextName)),
+  updateColumnType: (columnId, nextType) => dispatch(updateColumnTypeAction(columnId, nextType))
 })
 
 //-----------------------------------------------------------------------------
@@ -31,7 +33,8 @@ const TableHeaderDropdown = ({
   column, 
   isDropdownVisible, 
   toggleColumnIsEditable, 
-  updateColumnName 
+  updateColumnName,
+  updateColumnType
 }) => {
   return (
     <Dropdown
@@ -45,6 +48,36 @@ const TableHeaderDropdown = ({
             onChange={e => updateColumnName(column.id, e.target.value)}
             value={column.name === null ? "" : column.name}/>
         </EditContainer>
+        <TypesContainer>
+          <EditContainer>
+            <Label>Date:</Label>
+            <StyledInput
+              type="checkbox"
+              checked={column.type === "DATETIME"}
+              onChange={() => updateColumnType(column.id, "DATETIME")}/>
+          </EditContainer>
+          <EditContainer>
+            <Label>Text:</Label>
+            <StyledInput
+              type="checkbox"
+              checked={column.type === "STRING"}
+              onChange={() => updateColumnType(column.id, "STRING")}/>
+          </EditContainer>
+          <EditContainer>
+            <Label>Number:</Label>
+            <StyledInput
+              type="checkbox"
+              checked={column.type === "NUMBER"}
+              onChange={() => updateColumnType(column.id, "NUMBER")}/>
+          </EditContainer>
+          <EditContainer>
+            <Label>Checkbox:</Label>
+            <StyledInput
+              type="checkbox"
+              checked={column.type === "BOOLEAN"}
+              onChange={() => updateColumnType(column.id, "BOOLEAN")}/>
+          </EditContainer>
+        </TypesContainer>
       </Container>
     </Dropdown>
   )
@@ -60,7 +93,8 @@ TableHeaderDropdown.propTypes = {
   }),
   isDropdownVisible: bool,
   toggleColumnIsEditable: func,
-  updateColumnName: func
+  updateColumnName: func,
+  updateColumnType: func
 }
 
 //-----------------------------------------------------------------------------
@@ -79,6 +113,10 @@ const EditContainer = styled.div`
   align-items: center;
 `
 
+const TypesContainer = styled.div`
+  width: 100%;
+`
+
 const Label = styled.div`
 `
 
@@ -95,6 +133,8 @@ const StyledTextarea = styled(AutosizeTextArea)`
   align-items: center;
   background-color: transparent;
 `
+
+const StyledInput = styled.input``
 
 export default connect(
   null,

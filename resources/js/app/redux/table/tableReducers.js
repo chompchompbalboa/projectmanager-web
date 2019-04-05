@@ -292,6 +292,25 @@ const tableReducers = (state = defaultState, action) => {
       }
     }
 
+    case 'UPDATE_COLUMN_TYPE': {
+      const {
+        columnId,
+        nextType
+      } = action
+      const nextColumns = state.columns.map(column => {
+        if(column.id === columnId) {
+          return {
+            ...column,
+            type: nextType
+          }
+        }
+        return column
+      })
+      return {
+        ...state,
+        columns: nextColumns
+      }
+    }
     case 'UPDATE_COLUMN_WIDTHS': {
       const {
         nextColumnWidths

@@ -1,5 +1,3 @@
-import _ from 'lodash'
-
 import { mutation } from '../../../_api'
 import { timing } from '../../../_config'
 import clone from '../../../_utils/clone'
@@ -80,16 +78,17 @@ const createRowServer = newRow => {
         nextRowId,
         rowId
       } = savedRow
-      const state = getState()
       // Get the row index
-      const rowIndex = _.findIndex(state.table.rows, ['id', rowId])
+      const rowIndex = getState().table.rows.findIndex(row => row.id === rowId)
       // Update the row id
       dispatch(updateRowId(rowIndex, nextRowId))
       // Update the cell ids
+      const nextRows = clone(getState().table.rows)
       nextCellIds.forEach(({ cellId, nextCellId }) => {
-        const cellIndex = _.findIndex(state.table.rows[rowIndex].cells, ['id', cellId])
-        dispatch(updateCellId(rowIndex, cellIndex, nextCellId))
+        const cellIndex = getState().table.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
+        nextRows[rowIndex].cells[cellIndex].id = nextCellId
       })
+      dispatch(updateRows(nextRows))
       dispatch(setStatus('ADDED_ROW'))
   })
   }
@@ -268,6 +267,38 @@ const updateColumnNameServer = columnId => {
         }
       })
     }
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Update Column Type
+//-----------------------------------------------------------------------------
+let updateColumnTypeTimeout
+export const updateColumnType = (columnId, nextType) => {
+  return dispatch => {
+    clearTimeout(updateColumnTypeTimeout)
+    dispatch(updateColumnTypeReducer(columnId, nextType))
+    updateColumnTypeTimeout = window.setTimeout(() => dispatch(updateColumnTypeServer(columnId)), timing.SAVE_INTERVAL)
+  }
+}
+const updateColumnTypeReducer = (columnId, nextType) => ({
+  type: 'UPDATE_COLUMN_TYPE',
+  columnId: columnId,
+  nextType: nextType
+})
+const updateColumnTypeServer = columnId => {
+  return (dispatch, getState) => {
+    dispatch(setStatus('SAVING'))
+    const columns = getState().table.columns
+    const columnToSave = columns.find(column => column.id === columnId)
+    mutation.updateColumn(columnToSave.id, columnToSave).then(success => {
+      if(success) {
+        dispatch(setStatus('SAVED'))
+      }
+      else {
+        dispatch(setStatus('ERROR'))
+      }
+    })
   }
 }
 

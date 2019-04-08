@@ -60,12 +60,14 @@ const Container = styled.div`
 `
 
 const LeftColumn = styled.div`
+  z-index: 2;
   position: sticky;
   top: 0;
   width: calc(13% - (${layout.PADDING} / 1.5));
 `
 
 const RightColumn = styled.div`
+  z-index: 1;
   width: calc(87% - (${layout.PADDING} / 1.5));
 `
 

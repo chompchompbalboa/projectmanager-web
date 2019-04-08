@@ -30,7 +30,7 @@ const AppProjectChooseTableContextMenu = ({
 }) => {
 
   const actions = [
-    { text: 'Edit Project', action: () => toggleTableIsEditing(id) }
+    { text: 'Edit Table Info', action: () => toggleTableIsEditing(id) }
   ]
 
   return (

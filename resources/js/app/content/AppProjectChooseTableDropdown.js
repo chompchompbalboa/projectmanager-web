@@ -9,11 +9,9 @@ import styled from 'styled-components'
 import { colors } from '../../_config'
 
 import {
-  toggleTableIsEditing as toggleTableIsEditingAction
-} from '../redux/project/projectActions'
-import {
+  toggleTableIsEditing as toggleTableIsEditingAction,
   updateTableName as updateTableNameAction,
-} from '../redux/table/tableActions'
+} from '../redux/project/projectActions'
 
 import AutosizeTextArea from 'react-autosize-textarea'
 import Dropdown from '../components/Dropdown'

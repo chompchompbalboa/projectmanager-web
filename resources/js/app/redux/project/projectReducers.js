@@ -43,6 +43,26 @@ const projectReducers = (state = defaultState, action) => {
       }
     }
 
+    case 'UPDATE_TABLE_NAME': {
+      const {
+        tableId,
+        nextTableName
+      } = action
+      const nextActiveProjectTables = state.activeProject.tables.map(table => {
+        return {
+          ...table,
+          name: table.id === tableId ? nextTableName : table.name
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextActiveProjectTables
+        }
+      }
+    }
+
     default:
       return state
   }

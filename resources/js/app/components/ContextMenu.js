@@ -85,7 +85,7 @@ ContextMenu.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  z-index: 10000;
+  z-index: 100000;
   position: fixed;
   top: ${ props => props.contextMenuTop + 'px' };
   left: ${ props => (props.contextMenuLeft + 2) + 'px' };

@@ -32,3 +32,12 @@ export const toggleTableIsEditing = tableId => ({
   type: 'TOGGLE_TABLE_IS_EDITING',
   tableId: tableId
 })
+
+//-----------------------------------------------------------------------------
+// Update Table Name
+//-----------------------------------------------------------------------------
+export const updateTableName = (tableId, nextTableName) => ({
+  type: 'UPDATE_TABLE_NAME',
+  tableId: tableId,
+  nextTableName: nextTableName
+})

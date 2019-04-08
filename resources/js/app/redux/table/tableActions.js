@@ -173,9 +173,10 @@ export const setTableId = nextTableId => ({
 //-----------------------------------------------------------------------------
 // Sort Rows
 //-----------------------------------------------------------------------------
-export const sortRows = nextSortColumn => ({
+export const sortRows = (nextSortColumnId, nextSortOrder) => ({
   type: 'SORT_ROWS',
-  nextSortColumn: nextSortColumn
+  nextSortColumnId: nextSortColumnId,
+  nextSortOrder: nextSortOrder
 })
 
 //-----------------------------------------------------------------------------

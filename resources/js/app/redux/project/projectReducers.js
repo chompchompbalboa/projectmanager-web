@@ -24,6 +24,25 @@ const projectReducers = (state = defaultState, action) => {
         projects: action.nextProjects
       }
 
+    case 'TOGGLE_TABLE_IS_EDITING': {
+      const {
+        tableId
+      } = action
+      const nextActiveProjectTables = state.activeProject.tables.map(table => {
+        return {
+          ...table,
+          isEditing: table.id === tableId ? (table.isEditing ? false : true) : table.isEditing
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextActiveProjectTables
+        }
+      }
+    }
+
     default:
       return state
   }

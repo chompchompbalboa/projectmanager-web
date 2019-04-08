@@ -1,10 +1,8 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import moment from 'moment'
 import _ from 'lodash'
 
-import { date as dateConfig } from '../../../_config'
 import clone from '../../../_utils/clone'
 
 //-----------------------------------------------------------------------------
@@ -47,6 +45,7 @@ const sortRows = (rows, sortColumn, sortOrder) => {
 //-----------------------------------------------------------------------------
 const defaultState = {
   id: null,
+  isEditing: false,
   rows: null,
   columns: null,
   sortColumn: null,
@@ -73,7 +72,6 @@ const tableReducers = (state = defaultState, action) => {
         required: true,
         position: null,
         type: 'STRING',
-        defaultSortOrder: 'ASC',
         width: insertWidth,
         isEditable: true
       }
@@ -182,18 +180,14 @@ const tableReducers = (state = defaultState, action) => {
 
     case 'SORT_ROWS': {
       const {
-        rows,
-        sortColumn,
-        sortOrder
+        rows
       } = state
       const {
-        nextSortColumn
+        nextSortColumnId,
+        nextSortOrder
       } = action
 
-      const nextSortOrder = nextSortColumn.id === sortColumn.id
-        ? sortOrder === 'ASC' ? 'DESC' : 'ASC' 
-        : nextSortColumn.defaultSortOrder
-
+      const nextSortColumn = state.columns.find(column => column.id === nextSortColumnId)
       const nextRows = sortRows(rows, nextSortColumn, nextSortOrder)
 
       return {

@@ -44,7 +44,7 @@ const mapDispatchToProps = dispatch => ({
   deleteColumn: columnId => dispatch(deleteColumnAction(columnId)),
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setTable: nextTable => dispatch(setTableAction(nextTable)),
-  sortRows: nextSortColumn => dispatch(sortRowsAction(nextSortColumn)),
+  sortRows: (nextSortColumn, nextSortOrder) => dispatch(sortRowsAction(nextSortColumn, nextSortOrder)),
   toggleColumnIsEditable: columnId => dispatch(toggleColumnIsEditableAction(columnId)),
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
   updateColumnWidths: nextColumnWidths => dispatch(updateColumnWidthsAction(nextColumnWidths))
@@ -88,7 +88,7 @@ class Table extends PureComponent {
     }
   }
 
-  closeContextMenu = async () => {
+  closeContextMenu = () => {
     this.setState({
       isContextMenuOpen: false
     })
@@ -158,7 +158,6 @@ class Table extends PureComponent {
                 openContextMenu={this.openContextMenu}
                 sortColumn={sortColumn}
                 sortOrder={sortOrder}
-                sortRows={sortRows}
                 updateColumnWidths={updateColumnWidths}/>
               {rows.map(row => {
                 return (
@@ -190,6 +189,7 @@ class Table extends PureComponent {
               createColumn={createColumn}
               deleteColumn={deleteColumn}
               deleteRow={deleteRow}
+              sortRows={sortRows}
               toggleColumnIsEditable={toggleColumnIsEditable}
               top={contextMenuTop}
               left={contextMenuLeft}/>
@@ -212,6 +212,7 @@ Table.propTypes = {
   })),
   createColumn: func,
   createRow: func,
+  deleteColumn: func,
   deleteRow: func,
   rows: array,
   setTable: func,

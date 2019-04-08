@@ -18,19 +18,15 @@ $factory->define(App\Models\Column::class, function (Faker $faker) {
     $type = $faker->randomElement([
       [
         'type' => 'STRING',
-        'default_sort_order' => 'ASC',
       ],
       [
         'type' => 'NUMBER',
-        'default_sort_order' => 'ASC',
       ],
       [
         'type' => 'BOOLEAN',
-        'default_sort_order' => 'ASC',
       ],
       [
         'type' => 'DATETIME',
-        'default_sort_order' => 'DESC',
       ]
     ]);
 
@@ -41,6 +37,5 @@ $factory->define(App\Models\Column::class, function (Faker $faker) {
       'name' => $faker->streetSuffix,
       'required' => $faker->boolean($chanceOfGettingTrue = 50),
       'type' => $type['type'],
-      'default_sort_order' => $type['default_sort_order'],
     ];
 });

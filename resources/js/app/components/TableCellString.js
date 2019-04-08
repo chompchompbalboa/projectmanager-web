@@ -14,7 +14,7 @@ const TableCellString = ({ updateValue, value }) => {
   return (
     <StyledTextarea
       onChange={(e) => updateValue(e.target.value)}
-      value={value}/>
+      value={value === null ? "" : value}/>
   )
 }
 

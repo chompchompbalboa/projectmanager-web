@@ -19,7 +19,6 @@ class CreateColumn extends Migration
             $table->string('name')->nullable();
             $table->string('type');
             $table->boolean('required');
-            $table->string('default_sort_order');
             $table->unsignedInteger('position');
             $table->float('width');
             $table->timestamps();

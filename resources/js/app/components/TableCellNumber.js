@@ -13,7 +13,7 @@ const TableCellNumber = ({ updateValue, value }) => {
       <StyledInput
         type="number"
         onChange={(e) => updateValue(e.target.value)}
-        value={value}/>
+        value={value === null ? "" : value}/>
   )
 }
 

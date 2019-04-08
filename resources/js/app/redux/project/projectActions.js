@@ -24,3 +24,11 @@ export const setProjects = nextProjects => ({
   type: 'SET_PROJECTS',
   nextProjects: nextProjects
 })
+
+//-----------------------------------------------------------------------------
+// Toggle Table isEditing
+//-----------------------------------------------------------------------------
+export const toggleTableIsEditing = tableId => ({
+  type: 'TOGGLE_TABLE_IS_EDITING',
+  tableId: tableId
+})

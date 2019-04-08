@@ -44,7 +44,6 @@ class ColumnController extends Controller
       $newColumn->required = $newColumnInput['required'];
       $newColumn->position = $newColumnInput['position'];
       $newColumn->type = $newColumnInput['type'];
-      $newColumn->default_sort_order = $newColumnInput['defaultSortOrder'];
       $newColumn->width = $newColumnInput['width'];
       if ($newColumn->save()) {
         // Update the column positions for the table

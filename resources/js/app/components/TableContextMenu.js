@@ -1,142 +1,64 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { PureComponent } from 'react'
-import { bool, func, number, oneOf } from 'prop-types'
-import styled from 'styled-components'
+import React from 'react'
+import { func, number, oneOf } from 'prop-types'
 
-import { colors } from '../../_config'
+import ContextMenu from './ContextMenu'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class TableContextMenu extends PureComponent {
+const TableContextMenu = ({ 
+  closeContextMenu, 
+  columnOrRow, 
+  createColumn, 
+  deleteRow, 
+  deleteColumn, 
+  id, 
+  sortRows, 
+  toggleColumnIsEditable,
+  top,
+  left
+}) => {
 
-  constructor(props) {
-    super(props)
-    this.contextMenuContainer = React.createRef()
-  }
+  const rowActions = [
+    { text: 'Delete', action: () => deleteRow(id) }
+  ]
   
-  columnActions = () => {
-    const {
-      createColumn,
-      deleteColumn,
-      id,
-      toggleColumnIsEditable
-    } = this.props
-    return [
-      { text: 'Insert Before', action: () => createColumn(id, 'BEFORE') },
-      { text: 'Insert After', action: () => createColumn(id, 'AFTER') },
-      { text: 'Edit Column', action: () => toggleColumnIsEditable(id) },
-      { text: 'Delete Column', action: () => deleteColumn(id) },
-    ]
-  }
+  const columnActions = [
+    { text: 'Sort A to Z', action: () => sortRows(id, 'ASC') },
+    { text: 'Sort Z to A', action: () => sortRows(id, 'DESC') },
+    { text: 'Insert Before', action: () => createColumn(id, 'BEFORE') },
+    { text: 'Insert After', action: () => createColumn(id, 'AFTER') },
+    { text: 'Edit Column', action: () => toggleColumnIsEditable(id) },
+    { text: 'Delete Column', action: () => deleteColumn(id) },
+  ]
 
-  rowActions = () => {
-    const {
-      deleteRow,
-      id
-    } = this.props
-    return [
-      { text: 'Delete', action: () => deleteRow(id) }
-    ]
-  }
-
-  componentDidMount = () => {
-    document.addEventListener('mousedown', this.checkForClickOutside, false)
-  }
-
-  componentWillUnmount = () => {
-    document.removeEventListener('mousedown', this.checkForClickOutside, false)
-
-  }
-
-  checkForClickOutside = e => {
-    if(!this.contextMenuContainer.current.contains(e.target)) {
-      const {
-        closeContextMenu
-      } = this.props
-      closeContextMenu()
-    }
-  }
-
-  handleClick = action => {
-    const {
-      closeContextMenu
-    } = this.props
-    closeContextMenu()
-    action()
-  }
-  
-  render() {
-    const {
-      columnOrRow,
-      top, 
-      left
-    } = this.props
-    const actions = columnOrRow === 'COLUMN' ? this.columnActions() : this.rowActions()
-    return (
-      <Container
-        ref={this.contextMenuContainer}
-        contextMenuTop={top}
-        contextMenuLeft={left}>
-        {actions.map((action, index) => {
-          return (
-            <Action
-              key={index}
-              onClick={() => this.handleClick(action.action)}>
-              {action.text}
-            </Action>
-          )
-        })}
-      </Container>
-    )
-  }
+  return (
+    <ContextMenu
+      actions={columnOrRow === 'COLUMN' ? columnActions : rowActions }
+      closeContextMenu={closeContextMenu}
+      top={top}
+      left={left}/>
+  )
 }
 
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
 TableContextMenu.propTypes = {
-  columnOrRow: oneOf(['COLUMN', 'ROW']),
   closeContextMenu: func,
+  columnOrRow: oneOf([ 'COLUMN', 'ROW' ]),
   createColumn: func,
   deleteColumn: func,
   deleteRow: func,
   id: number,
-  isHeader: bool,
   rowId: number,
+  sortRows: func,
   toggleColumnIsEditable: func,
   top: number,
   left: number
 }
-
-//-----------------------------------------------------------------------------
-// Styled Components
-//-----------------------------------------------------------------------------
-const Container = styled.div`
-  z-index: 10000;
-  position: fixed;
-  top: ${ props => props.contextMenuTop + 'px' };
-  left: ${ props => (props.contextMenuLeft + 2) + 'px' };
-  width: 10vw;
-  background-color: white;
-	box-shadow: 1.25px 1.25px 1.25px rgba(0, 0, 0, 0.16);
-`
-
-const Action = styled.div`
-  cursor: pointer;
-  padding: 0.5vw;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  border-right: 3px solid transparent;
-  &:hover {
-    color: ${ colors.PRIMARY };
-    border-right: 3px solid ${ colors.PRIMARY };
-  }
-`
 
 export default TableContextMenu

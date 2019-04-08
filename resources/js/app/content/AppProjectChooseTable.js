@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React from 'react'
+import React, { PureComponent } from 'react'
 import { array, func, number } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -11,6 +11,9 @@ import { colors, timing } from '../../_config'
 import {
   setTableId as setTableIdAction
 } from '../redux/table/tableActions'
+
+import AppProjectChooseTableContextMenu from './AppProjectChooseTableContextMenu'
+import AppProjectChooseTableDropdown from './AppProjectChooseTableDropdown'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -27,21 +30,73 @@ const mapDispatchToProps = dispatch => ({
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppProjectChooseTable = ({ tables, tableId, setTableId }) => {
-  return (
-    <Container>
-      {tables.map(table => {
-        return (
-          <ContentChoiceContainer
-            key={table.id}
-            isActiveTable={tableId === table.id}
-            onClick={() => setTableId(table.id)}>
-            {table.name}
-          </ContentChoiceContainer>
-        )
-      })}
-    </Container>
-  )
+class AppProjectChooseTable extends PureComponent {
+
+  state = {
+    contextMenuId: null,
+    isContextMenuOpen: false,
+    contextMenuTop: null,
+    contextMenuLeft: null
+  }
+
+  closeContextMenu = () => {
+    this.setState({
+      isContextMenuOpen: false
+    })
+  }
+
+  openContextMenu = (e, id) => {
+    e.preventDefault()
+    this.setState({
+      contextMenuId: id,
+      isContextMenuOpen: true,
+      contextMenuTop: e.clientY,
+      contextMenuLeft: e.clientX
+    })
+  }
+
+  render() {
+    const { 
+      tables, 
+      tableId, 
+      setTableId 
+    } = this.props
+
+    const {
+      contextMenuId,
+      isContextMenuOpen,
+      contextMenuTop,
+      contextMenuLeft
+    } = this.state
+
+    return (
+      <Container>
+        {tables.map(table => {
+          return (
+            <TableLinkContainer
+              key={table.id}>
+              <TableLink
+                isActiveTable={tableId === table.id}
+                onClick={() => setTableId(table.id)}
+                onContextMenu={e => this.openContextMenu(e, table.id)}>
+                {table.name}
+              </TableLink>
+              <AppProjectChooseTableDropdown
+                isDropdownVisible={table.isEditing}
+                table={table}/>
+            </TableLinkContainer>
+          )
+        })}
+        {isContextMenuOpen && 
+          <AppProjectChooseTableContextMenu
+            id={contextMenuId}
+            closeContextMenu={this.closeContextMenu}
+            top={contextMenuTop}
+            left={contextMenuLeft}/>
+        }
+      </Container>
+    )
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -61,7 +116,12 @@ const Container = styled.div`
   width: 100%;
 `
 
-const ContentChoiceContainer = styled.div`
+const TableLinkContainer = styled.div`
+  width: 100%;
+`
+
+const TableLink = styled.div`
+  user-select: none;
   cursor: pointer;
   padding: 0.5vh 0;
   margin-bottom: 2vh;

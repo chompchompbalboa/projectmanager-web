@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch => ({
 class TableCell extends PureComponent {
 
   state = {
-    value: this.props.value === null ? "" : this.props.value
+    value: this.props.value
   }
 
   tableCellTypeComponents = {
@@ -97,11 +97,6 @@ TableCell.propTypes = {
   type: string,
   updateCell: func,
 	value: oneOfType([bool, number, string])
-}
-
-TableCell.defaultProps = {
-  autofocus: false,
-	width: 1
 }
 
 //-----------------------------------------------------------------------------

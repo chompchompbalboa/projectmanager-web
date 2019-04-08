@@ -33,17 +33,6 @@ class TableHeader extends PureComponent {
     window.removeEventListener('mouseup', this.handleResizeMouseUp)
   }
   
-  getSortDirection = column => {
-    const {
-      sortColumn,
-      sortOrder
-    } = this.props
-    if (column.id === sortColumn.id) {
-      return sortOrder === column.defaultSortOrder ? 'DOWN' : 'UP'
-    }
-    return 'BOTH'
-  }
-  
   handleResizeMouseDown = (e, columnId, columnWidth, adjacentColumnId, adjacentColumnWidth) => {
     e.preventDefault()
     window.addEventListener('mousemove', this.handleResizeMouseMove)
@@ -104,8 +93,7 @@ class TableHeader extends PureComponent {
   render() {
     const { 
       columns,
-      openContextMenu,
-      sortRows
+      openContextMenu
     } = this.props
     const {
       mouseDownAdjacentColumnId,
@@ -117,12 +105,10 @@ class TableHeader extends PureComponent {
           backgroundColor={colors.ACCENT}
           ref={this.tableHeaderContainer}>
           {columns.map((column, index) => {
-            const sortDirection = this.getSortDirection(column)
             return (
               <TableHeaderCell
                 key={column.id}
                 onContextMenu={e => openContextMenu(e, 'COLUMN', column.id)}
-                sortDirection={sortDirection}
                 widthPercentage={column.width}>
                 <ResizeContainer
                   cursor={index !== 0 ? 'col-resize' : 'pointer'}
@@ -132,10 +118,7 @@ class TableHeader extends PureComponent {
                   onMouseDown={index!== 0 ? e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width) : null}/>
                 <ContentContainer
                   isCentered={column.type === 'BOOLEAN'}>
-                  <TableHeaderCellValue
-                    isColumnResizing={mouseDownAdjacentColumnId !== null}
-                    isFirst={index === 0}
-                    onClick={() => sortRows(column)}>
+                  <TableHeaderCellValue>
                     {column.name}&nbsp;&nbsp;
                   </TableHeaderCellValue>
                   </ContentContainer>
@@ -188,7 +171,6 @@ const TableHeaderCell = styled.th`
   width: ${ props => props.widthPercentage * 100}%;
   height: 100%;
   background-color: ${colors.ACCENT};
-  color: ${ props => props.sortDirection === "BOTH" ? colors.TEXT_LIGHT : colors.TEXT_DARK };
   border-bottom: 1px solid ${colors.TEXT_LIGHT};
   font-weight: bold;
   font-size: 14px;
@@ -203,7 +185,6 @@ const ContentContainer = styled.div`
 `
 
 const TableHeaderCellValue = styled.div`
-  cursor: ${ props => props.isColumnResizing ? 'col-resize' : 'pointer' };
   padding: calc(${ layout.TABLE_PADDING }/2) calc(${ layout.TABLE_PADDING }/4);
   user-select: none;
 `

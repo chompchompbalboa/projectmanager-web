@@ -8,6 +8,24 @@ import { setTableId } from '../table/tableActions'
 import { setStatus } from '../status/statusActions'
 
 //-----------------------------------------------------------------------------
+// Create Table
+//-----------------------------------------------------------------------------
+export const createTable = () => {
+  return dispatch => {
+    dispatch(createTableReducer())
+    dispatch(createTableServer())
+  }
+}
+const createTableReducer = () => ({
+  type: 'CREATE_TABLE'
+})
+const createTableServer = () => {
+  return dispatch => {
+    dispatch(setStatus('SAVING'))
+  }
+}
+
+//-----------------------------------------------------------------------------
 // Set Active Project
 //-----------------------------------------------------------------------------
 export const setActiveProject = nextActiveProject => {

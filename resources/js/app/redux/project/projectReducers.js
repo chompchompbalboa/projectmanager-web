@@ -12,6 +12,13 @@ const defaultState = {
 const projectReducers = (state = defaultState, action) => {
   switch(action.type) {
 
+    case 'CREATE_TABLE': {
+      console.log('CREATE_TABLE')
+      return {
+        ...state
+      }
+    }
+
     case 'SET_ACTIVE_PROJECT': 
       return {
         ...state, 

@@ -9,6 +9,9 @@ import styled from 'styled-components'
 import { colors, timing } from '../../_config'
 
 import {
+  createTable as createTableAction
+} from '../redux/project/projectActions'
+import {
   setTableId as setTableIdAction
 } from '../redux/table/tableActions'
 
@@ -24,6 +27,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  createTable: () => dispatch(createTableAction()),
   setTableId: nextTableId => dispatch(setTableIdAction(nextTableId))
 })
 
@@ -57,6 +61,7 @@ class AppProjectChooseTable extends PureComponent {
 
   render() {
     const { 
+      createTable,
       tables, 
       tableId, 
       setTableId 
@@ -87,6 +92,10 @@ class AppProjectChooseTable extends PureComponent {
             </TableLinkContainer>
           )
         })}
+        <TableLink
+          onClick={() => createTable()}>
+          Add +
+        </TableLink>
         {isContextMenuOpen && 
           <AppProjectChooseTableContextMenu
             id={contextMenuId}
@@ -103,6 +112,7 @@ class AppProjectChooseTable extends PureComponent {
 // Props
 //-----------------------------------------------------------------------------
 AppProjectChooseTable.propTypes = {
+  createTable: func,
   tables: array,
   tableId: number,
   setTableId: func

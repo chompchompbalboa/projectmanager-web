@@ -1,7 +1,11 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
+import { mutation } from '../../../_api'
+import { timing } from '../../../_config'
 import { setTableId } from '../table/tableActions'
+
+import { setStatus } from '../status/statusActions'
 
 //-----------------------------------------------------------------------------
 // Set Active Project
@@ -36,8 +40,32 @@ export const toggleTableIsEditing = tableId => ({
 //-----------------------------------------------------------------------------
 // Update Table Name
 //-----------------------------------------------------------------------------
-export const updateTableName = (tableId, nextTableName) => ({
+let updateTableNameTimeout = null
+export const updateTableName = (tableId, nextTableName) => {
+  return dispatch => {    
+    clearTimeout(updateTableNameTimeout)
+    dispatch(updateTableNameReducer(tableId, nextTableName))
+    updateTableNameTimeout = window.setTimeout(() => dispatch(updateTableNameServer(tableId)), timing.SAVE_INTERVAL)
+  }
+}
+const updateTableNameReducer = (tableId, nextTableName) => ({
   type: 'UPDATE_TABLE_NAME',
   tableId: tableId,
   nextTableName: nextTableName
 })
+const updateTableNameServer = tableId => {
+  return (dispatch, getState) => {
+    dispatch(setStatus('SAVING'))
+    const tableToSave = getState().project.activeProject.tables.find(table => table.id === tableId)
+    if(tableToSave.name !== "") {
+      mutation.updateTable(tableToSave.id, tableToSave).then(success => {
+        if(success) {
+          dispatch(setStatus('SAVED'))
+        }
+        else {
+          dispatch(setStatus('ERROR'))
+        }
+      })
+    }
+  }
+}

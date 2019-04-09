@@ -79,8 +79,18 @@ class TableController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Table $table)
-    {
-        //
+    {      
+      $table->name = $request->input('table')['name'];
+      if ($table->save()) {
+        return [
+          "success" => true
+        ];
+      }
+      else {
+        return [
+          "success" => false
+        ];
+      }
     }
 
     /**

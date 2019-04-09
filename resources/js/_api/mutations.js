@@ -53,3 +53,12 @@ export const updateColumn = async (id, column) => {
     return response.data
   })
 }
+
+export const updateTable = async (id, table) => {  
+  return axios.patch('/app/tables/' + id, {
+    id: id,
+    table: table
+  }).then(response => {
+    return response.data
+  })
+}

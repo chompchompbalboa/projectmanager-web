@@ -3,25 +3,35 @@
 //-----------------------------------------------------------------------------
 import { mutation } from '../../../_api'
 import { timing } from '../../../_config'
-import { setTableId } from '../table/tableActions'
 
 import { setStatus } from '../status/statusActions'
+import { setTableId } from '../table/tableActions'
 
 //-----------------------------------------------------------------------------
 // Create Table
 //-----------------------------------------------------------------------------
 export const createTable = () => {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch(createTableReducer())
-    dispatch(createTableServer())
+    console.log(getState().project.activeProject)
+    dispatch(createTableServer(getState().project.activeProject.id))
   }
 }
 const createTableReducer = () => ({
   type: 'CREATE_TABLE'
 })
-const createTableServer = () => {
+const createTableServer = projectId => {
   return dispatch => {
     dispatch(setStatus('SAVING'))
+    mutation.createTable(projectId).then(newTable => {
+      const {
+        tableId,
+        nextTableId
+      } = newTable
+      dispatch(updateTableIdInActiveProjectTables(tableId, nextTableId))
+      dispatch(setTableId(nextTableId))
+      dispatch(setStatus('SAVED'))
+    })
   }
 }
 
@@ -56,6 +66,15 @@ export const toggleTableIsEditing = tableId => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Table Id
+//-----------------------------------------------------------------------------
+export const updateTableIdInActiveProjectTables = (tableId, nextTableId) => ({
+  type: 'UPDATE_TABLE_ID_IN_ACTIVE_PROJECT_TABLES',
+  tableId: tableId,
+  nextTableId: nextTableId
+})
+
+//-----------------------------------------------------------------------------
 // Update Table Name
 //-----------------------------------------------------------------------------
 let updateTableNameTimeout = null
@@ -73,9 +92,9 @@ const updateTableNameReducer = (tableId, nextTableName) => ({
 })
 const updateTableNameServer = tableId => {
   return (dispatch, getState) => {
-    dispatch(setStatus('SAVING'))
     const tableToSave = getState().project.activeProject.tables.find(table => table.id === tableId)
-    if(tableToSave.name !== "") {
+    if(tableToSave.name !== "" && tableToSave.id > 0) {
+      dispatch(setStatus('SAVING'))
       mutation.updateTable(tableToSave.id, tableToSave).then(success => {
         if(success) {
           dispatch(setStatus('SAVED'))

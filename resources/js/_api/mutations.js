@@ -24,6 +24,14 @@ export const createRow = async (newRow) => {
   })
 }
 
+export const createTable = async projectId => {  
+  return axios.post('/app/tables', {
+    projectId: projectId
+  }).then(response => {
+    return response.data
+  })
+}
+
 export const deleteColumn = async (columnId) => {  
   return axios.delete('/app/columns/' + columnId).then(response => {
     return response.data

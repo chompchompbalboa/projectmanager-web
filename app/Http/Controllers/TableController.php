@@ -39,7 +39,14 @@ class TableController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $newTable = new Table;
+      $newTable->project_id = $request->input('projectId');
+      if($newTable->save()) {
+        return [
+          'tableId' => $newTableInput['id'],
+          'nextTableId' => $newTable->id,
+        ];
+      }
     }
 
     /**

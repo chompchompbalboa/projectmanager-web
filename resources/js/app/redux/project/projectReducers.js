@@ -1,4 +1,9 @@
 //-----------------------------------------------------------------------------
+// Imports
+//-----------------------------------------------------------------------------
+import _ from 'lodash'
+
+//-----------------------------------------------------------------------------
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
@@ -13,9 +18,20 @@ const projectReducers = (state = defaultState, action) => {
   switch(action.type) {
 
     case 'CREATE_TABLE': {
-      console.log('CREATE_TABLE')
+      const nextTable = {
+        id: _.random(-100000, -999999),
+        name: "",
+        isEditing: true
+      }
       return {
-        ...state
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: [
+            ...state.activeProject.tables, 
+            nextTable
+          ]
+        }
       }
     }
 
@@ -39,6 +55,26 @@ const projectReducers = (state = defaultState, action) => {
         return {
           ...table,
           isEditing: table.id === tableId ? (table.isEditing ? false : true) : table.isEditing
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextActiveProjectTables
+        }
+      }
+    }
+
+    case 'UPDATE_TABLE_ID_IN_ACTIVE_PROJECT_TABLES': {
+      const {
+        tableId,
+        nextTableId
+      } = action
+      const nextActiveProjectTables = state.activeProject.tables.map(table => {
+        return {
+          ...table,
+          id: table.id === tableId ? nextTableId : table.id
         }
       })
       return {

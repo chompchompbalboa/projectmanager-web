@@ -5,7 +5,10 @@ import { mutation } from '../../../_api'
 import { timing } from '../../../_config'
 
 import { setStatus } from '../status/statusActions'
-import { setTableId } from '../table/tableActions'
+import { 
+  setTableId,
+  updateColumnId
+} from '../table/tableActions'
 
 //-----------------------------------------------------------------------------
 // Create Table
@@ -13,23 +16,27 @@ import { setTableId } from '../table/tableActions'
 export const createTable = () => {
   return (dispatch, getState) => {
     dispatch(createTableReducer())
-    console.log(getState().project.activeProject)
-    dispatch(createTableServer(getState().project.activeProject.id))
+    const state = getState()
+    const tableId = state.project.activeProject.tables.find(table => table.id < 0).id
+    const projectId = state.project.activeProject.id
+    dispatch(createTableServer(projectId, tableId))
   }
 }
 const createTableReducer = () => ({
   type: 'CREATE_TABLE'
 })
-const createTableServer = projectId => {
+const createTableServer = (projectId, tableId) => {
   return dispatch => {
     dispatch(setStatus('SAVING'))
-    mutation.createTable(projectId).then(newTable => {
+    mutation.createTable(projectId, tableId).then(newTable => {
       const {
         tableId,
-        nextTableId
+        nextTableId,
+        firstColumnId
       } = newTable
       dispatch(updateTableIdInActiveProjectTables(tableId, nextTableId))
       dispatch(setTableId(nextTableId))
+      dispatch(updateColumnId(0, firstColumnId))
       dispatch(setStatus('SAVED'))
     })
   }

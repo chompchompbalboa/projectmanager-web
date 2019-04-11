@@ -18,7 +18,6 @@ class CreateColumn extends Migration
             $table->unsignedInteger('table_id');
             $table->string('name')->nullable();
             $table->string('type');
-            $table->boolean('required');
             $table->unsignedInteger('position');
             $table->float('width');
             $table->timestamps();

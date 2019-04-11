@@ -41,7 +41,7 @@ const AppProjectChooseTableDropdown = ({
         <EditContainer>
           <Label>Name:&nbsp;&nbsp;</Label>
           <StyledTextarea
-            autoFocus={isDropdownVisible}
+            autoFocus
             onChange={e => updateTableName(table.id, e.target.value)}
             value={table.name === null ? "" : table.name}/>
         </EditContainer>

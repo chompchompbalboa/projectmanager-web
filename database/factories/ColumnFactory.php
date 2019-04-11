@@ -35,7 +35,6 @@ $factory->define(App\Models\Column::class, function (Faker $faker) {
       'position' => 1,
       'width' => 0.2,
       'name' => $faker->streetSuffix,
-      'required' => $faker->boolean($chanceOfGettingTrue = 50),
       'type' => $type['type'],
     ];
 });

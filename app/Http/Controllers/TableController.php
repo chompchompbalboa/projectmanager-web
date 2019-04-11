@@ -42,10 +42,21 @@ class TableController extends Controller
       $newTable = new Table;
       $newTable->project_id = $request->input('projectId');
       if($newTable->save()) {
-        return [
-          'tableId' => $newTableInput['id'],
-          'nextTableId' => $newTable->id,
-        ];
+        // Add the first column to the table. If you make changes to the defaults
+        // here, you also need to update the column defaults on the front end.
+        $firstColumn = new Column;
+        ['id', 'tableId', 'name', 'position', 'width', 'type'];
+        $firstColumn->table_id = $newTable->id;
+        $firstColumn->position = 1;
+        $firstColumn->width = 1;
+        $firstColumn->type = 'STRING';
+        if($firstColumn->save()) {
+          return [
+            'tableId' => $request->input('tableId'),
+            'nextTableId' => $newTable->id,
+            'firstColumnId' => $firstColumn->id
+          ];
+        }
       }
     }
 

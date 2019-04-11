@@ -95,7 +95,15 @@ const createRowServer = newRow => {
 }
 
 //-----------------------------------------------------------------------------
-// Delete Column
+// Create Table
+//-----------------------------------------------------------------------------
+export const createTable = nextTableId => ({
+  type: 'CREATE_TABLE',
+  nextTableId: nextTableId
+})
+
+//-----------------------------------------------------------------------------
+// Delete Columns
 //-----------------------------------------------------------------------------
 export const deleteColumn = columnId => {
   return (dispatch, getState) => {

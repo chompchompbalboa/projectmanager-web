@@ -24,9 +24,10 @@ export const createRow = async (newRow) => {
   })
 }
 
-export const createTable = async projectId => {  
+export const createTable = async (projectId, tableId) => {  
   return axios.post('/app/tables', {
-    projectId: projectId
+    projectId: projectId,
+    tableId: tableId
   }).then(response => {
     return response.data
   })

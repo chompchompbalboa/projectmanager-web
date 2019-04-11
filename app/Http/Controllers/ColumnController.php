@@ -41,7 +41,6 @@ class ColumnController extends Controller
       $newColumn = new Column;
       $newColumn->table_id = $newColumnInput['tableId'];
       $newColumn->name = $newColumnInput['name'];
-      $newColumn->required = $newColumnInput['required'];
       $newColumn->position = $newColumnInput['position'];
       $newColumn->type = $newColumnInput['type'];
       $newColumn->width = $newColumnInput['width'];

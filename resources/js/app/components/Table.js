@@ -12,6 +12,7 @@ import { colors, layout } from '../../_config'
 import { 
   createColumn as createColumnAction,
   createRow as createRowAction,
+  createTable as createTableAction,
   deleteColumn as deleteColumnAction,
   deleteRow as deleteRowAction,
   setTable as setTableAction,
@@ -41,6 +42,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createColumn: (columnId, beforeOrAfter) => dispatch(createColumnAction(columnId, beforeOrAfter)),
   createRow: () => dispatch(createRowAction()),
+  createTable: () => dispatch(createTableAction()),
   deleteColumn: columnId => dispatch(deleteColumnAction(columnId)),
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setTable: nextTable => dispatch(setTableAction(nextTable)),
@@ -96,6 +98,7 @@ class Table extends PureComponent {
 
   getTable = () => {
     const { 
+      createTable,
       id,
       setTable
     } = this.props
@@ -103,15 +106,20 @@ class Table extends PureComponent {
       isGettingTable
     } = this.state
     if(!isGettingTable) {
-      this.setState({
-        isGettingTable: true
-      })
-      id !== null && query.getTable(id).then(nextTable => {
-        setTable(nextTable)
+      if (id < 0) {
+        createTable(id)
+      }
+      else {
         this.setState({
-          isGettingTable: false
+          isGettingTable: true
         })
-      })
+        id !== null && query.getTable(id).then(nextTable => {
+          setTable(nextTable)
+          this.setState({
+            isGettingTable: false
+          })
+        })
+      }
     }
   }
 

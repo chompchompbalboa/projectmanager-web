@@ -19,6 +19,17 @@ const defaultCell = (id, columnId) => ({
   datetime: null
 })
 
+const defaultColumn = (id, tableId, width) => ({
+  id: id,
+  tableId: tableId,
+  name: "",
+  required: true,
+  position: null,
+  type: 'STRING',
+  width: width,
+  isEditable: true
+})
+
 const sortColumns = columns => {
   return columns.sort((a, b) => a.position - b.position)
 }
@@ -65,16 +76,7 @@ const tableReducers = (state = defaultState, action) => {
       } = action
       const insertWidth = 0.1
       const newColumnId = _.random(-100000, -999999)
-      const newColumn = {
-        id: newColumnId,
-        tableId: state.id,
-        name: "",
-        required: true,
-        position: null,
-        type: 'STRING',
-        width: insertWidth,
-        isEditable: true
-      }
+      const newColumn = defaultColumn(newColumnId, state.id, insertWidth)
       const columnIndex = state.columns.findIndex(column => column.id === columnId)
       const insertIndex = beforeOrAfter === 'BEFORE' ? columnIndex : columnIndex + 1
       const columns = clone(state.columns)
@@ -108,6 +110,21 @@ const tableReducers = (state = defaultState, action) => {
       return {
         ...state,
         rows: [newRow, ...state.rows]
+      }
+    }
+
+    case 'CREATE_TABLE': {
+      const {
+        nextTableId
+      } = action
+      const firstColumn = defaultColumn(null, nextTableId, 1)
+      return {
+        id: nextTableId,
+        isEditing: true,
+        rows: [],
+        columns: [firstColumn],
+        sortColumn: firstColumn,
+        sortOrder: 'ASC'
       }
     }
 
@@ -147,10 +164,11 @@ const tableReducers = (state = defaultState, action) => {
         columns, 
         rows
       } = action
-      const sortColumn = columns[0]
-      const sortOrder = columns[0].defaultSortOrder
-      const sortedColumns = sortColumns(columns)
-      const sortedRows = sortRows(rows, sortColumn, sortOrder)
+      const isNewTable = columns.length === 0
+      const sortColumn = isNewTable ? null : columns[0] 
+      const sortOrder = isNewTable ? null : columns[0].defaultSortOrder
+      const sortedColumns = isNewTable ? columns : sortColumns(columns)
+      const sortedRows = isNewTable ? rows : sortRows(rows, sortColumn, sortOrder)
       if(state.id === id) {
         return {
           ...state, 

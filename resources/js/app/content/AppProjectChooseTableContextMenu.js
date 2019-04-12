@@ -6,7 +6,7 @@ import { func, number } from 'prop-types'
 import { connect } from 'react-redux'
 
 import {
-  toggleTableIsEditing as toggleTableIsEditingAction
+  toggleTableIsRenaming as toggleTableIsRenamingAction
 } from '../redux/project/projectActions'
 
 import ContextMenu from '../components/ContextMenu'
@@ -15,7 +15,7 @@ import ContextMenu from '../components/ContextMenu'
 // Redux
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
-  toggleTableIsEditing: id => dispatch(toggleTableIsEditingAction(id))
+  toggleTableIsRenaming: id => dispatch(toggleTableIsRenamingAction(id))
 })
 
 //-----------------------------------------------------------------------------
@@ -24,13 +24,13 @@ const mapDispatchToProps = dispatch => ({
 const AppProjectChooseTableContextMenu = ({ 
   closeContextMenu, 
   id,
-  toggleTableIsEditing,
+  toggleTableIsRenaming,
   top,
   left
 }) => {
 
   const actions = [
-    { text: 'Edit Table Info', action: () => toggleTableIsEditing(id) }
+    { text: 'Rename', action: () => toggleTableIsRenaming(id) }
   ]
 
   return (
@@ -48,7 +48,7 @@ const AppProjectChooseTableContextMenu = ({
 AppProjectChooseTableContextMenu.propTypes = {
   closeContextMenu: func,
   id: number,
-  toggleTableIsEditing: func,
+  toggleTableIsRenaming: func,
   top: number,
   left: number
 }

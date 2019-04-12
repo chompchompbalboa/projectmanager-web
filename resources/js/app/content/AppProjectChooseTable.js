@@ -6,17 +6,18 @@ import { array, func, number } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { colors, timing } from '../../_config'
+import { colors, layout, timing } from '../../_config'
 
 import {
-  createTable as createTableAction
+  createTable as createTableAction,
+  toggleTableIsRenaming as toggleTableIsRenamingAction,
+  updateTableName as updateTableNameAction
 } from '../redux/project/projectActions'
 import {
   setTableId as setTableIdAction
 } from '../redux/table/tableActions'
 
 import AppProjectChooseTableContextMenu from './AppProjectChooseTableContextMenu'
-import AppProjectChooseTableDropdown from './AppProjectChooseTableDropdown'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -28,7 +29,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   createTable: () => dispatch(createTableAction()),
-  setTableId: nextTableId => dispatch(setTableIdAction(nextTableId))
+  setTableId: nextTableId => dispatch(setTableIdAction(nextTableId)),
+  toggleTableIsRenaming: id => dispatch(toggleTableIsRenamingAction(id)),
+  updateTableName: (columnId, nextName) => dispatch(updateTableNameAction(columnId, nextName)),
 })
 
 //-----------------------------------------------------------------------------
@@ -62,9 +65,11 @@ class AppProjectChooseTable extends PureComponent {
   render() {
     const { 
       createTable,
+      setTableId,
       tables, 
       tableId, 
-      setTableId 
+      toggleTableIsRenaming,
+      updateTableName
     } = this.props
 
     const {
@@ -79,23 +84,27 @@ class AppProjectChooseTable extends PureComponent {
         {tables.map(table => {
           return (
             <TableLinkContainer
-              key={table.id}>
+              key={table.id}
+              onClick={!table.isRenaming ? () => setTableId(table.id) : null}>
               <TableLink
+                ref={input => input && input.focus()}
+                disabled={!table.isRenaming}
                 isActiveTable={tableId === table.id}
-                onClick={() => setTableId(table.id)}
-                onContextMenu={e => this.openContextMenu(e, table.id)}>
-                {table.name}
-              </TableLink>
-              <AppProjectChooseTableDropdown
-                isDropdownVisible={table.isEditing}
-                table={table}/>
+                onBlur={() => toggleTableIsRenaming(table.id)}
+                onChange={e => updateTableName(table.id, e.target.value)}
+                onContextMenu={e => this.openContextMenu(e, table.id)}
+                placeholder="Name..."
+                value={table.name === null ? "" : table.name}/>
             </TableLinkContainer>
           )
         })}
-        <TableLink
-          onClick={() => createTable()}>
-          Add +
-        </TableLink>
+        <TableLinkContainer
+           onClick={() => createTable()}>
+          <TableLink
+            readOnly
+            disabled
+            value="Add +"/>
+        </TableLinkContainer>
         {isContextMenuOpen && 
           <AppProjectChooseTableContextMenu
             id={contextMenuId}
@@ -122,21 +131,25 @@ AppProjectChooseTable.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  margin-top: 1vh;
   width: 100%;
+  padding: 0 calc(${ layout.TABLE_PADDING }/4);
+  padding-bottom: 5vh;
 `
 
 const TableLinkContainer = styled.div`
   width: 100%;
+  margin: 1vh 0;
 `
 
-const TableLink = styled.div`
-  user-select: none;
+const TableLink = styled.input`
   cursor: pointer;
-  padding: 0.5vh 0;
-  margin-bottom: 2vh;
+  width: 100%;
+  padding: 0.25vh;
   font-size: 13px;
   color: ${ props => props.isActiveTable ? colors.PRIMARY : colors.TEXT_INACTIVE };
+  background-color: transparent;
+  outline: none;
+  border: none;
   border-bottom: ${ props => props.isActiveTable ? '2px solid ' + colors.PRIMARY : '2px solid transparent' };
   transition: all ${ timing.TRANSITION_DURATION };
   &:hover {

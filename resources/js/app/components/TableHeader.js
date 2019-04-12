@@ -167,7 +167,7 @@ const Container = styled.tr`
 const TableHeaderCell = styled.th`
   z-index: 1000;
   position: sticky;
-  top: calc(-1*${ layout.PADDING });
+  top: 0;
   width: ${ props => props.widthPercentage * 100}%;
   height: 100%;
   background-color: ${colors.ACCENT};

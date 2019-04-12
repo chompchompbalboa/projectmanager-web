@@ -77,6 +77,7 @@ const tableReducers = (state = defaultState, action) => {
       const columnIndex = state.columns.findIndex(column => column.id === columnId)
       const insertIndex = beforeOrAfter === 'BEFORE' ? columnIndex : columnIndex + 1
       const columns = clone(state.columns)
+      console.log(columns)
       const insertWidth = (columns[columnIndex].width > 0.3) ? (columns[columnIndex].width / 2) : 0.1
       const newColumnId = _.random(-100000, -999999)
       const newColumn = defaultColumn(newColumnId, state.id, insertWidth)
@@ -86,6 +87,7 @@ const tableReducers = (state = defaultState, action) => {
         column.width = column.id !== newColumnId ? column.width - (insertWidth / (columns.length - 1)) : insertWidth
         return column
       })
+      console.log(nextColumns)
       const nextRows = state.rows.map(row => {
         const nextCells = row.cells.concat([defaultCell(state.id, newColumnId)])
         return {...row, cells: nextCells}

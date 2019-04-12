@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { colors } from '../../_config'
 
 import {
-  toggleTableIsEditing as toggleTableIsEditingAction,
+  toggleTableIsRenaming as toggleTableIsRenamingAction,
   updateTableName as updateTableNameAction,
 } from '../redux/project/projectActions'
 
@@ -20,7 +20,7 @@ import Dropdown from '../components/Dropdown'
 // Redux
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
-  toggleTableIsEditing: id => dispatch(toggleTableIsEditingAction(id)),
+  toggleTableIsRenaming: id => dispatch(toggleTableIsRenamingAction(id)),
   updateTableName: (columnId, nextName) => dispatch(updateTableNameAction(columnId, nextName)),
 })
 
@@ -30,12 +30,12 @@ const mapDispatchToProps = dispatch => ({
 const AppProjectChooseTableDropdown = ({ 
   isDropdownVisible,
   table,
-  toggleTableIsEditing,
+  toggleTableIsRenaming,
   updateTableName
 }) => {
   return (
     <Dropdown
-      closeDropdown={() => toggleTableIsEditing(table.id)}
+      closeDropdown={() => toggleTableIsRenaming(table.id)}
       isDropdownVisible={isDropdownVisible}>
       <Container>
         <EditContainer>
@@ -59,7 +59,7 @@ AppProjectChooseTableDropdown.propTypes = {
     id: number,
     name: string
   }),
-  toggleTableIsEditing: func,
+  toggleTableIsRenaming: func,
   updateTableName: func
 }
 

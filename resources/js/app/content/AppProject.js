@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { colors, layout } from '../../_config'
 
 import AppProjectChooseTable from './AppProjectChooseTable'
+import HiddenScrollbarContainer from '../components/HiddenScrollbarContainer'
 import Table from '../components/Table'
 
 //-----------------------------------------------------------------------------
@@ -51,7 +52,6 @@ const Container = styled.div`
   left: ${layout.SIDEBAR_WIDTH};
   width: calc(100vw - ${layout.SIDEBAR_WIDTH});
   height: calc(100vh - ${layout.HEADER_HEIGHT});
-  padding: ${layout.PADDING};
   display: flex;
   justify-content: space-between;
   background-color: ${colors.BACKGROUND};
@@ -59,19 +59,19 @@ const Container = styled.div`
   overflow-y: scroll;
 `
 
-const LeftColumn = styled.div`
+const LeftColumn = styled(HiddenScrollbarContainer)`
   z-index: 2;
   position: sticky;
   top: 0;
   left: 0;
-  width: calc(13% - (${layout.PADDING} / 1.5));
-  overflow-x: visible;
-  overflow-y: scroll;
+  width: 13%;
+  padding-top: ${layout.PADDING};
 `
 
 const RightColumn = styled.div`
   z-index: 1;
-  width: calc(87% - (${layout.PADDING} / 1.5));
+  width: calc(87% - 5px);
+  padding-top: ${layout.PADDING};
 `
 
 export default connect(

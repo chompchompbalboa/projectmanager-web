@@ -21,7 +21,7 @@ const projectReducers = (state = defaultState, action) => {
       const nextTable = {
         id: _.random(-100000, -999999),
         name: "",
-        isEditing: true
+        isRenaming: true
       }
       return {
         ...state,
@@ -47,14 +47,14 @@ const projectReducers = (state = defaultState, action) => {
         projects: action.nextProjects
       }
 
-    case 'TOGGLE_TABLE_IS_EDITING': {
+    case 'TOGGLE_TABLE_IS_RENAMING': {
       const {
         tableId
       } = action
       const nextActiveProjectTables = state.activeProject.tables.map(table => {
         return {
           ...table,
-          isEditing: table.id === tableId ? (table.isEditing ? false : true) : table.isEditing
+          isRenaming: table.id === tableId ? (table.isRenaming ? false : true) : table.isRenaming
         }
       })
       return {

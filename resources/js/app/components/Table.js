@@ -258,7 +258,7 @@ const TableBody = styled.tbody`
 
 const TableActions = styled.div`
   position: sticky;
-  top: calc(-1 * (${ layout.PADDING } / 2));
+  top: calc(${ layout.PADDING } / 2);
   height: 100%;
   padding-left: calc(${ layout.PADDING } / 2);
   display: flex;

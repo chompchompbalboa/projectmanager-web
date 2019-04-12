@@ -67,10 +67,10 @@ export const setProjects = nextProjects => ({
 })
 
 //-----------------------------------------------------------------------------
-// Toggle Table isEditing
+// Toggle Table isRenaming
 //-----------------------------------------------------------------------------
-export const toggleTableIsEditing = tableId => ({
-  type: 'TOGGLE_TABLE_IS_EDITING',
+export const toggleTableIsRenaming = tableId => ({
+  type: 'TOGGLE_TABLE_IS_RENAMING',
   tableId: tableId
 })
 

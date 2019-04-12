@@ -265,6 +265,7 @@ const tableReducers = (state = defaultState, action) => {
         nextColumnId,
         columnIndex
       } = action
+      console.log(state)
       const columnId = state.columns[columnIndex].id
       const nextState = clone(state)
       const nextRows = nextState.rows.map(row => {
@@ -352,6 +353,16 @@ const tableReducers = (state = defaultState, action) => {
       return {
         ...state,
         rows: nextRows
+      }
+    }
+
+    case 'UPDATE_TABLE_ID': {
+      const {
+        nextTableId,
+      } = action
+      return {
+        ...state,
+        id: nextTableId
       }
     }
   

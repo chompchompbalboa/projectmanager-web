@@ -364,3 +364,11 @@ export const updateRows = nextRows => ({
   type: 'UPDATE_ROWS',
   nextRows: nextRows
 })
+
+//-----------------------------------------------------------------------------
+// Update Table ID
+//-----------------------------------------------------------------------------
+export const updateTableId = nextTableId => ({
+  type: 'UPDATE_TABLE_ID',
+  nextTableId: nextTableId
+})

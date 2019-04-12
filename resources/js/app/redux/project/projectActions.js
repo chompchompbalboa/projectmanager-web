@@ -7,7 +7,8 @@ import { timing } from '../../../_config'
 import { setStatus } from '../status/statusActions'
 import { 
   setTableId,
-  updateColumnId
+  updateColumnId,
+  updateTableId
 } from '../table/tableActions'
 
 //-----------------------------------------------------------------------------
@@ -19,11 +20,12 @@ export const createTable = () => {
     const state = getState()
     const tableId = state.project.activeProject.tables.find(table => table.id < 0).id
     const projectId = state.project.activeProject.id
+    dispatch(setTableId(tableId))
     dispatch(createTableServer(projectId, tableId))
   }
 }
 const createTableReducer = () => ({
-  type: 'CREATE_TABLE'
+  type: 'CREATE_TABLE_IN_ACTIVE_PROJECT'
 })
 const createTableServer = (projectId, tableId) => {
   return dispatch => {
@@ -35,7 +37,7 @@ const createTableServer = (projectId, tableId) => {
         firstColumnId
       } = newTable
       dispatch(updateTableIdInActiveProjectTables(tableId, nextTableId))
-      dispatch(setTableId(nextTableId))
+      dispatch(updateTableId(nextTableId))
       dispatch(updateColumnId(0, firstColumnId))
       dispatch(setStatus('SAVED'))
     })

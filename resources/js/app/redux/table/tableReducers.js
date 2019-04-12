@@ -74,16 +74,16 @@ const tableReducers = (state = defaultState, action) => {
         beforeOrAfter,
         columnId
       } = action
-      const insertWidth = 0.1
-      const newColumnId = _.random(-100000, -999999)
-      const newColumn = defaultColumn(newColumnId, state.id, insertWidth)
       const columnIndex = state.columns.findIndex(column => column.id === columnId)
       const insertIndex = beforeOrAfter === 'BEFORE' ? columnIndex : columnIndex + 1
       const columns = clone(state.columns)
+      const insertWidth = (columns[columnIndex].width > 0.3) ? (columns[columnIndex].width / 2) : 0.1
+      const newColumnId = _.random(-100000, -999999)
+      const newColumn = defaultColumn(newColumnId, state.id, insertWidth)
       columns.splice(insertIndex, 0, newColumn)
       const nextColumns = columns.map((column, index) => {
         column.position = index
-        column.width = column.width - (insertWidth / columns.length)
+        column.width = column.id !== newColumnId ? column.width - (insertWidth / (columns.length - 1)) : insertWidth
         return column
       })
       const nextRows = state.rows.map(row => {
@@ -122,7 +122,7 @@ const tableReducers = (state = defaultState, action) => {
         id: nextTableId,
         isEditing: true,
         rows: [],
-        columns: [firstColumn],
+        columns: [{...firstColumn, position: 0}],
         sortColumn: firstColumn,
         sortOrder: 'ASC'
       }
@@ -265,7 +265,6 @@ const tableReducers = (state = defaultState, action) => {
         nextColumnId,
         columnIndex
       } = action
-      console.log(state)
       const columnId = state.columns[columnIndex].id
       const nextState = clone(state)
       const nextRows = nextState.rows.map(row => {

@@ -54,7 +54,7 @@ class Dropdown extends Component {
 		const { 
       closeDropdown
     } = this.props
-    closeDropdown()
+    closeDropdown !== null && closeDropdown()
 	}
 
 	addEventListeners = () => {
@@ -101,7 +101,7 @@ Dropdown.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-	z-index: 1000;
+	z-index: 100000;
 	display: ${props => (props.isDropdownVisible ? 'block' : 'none')};
 	position: absolute;
 	max-height: 50vh;

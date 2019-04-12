@@ -63,7 +63,10 @@ const LeftColumn = styled.div`
   z-index: 2;
   position: sticky;
   top: 0;
+  left: 0;
   width: calc(13% - (${layout.PADDING} / 1.5));
+  overflow-x: visible;
+  overflow-y: scroll;
 `
 
 const RightColumn = styled.div`

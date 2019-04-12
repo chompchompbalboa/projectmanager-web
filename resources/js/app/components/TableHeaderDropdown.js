@@ -38,7 +38,7 @@ const TableHeaderDropdown = ({
 }) => {
   return (
     <Dropdown
-      closeDropdown={() => toggleColumnIsEditable(column.id)}
+      closeDropdown={!column.name || column.name.length === 0 ? null : () => toggleColumnIsEditable(column.id)}
       isDropdownVisible={isDropdownVisible}>
       <Container>
         <EditContainer>

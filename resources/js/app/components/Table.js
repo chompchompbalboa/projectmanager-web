@@ -17,9 +17,11 @@ import {
   deleteRow as deleteRowAction,
   setTable as setTableAction,
   sortRows as sortRowsAction,
-  toggleColumnIsEditable as toggleColumnIsEditableAction,
+  toggleColumnIsEditing as toggleColumnIsEditingAction,
+  toggleColumnIsRenaming as toggleColumnIsRenamingAction,
   updateCell as updateCellAction,
-  updateColumnWidths as updateColumnWidthsAction
+  updateColumnWidths as updateColumnWidthsAction,
+  updateColumnName as updateColumnNameAction
 } from '../redux/table/tableActions'
 
 import Loading from '../components/Loading'
@@ -47,9 +49,11 @@ const mapDispatchToProps = dispatch => ({
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setTable: nextTable => dispatch(setTableAction(nextTable)),
   sortRows: (nextSortColumn, nextSortOrder) => dispatch(sortRowsAction(nextSortColumn, nextSortOrder)),
-  toggleColumnIsEditable: columnId => dispatch(toggleColumnIsEditableAction(columnId)),
+  toggleColumnIsEditing: columnId => dispatch(toggleColumnIsEditingAction(columnId)),
+  toggleColumnIsRenaming: columnId => dispatch(toggleColumnIsRenamingAction(columnId)),
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
-  updateColumnWidths: nextColumnWidths => dispatch(updateColumnWidthsAction(nextColumnWidths))
+  updateColumnWidths: nextColumnWidths => dispatch(updateColumnWidthsAction(nextColumnWidths)),
+  updateColumnName: (columnId, nextName) => dispatch(updateColumnNameAction(columnId, nextName))
 })
 
 //-----------------------------------------------------------------------------
@@ -144,8 +148,10 @@ class Table extends PureComponent {
       sortColumn,
       sortOrder,
       sortRows,
-      toggleColumnIsEditable,
+      toggleColumnIsEditing,
+      toggleColumnIsRenaming,
       updateCell,
+      updateColumnName,
       updateColumnWidths
     } = this.props
     const {
@@ -166,6 +172,8 @@ class Table extends PureComponent {
                 openContextMenu={this.openContextMenu}
                 sortColumn={sortColumn}
                 sortOrder={sortOrder}
+                toggleColumnIsRenaming={toggleColumnIsRenaming}
+                updateColumnName={updateColumnName}
                 updateColumnWidths={updateColumnWidths}/>
               {rows.map(row => {
                 return (
@@ -198,7 +206,8 @@ class Table extends PureComponent {
               deleteColumn={deleteColumn}
               deleteRow={deleteRow}
               sortRows={sortRows}
-              toggleColumnIsEditable={toggleColumnIsEditable}
+              toggleColumnIsEditing={toggleColumnIsEditing}
+              toggleColumnIsRenaming={toggleColumnIsRenaming}
               top={contextMenuTop}
               left={contextMenuLeft}/>
           }
@@ -220,6 +229,7 @@ Table.propTypes = {
   })),
   createColumn: func,
   createRow: func,
+  createTable: func,
   deleteColumn: func,
   deleteRow: func,
   rows: array,
@@ -227,8 +237,10 @@ Table.propTypes = {
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),
   sortRows: func,
-  toggleColumnIsEditable: func,
+  toggleColumnIsEditing: func,
+  toggleColumnIsRenaming: func,
   updateCell: func,
+  updateColumnName: func,
   updateColumnWidths: func
 }
 
@@ -260,7 +272,7 @@ const TableActions = styled.div`
   position: sticky;
   top: calc(${ layout.PADDING } / 2);
   height: 100%;
-  padding-left: calc(${ layout.PADDING } / 2);
+  padding: 0 calc(${ layout.PADDING } / 2);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

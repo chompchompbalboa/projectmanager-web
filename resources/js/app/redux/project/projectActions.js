@@ -37,9 +37,32 @@ const createTableServer = (projectId, tableId) => {
         firstColumnId
       } = newTable
       dispatch(updateTableIdInActiveProjectTables(tableId, nextTableId))
-      dispatch(updateTableId(nextTableId))
       dispatch(updateColumnId(0, firstColumnId))
+      dispatch(updateTableId(nextTableId))
       dispatch(setStatus('SAVED'))
+    })
+  }
+}
+
+export const deleteTable = tableId => {
+  return (dispatch, getState) => {
+    dispatch(deleteTableReducer(tableId))
+    // If we're deleting the currently visible table, switch to another one
+    if (getState().table.id === tableId) {
+      dispatch(setTableId(getState().project.activeProject.tables[0].id))
+    }
+    dispatch(deleteTableServer(tableId))
+  }
+}
+const deleteTableReducer = tableId => ({
+  type: 'DELETE_TABLE',
+  tableId: tableId
+})
+const deleteTableServer = tableId => {
+  setStatus('SAVING')
+  return async dispatch => {
+    return mutation.deleteTable(tableId).then(success => {
+      success && dispatch(setStatus('SAVED'))
     })
   }
 }

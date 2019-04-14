@@ -109,7 +109,7 @@ class RowController extends Controller
     public function destroy(Row $row)
     {
       // Delete all of the cells
-      $deletedRows = Cell::where('row_id', $row->id)->delete();
+      $deletedCells = Cell::where('row_id', $row->id)->delete();
       return Row::destroy($row->id);
     }
 }

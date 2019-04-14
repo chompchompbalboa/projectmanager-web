@@ -16,7 +16,8 @@ import { date as dateConfig } from '../../_config'
 const TableCellDatetime = ({ updateValue, value }) => {
   return (
     <DatePicker
-      customInput={<StyledInput />}
+      autoComplete="new-password"
+      customInput={<StyledInput/>}
       selected={value !== null ? moment(value).toDate() : null}
       onChange={date => updateValue(moment(date).format(dateConfig.format))}/>
   )

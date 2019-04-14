@@ -119,6 +119,12 @@ class TableController extends Controller
      */
     public function destroy(Table $table)
     {
-        //
+      $rowsToDelete = Row::where('table_id', $table->id)->get();
+      foreach($rowsToDelete as $rowToDelete) {
+        Cell::where('row_id', $rowToDelete->id)->delete();
+        Row::destroy($rowToDelete->id);
+      }
+      Column::where('table_id', $table->id)->delete();
+      return Table::destroy($table->id);
     }
 }

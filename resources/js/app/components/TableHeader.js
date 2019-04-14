@@ -93,12 +93,15 @@ class TableHeader extends PureComponent {
   render() {
     const { 
       columns,
-      openContextMenu
+      openContextMenu,
+      toggleColumnIsRenaming,
+      updateColumnName
     } = this.props
     const {
       mouseDownAdjacentColumnId,
       mouseDownResizePageX
     } = this.state
+    const isFirstColumnInNewTable = columns.length === 1 && (columns[0].name === "" || columns[0].name === null)
     return (
       <>
         <Container 
@@ -116,15 +119,18 @@ class TableHeader extends PureComponent {
                   isResizing={mouseDownAdjacentColumnId === column.id}
                   left={mouseDownResizePageX === null ? 0 : mouseDownResizePageX}
                   onMouseDown={index!== 0 ? e => this.handleResizeMouseDown(e, columns[index - 1].id, columns[index - 1].width, column.id, column.width) : null}/>
-                <ContentContainer
-                  isCentered={column.type === 'BOOLEAN'}>
-                  <TableHeaderCellValue>
-                    {column.name}&nbsp;&nbsp;
-                  </TableHeaderCellValue>
-                  </ContentContainer>
+                <ContentContainer>
+                  <TableHeaderCellValue
+                    ref={input => !isFirstColumnInNewTable && input && input.focus()}
+                    disabled={!column.isRenaming}
+                    onBlur={() => toggleColumnIsRenaming(column.id)}
+                    onChange={e => updateColumnName(column.id, e.target.value)}
+                    placeholder="Column..."
+                    value={column.name === null ? "" : column.name}/>
+                </ContentContainer>
                   <TableHeaderDropdown
                     column={column}
-                    isDropdownVisible={column.isEditable}>
+                    isDropdownVisible={column.isEditing}>
                   </TableHeaderDropdown>
               </TableHeaderCell>
             )
@@ -152,6 +158,8 @@ TableHeader.propTypes = {
   }),
   sortOrder: oneOf(['ASC', 'DESC']),
   sortRows: func,
+  toggleColumnIsRenaming: func,
+  updateColumnName: func,
   updateColumnWidths: func
 }
 
@@ -172,21 +180,27 @@ const TableHeaderCell = styled.th`
   height: 100%;
   background-color: ${colors.ACCENT};
   border-bottom: 1px solid ${colors.TEXT_LIGHT};
-  font-weight: bold;
-  font-size: 14px;
 `
 
 const ContentContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: ${ props => props.isCentered ? 'center' : 'space-between' };
+  justify-content: space-between;
   align-items: center;
 `
 
-const TableHeaderCellValue = styled.div`
+const TableHeaderCellValue = styled.input`
+  cursor: inherit;
+  width: 100%;
+  outline: none;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
   padding: calc(${ layout.TABLE_PADDING }/2) calc(${ layout.TABLE_PADDING }/4);
   user-select: none;
+  text-overflow: ellipsis;
 `
 
 const ResizeContainer = styled.div`

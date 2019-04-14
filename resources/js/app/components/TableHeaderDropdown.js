@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { colors } from '../../_config'
 
 import {
-  toggleColumnIsEditable as toggleColumnIsEditableAction,
+  toggleColumnIsEditing as toggleColumnIsEditingAction,
   updateColumnName as updateColumnNameAction,
   updateColumnType as updateColumnTypeAction,
 } from '../redux/table/tableActions'
@@ -21,7 +21,7 @@ import Dropdown from './Dropdown'
 // Redux
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
-  toggleColumnIsEditable: columnId => dispatch(toggleColumnIsEditableAction(columnId)),
+  toggleColumnIsEditing: columnId => dispatch(toggleColumnIsEditingAction(columnId)),
   updateColumnName: (columnId, nextName) => dispatch(updateColumnNameAction(columnId, nextName)),
   updateColumnType: (columnId, nextType) => dispatch(updateColumnTypeAction(columnId, nextType))
 })
@@ -32,13 +32,13 @@ const mapDispatchToProps = dispatch => ({
 const TableHeaderDropdown = ({ 
   column, 
   isDropdownVisible, 
-  toggleColumnIsEditable, 
+  toggleColumnIsEditing, 
   updateColumnName,
   updateColumnType
 }) => {
   return (
     <Dropdown
-      closeDropdown={!column.name || column.name.length === 0 ? null : () => toggleColumnIsEditable(column.id)}
+      closeDropdown={!column.name || column.name.length === 0 ? null : () => toggleColumnIsEditing(column.id)}
       isDropdownVisible={isDropdownVisible}>
       <Container>
         <EditContainer>
@@ -91,7 +91,7 @@ TableHeaderDropdown.propTypes = {
     name: string
   }),
   isDropdownVisible: bool,
-  toggleColumnIsEditable: func,
+  toggleColumnIsEditing: func,
   updateColumnName: func,
   updateColumnType: func
 }

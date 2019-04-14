@@ -17,7 +17,8 @@ const TableContextMenu = ({
   deleteColumn, 
   id, 
   sortRows, 
-  toggleColumnIsEditable,
+  toggleColumnIsEditing,
+  toggleColumnIsRenaming,
   top,
   left
 }) => {
@@ -31,7 +32,8 @@ const TableContextMenu = ({
     { text: 'Sort Z to A', action: () => sortRows(id, 'DESC') },
     { text: 'Insert Before', action: () => createColumn(id, 'BEFORE') },
     { text: 'Insert After', action: () => createColumn(id, 'AFTER') },
-    { text: 'Edit Column', action: () => toggleColumnIsEditable(id) },
+    { text: 'Rename', action: () => toggleColumnIsRenaming(id) },
+    { text: 'Edit Column', action: () => toggleColumnIsEditing(id) },
     { text: 'Delete Column', action: () => deleteColumn(id) },
   ]
 
@@ -56,7 +58,8 @@ TableContextMenu.propTypes = {
   id: number,
   rowId: number,
   sortRows: func,
-  toggleColumnIsEditable: func,
+  toggleColumnIsEditing: func,
+  toggleColumnIsRenaming: func,
   top: number,
   left: number
 }

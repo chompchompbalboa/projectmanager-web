@@ -188,10 +188,18 @@ export const sortRows = (nextSortColumnId, nextSortOrder) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Toggle Column isEditable
+// Toggle Column Is Editing
 //-----------------------------------------------------------------------------
-export const toggleColumnIsEditable = columnId => ({
-  type: 'TOGGLE_COLUMN_IS_EDITABLE',
+export const toggleColumnIsEditing = columnId => ({
+  type: 'TOGGLE_COLUMN_IS_EDITING',
+  columnId: columnId
+})
+
+//-----------------------------------------------------------------------------
+// Toggle Column Is Renaming
+//-----------------------------------------------------------------------------
+export const toggleColumnIsRenaming = columnId => ({
+  type: 'TOGGLE_COLUMN_IS_RENAMING',
   columnId: columnId
 })
 

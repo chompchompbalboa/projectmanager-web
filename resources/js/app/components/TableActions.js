@@ -48,7 +48,7 @@ const TableActions = () => {
 const Container = styled.div`
   position: fixed;
   top: calc(${ layout.HEADER_HEIGHT} + (${ layout.PADDING } / 2));
-  padding-left: calc(${ layout.PADDING } / 2);
+  padding: 0 calc(${ layout.PADDING } / 2);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

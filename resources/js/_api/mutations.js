@@ -45,6 +45,12 @@ export const deleteRow = async (rowId) => {
   })
 }
 
+export const deleteTable = async (tableId) => {  
+  return axios.delete('/app/tables/' + tableId).then(response => {
+    return response.data
+  })
+}
+
 export const updateCell = async (id, value) => {  
   return axios.patch('/app/cells/' + id, {
     id: id,

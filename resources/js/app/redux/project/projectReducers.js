@@ -35,6 +35,20 @@ const projectReducers = (state = defaultState, action) => {
       }
     }
 
+    case 'DELETE_TABLE': {
+      const {
+        tableId
+      } = action
+      const nextTables = state.activeProject.tables.filter(table => table.id !== tableId)
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
     case 'SET_ACTIVE_PROJECT': 
       return {
         ...state, 

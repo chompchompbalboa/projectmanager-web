@@ -124,7 +124,9 @@ AppProjectChooseTable.propTypes = {
   createTable: func,
   tables: array,
   tableId: number,
-  setTableId: func
+  setTableId: func,
+  toggleTableIsRenaming: func,
+  updateTableName: func
 }
 
 //-----------------------------------------------------------------------------
@@ -152,9 +154,13 @@ const TableLink = styled.input`
   border: none;
   border-bottom: ${ props => props.isActiveTable ? '2px solid ' + colors.PRIMARY : '2px solid transparent' };
   transition: all ${ timing.TRANSITION_DURATION };
+  text-overflow: ellipsis;
   &:hover {
     color: ${ colors.PRIMARY };
     border-bottom: 2px solid ${ colors.PRIMARY };
+  }
+  &::placeholder {
+    color: ${ props => props.isActiveTable ? colors.PRIMARY : colors.TEXT_INACTIVE };
   }
 `
 

@@ -27,7 +27,8 @@ const defaultColumn = (id, tableId, width) => ({
   position: null,
   type: 'STRING',
   width: width,
-  isEditable: true
+  isEditing: false,
+  isRenaming: true
 })
 
 const sortColumns = columns => {
@@ -77,17 +78,19 @@ const tableReducers = (state = defaultState, action) => {
       const columnIndex = state.columns.findIndex(column => column.id === columnId)
       const insertIndex = beforeOrAfter === 'BEFORE' ? columnIndex : columnIndex + 1
       const columns = clone(state.columns)
-      console.log(columns)
-      const insertWidth = (columns[columnIndex].width > 0.3) ? (columns[columnIndex].width / 2) : 0.1
+      const insertWidth = Number((1 / (columns.length + 1)).toFixed(2))
       const newColumnId = _.random(-100000, -999999)
       const newColumn = defaultColumn(newColumnId, state.id, insertWidth)
       columns.splice(insertIndex, 0, newColumn)
+      let totalWidth = 0
       const nextColumns = columns.map((column, index) => {
+        const isLastColumn = index === columns.length - 1
+        const calculatedColumnWidth = Number((column.id !== newColumnId ? column.width - (insertWidth / (columns.length - 1)) : insertWidth).toFixed(2))
         column.position = index
-        column.width = column.id !== newColumnId ? column.width - (insertWidth / (columns.length - 1)) : insertWidth
+        column.width = Number((isLastColumn ? 1 - totalWidth : calculatedColumnWidth).toFixed(2))
+        totalWidth = totalWidth + calculatedColumnWidth
         return column
       })
-      console.log(nextColumns)
       const nextRows = state.rows.map(row => {
         const nextCells = row.cells.concat([defaultCell(state.id, newColumnId)])
         return {...row, cells: nextCells}
@@ -218,7 +221,7 @@ const tableReducers = (state = defaultState, action) => {
       }
     }
 
-    case 'TOGGLE_COLUMN_IS_EDITABLE': {
+    case 'TOGGLE_COLUMN_IS_EDITING': {
       const {
         columnId
       } = action
@@ -226,12 +229,34 @@ const tableReducers = (state = defaultState, action) => {
         if(column.id === columnId) {
           return {
             ...column,
-            isEditable: column.isEditable ? false : true
+            isEditing: column.isEditing ? false : true
           }
         }
         return {
           ...column,
-          isEditable: false
+          isEditing: false
+        }
+      })
+      return {
+        ...state,
+        columns: nextColumns
+      }
+    }
+
+    case 'TOGGLE_COLUMN_IS_RENAMING': {
+      const {
+        columnId
+      } = action
+      const nextColumns = state.columns.map(column => {
+        if(column.id === columnId) {
+          return {
+            ...column,
+            isRenaming: column.isRenaming ? false : true
+          }
+        }
+        return {
+          ...column,
+          isRenaming: false
         }
       })
       return {

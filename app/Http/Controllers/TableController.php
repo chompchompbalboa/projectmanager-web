@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Models\Cell;
@@ -45,12 +46,15 @@ class TableController extends Controller
         // Add the first column to the table. If you make changes to the defaults
         // here, you also need to update the column defaults on the front end.
         $firstColumn = new Column;
-        ['id', 'tableId', 'name', 'position', 'width', 'type'];
         $firstColumn->table_id = $newTable->id;
         $firstColumn->position = 1;
         $firstColumn->width = 1;
         $firstColumn->type = 'STRING';
         if($firstColumn->save()) {
+          $user = Auth::user();
+          $user->active_project_id = $newTable->project_id;
+          $user->active_table_id = $newTable->id;
+          $user->save();
           return [
             'tableId' => $request->input('tableId'),
             'nextTableId' => $newTable->id,
@@ -68,6 +72,10 @@ class TableController extends Controller
      */
     public function show(Table $table)
     {
+      $user = Auth::user();
+      $user->active_project_id = $table->project_id;
+      $user->active_table_id = $table->id;
+      $user->save();
       $columns = Column::where('table_id', $table->id)->get();
       $rows = Row::where('table_id', $table->id)->get();
       return [

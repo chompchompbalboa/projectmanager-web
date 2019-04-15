@@ -77,3 +77,11 @@ export const updateTable = async (id, table) => {
     return response.data
   })
 }
+
+export const updateView = async nextLeftColumnWidth => {  
+  return axios.patch('/app/view', {
+    nextLeftColumnWidth: nextLeftColumnWidth,
+  }).then(response => {
+    return response.data
+  })
+}

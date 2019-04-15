@@ -25,6 +25,8 @@ Route::prefix('app')->group(function () {
   });
 
   Route::get('organizations/{organization}/projects', 'OrganizationController@projects');
+  
+  Route::patch('/view', 'ViewController@updateView');
 
   Route::resources([
     'cells' => 'CellController',

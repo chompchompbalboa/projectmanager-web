@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch => ({
   setActiveProject: nextActiveProject => dispatch(setActiveProjectAction(nextActiveProject)),
   setTableId: nextTableId => dispatch(setTableIdAction(nextTableId)),
   setProjects: nextProjects => dispatch(setProjectsAction(nextProjects)),
-  updateLeftColumnWidth: nextLeftColumnWidth => dispatch(updateLeftColumnWidthAction(nextLeftColumnWidth))
+  updateLeftColumnWidth: (nextLeftColumnWidth, isInitialLoad) => dispatch(updateLeftColumnWidthAction(nextLeftColumnWidth, isInitialLoad))
 })
 
 //-----------------------------------------------------------------------------
@@ -56,7 +56,7 @@ class AppProjects extends Component {
         activeTableId,
         projects
       } = response
-      updateLeftColumnWidth(activeLeftColumnWidth)
+      updateLeftColumnWidth(activeLeftColumnWidth, true)
       setActiveProject(activeProject)
       setTableId(activeTableId)
       setProjects(projects)

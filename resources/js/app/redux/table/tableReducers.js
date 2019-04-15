@@ -85,7 +85,7 @@ const tableReducers = (state = defaultState, action) => {
       let totalWidth = 0
       const nextColumns = columns.map((column, index) => {
         const isLastColumn = index === columns.length - 1
-        const calculatedColumnWidth = Number((column.id !== newColumnId ? column.width - (insertWidth / (columns.length - 1)) : insertWidth).toFixed(2))
+        const calculatedColumnWidth = Number((column.id !== newColumnId ? (column.width * (1 - insertWidth)) : insertWidth).toFixed(2))
         column.position = index
         column.width = Number((isLastColumn ? 1 - totalWidth : calculatedColumnWidth).toFixed(2))
         totalWidth = totalWidth + calculatedColumnWidth

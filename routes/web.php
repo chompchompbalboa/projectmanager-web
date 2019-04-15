@@ -2,6 +2,9 @@
 //-----------------------------------------------------------------------------
 // Use
 //-----------------------------------------------------------------------------
+
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Project;
 use App\Models\Table;
 use App\Models\Row;
@@ -14,9 +17,10 @@ use App\Models\Cell;
 Route::prefix('app')->group(function () {
 
   Route::get('/', function () {
+    $user = Auth::loginUsingId(1, true);
     return view('app')->with([
-      'organizationId' => 1,
-      'userId' => 1
+      'organizationId' => $user->organization()->first()->id,
+      'userId' => $user->id
     ]);
   });
 

@@ -14,6 +14,9 @@ import {
 import { 
   setTableId as setTableIdAction,
 } from '../redux/table/tableActions'
+import { 
+  updateLeftColumnWidth as updateLeftColumnWidthAction
+} from '../redux/view/viewActions';
 
 import AppContentContainer from './AppContentContainer'
 import AppProject from './AppProject'
@@ -26,7 +29,8 @@ import Loading from '../components/Loading'
 const mapDispatchToProps = dispatch => ({
   setActiveProject: nextActiveProject => dispatch(setActiveProjectAction(nextActiveProject)),
   setTableId: nextTableId => dispatch(setTableIdAction(nextTableId)),
-  setProjects: nextProjects => dispatch(setProjectsAction(nextProjects))
+  setProjects: nextProjects => dispatch(setProjectsAction(nextProjects)),
+  updateLeftColumnWidth: nextLeftColumnWidth => dispatch(updateLeftColumnWidthAction(nextLeftColumnWidth))
 })
 
 //-----------------------------------------------------------------------------
@@ -42,11 +46,19 @@ class AppProjects extends Component {
     const {
       setActiveProject,
       setTableId,
-      setProjects
+      setProjects,
+      updateLeftColumnWidth
     } = this.props
-    query.getOrganizationProjects(organizationId).then(projects => {
-      setActiveProject(projects[0])
-      setTableId(projects[0].tables[0].id)
+    query.getOrganizationProjects(organizationId).then(response => {
+      const {
+        activeLeftColumnWidth,
+        activeProject,
+        activeTableId,
+        projects
+      } = response
+      updateLeftColumnWidth(activeLeftColumnWidth)
+      setActiveProject(activeProject)
+      setTableId(activeTableId)
       setProjects(projects)
       this.setState({
         isLoading: false
@@ -84,7 +96,8 @@ AppProjects.propTypes = {
   isActive: bool,
   setActiveProject: func,
   setTableId: func,
-  setProjects: func
+  setProjects: func,
+  updateLeftColumnWidth: func
 }
 
 export default connect(

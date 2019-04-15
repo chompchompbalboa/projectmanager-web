@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Models\Organization;
@@ -93,6 +94,19 @@ class OrganizationController extends Controller
      */
     public function projects(Organization $organization)
     {
-      return Project::where('organization_id', $organization->id)->get();
+      $user = Auth::user();
+      $projects = Project::where('organization_id', $organization->id)->get();
+      $activeProjectId = $user->active_project_id !== null ? $user->active_project_id : $projects[0]->id ;
+      $activeProject = $projects->firstWhere('id', $activeProjectId);
+      $activeTableId = 
+        $user->active_table_id !== null && $activeProject->tables()->get()->contains('id', $user->active_table_id) 
+        ? $user->active_table_id
+        : $activeProject->tables()->first()->id;
+      return [
+        'activeLeftColumnWidth' => $user->active_left_column_width,
+        'activeProject' => $activeProject,
+        'activeTableId' => $activeTableId,
+        'projects' => Project::where('organization_id', $organization->id)->get()
+      ];
     }
 }

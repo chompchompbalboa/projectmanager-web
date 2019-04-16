@@ -2,6 +2,8 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
+import { string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors, enums } from '../_config'
@@ -9,9 +11,17 @@ import { colors, enums } from '../_config'
 import AppBusiness from './content/AppBusiness'
 import AppContent from './content/AppContent'
 import AppMe from './content/AppMe'
+import AppModal from './content/AppModal'
 import AppProjects from './content/AppProjects'
 import AppSettings from './content/AppSettings'
 import AppSidebar from './content/AppSidebar'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeModal: state.modal.activeModal
+})
 
 //-----------------------------------------------------------------------------
 // Component
@@ -29,7 +39,13 @@ class App extends Component {
   }
 
 	render() {
-    const { activeContent, userId } = this.state
+    const {
+      activeModal
+    } = this.props
+    const { 
+      activeContent,
+      userId 
+    } = this.state
     
 		return (
       <Container>
@@ -48,9 +64,20 @@ class App extends Component {
           <AppSettings 
             isActive={activeContent === 'SETTINGS'}/>
         </AppContent>
+        {activeModal !== null &&
+          <AppModal
+            activeModal={activeModal}/>
+        }
       </Container>
     )
 	}
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+App.propTypes = {
+  activeModal: string
 }
 
 //-----------------------------------------------------------------------------
@@ -61,4 +88,6 @@ const Container = styled.div`
 	color: ${colors.TEXT_DARK};
 `
 
-export default App
+export default connect(
+  mapStateToProps
+)(App)

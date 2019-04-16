@@ -11,7 +11,7 @@ import {
 // Update Left Column Width
 //-----------------------------------------------------------------------------
 export const updateLeftColumnWidth = (nextLeftColumnWidth, isInitialLoad) => {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch(updateLeftColumnWidthReducer(nextLeftColumnWidth))
     if (!isInitialLoad) {
       dispatch(updateLeftColumnWidthServer(nextLeftColumnWidth))

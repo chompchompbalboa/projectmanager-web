@@ -45,6 +45,19 @@ class OrganizationTableSeeder extends Seeder
                 $cell->save();
               });
             });
+            
+            $breakdowns = factory(App\Models\Breakdown::class, rand(1, 3))->create();
+            $breakdowns->each(function($breakdown) use($columns, $table) {
+              $breakdown->table_id = $table->id;
+              $breakdown->save();
+              
+              $formulas = factory(App\Models\Formula::class, rand(1, 3))->create();
+              $formulas->each(function($formula) use($breakdown, $columns) {
+                $formula->breakdown_id = $breakdown->id;
+                $formula->column_id = $columns->random()->id;
+                $formula->save();
+              });
+            });
           });
         });
 

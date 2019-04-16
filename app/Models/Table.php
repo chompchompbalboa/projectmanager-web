@@ -9,12 +9,12 @@ class Table extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name'];
+  protected $visible = ['id', 'name', 'breakdowns'];
 
   /**
    * Build custom attributes
    */
-  protected $appends = ['rows', 'columns'];
+  protected $appends = ['breakdowns', 'rows', 'columns'];
   
   /**
    * Get the project this table belongs to
@@ -31,6 +31,16 @@ class Table extends Model
   }
   public function getRowsAttribute() {
     return $this->rows()->get();
+  }
+  
+  /**
+   * Get all the breakdowns that belong to this table
+   */
+  public function breakdowns() {
+    return $this->hasMany('App\Models\Breakdown');
+  }
+  public function getBreakdownsAttribute() {
+    return $this->breakdowns()->get();
   }
   
   /**

@@ -36,9 +36,9 @@ import TableRow from './TableRow'
 const mapStateToProps = state => ({
   id: state.table.id,
   columns: state.table.columns,
-  rows: state.table.rows,
   sortColumn: state.table.sortColumn,
-  sortOrder: state.table.sortOrder
+  sortOrder: state.table.sortOrder,
+  visibleRows: state.table.visibleRows
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -144,7 +144,6 @@ class Table extends PureComponent {
       createColumn,
       deleteColumn,
       deleteRow,
-      rows,
       sortColumn,
       sortOrder,
       sortRows,
@@ -152,7 +151,8 @@ class Table extends PureComponent {
       toggleColumnIsRenaming,
       updateCell,
       updateColumnName,
-      updateColumnWidths
+      updateColumnWidths,
+      visibleRows
     } = this.props
     const {
       contextMenuId,
@@ -161,7 +161,7 @@ class Table extends PureComponent {
       contextMenuLeft,
       isContextMenuOpen
     } = this.state
-    if (rows !== null && columns !== null) {
+    if (visibleRows !== null && columns !== null) {
       return (
         <Container>
           <TableData>
@@ -175,7 +175,7 @@ class Table extends PureComponent {
                 toggleColumnIsRenaming={toggleColumnIsRenaming}
                 updateColumnName={updateColumnName}
                 updateColumnWidths={updateColumnWidths}/>
-              {rows.map(row => {
+              {visibleRows.map(row => {
                 return (
                   <TableRow 
                     key={row.id} 
@@ -232,7 +232,6 @@ Table.propTypes = {
   createTable: func,
   deleteColumn: func,
   deleteRow: func,
-  rows: array,
   setTable: func,
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),
@@ -241,7 +240,8 @@ Table.propTypes = {
   toggleColumnIsRenaming: func,
   updateCell: func,
   updateColumnName: func,
-  updateColumnWidths: func
+  updateColumnWidths: func,
+  visibleRows: array,
 }
 
 //-----------------------------------------------------------------------------

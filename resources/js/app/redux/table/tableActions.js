@@ -41,12 +41,18 @@ const createColumnServer = (newColumn, rowIds, columnPositions) => {
       dispatch(updateColumnId(columnIndex, nextColumnId))
       const state = getState()
       const nextRows = clone(state.table.rows)
+      const nextVisibleRows = clone(state.table.rows)
       // Update the cell ids
       nextCellIds.forEach(({ rowId, nextCellId }) => {
-        const rowIndex = state.table.rows.findIndex(row => row.id === rowId)
-        const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.columnId === nextColumnId)
-        nextRows[rowIndex].cells[cellIndex].id = nextCellId
+        const rowsRowIndex = state.table.rows.findIndex(row => row.id === rowId)
+        const rowsCellIndex = state.table.rows[rowsRowIndex].cells.findIndex(cell => cell.columnId === nextColumnId)
+        nextRows[rowsRowIndex].cells[rowsCellIndex].id = nextCellId
         dispatch(updateRows(nextRows))
+
+        const visibleRowsRowIndex = state.table.visibleRows.findIndex(row => row.id === rowId)
+        const visibleRowsCellIndex = state.table.visibleRows[visibleRowsRowIndex].cells.findIndex(cell => cell.columnId === nextColumnId)
+        nextVisibleRows[visibleRowsRowIndex].cells[visibleRowsCellIndex].id = nextCellId
+        dispatch(updateVisibleRows(nextVisibleRows))
       })
       dispatch(setStatus('SAVED'))
     })
@@ -78,17 +84,22 @@ const createRowServer = newRow => {
         nextRowId,
         rowId
       } = savedRow
-      // Get the row index
-      const rowIndex = getState().table.rows.findIndex(row => row.id === rowId)
       // Update the row id
-      dispatch(updateRowId(rowIndex, nextRowId))
+      dispatch(updateRowId(rowId, nextRowId))
+      // Get the row indexes
+      const rowsRowIndex = getState().table.rows.findIndex(row => row.id === nextRowId)
+      const visibleRowsRowIndex = getState().table.visibleRows.findIndex(row => row.id === nextRowId)
       // Update the cell ids
       const nextRows = clone(getState().table.rows)
+      const nextVisibleRows = clone(getState().table.visibleRows)
       nextCellIds.forEach(({ cellId, nextCellId }) => {
-        const cellIndex = getState().table.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
-        nextRows[rowIndex].cells[cellIndex].id = nextCellId
+        const rowsCellIndex = getState().table.rows[rowsRowIndex].cells.findIndex(cell => cell.id === cellId)
+        nextRows[rowsRowIndex].cells[rowsCellIndex].id = nextCellId
+        const visibleRowsCellIndex = getState().table.visibleRows[visibleRowsRowIndex].cells.findIndex(cell => cell.id === cellId)
+        nextVisibleRows[visibleRowsRowIndex].cells[visibleRowsCellIndex].id = nextCellId
       })
       dispatch(updateRows(nextRows))
+      dispatch(updateVisibleRows(nextVisibleRows))
       dispatch(setStatus('ADDED_ROW'))
   })
   }
@@ -161,6 +172,15 @@ const deleteRowServer = rowId => {
 }
 
 //-----------------------------------------------------------------------------
+// Set Breakdown
+//-----------------------------------------------------------------------------
+export const setBreakdown = (nextTableId, nextBreakdown) => ({
+  type: 'SET_BREAKDOWN',
+  nextBreakdown: nextBreakdown,
+  nextTableId: nextTableId
+})
+
+//-----------------------------------------------------------------------------
 // Set Table
 //-----------------------------------------------------------------------------
 export const setTable = nextTable => ({
@@ -209,26 +229,28 @@ export const toggleColumnIsRenaming = columnId => ({
 export const updateCell = (rowId, cellId, type, value) => {
   return (dispatch, getState) => {
     const state = getState()
+    console.log(rowId, cellId, type, value)
+    console.log(state.table.rows)
     const rowIndex = state.table.rows.findIndex(row => row.id === rowId)
     const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
     // Make sure the value has changed
     if (state.table.rows[rowIndex].cells[cellIndex][type.toLowerCase()] !== value) {
-      dispatch(updateCellServer(cellId, rowIndex, cellIndex, value))
+      dispatch(updateCellServer(rowId, cellId, value))
     }
   }
 
 }
-const updateCellReducer = (rowIndex, cellIndex, nextCell) => ({
+const updateCellReducer = (rowId, cellId, nextCell) => ({
   type: 'UPDATE_CELL',
-  cellIndex: cellIndex,
+  cellId: cellId,
   nextCell: nextCell,
-  rowIndex: rowIndex
+  rowId: rowId
 })
-const updateCellServer = (cellId, rowIndex, cellIndex, value) => {
+const updateCellServer = (rowId, cellId, value) => {
   return dispatch => {
     dispatch(setStatus('UPDATING_CELL'))
     mutation.updateCell(cellId, value).then(updatedCell => {
-      dispatch(updateCellReducer(rowIndex, cellIndex, updatedCell))
+      dispatch(updateCellReducer(rowId, cellId, updatedCell))
       dispatch(setStatus('UPDATED_CELL'))
     })
   }
@@ -359,9 +381,9 @@ const updateColumnWidthsServer = nextColumnWidths => {
 //-----------------------------------------------------------------------------
 // Update Row ID
 //-----------------------------------------------------------------------------
-export const updateRowId = (rowIndex, nextRowId) => ({
+export const updateRowId = (rowId, nextRowId) => ({
   type: 'UPDATE_ROW_ID',
-  rowIndex: rowIndex,
+  rowId: rowId,
   nextRowId: nextRowId
 })
 
@@ -379,4 +401,12 @@ export const updateRows = nextRows => ({
 export const updateTableId = nextTableId => ({
   type: 'UPDATE_TABLE_ID',
   nextTableId: nextTableId
+})
+
+//-----------------------------------------------------------------------------
+// Update VisibleRows
+//-----------------------------------------------------------------------------
+export const updateVisibleRows = nextVisibleRows => ({
+  type: 'UPDATE_VISIBLE_ROWS',
+  nextVisibleRows: nextVisibleRows
 })

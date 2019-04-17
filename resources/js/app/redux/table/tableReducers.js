@@ -8,6 +8,15 @@ import clone from '../../../_utils/clone'
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
+const breakdownRows = (rows, formulas) => {
+  let brokendownRows = rows
+  formulas.forEach(formula => {
+    brokendownRows = brokendownRows.filter(row => row.id !== row.id)
+  })
+  console.log(brokendownRows)
+  return brokendownRows
+}
+
 const defaultCell = (id, columnId) => ({
   id: _.random(-100000, -999999),
   tableId: id,
@@ -56,12 +65,14 @@ const sortRows = (rows, sortColumn, sortOrder) => {
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
+  breakdown: null,
   id: null,
   isEditing: false,
   rows: null,
   columns: null,
   sortColumn: null,
-  sortOrder: null
+  sortOrder: null,
+  visibleRows: null
 }
 
 //-----------------------------------------------------------------------------
@@ -95,10 +106,15 @@ const tableReducers = (state = defaultState, action) => {
         const nextCells = row.cells.concat([defaultCell(state.id, newColumnId)])
         return {...row, cells: nextCells}
       })
+      const nextVisibleRows = state.visibleRows.map(row => {
+        const nextCells = row.cells.concat([defaultCell(state.id, newColumnId)])
+        return {...row, cells: nextCells}
+      })
       return {
         ...state,
         columns: nextColumns,
-        rows: nextRows
+        rows: nextRows,
+        visibleRows: nextVisibleRows
       }
     }
 
@@ -106,15 +122,17 @@ const tableReducers = (state = defaultState, action) => {
       const newRowCells = state.columns.map(column => {
         return defaultCell(state.id, column.id)
       })
+      const newRowId = _.random(-100000, -999999)
       const newRow = {
-        id: _.random(-100000, -999999),
+        id: newRowId,
         tableId: state.id,
         cells: newRowCells,
         isEditable: true
       }
       return {
         ...state,
-        rows: [newRow, ...state.rows]
+        rows: [newRow, ...state.rows],
+        visibleRows: [newRow, ...state.visibleRows]
       }
     }
 
@@ -129,7 +147,8 @@ const tableReducers = (state = defaultState, action) => {
         rows: [],
         columns: [{...firstColumn, position: 0}],
         sortColumn: firstColumn,
-        sortOrder: 'ASC'
+        sortOrder: 'ASC',
+        visibleRows: []
       }
     }
 
@@ -145,10 +164,18 @@ const tableReducers = (state = defaultState, action) => {
           cells: nextCells
         }
       })
+      const nextVisibleRows = state.visibleRows.map(row => {
+        const nextCells = row.cells.filter(cell => cell.columnId !== columnId)
+        return {
+          ...row,
+          cells: nextCells
+        }
+      })
       return {
         ...state,
         columns: nextColumns,
-        rows: nextRows
+        rows: nextRows,
+        visibleRows: nextVisibleRows
       }
     }
 
@@ -157,9 +184,34 @@ const tableReducers = (state = defaultState, action) => {
         rowId
       } = action
       const nextRows = state.rows.filter(row => row.id !== rowId)
+      const nextVisibleRows = state.visibleRows.filter(row => row.id !== rowId)
       return {
         ...state,
-        rows: nextRows
+        rows: nextRows,
+        visibleRows: nextVisibleRows
+      }
+    }
+
+    case 'SET_BREAKDOWN': {
+      const {
+        nextBreakdown,
+        nextTableId
+      } = action
+      if (nextTableId !== state.id) {
+        return {
+          ...state,
+          breakdown: nextBreakdown,
+          id: nextTableId,
+          rows: null,
+          columns: null,
+          sortColumn: null,
+          sortOrder: null
+        }
+      }
+      return {
+        ...state,
+        breakdown: nextBreakdown,
+        visibleRows: breakdownRows(state.rows, nextBreakdown.formulas)
       }
     }
 
@@ -173,15 +225,17 @@ const tableReducers = (state = defaultState, action) => {
       const sortColumn = isNewTable ? null : columns[0] 
       const sortOrder = isNewTable ? null : columns[0].defaultSortOrder
       const sortedColumns = isNewTable ? columns : sortColumns(columns)
-      const sortedRows = isNewTable ? rows : sortRows(rows, sortColumn, sortOrder)
+      const brokendownRows = state.breakdown === null ? rows : breakdownRows(rows, state.breakdown.formulas)
+      const sortedBrokendownRows = isNewTable ? brokendownRows : sortRows(brokendownRows, sortColumn, sortOrder)
       if(state.id === id) {
         return {
           ...state, 
           id: id,
           columns: sortedColumns,
-          rows: sortedRows,
+          rows: rows,
           sortColumn: sortColumn,
-          sortOrder: sortOrder
+          sortOrder: sortOrder,
+          visibleRows: sortedBrokendownRows
         }
       }
       return state
@@ -194,10 +248,12 @@ const tableReducers = (state = defaultState, action) => {
         return {
           ...state, 
           id: nextTableId,
+          breakdown: null,
           rows: null,
           columns: null,
           sortColumn: null,
-          sortOrder: null
+          sortOrder: null,
+          visibleRows: null,
         }
     }
 
@@ -211,13 +267,13 @@ const tableReducers = (state = defaultState, action) => {
       } = action
 
       const nextSortColumn = state.columns.find(column => column.id === nextSortColumnId)
-      const nextRows = sortRows(rows, nextSortColumn, nextSortOrder)
+      const nextVisibleRows = sortRows(rows, nextSortColumn, nextSortOrder)
 
       return {
         ...state,
-        rows: nextRows,
         sortColumn: nextSortColumn,
-        sortOrder: nextSortOrder
+        sortOrder: nextSortOrder,
+        visibleRows: nextVisibleRows,
       }
     }
 
@@ -267,12 +323,20 @@ const tableReducers = (state = defaultState, action) => {
 
     case 'UPDATE_CELL': {
       const {
-        cellIndex,
+        cellId,
         nextCell,
-        rowIndex
+        rowId
       } = action
       const nextState = clone(state)
-      nextState.rows[rowIndex].cells[cellIndex] = nextCell
+
+      const rowsRowIndex = state.rows.findIndex(row => row.id === rowId)
+      const rowsCellIndex = state.rows[rowsRowIndex].cells.findIndex(cell => cell.id === cellId)
+      nextState.rows[rowsRowIndex].cells[rowsCellIndex] = nextCell
+
+      const visibleRowsRowIndex = state.visibleRows.findIndex(row => row.id === rowId)
+      const visibleRowsCellIndex = state.visibleRows[visibleRowsRowIndex].cells.findIndex(cell => cell.id === cellId)
+      nextState.visibleRows[visibleRowsRowIndex].cells[visibleRowsCellIndex] = nextCell
+
       return nextState
     }
 
@@ -306,8 +370,21 @@ const tableReducers = (state = defaultState, action) => {
           cells: nextCells
         }
       })
+      const nextVisibleRows = nextState.visibleRows.map(row => {
+        const nextCells = row.cells.map(cell => {
+          if (cell.columnId === columnId) {
+            cell.columnId = nextColumnId
+          }
+          return cell
+        })
+        return {
+          ...row,
+          cells: nextCells
+        }
+      })
       nextState.columns[columnIndex].id = nextColumnId
       nextState.rows = nextRows
+      nextState.visibleRows = nextVisibleRows
       return nextState
     }
 
@@ -365,10 +442,13 @@ const tableReducers = (state = defaultState, action) => {
     case 'UPDATE_ROW_ID': {
       const {
         nextRowId,
-        rowIndex
+        rowId
       } = action
       const nextState = clone(state)
-      nextState.rows[rowIndex].id = nextRowId
+      const rowsRowIndex = nextState.rows.findIndex(row => row.id === rowId)
+      const visibleRowsRowIndex = nextState.visibleRows.findIndex(row => row.id === rowId)
+      nextState.rows[rowsRowIndex].id = nextRowId
+      nextState.visibleRows[visibleRowsRowIndex].id = nextRowId
       return nextState
     }
 
@@ -379,6 +459,16 @@ const tableReducers = (state = defaultState, action) => {
       return {
         ...state,
         rows: nextRows
+      }
+    }
+
+    case 'UPDATE_VISIBLE_ROWS': {
+      const {
+        nextVisibleRows
+      } = action
+      return {
+        ...state,
+        visibleRows: nextVisibleRows
       }
     }
 

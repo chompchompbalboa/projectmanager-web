@@ -229,8 +229,6 @@ export const toggleColumnIsRenaming = columnId => ({
 export const updateCell = (rowId, cellId, type, value) => {
   return (dispatch, getState) => {
     const state = getState()
-    console.log(rowId, cellId, type, value)
-    console.log(state.table.rows)
     const rowIndex = state.table.rows.findIndex(row => row.id === rowId)
     const cellIndex = state.table.rows[rowIndex].cells.findIndex(cell => cell.id === cellId)
     // Make sure the value has changed

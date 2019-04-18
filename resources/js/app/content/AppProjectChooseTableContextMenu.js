@@ -21,7 +21,7 @@ import ContextMenu from '../components/ContextMenu'
 const mapDispatchToProps = dispatch => ({
   deleteTable: tableId => dispatch(deleteTableAction(tableId)),
   toggleTableIsRenaming: tableId => dispatch(toggleTableIsRenamingAction(tableId)),
-  updateActiveModal: nextActiveModal => dispatch(updateActiveModalAction(nextActiveModal))
+  updateActiveModal: (nextActiveModal, nextActiveModalTableId) => dispatch(updateActiveModalAction(nextActiveModal, nextActiveModalTableId))
 })
 
 //-----------------------------------------------------------------------------
@@ -38,7 +38,7 @@ const AppProjectChooseTableContextMenu = ({
 }) => {
 
   const actions = [
-    { text: 'Breakdowns', action: () => updateActiveModal('BREAKDOWNS') },
+    { text: 'Breakdowns', action: () => updateActiveModal('BREAKDOWNS', id) },
     { text: 'Rename', action: () => toggleTableIsRenaming(id) },
     { text: 'Delete', action: () => deleteTable(id) }
   ]

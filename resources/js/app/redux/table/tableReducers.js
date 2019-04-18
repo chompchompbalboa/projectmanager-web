@@ -13,7 +13,6 @@ const breakdownRows = (rows, formulas) => {
   formulas.forEach(formula => {
     brokendownRows = brokendownRows.filter(row => row.id !== row.id)
   })
-  console.log(brokendownRows)
   return brokendownRows
 }
 
@@ -142,6 +141,7 @@ const tableReducers = (state = defaultState, action) => {
       } = action
       const firstColumn = defaultColumn(null, nextTableId, 1)
       return {
+        breakdown: null,
         id: nextTableId,
         isEditing: true,
         rows: [],

@@ -2,7 +2,8 @@
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  activeModal: null
+  activeModal: null,
+  activeModalTableId: null
 }
 
 //-----------------------------------------------------------------------------
@@ -13,11 +14,14 @@ const modalReducers = (state = defaultState, action) => {
 
     case 'UPDATE_ACTIVE_MODAL': {
       const {
-        nextActiveModal
+        nextActiveModal,
+        nextActiveId
       } = action
+
       return {
         ...state,
-        activeModal: nextActiveModal
+        activeModal: nextActiveModal,
+        activeModalTableId: nextActiveModal === 'BREAKDOWNS' ? nextActiveId : null
       }
     }
 

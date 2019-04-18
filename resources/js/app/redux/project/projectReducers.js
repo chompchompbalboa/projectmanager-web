@@ -21,7 +21,8 @@ const projectReducers = (state = defaultState, action) => {
       const nextTable = {
         id: _.random(-100000, -999999),
         name: "",
-        isRenaming: true
+        breakdowns: [],
+        isRenaming: true,
       }
       return {
         ...state,
@@ -69,6 +70,26 @@ const projectReducers = (state = defaultState, action) => {
         return {
           ...table,
           isRenaming: table.id === tableId ? (table.isRenaming ? false : true) : table.isRenaming
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextActiveProjectTables
+        }
+      }
+    }
+
+    case 'UPDATE_BREAKDOWNS_IN_ACTIVE_PROJECT_TABLES': {
+      const {
+        tableId,
+        nextBreakdowns
+      } = action
+      const nextActiveProjectTables = state.activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : nextBreakdowns
         }
       })
       return {

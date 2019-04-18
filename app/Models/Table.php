@@ -9,7 +9,7 @@ class Table extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name', 'breakdowns'];
+  protected $visible = ['id', 'name', 'breakdowns', 'columns'];
 
   /**
    * Build custom attributes

@@ -98,6 +98,20 @@ export const toggleTableIsRenaming = tableId => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Breakdown
+//-----------------------------------------------------------------------------
+export const updateBreakdowns = (tableId, nextBreakdowns) => {
+  return dispatch => {
+    dispatch(updateBreakdownsInActiveProjectTables(tableId, nextBreakdowns))
+  }
+}
+const updateBreakdownsInActiveProjectTables = (tableId, nextBreakdowns) => ({
+  type: 'UPDATE_BREAKDOWNS_IN_ACTIVE_PROJECT_TABLES',
+  nextBreakdowns: nextBreakdowns,
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
 // Update Table Id
 //-----------------------------------------------------------------------------
 export const updateTableIdInActiveProjectTables = (tableId, nextTableId) => ({

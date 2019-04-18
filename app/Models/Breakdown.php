@@ -10,11 +10,18 @@ class Breakdown extends Model
    * Define which attributes will be visible
    */
   protected $visible = ['id', 'name', 'formulas'];
-  
+
   /**
    * Build custom attributes
    */
-  protected $appends = ['formulas'];
+  protected $appends = ['formulas', 'tableId'];
+
+  /**
+   * Rename table columns from snake case to camel case
+   */
+  public function getTableIdAttribute() {
+    return $this->attributes['table_id'];
+  }
   
   /**
    * Get all the formulas that belong to this breakdown

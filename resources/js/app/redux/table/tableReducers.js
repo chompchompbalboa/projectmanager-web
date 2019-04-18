@@ -8,10 +8,25 @@ import clone from '../../../_utils/clone'
 //-----------------------------------------------------------------------------
 // Helper functions
 //-----------------------------------------------------------------------------
-const breakdownRows = (rows, formulas) => {
+const breakdownRows = (rows, columns, formulas) => {
   let brokendownRows = rows
   formulas.forEach(formula => {
-    brokendownRows = brokendownRows.filter(row => row.id !== row.id)
+    brokendownRows = brokendownRows.filter(row => {
+      const column = columns.find(column => column.id === formula.columnId)
+      const cell = row.cells.find(cell => cell.columnId === formula.columnId)
+      const rowValue = cell[column.type.toLowerCase()]
+      const formulaValue = formula[column.type.toLowerCase()]
+      switch(formula.type) {
+        case 'EQUALS':
+          return rowValue === formulaValue
+        case 'GREATER_THAN':
+          return rowValue > formulaValue
+        case 'LESS_THAN':
+          return rowValue < formulaValue
+        default: 
+          return true
+      }
+    })
   })
   return brokendownRows
 }
@@ -211,7 +226,7 @@ const tableReducers = (state = defaultState, action) => {
       return {
         ...state,
         breakdown: nextBreakdown,
-        visibleRows: breakdownRows(state.rows, nextBreakdown.formulas)
+        visibleRows: breakdownRows(state.rows, state.columns, nextBreakdown.formulas)
       }
     }
 
@@ -225,7 +240,7 @@ const tableReducers = (state = defaultState, action) => {
       const sortColumn = isNewTable ? null : columns[0] 
       const sortOrder = isNewTable ? null : columns[0].defaultSortOrder
       const sortedColumns = isNewTable ? columns : sortColumns(columns)
-      const brokendownRows = state.breakdown === null ? rows : breakdownRows(rows, state.breakdown.formulas)
+      const brokendownRows = state.breakdown === null ? rows : breakdownRows(rows, columns, state.breakdown.formulas)
       const sortedBrokendownRows = isNewTable ? brokendownRows : sortRows(brokendownRows, sortColumn, sortOrder)
       if(state.id === id) {
         return {

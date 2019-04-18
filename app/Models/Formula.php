@@ -9,7 +9,18 @@ class Formula extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'breakdown_id', 'column_id', 'type', 'boolean', 'datetime', 'number', 'string'];
+  protected $visible = ['id', 'breakdownId', 'columnId', 'type', 'boolean', 'datetime', 'number', 'string'];
+
+  /**
+   * Rename table columns from snake case to camel case
+   */
+  protected $appends = [ 'breakdownId', 'columnId' ];
+  public function getColumnIdAttribute() {
+    return $this->attributes['column_id'];
+  }
+  public function getBreakdownIdAttribute() {
+    return $this->attributes['breakdown_id'];
+  }
   
   /**
    * Get the project this table belongs to

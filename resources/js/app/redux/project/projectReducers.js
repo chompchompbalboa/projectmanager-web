@@ -81,7 +81,7 @@ const projectReducers = (state = defaultState, action) => {
       }
     }
 
-    case 'UPDATE_BREAKDOWNS_IN_ACTIVE_PROJECT_TABLES': {
+    case 'UPDATE_BREAKDOWNS': {
       const {
         tableId,
         nextBreakdowns

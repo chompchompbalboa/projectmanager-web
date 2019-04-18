@@ -6,6 +6,7 @@ import { timing } from '../../../_config'
 
 import { setStatus } from '../status/statusActions'
 import { 
+  setBreakdown,
   setTableId,
   updateColumnId,
   updateTableId
@@ -101,12 +102,17 @@ export const toggleTableIsRenaming = tableId => ({
 // Update Breakdown
 //-----------------------------------------------------------------------------
 export const updateBreakdowns = (tableId, nextBreakdowns) => {
-  return dispatch => {
-    dispatch(updateBreakdownsInActiveProjectTables(tableId, nextBreakdowns))
+  return (dispatch, getState) => {
+    dispatch(updateBreakdownsReducer(tableId, nextBreakdowns))
+    if(tableId === getState().table.id && getState().table.breakdown !== null) {
+      const breakdownId = getState().table.breakdown.id
+      const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+      dispatch(setBreakdown(tableId, nextBreakdown))
+    }
   }
 }
-const updateBreakdownsInActiveProjectTables = (tableId, nextBreakdowns) => ({
-  type: 'UPDATE_BREAKDOWNS_IN_ACTIVE_PROJECT_TABLES',
+const updateBreakdownsReducer = (tableId, nextBreakdowns) => ({
+  type: 'UPDATE_BREAKDOWNS',
   nextBreakdowns: nextBreakdowns,
   tableId: tableId
 })

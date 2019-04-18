@@ -2,12 +2,11 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, number } from 'prop-types'
+import { array, func, number } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { timing } from '../../_config'
-import clone from '../../_utils/clone'
 
 import {
   updateBreakdowns as updateBreakdownsAction
@@ -102,8 +101,7 @@ class AppModalBreakdowns extends Component {
   
   render() {
     const {
-      columns, 
-      tableId 
+      columns
     } = this.props
     const {
       breakdowns
@@ -131,11 +129,12 @@ class AppModalBreakdowns extends Component {
                      value={breakdown.name !== null ? breakdown.name : ""}/>
                 </NameContainer>
                 <FormulasContainer>
-                  {breakdown.formulas.map((formula, formulaIndex) => {
-                    const column = columns.find(column => column.id === formula.column_id)
+                  {breakdown.formulas.map(formula => {
+                    console.log(formula)
+                    const column = columns.find(column => column.id === formula.columnId)
                     return (
                       <Formula
-                         key={formula.id}>
+                         key={formula.id}>  
                         <Column>
                           {column.name}
                         </Column>
@@ -144,7 +143,7 @@ class AppModalBreakdowns extends Component {
                         </Type>
                         <ValueContainer>
                           <ValueInput
-                            onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, formula.name, formula.type, e.target.value)}
+                            onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, column.id, formula.type, e.target.value)}
                             value={formula[column.type.toLowerCase()] !== null ? formula[column.type.toLowerCase()] : ""}/>
                         </ValueContainer>
                       </Formula>
@@ -166,7 +165,8 @@ class AppModalBreakdowns extends Component {
 AppModalBreakdowns.propTypes = {
   breakdowns: array,
   columns: array,
-  tableId: number
+  tableId: number,
+  updateBreakdowns: func
 }
 AppModalBreakdowns.defaultProps = {
   breakdowns: [

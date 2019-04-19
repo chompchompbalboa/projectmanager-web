@@ -42,7 +42,7 @@ class Modal extends Component {
     } = this.props
     return (
       <Container
-        onClick={e => this.handleClick(e)}>
+        onMouseDown={e => this.handleClick(e)}>
         <ContentContainer
           ref={this.contentContainer}>
           {children}

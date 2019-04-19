@@ -38,10 +38,56 @@ class AppModalBreakdowns extends Component {
 
   saveTimeout = null
   
-  types = {
-    EQUALS: '=',
-    GREATER_THAN: '>',
-    LESS_THAN: '<'
+  types = [
+    { type: 'EQUALS', text: "="},
+    { type: 'GREATER_THAN', text: ">"},
+    { type: 'LESS_THAN', text: "<"}
+  ]  
+
+  createFormula = breakdownId => {
+    clearTimeout(this.saveTimeout)
+    const {
+      columns
+    } = this.props
+    const {
+      breakdowns
+    } = this.state
+    const nextBreakdowns = breakdowns.map(breakdown => {
+      return {
+        ...breakdown,
+        formulas: breakdown.id !== breakdownId ? breakdown.formulas : [...breakdown.formulas, {
+          id: _.random(-100000, -900000),
+          name: null,
+          type: 'EQUALS',
+          columnId: columns[0].id,
+          boolean: null,
+          datetime: null, 
+          number: null,
+          string: null
+        }]
+      }
+    })
+    this.setState({
+      breakdowns: nextBreakdowns
+    })
+    this.saveTimeout = window.setTimeout(this.saveChanges, timing.SAVE_INTERVAL)
+  }
+
+  deleteFormula = (breakdownId, formulaId) => {
+    clearTimeout(this.saveTimeout)
+    const {
+      breakdowns
+    } = this.state
+    const nextBreakdowns = breakdowns.map(breakdown => {
+      return {
+        ...breakdown,
+        formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.filter(formula => formula.id !== formulaId)
+      }
+    })
+    this.setState({
+      breakdowns: nextBreakdowns
+    })
+    this.saveTimeout = window.setTimeout(this.saveChanges, timing.SAVE_INTERVAL)
   }
 
   updateBreakdown = (breakdownId, nextName) => {
@@ -113,9 +159,10 @@ class AppModalBreakdowns extends Component {
             <NameContainer>Name</NameContainer>
             <FormulasContainer>
               <Formula>
-                <Column>Column</Column>
-                <Type>Type</Type>
+                <ColumnContainer>Column</ColumnContainer>
+                <TypeContainer>Type</TypeContainer>
                 <ValueContainer>Value</ValueContainer>
+                <DeleteContainer/>
               </Formula>
             </FormulasContainer>
           </Breakdown>
@@ -130,25 +177,58 @@ class AppModalBreakdowns extends Component {
                 </NameContainer>
                 <FormulasContainer>
                   {breakdown.formulas.map(formula => {
-                    console.log(formula)
                     const column = columns.find(column => column.id === formula.columnId)
                     return (
                       <Formula
-                         key={formula.id}>  
-                        <Column>
-                          {column.name}
-                        </Column>
-                        <Type>
-                          {this.types[formula.type]}
-                        </Type>
+                         key={formula.id}>
+                        <ColumnContainer>
+                          <ColumnSelect
+                            onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, Number(e.target.value), formula.type, formula[column.type.toLowerCase()])}
+                            value={formula.columnId}>
+                            {columns.map(column => {
+                              return (
+                                <ColumnOption
+                                  key={column.id}
+                                  value={column.id}>
+                                  {column.name}
+                                </ColumnOption>
+                              )
+                            })}
+                            {column.name}
+                          </ColumnSelect>
+                        </ColumnContainer>
+                        <TypeContainer>
+                          <TypeSelect
+                            onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, column.id, e.target.value, formula[column.type.toLowerCase()])}
+                            value={formula.type}>
+                            {this.types.map(type => {
+                              return (
+                                <TypeOption
+                                  key={type.type}
+                                  value={type.type}>
+                                  {type.text}
+                                </TypeOption>
+                              )
+                            })}
+                            {this.types[formula.type]}
+                          </TypeSelect>
+                        </TypeContainer>
                         <ValueContainer>
                           <ValueInput
                             onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, column.id, formula.type, e.target.value)}
                             value={formula[column.type.toLowerCase()] !== null ? formula[column.type.toLowerCase()] : ""}/>
                         </ValueContainer>
+                        <DeleteContainer
+                          onClick={() => this.deleteFormula(breakdown.id, formula.id)}>
+                          X
+                        </DeleteContainer>
                       </Formula>
                     )
                   })}
+                  <AddFormulaContainer
+                    onClick={() => this.createFormula(breakdown.id)}>
+                    +
+                  </AddFormulaContainer>
                 </FormulasContainer>
               </Breakdown>
             )
@@ -207,7 +287,6 @@ const NameContainer = styled.div`
 
 const StyledInput = styled.input`
   width: 100%;
-  border: none;
   outline: none;
   background-color: transparent;
   text-align: center;
@@ -222,25 +301,48 @@ const FormulasContainer = styled.div`
 const Formula = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 `
 
-const Column = styled.div`
-  width: 33%;
+const ColumnContainer = styled.div`
+  width: 30%;
   text-align: center;
 `
 
-const Type = styled.div`
-  width: 33%;
+const ColumnSelect = styled.select`
+`
+
+const ColumnOption = styled.option``
+
+const TypeContainer = styled.div`
+  width: 30%;
   text-align: center;
 `
+
+const TypeSelect = styled.select``
+
+const TypeOption = styled.option``
 
 const ValueContainer = styled.div`
-  width: 33%;
+  width: 30%;
   text-align: center;
 `
 
 const ValueInput = styled(StyledInput)``
+
+const DeleteContainer = styled.div`
+  cursor: pointer;
+  width: 10%;
+  text-align: right;
+  color: red;
+`
+
+const AddFormulaContainer = styled.div`
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`
 
 export default connect(
   mapStateToProps,

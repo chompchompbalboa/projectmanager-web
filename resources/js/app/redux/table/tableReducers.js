@@ -18,7 +18,7 @@ const breakdownRows = (rows, columns, formulas) => {
       const formulaValue = formula[column.type.toLowerCase()]
       switch(formula.type) {
         case 'EQUALS':
-          return rowValue === formulaValue
+          return rowValue == formulaValue
         case 'GREATER_THAN':
           return rowValue > formulaValue
         case 'LESS_THAN':

@@ -29,8 +29,10 @@ Route::prefix('app')->group(function () {
   Route::patch('/view', 'ViewController@updateView');
 
   Route::resources([
+    'breakdowns' => 'BreakdownController',
     'cells' => 'CellController',
     'columns' => 'ColumnController',
+    'formulas' => 'FormulaController',
     'rows' => 'RowController',
     'tables' => 'TableController',
   ]);

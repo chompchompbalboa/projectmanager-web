@@ -12,6 +12,11 @@ import {
   updateTableId
 } from '../table/tableActions'
 
+//-----------------------------------------------------------------------------
+// Timeouts
+//-----------------------------------------------------------------------------
+let setBreakdownTimeout = null
+let updateBreakdownFormulaTimeout = null
 
 //-----------------------------------------------------------------------------
 // Create Breakdown Formula
@@ -19,14 +24,33 @@ import {
 export const createBreakdownFormula = (tableId, breakdownId, defaultColumnId) => {
   return dispatch => {
     dispatch(createBreakdownFormulaReducer(tableId, breakdownId, defaultColumnId))
+    dispatch(createBreakdownFormulaServer(tableId, breakdownId))
   }
 }
+
 const createBreakdownFormulaReducer = (tableId, breakdownId, defaultColumnId) => ({
   type: 'CREATE_BREAKDOWN_FORMULA',
   breakdownId: breakdownId,
   defaultColumnId: defaultColumnId,
   tableId: tableId
 })
+
+const createBreakdownFormulaServer = (tableId, breakdownId) => {
+  return (dispatch, getState) => {
+    const newFormula = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId).formulas.find(formula => formula.id < 0)
+    mutation.createFormula(breakdownId, newFormula).then(formulaIds => {
+      const {
+        formulaId,
+        nextFormulaId
+      } = formulaIds
+      dispatch(updateBreakdownFormulaId(tableId, breakdownId, formulaId, nextFormulaId))
+      if(tableId === getState().table.id && getState().table.breakdown !== null) {
+        const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+        dispatch(setBreakdown(tableId, nextBreakdown))
+      }
+    })
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Create Table
@@ -67,10 +91,7 @@ const createTableServer = (projectId, tableId) => {
 export const deleteBreakdownFormula = (tableId, breakdownId, formulaId) => {
   return (dispatch, getState) => {
     dispatch(deleteBreakdownFormulaReducer(tableId, breakdownId, formulaId))
-    if(tableId === getState().table.id && getState().table.breakdown !== null) {
-      const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
-      dispatch(setBreakdown(tableId, nextBreakdown))
-    }
+    dispatch(deleteBreakdownFormulaServer(tableId, breakdownId, formulaId))
   }
 }
 const deleteBreakdownFormulaReducer = (tableId, breakdownId, formulaId) => ({
@@ -79,6 +100,18 @@ const deleteBreakdownFormulaReducer = (tableId, breakdownId, formulaId) => ({
   formulaId: formulaId,
   tableId: tableId
 })
+const deleteBreakdownFormulaServer = (tableId, breakdownId, formulaId) => {
+  return (dispatch, getState) => {
+    mutation.deleteFormula(formulaId).then(success => {
+      if(success) {
+        if(tableId === getState().table.id && getState().table.breakdown !== null) {
+          const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+          dispatch(setBreakdown(tableId, nextBreakdown))
+        }
+      }
+    })
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Delete Table
@@ -139,13 +172,12 @@ export const toggleTableIsRenaming = tableId => ({
 //-----------------------------------------------------------------------------
 // Update Breakdown Name
 //-----------------------------------------------------------------------------
+let updateBreakdownNameTimeout = null
 export const updateBreakdownName = (tableId, breakdownId, nextBreakdownName) => {
   return (dispatch, getState) => {
     dispatch(updateBreakdownNameReducer(tableId, breakdownId, nextBreakdownName))
-    if(tableId === getState().table.id && getState().table.breakdown !== null) {
-      const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
-      dispatch(setBreakdown(tableId, nextBreakdown))
-    }
+    clearTimeout(updateBreakdownNameTimeout)
+    updateBreakdownNameTimeout = window.setTimeout(() => dispatch(updateBreakdownNameServer(tableId, breakdownId)), timing.SAVE_INTERVAL)
   }
 }
 const updateBreakdownNameReducer = (tableId, breakdownId, nextBreakdownName) => ({
@@ -154,36 +186,25 @@ const updateBreakdownNameReducer = (tableId, breakdownId, nextBreakdownName) => 
   nextBreakdownName: nextBreakdownName,
   tableId: tableId
 })
-
-//-----------------------------------------------------------------------------
-// Update Breakdowns
-//-----------------------------------------------------------------------------
-export const updateBreakdowns = (tableId, nextBreakdowns) => {
+const updateBreakdownNameServer = (tableId, breakdownId) => {
   return (dispatch, getState) => {
-    dispatch(updateBreakdownsReducer(tableId, nextBreakdowns))
-    if(tableId === getState().table.id && getState().table.breakdown !== null) {
-      const breakdownId = getState().table.breakdown.id
-      const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
-      dispatch(setBreakdown(tableId, nextBreakdown))
-    }
+    const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    mutation.updateBreakdown(breakdownId, nextBreakdown).then(breakdown => {
+      if(tableId === getState().table.id && getState().table.breakdown !== null) {
+        dispatch(setBreakdown(tableId, breakdown))
+      }
+    })
   }
 }
-const updateBreakdownsReducer = (tableId, nextBreakdowns) => ({
-  type: 'UPDATE_BREAKDOWNS',
-  nextBreakdowns: nextBreakdowns,
-  tableId: tableId
-})
 
 //-----------------------------------------------------------------------------
 // Update Breakdown Formula Column Id
 //-----------------------------------------------------------------------------
 export const updateBreakdownFormulaColumnId = (tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId) => {
   return (dispatch, getState) => {
+    clearTimeout(updateBreakdownFormulaTimeout)
     dispatch(updateBreakdownFormulaColumnIdReducer(tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId))
-    if(tableId === getState().table.id && getState().table.breakdown !== null) {
-      const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
-      dispatch(setBreakdown(tableId, nextBreakdown))
-    }
+    updateBreakdownFormulaTimeout = window.setTimeout(() => dispatch(updateBreakdownFormulaServer(tableId, breakdownId, formulaId)), timing.SAVE_INTERVAL)
   }
 }
 const updateBreakdownFormulaColumnIdReducer = (tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId) => ({
@@ -195,15 +216,24 @@ const updateBreakdownFormulaColumnIdReducer = (tableId, breakdownId, formulaId, 
 })
 
 //-----------------------------------------------------------------------------
+// Update Breakdown Formula Id
+//-----------------------------------------------------------------------------
+const updateBreakdownFormulaId = (tableId, breakdownId, formulaId, nextFormulaId) => ({
+  type: 'UPDATE_BREAKDOWN_FORMULA_ID',
+  breakdownId: breakdownId,
+  formulaId: formulaId,
+  nextFormulaId: nextFormulaId,
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
 // Update Breakdown Formula Type
 //-----------------------------------------------------------------------------
 export const updateBreakdownFormulaType = (tableId, breakdownId, formulaId, nextBreakdownFormulaType) => {
   return (dispatch, getState) => {
+    clearTimeout(updateBreakdownFormulaTimeout)
     dispatch(updateBreakdownFormulaTypeReducer(tableId, breakdownId, formulaId, nextBreakdownFormulaType))
-    if(tableId === getState().table.id && getState().table.breakdown !== null) {
-      const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
-      dispatch(setBreakdown(tableId, nextBreakdown))
-    }
+    updateBreakdownFormulaTimeout = window.setTimeout(() => dispatch(updateBreakdownFormulaServer(tableId, breakdownId, formulaId)), timing.SAVE_INTERVAL)
   }
 }
 const updateBreakdownFormulaTypeReducer = (tableId, breakdownId, formulaId, nextBreakdownFormulaType) => ({
@@ -219,11 +249,9 @@ const updateBreakdownFormulaTypeReducer = (tableId, breakdownId, formulaId, next
 //-----------------------------------------------------------------------------
 export const updateBreakdownFormulaValue = (tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue) => {
   return (dispatch, getState) => {
+    clearTimeout(updateBreakdownFormulaTimeout)
     dispatch(updateBreakdownFormulaValueReducer(tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue))
-    if(tableId === getState().table.id && getState().table.breakdown !== null) {
-      const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
-      dispatch(setBreakdown(tableId, nextBreakdown))
-    }
+    updateBreakdownFormulaTimeout = window.setTimeout(() => dispatch(updateBreakdownFormulaServer(tableId, breakdownId, formulaId)), timing.SAVE_INTERVAL)
   }
 }
 const updateBreakdownFormulaValueReducer = (tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue) => ({
@@ -234,6 +262,21 @@ const updateBreakdownFormulaValueReducer = (tableId, breakdownId, formulaId, col
   nextBreakdownFormulaValue: nextBreakdownFormulaValue,
   tableId: tableId
 })
+
+//-----------------------------------------------------------------------------
+// Update Breakdown Formula Server
+//-----------------------------------------------------------------------------
+const updateBreakdownFormulaServer = (tableId, breakdownId, formulaId) => {
+  return (dispatch, getState) => {
+    const nextFormula = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId).formulas.find(formula => formula.id === formulaId)
+    mutation.updateFormula(formulaId, nextFormula).then(formula => {
+      if(tableId === getState().table.id && getState().table.breakdown !== null) {
+        const nextBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+        dispatch(setBreakdown(tableId, nextBreakdown))
+      }
+    })
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Update Table Id

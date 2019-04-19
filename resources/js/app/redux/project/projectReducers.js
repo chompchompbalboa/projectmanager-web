@@ -34,7 +34,6 @@ const projectReducers = (state = defaultState, action) => {
               ...breakdown,
               formulas: breakdown.id !== breakdownId ? breakdown.formulas : [...breakdown.formulas, {
                 id: _.random(-100000, -900000),
-                name: null,
                 type: 'EQUALS',
                 columnId: defaultColumnId,
                 boolean: null,
@@ -180,6 +179,41 @@ const projectReducers = (state = defaultState, action) => {
       }
     }
 
+    case 'UPDATE_BREAKDOWN_FORMULA_ID': {
+      const {
+        breakdownId,
+        formulaId,
+        nextFormulaId,
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.map(formula => {
+                return {
+                  ...formula,
+                  id: formula.id !== formulaId ? formula.id : nextFormulaId
+                }
+              })
+            }
+          })
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
     case 'UPDATE_BREAKDOWN_FORMULA_TYPE': {
       const {
         breakdownId,
@@ -282,27 +316,7 @@ const projectReducers = (state = defaultState, action) => {
         }
       }
     }
-
-    case 'UPDATE_BREAKDOWNS': {
-      const {
-        tableId,
-        nextBreakdowns
-      } = action
-      const nextActiveProjectTables = state.activeProject.tables.map(table => {
-        return {
-          ...table,
-          breakdowns: table.id !== tableId ? table.breakdowns : nextBreakdowns
-        }
-      })
-      return {
-        ...state,
-        activeProject: {
-          ...state.activeProject,
-          tables: nextActiveProjectTables
-        }
-      }
-    }
-
+      
     case 'UPDATE_TABLE_ID_IN_ACTIVE_PROJECT_TABLES': {
       const {
         tableId,

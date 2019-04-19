@@ -24,6 +24,15 @@ export const createRow = async (newRow) => {
   })
 }
 
+export const createFormula = async (breakdownId, newFormula) => {  
+  return axios.post('/app/formulas', {
+    breakdownId: breakdownId,
+    newFormula: newFormula
+  }).then(response => {
+    return response.data
+  })
+}
+
 export const createTable = async (projectId, tableId) => {  
   return axios.post('/app/tables', {
     projectId: projectId,
@@ -39,6 +48,12 @@ export const deleteColumn = async (columnId) => {
   })
 }
 
+export const deleteFormula = async (formulaId) => {  
+  return axios.delete('/app/formulas/' + formulaId).then(response => {
+    return response.data
+  })
+}
+
 export const deleteRow = async (rowId) => {  
   return axios.delete('/app/rows/' + rowId).then(response => {
     return response.data
@@ -47,6 +62,24 @@ export const deleteRow = async (rowId) => {
 
 export const deleteTable = async (tableId) => {  
   return axios.delete('/app/tables/' + tableId).then(response => {
+    return response.data
+  })
+}
+
+export const updateBreakdown = async (id, breakdown) => {  
+  return axios.patch('/app/breakdowns/' + id, {
+    id: id,
+    breakdown: breakdown
+  }).then(response => {
+    return response.data
+  })
+}
+
+export const updateFormula = async (id, formula) => {  
+  return axios.patch('/app/formulas/' + id, {
+    id: id,
+    formula: formula
+  }).then(response => {
     return response.data
   })
 }

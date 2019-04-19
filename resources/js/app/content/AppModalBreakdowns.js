@@ -12,8 +12,7 @@ import {
   updateBreakdownFormulaColumnId as updateBreakdownFormulaColumnIdAction,
   updateBreakdownFormulaType as updateBreakdownFormulaTypeAction,
   updateBreakdownFormulaValue as updateBreakdownFormulaValueAction,
-  updateBreakdownName as updateBreakdownNameAction,
-  updateBreakdowns as updateBreakdownsAction
+  updateBreakdownName as updateBreakdownNameAction
 } from '../redux/project/projectActions'
 
 import Modal from '../components/Modal'
@@ -33,8 +32,7 @@ const mapDispatchToProps = dispatch => ({
   updateBreakdownFormulaColumnId: (tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId) => dispatch(updateBreakdownFormulaColumnIdAction(tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId)),
   updateBreakdownFormulaType: (tableId, breakdownId, formulaId, nextBreakdownFormulaType) => dispatch(updateBreakdownFormulaTypeAction(tableId, breakdownId, formulaId, nextBreakdownFormulaType)),
   updateBreakdownFormulaValue: (tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue) => dispatch(updateBreakdownFormulaValueAction(tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue)),
-  updateBreakdownName: (tableId, breakdownId, nextBreakdownName) => dispatch(updateBreakdownNameAction(tableId, breakdownId, nextBreakdownName)),
-  updateBreakdowns: (tableId, nextBreakdowns) => dispatch(updateBreakdownsAction(tableId, nextBreakdowns))
+  updateBreakdownName: (tableId, breakdownId, nextBreakdownName) => dispatch(updateBreakdownNameAction(tableId, breakdownId, nextBreakdownName))
 })
 
 //-----------------------------------------------------------------------------

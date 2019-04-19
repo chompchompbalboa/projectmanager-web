@@ -274,7 +274,7 @@ const tableReducers = (state = defaultState, action) => {
 
     case 'SORT_ROWS': {
       const {
-        rows
+        visibleRows
       } = state
       const {
         nextSortColumnId,
@@ -282,7 +282,7 @@ const tableReducers = (state = defaultState, action) => {
       } = action
 
       const nextSortColumn = state.columns.find(column => column.id === nextSortColumnId)
-      const nextVisibleRows = sortRows(rows, nextSortColumn, nextSortOrder)
+      const nextVisibleRows = sortRows(visibleRows, nextSortColumn, nextSortOrder)
 
       return {
         ...state,

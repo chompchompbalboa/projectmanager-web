@@ -7,7 +7,9 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import {
+  createBreakdown as createBreakdownAction,
   createBreakdownFormula as createBreakdownFormulaAction,
+  deleteBreakdown as deleteBreakdownAction,
   deleteBreakdownFormula as deleteBreakdownFormulaAction,
   updateBreakdownFormulaColumnId as updateBreakdownFormulaColumnIdAction,
   updateBreakdownFormulaType as updateBreakdownFormulaTypeAction,
@@ -27,7 +29,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  createBreakdown: tableId => dispatch(createBreakdownAction(tableId)),
   createBreakdownFormula: (tableId, breakdownId, defaultColumnId) => dispatch(createBreakdownFormulaAction(tableId, breakdownId, defaultColumnId)),
+  deleteBreakdown: (tableId, breakdownId) => dispatch(deleteBreakdownAction(tableId, breakdownId)),
   deleteBreakdownFormula: (tableId, breakdownId, formulaId) => dispatch(deleteBreakdownFormulaAction(tableId, breakdownId, formulaId)),
   updateBreakdownFormulaColumnId: (tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId) => dispatch(updateBreakdownFormulaColumnIdAction(tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId)),
   updateBreakdownFormulaType: (tableId, breakdownId, formulaId, nextBreakdownFormulaType) => dispatch(updateBreakdownFormulaTypeAction(tableId, breakdownId, formulaId, nextBreakdownFormulaType)),
@@ -41,7 +45,9 @@ const mapDispatchToProps = dispatch => ({
 const AppModalBreakdowns  = ({
   breakdowns,
   columns,
+  createBreakdown,
   createBreakdownFormula,
+  deleteBreakdown,
   deleteBreakdownFormula,
   tableId,
   updateBreakdownFormulaColumnId,
@@ -129,14 +135,26 @@ const AppModalBreakdowns  = ({
                     </Formula>
                   )
                 })}
-                <AddFormulaContainer
+                <BottomContainer>
+                  <DeleteBreakdown
+                    onClick={() => deleteBreakdown(tableId, breakdown.id)}>
+                    Delete Breakdown
+                  </DeleteBreakdown>
+                  <AddFormula
                   onClick={() => createBreakdownFormula(tableId, breakdown.id, columns[0].id)}>
-                  +
-                </AddFormulaContainer>
+                    Add formula +
+                  </AddFormula>
+                </BottomContainer>
               </FormulasContainer>
             </Breakdown>
           )
         })}
+        <AddBreakdownContainer>
+          <AddBreakdown
+            onClick={() => createBreakdown(tableId)}>
+            Add breakdown +
+          </AddBreakdown>
+        </AddBreakdownContainer>
       </BreakdownsContainer>
     </Modal>
   )
@@ -148,7 +166,9 @@ const AppModalBreakdowns  = ({
 AppModalBreakdowns.propTypes = {
   breakdowns: array,
   columns: array,
+  createBreakdown: func,
   createBreakdownFormula: func,
+  deleteBreakdown: func,
   deleteBreakdownFormula: func,
   tableId: number,
   updateBreakdownFormulaColumnId: func,
@@ -232,11 +252,31 @@ const DeleteContainer = styled.div`
   color: red;
 `
 
-const AddFormulaContainer = styled.div`
+const BottomContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`
+
+const DeleteBreakdown = styled.div`
   cursor: pointer;
+  text-align: left;
+`
+
+const AddFormula = styled.div`
+  cursor: pointer;
+  text-align: right;
+`
+
+const AddBreakdownContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+`
+
+const AddBreakdown = styled.div`
+  cursor: pointer;
+  text-align: right;
 `
 
 export default connect(

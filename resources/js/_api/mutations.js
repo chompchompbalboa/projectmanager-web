@@ -6,6 +6,14 @@ import axios from './axios'
 //-----------------------------------------------------------------------------
 // Queries
 //-----------------------------------------------------------------------------
+export const createBreakdown = async (tableId, newBreakdown) => {  
+  return axios.post('/app/breakdowns', {
+    newBreakdown: newBreakdown,
+    tableId: tableId
+  }).then(response => {
+    return response.data
+  })
+}
 export const createColumn = async (newColumn, rowIds, columnPositions) => {  
   return axios.post('/app/columns', {
     newColumn: newColumn,
@@ -41,6 +49,13 @@ export const createTable = async (projectId, tableId) => {
     return response.data
   })
 }
+
+export const deleteBreakdown = async (breakdownId) => {  
+  return axios.delete('/app/breakdowns/' + breakdownId).then(response => {
+    return response.data
+  })
+}
+
 
 export const deleteColumn = async (columnId) => {  
   return axios.delete('/app/columns/' + columnId).then(response => {

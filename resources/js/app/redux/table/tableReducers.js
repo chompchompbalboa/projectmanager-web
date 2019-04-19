@@ -226,7 +226,7 @@ const tableReducers = (state = defaultState, action) => {
       return {
         ...state,
         breakdown: nextBreakdown,
-        visibleRows: breakdownRows(state.rows, state.columns, nextBreakdown.formulas)
+        visibleRows: nextBreakdown !== null ? sortRows(breakdownRows(state.rows, state.columns, nextBreakdown.formulas), state.sortColumn, state.sortOrder) : []
       }
     }
 
@@ -260,6 +260,7 @@ const tableReducers = (state = defaultState, action) => {
       const {
         nextTableId,
       } = action
+      if(state.id !== nextTableId) {
         return {
           ...state, 
           id: nextTableId,
@@ -270,6 +271,12 @@ const tableReducers = (state = defaultState, action) => {
           sortOrder: null,
           visibleRows: null,
         }
+      }
+      return {
+        ...state,
+        breakdown: null,
+        visibleRows: state.rows
+      }
     }
 
     case 'SORT_ROWS': {

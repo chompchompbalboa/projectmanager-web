@@ -21,6 +21,33 @@ let updateBreakdownFormulaTimeout = null
 //-----------------------------------------------------------------------------
 // Create Breakdown Formula
 //-----------------------------------------------------------------------------
+export const createBreakdown = (tableId) => {
+  return dispatch => {
+    dispatch(createBreakdownReducer(tableId))
+    dispatch(createBreakdownServer(tableId))
+  }
+}
+
+const createBreakdownReducer = (tableId) => ({
+  type: 'CREATE_BREAKDOWN',
+  tableId: tableId
+})
+
+const createBreakdownServer = (tableId) => {
+  return (dispatch, getState) => {
+    const newBreakdown = getState().project.activeProject.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id < 0)
+    mutation.createBreakdown(tableId, newBreakdown).then(breakdownIds => {
+      const {
+        breakdownId,
+        nextBreakdownId
+      } = breakdownIds
+      dispatch(updateBreakdownId(tableId, breakdownId, nextBreakdownId))
+    })
+  }
+}
+//-----------------------------------------------------------------------------
+// Create Breakdown Formula
+//-----------------------------------------------------------------------------
 export const createBreakdownFormula = (tableId, breakdownId, defaultColumnId) => {
   return dispatch => {
     dispatch(createBreakdownFormulaReducer(tableId, breakdownId, defaultColumnId))
@@ -81,6 +108,32 @@ const createTableServer = (projectId, tableId) => {
       dispatch(updateColumnId(0, firstColumnId))
       dispatch(updateTableId(nextTableId))
       dispatch(setStatus('SAVED'))
+    })
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Delete Breakdown
+//-----------------------------------------------------------------------------
+export const deleteBreakdown = (tableId, breakdownId) => {
+  return (dispatch, getState) => {
+    dispatch(deleteBreakdownReducer(tableId, breakdownId))
+    dispatch(deleteBreakdownServer(tableId, breakdownId))
+  }
+}
+const deleteBreakdownReducer = (tableId, breakdownId) => ({
+  type: 'DELETE_BREAKDOWN',
+  breakdownId: breakdownId,
+  tableId: tableId
+})
+const deleteBreakdownServer = (tableId, breakdownId) => {
+  return (dispatch, getState) => {
+    mutation.deleteBreakdown(breakdownId).then(success => {
+      if(success) {
+        if(tableId === getState().table.id && getState().table.breakdown !== null && getState().table.breakdown.id === breakdownId) {
+          dispatch(setBreakdown(tableId, null))
+        }
+      }
     })
   }
 }
@@ -166,6 +219,16 @@ export const setProjects = nextProjects => ({
 //-----------------------------------------------------------------------------
 export const toggleTableIsRenaming = tableId => ({
   type: 'TOGGLE_TABLE_IS_RENAMING',
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
+// Update Breakdown Id
+//-----------------------------------------------------------------------------
+const updateBreakdownId = (tableId, breakdownId, nextBreakdownId) => ({
+  type: 'UPDATE_BREAKDOWN_ID',
+  breakdownId: breakdownId,
+  nextBreakdownId: nextBreakdownId,
   tableId: tableId
 })
 

@@ -16,6 +16,32 @@ const defaultState = {
 //-----------------------------------------------------------------------------
 const projectReducers = (state = defaultState, action) => {
   switch(action.type) {
+      
+    case 'CREATE_BREAKDOWN': {
+      const {
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : [...table.breakdowns, {
+            id: _.random(-100000, -900000),
+            name: null,
+            formulas: []
+          }]
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
 
     case 'CREATE_BREAKDOWN_FORMULA': {
       const {
@@ -73,11 +99,17 @@ const projectReducers = (state = defaultState, action) => {
       }
     }
 
-    case 'DELETE_TABLE': {
+    case 'DELETE_BREAKDOWN': {
       const {
-        tableId
+        tableId,
+        breakdownId
       } = action
-      const nextTables = state.activeProject.tables.filter(table => table.id !== tableId)
+      const nextTables = state.activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.filter(breakdown => breakdown.id !== breakdownId)
+        }
+      })
       return {
         ...state,
         activeProject: {
@@ -104,6 +136,20 @@ const projectReducers = (state = defaultState, action) => {
           })
         }
       })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
+    case 'DELETE_TABLE': {
+      const {
+        tableId
+      } = action
+      const nextTables = state.activeProject.tables.filter(table => table.id !== tableId)
       return {
         ...state,
         activeProject: {
@@ -275,6 +321,35 @@ const projectReducers = (state = defaultState, action) => {
                   string: formula.id === formulaId && columnType === 'STRING' ? nextBreakdownFormulaValue : formula.string
                 }
               })
+            }
+          })
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
+    case 'UPDATE_BREAKDOWN_ID': {
+      const {
+        breakdownId,
+        nextBreakdownId,
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              id: breakdown.id !== breakdownId ? breakdown.id : nextBreakdownId
             }
           })
         }

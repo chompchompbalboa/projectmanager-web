@@ -112,7 +112,8 @@ class AppProjectChooseTable extends PureComponent {
                       isActive={activeBreakdown !== null ? activeBreakdown.id === breakdown.id : false}
                       onChange={() => null}
                       onContextMenu={e => this.openContextMenu(e, table.id)}
-                      value={breakdown.name}/>
+                      placeholder="Breakdown..."
+                      value={breakdown.name !== null ? breakdown.name : ""}/>
                   </BreakdownLinkContainer>
                 )
               })}

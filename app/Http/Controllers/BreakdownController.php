@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Breakdown;
+use App\Models\Formula;
 
 class BreakdownController extends Controller
 {
@@ -36,7 +37,16 @@ class BreakdownController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $newBreakdownInput = $request->input('newBreakdown');
+      $newBreakdown = new Breakdown;
+      $newBreakdown->name = $newBreakdownInput['name'];
+      $newBreakdown->table_id =$request->input('tableId');
+      if($newBreakdown->save()) {
+        return [
+          'breakdownId' => $newBreakdownInput['id'],
+          'nextBreakdownId' => $newBreakdown->id
+        ];
+      }
     }
 
     /**
@@ -82,8 +92,9 @@ class BreakdownController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Breakdown $breakdown)
     {
-        //
+      $deletedFormulas = Formula::where('breakdown_id', $breakdown->id)->delete();
+      return Breakdown::destroy($breakdown->id);
     }
 }

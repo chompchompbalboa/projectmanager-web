@@ -17,6 +17,44 @@ const defaultState = {
 const projectReducers = (state = defaultState, action) => {
   switch(action.type) {
 
+    case 'CREATE_BREAKDOWN_FORMULA': {
+      const {
+        breakdownId,
+        defaultColumnId,
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              formulas: breakdown.id !== breakdownId ? breakdown.formulas : [...breakdown.formulas, {
+                id: _.random(-100000, -900000),
+                name: null,
+                type: 'EQUALS',
+                columnId: defaultColumnId,
+                boolean: null,
+                datetime: null, 
+                number: null,
+                string: null
+              }]
+            }
+          })
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
     case 'CREATE_TABLE_IN_ACTIVE_PROJECT': {
       const nextTable = {
         id: _.random(-100000, -999999),
@@ -41,6 +79,32 @@ const projectReducers = (state = defaultState, action) => {
         tableId
       } = action
       const nextTables = state.activeProject.tables.filter(table => table.id !== tableId)
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
+    case 'DELETE_BREAKDOWN_FORMULA': {
+      const {
+        tableId,
+        breakdownId,
+        formulaId
+      } = action
+      const nextTables = state.activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.filter(formula => formula.id !== formulaId)
+            }
+          })
+        }
+      })
       return {
         ...state,
         activeProject: {
@@ -77,6 +141,144 @@ const projectReducers = (state = defaultState, action) => {
         activeProject: {
           ...state.activeProject,
           tables: nextActiveProjectTables
+        }
+      }
+    }
+
+    case 'UPDATE_BREAKDOWN_FORMULA_COLUMN_ID': {
+      const {
+        breakdownId,
+        formulaId,
+        nextBreakdownFormulaColumnId,
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.map(formula => {
+                return {
+                  ...formula,
+                  columnId: formula.id !== formulaId ? formula.columnId : Number(nextBreakdownFormulaColumnId)
+                }
+              })
+            }
+          })
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
+    case 'UPDATE_BREAKDOWN_FORMULA_TYPE': {
+      const {
+        breakdownId,
+        formulaId,
+        nextBreakdownFormulaType,
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.map(formula => {
+                return {
+                  ...formula,
+                  type: formula.id !== formulaId ? formula.type : nextBreakdownFormulaType
+                }
+              })
+            }
+          })
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
+    case 'UPDATE_BREAKDOWN_FORMULA_VALUE': {
+      const {
+        breakdownId,
+        columnType,
+        formulaId,
+        nextBreakdownFormulaValue,
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.map(formula => {
+                return {
+                  ...formula,
+                  boolean: formula.id === formulaId && columnType === 'BOOLEAN' ? nextBreakdownFormulaValue : formula.boolean,
+                  datetime: formula.id === formulaId && columnType === 'DATETIME' ? nextBreakdownFormulaValue : formula.datetime,
+                  number: formula.id === formulaId && columnType === 'NUMBER' ? nextBreakdownFormulaValue : formula.number,
+                  string: formula.id === formulaId && columnType === 'STRING' ? nextBreakdownFormulaValue : formula.string
+                }
+              })
+            }
+          })
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
+        }
+      }
+    }
+
+    case 'UPDATE_BREAKDOWN_NAME': {
+      const {
+        breakdownId,
+        nextBreakdownName,
+        tableId
+      } = action
+      const {
+        activeProject
+      } = state
+      const nextTables = activeProject.tables.map(table => {
+        return {
+          ...table,
+          breakdowns: table.id !== tableId ? table.breakdowns : table.breakdowns.map(breakdown => {
+            return {
+              ...breakdown,
+              name: breakdown.id !== breakdownId ? breakdown.name : nextBreakdownName
+            }
+          })
+        }
+      })
+      return {
+        ...state,
+        activeProject: {
+          ...state.activeProject,
+          tables: nextTables
         }
       }
     }

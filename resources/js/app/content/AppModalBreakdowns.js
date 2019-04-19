@@ -1,14 +1,18 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
+import React from 'react'
 import { array, func, number } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { timing } from '../../_config'
-
 import {
+  createBreakdownFormula as createBreakdownFormulaAction,
+  deleteBreakdownFormula as deleteBreakdownFormulaAction,
+  updateBreakdownFormulaColumnId as updateBreakdownFormulaColumnIdAction,
+  updateBreakdownFormulaType as updateBreakdownFormulaTypeAction,
+  updateBreakdownFormulaValue as updateBreakdownFormulaValueAction,
+  updateBreakdownName as updateBreakdownNameAction,
   updateBreakdowns as updateBreakdownsAction
 } from '../redux/project/projectActions'
 
@@ -24,219 +28,120 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  createBreakdownFormula: (tableId, breakdownId, defaultColumnId) => dispatch(createBreakdownFormulaAction(tableId, breakdownId, defaultColumnId)),
+  deleteBreakdownFormula: (tableId, breakdownId, formulaId) => dispatch(deleteBreakdownFormulaAction(tableId, breakdownId, formulaId)),
+  updateBreakdownFormulaColumnId: (tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId) => dispatch(updateBreakdownFormulaColumnIdAction(tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId)),
+  updateBreakdownFormulaType: (tableId, breakdownId, formulaId, nextBreakdownFormulaType) => dispatch(updateBreakdownFormulaTypeAction(tableId, breakdownId, formulaId, nextBreakdownFormulaType)),
+  updateBreakdownFormulaValue: (tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue) => dispatch(updateBreakdownFormulaValueAction(tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue)),
+  updateBreakdownName: (tableId, breakdownId, nextBreakdownName) => dispatch(updateBreakdownNameAction(tableId, breakdownId, nextBreakdownName)),
   updateBreakdowns: (tableId, nextBreakdowns) => dispatch(updateBreakdownsAction(tableId, nextBreakdowns))
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class AppModalBreakdowns extends Component {
+const AppModalBreakdowns  = ({
+  breakdowns,
+  columns,
+  createBreakdownFormula,
+  deleteBreakdownFormula,
+  tableId,
+  updateBreakdownFormulaColumnId,
+  updateBreakdownFormulaType,
+  updateBreakdownFormulaValue,
+  updateBreakdownName
+}) => {
   
-  state = {
-    breakdowns: this.props.breakdowns
-  }
-
-  saveTimeout = null
-  
-  types = [
+  const types = [
     { type: 'EQUALS', text: "="},
     { type: 'GREATER_THAN', text: ">"},
     { type: 'LESS_THAN', text: "<"}
-  ]  
+  ]
 
-  createFormula = breakdownId => {
-    clearTimeout(this.saveTimeout)
-    const {
-      columns
-    } = this.props
-    const {
-      breakdowns
-    } = this.state
-    const nextBreakdowns = breakdowns.map(breakdown => {
-      return {
-        ...breakdown,
-        formulas: breakdown.id !== breakdownId ? breakdown.formulas : [...breakdown.formulas, {
-          id: _.random(-100000, -900000),
-          name: null,
-          type: 'EQUALS',
-          columnId: columns[0].id,
-          boolean: null,
-          datetime: null, 
-          number: null,
-          string: null
-        }]
-      }
-    })
-    this.setState({
-      breakdowns: nextBreakdowns
-    })
-    this.saveTimeout = window.setTimeout(this.saveChanges, timing.SAVE_INTERVAL)
-  }
-
-  deleteFormula = (breakdownId, formulaId) => {
-    clearTimeout(this.saveTimeout)
-    const {
-      breakdowns
-    } = this.state
-    const nextBreakdowns = breakdowns.map(breakdown => {
-      return {
-        ...breakdown,
-        formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.filter(formula => formula.id !== formulaId)
-      }
-    })
-    this.setState({
-      breakdowns: nextBreakdowns
-    })
-    this.saveTimeout = window.setTimeout(this.saveChanges, timing.SAVE_INTERVAL)
-  }
-
-  updateBreakdown = (breakdownId, nextName) => {
-    clearTimeout(this.saveTimeout)
-    const {
-      breakdowns
-    } = this.state
-    const nextBreakdowns = breakdowns.map(breakdown => {
-      return {
-        ...breakdown,
-        name: breakdown.id === breakdownId ? nextName : breakdown.name
-      }
-    })
-    this.setState({
-      breakdowns: nextBreakdowns
-    })
-    this.saveTimeout = window.setTimeout(this.saveChanges, timing.SAVE_INTERVAL)
-  }
-  
-  updateFormula = (breakdownId, formulaId, columnType, nextColumnId, nextType, nextValue) => {
-    clearTimeout(this.saveTimeout)
-    const {
-      breakdowns
-    } = this.state
-    const nextBreakdowns = breakdowns.map(breakdown => {
-      return {
-        ...breakdown,
-          formulas: breakdown.id !== breakdownId ? breakdown.formulas : breakdown.formulas.map(formula => {
-            return {
-              ...formula,
-              columnId: formula.id === formulaId ? nextColumnId : formula.columnId,
-              type: formula.id === formulaId ? nextType : formula.type,
-              boolean: formula.id === formulaId && columnType === 'BOOLEAN' ? nextValue : formula.boolean,
-              datetime: formula.id === formulaId && columnType === 'DATETIME' ? nextValue : formula.datetime,
-              number: formula.id === formulaId && columnType === 'NUMBER' ? nextValue : formula.number,
-              string: formula.id === formulaId && columnType === 'STRING' ? nextValue : formula.string
-            }
-          })
-        }
-    })
-    this.setState({
-      breakdowns: nextBreakdowns
-    })
-    this.saveTimeout = window.setTimeout(this.saveChanges, timing.SAVE_INTERVAL)
-  }
-  
-  saveChanges = () => {
-    const {
-      tableId,
-      updateBreakdowns
-    } = this.props
-    const {
-      breakdowns
-    } = this.state
-    updateBreakdowns(tableId, breakdowns)
-  }
-  
-  render() {
-    const {
-      columns
-    } = this.props
-    const {
-      breakdowns
-    } = this.state
-    return (
-      <Modal>
-        <BreakdownsContainer>
-          <Breakdown>
-            <NameContainer>Name</NameContainer>
-            <FormulasContainer>
-              <Formula>
-                <ColumnContainer>Column</ColumnContainer>
-                <TypeContainer>Type</TypeContainer>
-                <ValueContainer>Value</ValueContainer>
-                <DeleteContainer/>
-              </Formula>
-            </FormulasContainer>
-          </Breakdown>
-          {breakdowns.map(breakdown => {
-            return (
-              <Breakdown
-                key={breakdown.id}>
-                <NameContainer>
-                  <NameInput
-                     onChange={e => this.updateBreakdown(breakdown.id, e.target.value)}
-                     value={breakdown.name !== null ? breakdown.name : ""}/>
-                </NameContainer>
-                <FormulasContainer>
-                  {breakdown.formulas.map(formula => {
-                    const column = columns.find(column => column.id === formula.columnId)
-                    return (
-                      <Formula
-                         key={formula.id}>
-                        <ColumnContainer>
-                          <ColumnSelect
-                            onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, Number(e.target.value), formula.type, formula[column.type.toLowerCase()])}
-                            value={formula.columnId}>
-                            {columns.map(column => {
-                              return (
-                                <ColumnOption
-                                  key={column.id}
-                                  value={column.id}>
-                                  {column.name}
-                                </ColumnOption>
-                              )
-                            })}
-                            {column.name}
-                          </ColumnSelect>
-                        </ColumnContainer>
-                        <TypeContainer>
-                          <TypeSelect
-                            onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, column.id, e.target.value, formula[column.type.toLowerCase()])}
-                            value={formula.type}>
-                            {this.types.map(type => {
-                              return (
-                                <TypeOption
-                                  key={type.type}
-                                  value={type.type}>
-                                  {type.text}
-                                </TypeOption>
-                              )
-                            })}
-                            {this.types[formula.type]}
-                          </TypeSelect>
-                        </TypeContainer>
-                        <ValueContainer>
-                          <ValueInput
-                            onChange={e => this.updateFormula(breakdown.id, formula.id, column.type, column.id, formula.type, e.target.value)}
-                            value={formula[column.type.toLowerCase()] !== null ? formula[column.type.toLowerCase()] : ""}/>
-                        </ValueContainer>
-                        <DeleteContainer
-                          onClick={() => this.deleteFormula(breakdown.id, formula.id)}>
-                          X
-                        </DeleteContainer>
-                      </Formula>
-                    )
-                  })}
-                  <AddFormulaContainer
-                    onClick={() => this.createFormula(breakdown.id)}>
-                    +
-                  </AddFormulaContainer>
-                </FormulasContainer>
-              </Breakdown>
-            )
-          })}
-        </BreakdownsContainer>
-      </Modal>
-    )
-  }
+  return (
+    <Modal>
+      <BreakdownsContainer>
+        <Breakdown>
+          <NameContainer>Name</NameContainer>
+          <FormulasContainer>
+            <Formula>
+              <ColumnContainer>Column</ColumnContainer>
+              <TypeContainer>Type</TypeContainer>
+              <ValueContainer>Value</ValueContainer>
+              <DeleteContainer/>
+            </Formula>
+          </FormulasContainer>
+        </Breakdown>
+        {breakdowns.map(breakdown => {
+          return (
+            <Breakdown
+              key={breakdown.id}>
+              <NameContainer>
+                <NameInput
+                    onChange={e => updateBreakdownName(tableId, breakdown.id, e.target.value)}
+                    value={breakdown.name !== null ? breakdown.name : ""}/>
+              </NameContainer>
+              <FormulasContainer>
+                {breakdown.formulas.map(formula => {
+                  const column = columns.find(column => column.id === formula.columnId)
+                  return (
+                    <Formula
+                        key={formula.id}>
+                      <ColumnContainer>
+                        <ColumnSelect
+                          onChange={e => updateBreakdownFormulaColumnId(tableId, breakdown.id, formula.id, e.target.value)}
+                          value={formula.columnId}>
+                          {columns.map(column => {
+                            return (
+                              <ColumnOption
+                                key={column.id}
+                                value={column.id}>
+                                {column.name}
+                              </ColumnOption>
+                            )
+                          })}
+                          {column.name}
+                        </ColumnSelect>
+                      </ColumnContainer>
+                      <TypeContainer>
+                        <TypeSelect
+                          onChange={e => updateBreakdownFormulaType(tableId, breakdown.id, formula.id, e.target.value)}
+                          value={formula.type}>
+                          {types.map(type => {
+                            return (
+                              <TypeOption
+                                key={type.type}
+                                value={type.type}>
+                                {type.text}
+                              </TypeOption>
+                            )
+                          })}
+                          {types[formula.type]}
+                        </TypeSelect>
+                      </TypeContainer>
+                      <ValueContainer>
+                        <ValueInput
+                          onChange={e => updateBreakdownFormulaValue(tableId, breakdown.id, formula.id, column.type, e.target.value)}
+                          value={formula[column.type.toLowerCase()] !== null ? formula[column.type.toLowerCase()] : ""}/>
+                      </ValueContainer>
+                      <DeleteContainer
+                        onClick={() => deleteBreakdownFormula(tableId, breakdown.id, formula.id)}>
+                        X
+                      </DeleteContainer>
+                    </Formula>
+                  )
+                })}
+                <AddFormulaContainer
+                  onClick={() => createBreakdownFormula(tableId, breakdown.id, columns[0].id)}>
+                  +
+                </AddFormulaContainer>
+              </FormulasContainer>
+            </Breakdown>
+          )
+        })}
+      </BreakdownsContainer>
+    </Modal>
+  )
 }
 
 //-----------------------------------------------------------------------------
@@ -245,23 +150,15 @@ class AppModalBreakdowns extends Component {
 AppModalBreakdowns.propTypes = {
   breakdowns: array,
   columns: array,
+  createBreakdownFormula: func,
+  deleteBreakdownFormula: func,
   tableId: number,
-  updateBreakdowns: func
+  updateBreakdownFormulaColumnId: func,
+  updateBreakdownFormulaType: func,
+  updateBreakdownFormulaValue: func,
+  updateBreakdownName: func,
 }
-AppModalBreakdowns.defaultProps = {
-  breakdowns: [
-    {id: 1, name: "Not Started", formulas: [
-      {id: 1, column: "Status", type: "=", value: "Not Started"}
-    ]},
-    {id: 2, name: "WIP", formulas: [
-      {id: 2, column: "Status", type: "=", value: "WIP"},
-      {id: 3, column: "Status", type: "=", value: "On Hold"}
-    ]},
-    {id: 3, name: "Completed", formulas: [
-      {id: 4, column: "Status", type: "=", value: "Completed"}
-    ]}
-  ]
-}
+
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------

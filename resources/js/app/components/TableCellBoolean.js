@@ -12,7 +12,7 @@ const TableCellBoolean = ({ updateValue, value }) => {
   return (
     <StyledInput 
        type="checkbox"
-       checked={value}
+       checked={value === null ? false : value}
        onChange={(e) => updateValue(e.target.checked)}/>
   )
 }

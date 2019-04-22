@@ -17,11 +17,11 @@ import {
   deleteRow as deleteRowAction,
   setTable as setTableAction,
   sortRows as sortRowsAction,
-  toggleColumnIsEditing as toggleColumnIsEditingAction,
   toggleColumnIsRenaming as toggleColumnIsRenamingAction,
   updateCell as updateCellAction,
   updateColumnWidths as updateColumnWidthsAction,
-  updateColumnName as updateColumnNameAction
+  updateColumnName as updateColumnNameAction,
+  updateColumnType as updateColumnTypeAction
 } from '../redux/table/tableActions'
 
 import Loading from '../components/Loading'
@@ -49,11 +49,11 @@ const mapDispatchToProps = dispatch => ({
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setTable: nextTable => dispatch(setTableAction(nextTable)),
   sortRows: (nextSortColumn, nextSortOrder) => dispatch(sortRowsAction(nextSortColumn, nextSortOrder)),
-  toggleColumnIsEditing: columnId => dispatch(toggleColumnIsEditingAction(columnId)),
   toggleColumnIsRenaming: columnId => dispatch(toggleColumnIsRenamingAction(columnId)),
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
   updateColumnWidths: nextColumnWidths => dispatch(updateColumnWidthsAction(nextColumnWidths)),
-  updateColumnName: (columnId, nextName) => dispatch(updateColumnNameAction(columnId, nextName))
+  updateColumnName: (columnId, nextName) => dispatch(updateColumnNameAction(columnId, nextName)),
+  updateColumnType: (columnId, nextType) => dispatch(updateColumnTypeAction(columnId, nextType))
 })
 
 //-----------------------------------------------------------------------------
@@ -147,10 +147,10 @@ class Table extends PureComponent {
       sortColumn,
       sortOrder,
       sortRows,
-      toggleColumnIsEditing,
       toggleColumnIsRenaming,
       updateCell,
       updateColumnName,
+      updateColumnType,
       updateColumnWidths,
       visibleRows
     } = this.props
@@ -206,9 +206,9 @@ class Table extends PureComponent {
               deleteColumn={deleteColumn}
               deleteRow={deleteRow}
               sortRows={sortRows}
-              toggleColumnIsEditing={toggleColumnIsEditing}
               toggleColumnIsRenaming={toggleColumnIsRenaming}
               top={contextMenuTop}
+              updateColumnType={updateColumnType}
               left={contextMenuLeft}/>
           }
         </Container>
@@ -232,6 +232,7 @@ Table.propTypes = {
   createTable: func,
   deleteColumn: func,
   deleteRow: func,
+  rows: array,
   setTable: func,
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),
@@ -240,6 +241,7 @@ Table.propTypes = {
   toggleColumnIsRenaming: func,
   updateCell: func,
   updateColumnName: func,
+  updateColumnType: func,
   updateColumnWidths: func,
   visibleRows: array,
 }

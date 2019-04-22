@@ -17,9 +17,9 @@ const TableContextMenu = ({
   deleteColumn, 
   id, 
   sortRows, 
-  toggleColumnIsEditing,
   toggleColumnIsRenaming,
   top,
+  updateColumnType,
   left
 }) => {
 
@@ -33,7 +33,12 @@ const TableContextMenu = ({
     { text: 'Insert Before', action: () => createColumn(id, 'BEFORE') },
     { text: 'Insert After', action: () => createColumn(id, 'AFTER') },
     { text: 'Rename', action: () => toggleColumnIsRenaming(id) },
-    { text: 'Edit Column', action: () => toggleColumnIsEditing(id) },
+    { text: 'Type', action: () => null, submenu: [
+      { text: 'Checkbox', action: () => updateColumnType(id, 'BOOLEAN') },
+      { text: 'Date', action: () => updateColumnType(id, 'DATETIME') },
+      { text: 'Number', action: () => updateColumnType(id, 'NUMBER') },
+      { text: 'String', action: () => updateColumnType(id, 'STRING') },
+    ]},
     { text: 'Delete Column', action: () => deleteColumn(id) },
   ]
 
@@ -61,6 +66,7 @@ TableContextMenu.propTypes = {
   toggleColumnIsEditing: func,
   toggleColumnIsRenaming: func,
   top: number,
+  updateColumnType: func,
   left: number
 }
 

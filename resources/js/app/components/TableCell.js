@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { PureComponent } from 'react'
-import { bool, func, number, object, oneOfType, string } from 'prop-types'
+import { bool, func, number, object, oneOfType, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch => ({
 class TableCell extends PureComponent {
 
   state = {
-    value: this.props.value
+    values: this.props.values
   }
 
   tableCellTypeComponents = {
@@ -43,13 +43,30 @@ class TableCell extends PureComponent {
   saveTimeout = null
 
   updateValue = (nextValue) => {
+    const {
+      type
+    } = this.props
+    const {
+      values: {
+        BOOLEAN,
+        DATETIME,
+        NUMBER,
+        STRING
+      }
+    } = this.state
+    const nextValues = {
+      BOOLEAN: type === 'BOOLEAN' ? nextValue : BOOLEAN,
+      DATETIME: type === 'DATETIME' ? nextValue : DATETIME,
+      NUMBER: type === 'NUMBER' ? nextValue : NUMBER,
+      STRING: type === 'STRING' ? nextValue : STRING
+    }
     this.setState({
-      value: nextValue
+      values: nextValues
     })
   }
 
   componentDidUpdate = (prevProps, prevState) => {
-    if(prevState.value !== this.state.value) {
+    if(prevState.values !== this.state.values) {
       clearTimeout(this.saveTimeout)
       this.saveTimeout = window.setTimeout(() => this.saveCell(), timing.SAVE_INTERVAL)
     }
@@ -75,14 +92,14 @@ class TableCell extends PureComponent {
       type
     } = this.props
     const {
-      value
+      values
     } = this.state
     const TableCellType = this.tableCellTypeComponents[type]
     return (
       <Container>
         <TableCellType
           updateValue={this.updateValue}
-          value={value}/>
+          value={values[type]}/>
       </Container>
     )
   }
@@ -96,7 +113,12 @@ TableCell.propTypes = {
   rowId: number,
   type: string,
   updateCell: func,
-	value: oneOfType([bool, number, string])
+	values: shape({
+    BOOLEAN: oneOfType([bool, number]),
+    DATETIME: string,
+    NUMBER: number,
+    STRING: string,
+  })
 }
 
 //-----------------------------------------------------------------------------

@@ -7,8 +7,6 @@ import styled from 'styled-components'
 
 import { colors, layout } from '../../_config'
 
-import TableHeaderDropdown from './TableHeaderDropdown'
-
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -128,10 +126,6 @@ class TableHeader extends PureComponent {
                     placeholder="Column..."
                     value={column.name === null ? "" : column.name}/>
                 </ContentContainer>
-                  <TableHeaderDropdown
-                    column={column}
-                    isDropdownVisible={column.isEditing}>
-                  </TableHeaderDropdown>
               </TableHeaderCell>
             )
           })}

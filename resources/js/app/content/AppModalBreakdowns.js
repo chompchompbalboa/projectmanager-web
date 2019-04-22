@@ -6,6 +6,8 @@ import { array, func, number } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
+import { colors, timing } from '../../_config'
+
 import {
   createBreakdown as createBreakdownAction,
   createBreakdownFormula as createBreakdownFormulaAction,
@@ -17,7 +19,12 @@ import {
   updateBreakdownName as updateBreakdownNameAction
 } from '../redux/project/projectActions'
 
+import Icon from '../components/Icon'
 import Modal from '../components/Modal'
+import TableCellBoolean from '../components/TableCellBoolean'
+import TableCellDatetime from '../components/TableCellDatetime'
+import TableCellNumber from '../components/TableCellNumber'
+import TableCellString from '../components/TableCellString'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -62,32 +69,35 @@ const AppModalBreakdowns  = ({
     { type: 'LESS_THAN', text: "<"}
   ]
 
+  const tableCellTypeComponents = {
+    BOOLEAN: TableCellBoolean,
+    DATETIME: TableCellDatetime,
+    NUMBER: TableCellNumber,
+    STRING: TableCellString,
+  }
+
   return (
     <Modal>
       <BreakdownsContainer>
-        <Breakdown>
-          <NameContainer>Name</NameContainer>
-          <FormulasContainer>
-            <Formula>
-              <ColumnContainer>Column</ColumnContainer>
-              <TypeContainer>Type</TypeContainer>
-              <ValueContainer>Value</ValueContainer>
-              <DeleteContainer/>
-            </Formula>
-          </FormulasContainer>
-        </Breakdown>
         {breakdowns.map(breakdown => {
           return (
             <Breakdown
               key={breakdown.id}>
-              <NameContainer>
+              <Header>
                 <NameInput
-                    onChange={e => updateBreakdownName(tableId, breakdown.id, e.target.value)}
-                    value={breakdown.name !== null ? breakdown.name : ""}/>
-              </NameContainer>
+                  onChange={e => updateBreakdownName(tableId, breakdown.id, e.target.value)}
+                  value={breakdown.name !== null ? breakdown.name : ""}/>
+                <DeleteBreakdown
+                  onClick={() => deleteBreakdown(tableId, breakdown.id)}>
+                  <Icon
+                    icon="DELETE"
+                    size="1em"/>
+                </DeleteBreakdown>
+              </Header>
               <FormulasContainer>
                 {breakdown.formulas.map(formula => {
                   const column = columns.find(column => column.id === formula.columnId)
+                  const ValueInput = tableCellTypeComponents[column.type]
                   return (
                     <Formula
                         key={formula.id}>
@@ -125,24 +135,22 @@ const AppModalBreakdowns  = ({
                       </TypeContainer>
                       <ValueContainer>
                         <ValueInput
-                          onChange={e => updateBreakdownFormulaValue(tableId, breakdown.id, formula.id, column.type, e.target.value)}
-                          value={formula[column.type.toLowerCase()] !== null ? formula[column.type.toLowerCase()] : ""}/>
+                          updateValue={nextValue => updateBreakdownFormulaValue(tableId, breakdown.id, formula.id, column.type, nextValue)}
+                          value={formula[column.type.toLowerCase()]}/>
                       </ValueContainer>
                       <DeleteContainer
                         onClick={() => deleteBreakdownFormula(tableId, breakdown.id, formula.id)}>
-                        X
+                        <Icon
+                          icon="TRASH"
+                          size="1em"/>
                       </DeleteContainer>
                     </Formula>
                   )
                 })}
                 <BottomContainer>
-                  <DeleteBreakdown
-                    onClick={() => deleteBreakdown(tableId, breakdown.id)}>
-                    Delete Breakdown
-                  </DeleteBreakdown>
                   <AddFormula
                   onClick={() => createBreakdownFormula(tableId, breakdown.id, columns[0].id)}>
-                    Add formula +
+                    Add +
                   </AddFormula>
                 </BottomContainer>
               </FormulasContainer>
@@ -185,17 +193,35 @@ const BreakdownsContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 30vw;
 `
 
 const Breakdown = styled.div`
-  width: 30vw;
-  padding: 2vh;
+  margin-bottom: 2vh;
   display: flex;
+  width: 100%;
+  flex-direction: column;
+  border: 0.25px solid ${ colors.TABLE_BORDER };
+  background-color: ${colors.ACCENT};
+	box-shadow: 0.5px 0.5px 2px ${colors.BOX_SHADOW};
 `
 
-const NameContainer = styled.div`
-  width: 30%;
+const DeleteBreakdown = styled.div`
+  cursor: pointer;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: color ${ timing.TRANSITION_DURATION };
+  &:hover {
+    color: rgb(200, 0, 0);
+  }
+`
+
+const Header = styled.div`
+  padding: 0.5vh 1vh;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
   align-items: center;
   justify-content: center;
 `
@@ -203,14 +229,21 @@ const NameContainer = styled.div`
 const StyledInput = styled.input`
   width: 100%;
   outline: none;
+  border: none;
   background-color: transparent;
   text-align: center;
 `
 
-const NameInput = styled(StyledInput)``
+const NameInput = styled(StyledInput)`
+  font-size: 14px;
+  font-weight: bold;
+  text-align: left;
+`
 
 const FormulasContainer = styled.div`
-  width: 70%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 `
 
 const Formula = styled.div`
@@ -219,9 +252,15 @@ const Formula = styled.div`
   justify-content: space-around;
 `
 
-const ColumnContainer = styled.div`
-  width: 30%;
+const FormulaColumn = styled.div`
+  font-size: 13px;
+  padding: 0.625vh 1.25vh;
   text-align: center;
+  border: 0.25px solid ${ colors.TABLE_BORDER };
+`
+
+const ColumnContainer = styled(FormulaColumn)`
+  width: 30%;
 `
 
 const ColumnSelect = styled.select`
@@ -229,54 +268,76 @@ const ColumnSelect = styled.select`
 
 const ColumnOption = styled.option``
 
-const TypeContainer = styled.div`
+const TypeContainer = styled(FormulaColumn)`
   width: 30%;
-  text-align: center;
 `
 
 const TypeSelect = styled.select``
 
 const TypeOption = styled.option``
 
-const ValueContainer = styled.div`
+const ValueContainer = styled(FormulaColumn)`
   width: 30%;
-  text-align: center;
 `
 
-const ValueInput = styled(StyledInput)``
-
-const DeleteContainer = styled.div`
+const DeleteContainer = styled(FormulaColumn)`
   cursor: pointer;
   width: 10%;
-  text-align: right;
-  color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  transition: color ${timing.TRANSITION_DURATION};
+  &:hover {
+    color: rgb(200, 0, 0);
+  }
 `
 
 const BottomContainer = styled.div`
+  padding: 0.5vh;
   width: 100%;
   display: flex;
-  justify-content: space-between;
-`
-
-const DeleteBreakdown = styled.div`
-  cursor: pointer;
-  text-align: left;
+  justify-content: flex-end;
+  border: 0.25px solid ${ colors.TABLE_BORDER };
 `
 
 const AddFormula = styled.div`
+  padding: 0.62vh 1.25vh;
+  font-size: 13px;
   cursor: pointer;
   text-align: right;
+  border: 1px solid ${ colors.PRIMARY };
+  background-color: white;
+  color: ${ colors.PRIMARY };
+  border-radius: 2px;
+  transition: all ${ timing.TRANSITION_DURATION };
+  &:hover {
+    background-color: ${ colors.PRIMARY };
+    color: white;
+  }
 `
 
 const AddBreakdownContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  margin-bottom: -2vh;
 `
 
 const AddBreakdown = styled.div`
+  padding: 0.62vh 1.25vh;
+  font-size: 13px;
   cursor: pointer;
   text-align: right;
+  border: 1px solid ${ colors.PRIMARY };
+  background-color: white;
+  color: ${ colors.PRIMARY };
+  border-radius: 2px;
+  transition: all ${ timing.TRANSITION_DURATION };
+  &:hover {
+    background-color: ${ colors.PRIMARY };
+    color: white;
+  }
 `
 
 export default connect(

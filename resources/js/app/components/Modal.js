@@ -6,6 +6,8 @@ import { func } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
+import { colors } from '../../_config'
+
 import {
   updateActiveModal as updateActiveModalAction
 } from '../redux/modal/modalActions'
@@ -76,11 +78,13 @@ const Container = styled.div`
 `
 
 const ContentContainer = styled.div`
-  background-color: white;
+  background-color: ${colors.BACKGROUND};
   padding: 3vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 2px;
+	box-shadow: 1px 1px 4px ${colors.BOX_SHADOW};
 `
 
 export default connect(

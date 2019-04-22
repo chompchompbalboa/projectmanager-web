@@ -226,7 +226,7 @@ const tableReducers = (state = defaultState, action) => {
       return {
         ...state,
         breakdown: nextBreakdown,
-        visibleRows: nextBreakdown !== null ? sortRows(breakdownRows(state.rows, state.columns, nextBreakdown.formulas), state.sortColumn, state.sortOrder) : []
+        visibleRows: nextBreakdown !== null ? sortRows(breakdownRows(state.rows, state.columns, nextBreakdown.formulas), state.sortColumn, state.sortOrder) : state.rows
       }
     }
 
@@ -296,28 +296,6 @@ const tableReducers = (state = defaultState, action) => {
         sortColumn: nextSortColumn,
         sortOrder: nextSortOrder,
         visibleRows: nextVisibleRows,
-      }
-    }
-
-    case 'TOGGLE_COLUMN_IS_EDITING': {
-      const {
-        columnId
-      } = action
-      const nextColumns = state.columns.map(column => {
-        if(column.id === columnId) {
-          return {
-            ...column,
-            isEditing: column.isEditing ? false : true
-          }
-        }
-        return {
-          ...column,
-          isEditing: false
-        }
-      })
-      return {
-        ...state,
-        columns: nextColumns
       }
     }
 

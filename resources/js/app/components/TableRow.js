@@ -34,7 +34,12 @@ class TableRow extends PureComponent {
               rowId={row.id}
               type={column.type}
               updateCell={updateCell}
-              value={cell[column.type.toLowerCase()]}
+              values={{
+                BOOLEAN: cell.boolean,
+                DATETIME: cell.datetime,
+                NUMBER: cell.number,
+                STRING: cell.string
+              }}
             />
           )
         })}

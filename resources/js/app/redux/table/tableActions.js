@@ -208,14 +208,6 @@ export const sortRows = (nextSortColumnId, nextSortOrder) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Toggle Column Is Editing
-//-----------------------------------------------------------------------------
-export const toggleColumnIsEditing = columnId => ({
-  type: 'TOGGLE_COLUMN_IS_EDITING',
-  columnId: columnId
-})
-
-//-----------------------------------------------------------------------------
 // Toggle Column Is Renaming
 //-----------------------------------------------------------------------------
 export const toggleColumnIsRenaming = columnId => ({

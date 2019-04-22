@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import { colors } from '../../_config'
 
+import Icon from '../components/Icon'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -69,21 +70,28 @@ class ContextMenu extends PureComponent {
                 hasSubmenu={typeof action.submenu !== 'undefined'}
                 onClick={() => this.handleClick(action.action)}
                 onMouseEnter={() => this.setState({ activeSubmenuIndex: actionIndex })}>
-                {action.text}
+                <ActionText>
+                  {action.text}
+                </ActionText>
+                <ActionIcon>
+                  {action.submenu && <Icon icon="CHEVRON_RIGHT"/>}
+                </ActionIcon>
               </Action>
               {action.submenu &&
-                <Submenu
-                  isVisible={activeSubmenuIndex === actionIndex}>
-                  {action.submenu && action.submenu.map((menuItem, menuItemIndex) => {
-                    return (
-                      <Action
-                        key={menuItemIndex}
-                        onClick={() => this.handleClick(menuItem.action)}>
-                        {menuItem.text}
-                      </Action>
-                    )
-                  })}
-                </Submenu>
+                <>
+                  <Submenu
+                    isVisible={activeSubmenuIndex === actionIndex}>
+                    {action.submenu && action.submenu.map((menuItem, menuItemIndex) => {
+                      return (
+                        <Action
+                          key={menuItemIndex}
+                          onClick={() => this.handleClick(menuItem.action)}>
+                          {menuItem.text}
+                        </Action>
+                      )
+                    })}
+                  </Submenu>
+                </>
               }
             </ActionContainer>
           )
@@ -137,16 +145,23 @@ const Submenu = styled.div`
 const Action = styled.div`
   cursor: pointer;
   padding: 0.5vw;
+  padding-right: ${props => props.hasSubmenu ? '0' : '0.5vw'}
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-size: 14px;
-  border-right: 3px solid transparent;
+  border-right: ${props => props.hasSubmenu ? 'none' : '3px solid transparent'};
   &:hover {
     color: ${ colors.PRIMARY };
-    border-right: 3px solid ${ props => props.hasSubmenu ? 'transparent' : colors.PRIMARY };
+    border-right: ${props => props.hasSubmenu ? 'none' : '3px solid ' + colors.PRIMARY};
   }
+`
+
+const ActionText = styled.div`
+`
+
+const ActionIcon = styled.div`
 `
 
 export default ContextMenu

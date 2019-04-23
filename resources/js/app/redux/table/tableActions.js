@@ -5,6 +5,87 @@ import clone from '../../../_utils/clone'
 import { setStatus } from '../status/statusActions'
 
 //-----------------------------------------------------------------------------
+// Create Breakdown
+//-----------------------------------------------------------------------------
+export const createBreakdown = (tableId) => {
+  return dispatch => {
+    dispatch(createBreakdownReducer(tableId))
+    dispatch(createBreakdownServer(tableId))
+  }
+}
+
+const createBreakdownReducer = (tableId) => ({
+  type: 'CREATE_BREAKDOWN',
+  tableId: tableId
+})
+
+const createBreakdownServer = (tableId) => {
+  return (dispatch, getState) => {
+    const newBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id < 0)
+    mutation.createBreakdown(tableId, newBreakdown).then(breakdownIds => {
+      const {
+        breakdownId,
+        nextBreakdownId
+      } = breakdownIds
+      dispatch(updateBreakdownId(tableId, breakdownId, nextBreakdownId))
+      const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === nextBreakdownId)
+      dispatch(setBreakdown(tableId, nextBreakdown))
+    })
+  }
+}
+
+const updateBreakdownId = (tableId, breakdownId, nextBreakdownId) => ({
+  type: 'UPDATE_BREAKDOWN_ID',
+  breakdownId: breakdownId,
+  nextBreakdownId: nextBreakdownId,
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
+// Create Breakdown Formula
+//-----------------------------------------------------------------------------
+export const createBreakdownFormula = (tableId, breakdownId, defaultColumnId) => {
+  return (dispatch, getState) => {
+    const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    dispatch(setBreakdown(tableId, nextBreakdown))
+    dispatch(createBreakdownFormulaReducer(tableId, breakdownId, defaultColumnId))
+    dispatch(createBreakdownFormulaServer(tableId, breakdownId))
+  }
+}
+
+const createBreakdownFormulaReducer = (tableId, breakdownId, defaultColumnId) => ({
+  type: 'CREATE_BREAKDOWN_FORMULA',
+  breakdownId: breakdownId,
+  defaultColumnId: defaultColumnId,
+  tableId: tableId
+})
+
+const createBreakdownFormulaServer = (tableId, breakdownId) => {
+  return (dispatch, getState) => {
+    const newFormula = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId).formulas.find(formula => formula.id < 0)
+    mutation.createFormula(breakdownId, newFormula).then(formulaIds => {
+      const {
+        formulaId,
+        nextFormulaId
+      } = formulaIds
+      dispatch(updateBreakdownFormulaId(tableId, breakdownId, formulaId, nextFormulaId))
+      if(tableId === getState().table.id && getState().table.breakdown !== null) {
+        const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+        dispatch(setBreakdown(tableId, nextBreakdown))
+      }
+    })
+  }
+}
+
+const updateBreakdownFormulaId = (tableId, breakdownId, formulaId, nextFormulaId) => ({
+  type: 'UPDATE_BREAKDOWN_FORMULA_ID',
+  breakdownId: breakdownId,
+  formulaId: formulaId,
+  nextFormulaId: nextFormulaId,
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
 // Create Column
 //-----------------------------------------------------------------------------
 export const createColumn = (columnId, beforeOrAfter) => {
@@ -108,10 +189,89 @@ const createRowServer = newRow => {
 //-----------------------------------------------------------------------------
 // Create Table
 //-----------------------------------------------------------------------------
-export const createTable = nextTableId => ({
-  type: 'CREATE_TABLE',
-  nextTableId: nextTableId
+export const createTable = () => {
+  return (dispatch, getState) => {
+    dispatch(createTableReducer())
+    const state = getState()
+    const tableId = state.table.tables.find(table => table.id < 0).id
+    const projectId = state.table.id
+    dispatch(setTableId(tableId))
+    dispatch(createTableServer(projectId, tableId))
+  }
+}
+const createTableReducer = () => ({
+  type: 'CREATE_TABLE'
 })
+const createTableServer = (projectId, tableId) => {
+  return dispatch => {
+    dispatch(setStatus('SAVING'))
+    mutation.createTable(projectId, tableId).then(newTable => {
+      const {
+        nextTableId,
+        firstColumnId
+      } = newTable
+      dispatch(updateColumnId(0, firstColumnId))
+      dispatch(updateTableId(nextTableId))
+      dispatch(setStatus('SAVED'))
+    })
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Delete Breakdown
+//-----------------------------------------------------------------------------
+export const deleteBreakdown = (tableId, breakdownId) => {
+  return dispatch => {
+    dispatch(deleteBreakdownReducer(tableId, breakdownId))
+    dispatch(deleteBreakdownServer(tableId, breakdownId))
+  }
+}
+const deleteBreakdownReducer = (tableId, breakdownId) => ({
+  type: 'DELETE_BREAKDOWN',
+  breakdownId: breakdownId,
+  tableId: tableId
+})
+const deleteBreakdownServer = (tableId, breakdownId) => {
+  return (dispatch, getState) => {
+    mutation.deleteBreakdown(breakdownId).then(success => {
+      if(success) {
+        if(tableId === getState().table.id && getState().table.breakdown !== null && getState().table.breakdown.id === breakdownId) {
+          dispatch(setBreakdown(tableId, null))
+        }
+      }
+    })
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Delete Breakdown Formula
+//-----------------------------------------------------------------------------
+export const deleteBreakdownFormula = (tableId, breakdownId, formulaId) => {
+  return (dispatch, getState) => {
+    const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    dispatch(setBreakdown(tableId, nextBreakdown))
+    dispatch(deleteBreakdownFormulaReducer(tableId, breakdownId, formulaId))
+    dispatch(deleteBreakdownFormulaServer(tableId, breakdownId, formulaId))
+  }
+}
+const deleteBreakdownFormulaReducer = (tableId, breakdownId, formulaId) => ({
+  type: 'DELETE_BREAKDOWN_FORMULA',
+  breakdownId: breakdownId,
+  formulaId: formulaId,
+  tableId: tableId
+})
+const deleteBreakdownFormulaServer = (tableId, breakdownId, formulaId) => {
+  return (dispatch, getState) => {
+    mutation.deleteFormula(formulaId).then(success => {
+      if(success) {
+        if(tableId === getState().table.id && getState().table.breakdown !== null) {
+          const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+          dispatch(setBreakdown(tableId, nextBreakdown))
+        }
+      }
+    })
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Delete Columns
@@ -172,6 +332,32 @@ const deleteRowServer = rowId => {
 }
 
 //-----------------------------------------------------------------------------
+// Delete Table
+//-----------------------------------------------------------------------------
+export const deleteTable = tableId => {
+  return (dispatch, getState) => {
+    dispatch(deleteTableReducer(tableId))
+    // If we're deleting the currently visible table, switch to another one
+    if (getState().table.id === tableId) {
+      dispatch(setTableId(getState().table.tables[0].id))
+    }
+    dispatch(deleteTableServer(tableId))
+  }
+}
+const deleteTableReducer = tableId => ({
+  type: 'DELETE_TABLE',
+  tableId: tableId
+})
+const deleteTableServer = tableId => {
+  setStatus('SAVING')
+  return async dispatch => {
+    return mutation.deleteTable(tableId).then(success => {
+      success && dispatch(setStatus('SAVED'))
+    })
+  }
+}
+
+//-----------------------------------------------------------------------------
 // Set Breakdown
 //-----------------------------------------------------------------------------
 export const setBreakdown = (nextTableId, nextBreakdown) => ({
@@ -199,6 +385,14 @@ export const setTableId = nextTableId => ({
 })
 
 //-----------------------------------------------------------------------------
+// Set Table ID
+//-----------------------------------------------------------------------------
+export const setTables = nextTables => ({
+  type: 'SET_TABLES',
+  nextTables: nextTables
+})
+
+//-----------------------------------------------------------------------------
 // Sort Rows
 //-----------------------------------------------------------------------------
 export const sortRows = (nextSortColumnId, nextSortOrder) => ({
@@ -214,6 +408,121 @@ export const toggleColumnIsRenaming = columnId => ({
   type: 'TOGGLE_COLUMN_IS_RENAMING',
   columnId: columnId
 })
+
+//-----------------------------------------------------------------------------
+// Toggle Table isRenaming
+//-----------------------------------------------------------------------------
+export const toggleTableIsRenaming = tableId => ({
+  type: 'TOGGLE_TABLE_IS_RENAMING',
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
+// Update Breakdown Formula Column Id
+//-----------------------------------------------------------------------------
+let updateBreakdownFormulaTimeout = null
+export const updateBreakdownFormulaColumnId = (tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId) => {
+  return (dispatch, getState) => {
+    const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    dispatch(setBreakdown(tableId, nextBreakdown))
+    clearTimeout(updateBreakdownFormulaTimeout)
+    dispatch(updateBreakdownFormulaColumnIdReducer(tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId))
+    updateBreakdownFormulaTimeout = window.setTimeout(() => dispatch(updateBreakdownFormulaServer(tableId, breakdownId, formulaId)), timing.SAVE_INTERVAL)
+  }
+}
+const updateBreakdownFormulaColumnIdReducer = (tableId, breakdownId, formulaId, nextBreakdownFormulaColumnId) => ({
+  type: 'UPDATE_BREAKDOWN_FORMULA_COLUMN_ID',
+  breakdownId: breakdownId,
+  formulaId: formulaId,
+  nextBreakdownFormulaColumnId: nextBreakdownFormulaColumnId,
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
+// Update Breakdown Formula Server
+//-----------------------------------------------------------------------------
+const updateBreakdownFormulaServer = (tableId, breakdownId, formulaId) => {
+  return (dispatch, getState) => {
+    const nextFormula = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId).formulas.find(formula => formula.id === formulaId)
+    mutation.updateFormula(formulaId, nextFormula).then(formula => {
+      if(tableId === getState().table.id && getState().table.breakdown !== null) {
+        const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+        dispatch(setBreakdown(tableId, nextBreakdown))
+      }
+    })
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Update Breakdown Formula Type
+//-----------------------------------------------------------------------------
+export const updateBreakdownFormulaType = (tableId, breakdownId, formulaId, nextBreakdownFormulaType) => {
+  return (dispatch, getState) => {
+    const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    dispatch(setBreakdown(tableId, nextBreakdown))
+    clearTimeout(updateBreakdownFormulaTimeout)
+    dispatch(updateBreakdownFormulaTypeReducer(tableId, breakdownId, formulaId, nextBreakdownFormulaType))
+    updateBreakdownFormulaTimeout = window.setTimeout(() => dispatch(updateBreakdownFormulaServer(tableId, breakdownId, formulaId)), timing.SAVE_INTERVAL)
+  }
+}
+const updateBreakdownFormulaTypeReducer = (tableId, breakdownId, formulaId, nextBreakdownFormulaType) => ({
+  type: 'UPDATE_BREAKDOWN_FORMULA_TYPE',
+  breakdownId: breakdownId,
+  formulaId: formulaId,
+  nextBreakdownFormulaType: nextBreakdownFormulaType,
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
+// Update Breakdown Formula Value
+//-----------------------------------------------------------------------------
+export const updateBreakdownFormulaValue = (tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue) => {
+  return (dispatch, getState) => {
+    const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    dispatch(setBreakdown(tableId, nextBreakdown))
+    clearTimeout(updateBreakdownFormulaTimeout)
+    dispatch(updateBreakdownFormulaValueReducer(tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue))
+    updateBreakdownFormulaTimeout = window.setTimeout(() => dispatch(updateBreakdownFormulaServer(tableId, breakdownId, formulaId)), timing.SAVE_INTERVAL)
+  }
+}
+const updateBreakdownFormulaValueReducer = (tableId, breakdownId, formulaId, columnType, nextBreakdownFormulaValue) => ({
+  type: 'UPDATE_BREAKDOWN_FORMULA_VALUE',
+  breakdownId: breakdownId,
+  columnType: columnType,
+  formulaId: formulaId,
+  nextBreakdownFormulaValue: nextBreakdownFormulaValue,
+  tableId: tableId
+})
+
+//-----------------------------------------------------------------------------
+// Update Breakdown Name
+//-----------------------------------------------------------------------------
+let updateBreakdownNameTimeout = null
+export const updateBreakdownName = (tableId, breakdownId, nextBreakdownName) => {
+  return (dispatch, getState) => {
+    const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    dispatch(setBreakdown(tableId, nextBreakdown))
+    dispatch(updateBreakdownNameReducer(tableId, breakdownId, nextBreakdownName))
+    clearTimeout(updateBreakdownNameTimeout)
+    updateBreakdownNameTimeout = window.setTimeout(() => dispatch(updateBreakdownNameServer(tableId, breakdownId)), timing.SAVE_INTERVAL)
+  }
+}
+const updateBreakdownNameReducer = (tableId, breakdownId, nextBreakdownName) => ({
+  type: 'UPDATE_BREAKDOWN_NAME',
+  breakdownId: breakdownId,
+  nextBreakdownName: nextBreakdownName,
+  tableId: tableId
+})
+const updateBreakdownNameServer = (tableId, breakdownId) => {
+  return (dispatch, getState) => {
+    const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
+    mutation.updateBreakdown(breakdownId, nextBreakdown).then(breakdown => {
+      if(tableId === getState().table.id && getState().table.breakdown !== null) {
+        dispatch(setBreakdown(tableId, breakdown))
+      }
+    })
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Update Cell
@@ -392,6 +701,39 @@ export const updateTableId = nextTableId => ({
   type: 'UPDATE_TABLE_ID',
   nextTableId: nextTableId
 })
+
+//-----------------------------------------------------------------------------
+// Update Table Name
+//-----------------------------------------------------------------------------
+let updateTableNameTimeout = null
+export const updateTableName = (tableId, nextTableName) => {
+  return dispatch => {    
+    clearTimeout(updateTableNameTimeout)
+    dispatch(updateTableNameReducer(tableId, nextTableName))
+    updateTableNameTimeout = window.setTimeout(() => dispatch(updateTableNameServer(tableId)), timing.SAVE_INTERVAL)
+  }
+}
+const updateTableNameReducer = (tableId, nextTableName) => ({
+  type: 'UPDATE_TABLE_NAME',
+  tableId: tableId,
+  nextTableName: nextTableName
+})
+const updateTableNameServer = tableId => {
+  return (dispatch, getState) => {
+    const tableToSave = getState().table.tables.find(table => table.id === tableId)
+    if(tableToSave.name !== "" && tableToSave.id > 0) {
+      dispatch(setStatus('SAVING'))
+      mutation.updateTable(tableToSave.id, tableToSave).then(success => {
+        if(success) {
+          dispatch(setStatus('SAVED'))
+        }
+        else {
+          dispatch(setStatus('ERROR'))
+        }
+      })
+    }
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Update VisibleRows

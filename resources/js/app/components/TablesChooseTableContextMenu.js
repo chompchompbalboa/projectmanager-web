@@ -11,7 +11,7 @@ import {
 import {
   deleteTable as deleteTableAction,
   toggleTableIsRenaming as toggleTableIsRenamingAction
-} from '../redux/project/projectActions'
+} from '../redux/table/tableActions'
 
 import ContextMenu from '../components/ContextMenu'
 

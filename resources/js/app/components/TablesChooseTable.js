@@ -10,12 +10,10 @@ import { colors, layout, timing } from '../../_config'
 
 import {
   createTable as createTableAction,
+  setBreakdown as setBreakdownAction,
+  setTableId as setTableIdAction,
   toggleTableIsRenaming as toggleTableIsRenamingAction,
   updateTableName as updateTableNameAction
-} from '../redux/project/projectActions'
-import {
-  setBreakdown as setBreakdownAction,
-  setTableId as setTableIdAction
 } from '../redux/table/tableActions'
 
 import TablesChooseTableContextMenu from './TablesChooseTableContextMenu'
@@ -26,7 +24,7 @@ import TablesChooseTableContextMenu from './TablesChooseTableContextMenu'
 const mapStateToProps = state => ({
   activeBreakdown: state.table.breakdown,
   tableId: state.table.id,
-  tables: state.project.activeProject.tables
+  tables: state.table.tables
 })
 
 const mapDispatchToProps = dispatch => ({

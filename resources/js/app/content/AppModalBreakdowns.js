@@ -17,7 +17,7 @@ import {
   updateBreakdownFormulaType as updateBreakdownFormulaTypeAction,
   updateBreakdownFormulaValue as updateBreakdownFormulaValueAction,
   updateBreakdownName as updateBreakdownNameAction
-} from '../redux/project/projectActions'
+} from '../redux/table/tableActions'
 
 import Icon from '../components/Icon'
 import Modal from '../components/Modal'
@@ -30,8 +30,8 @@ import TableCellString from '../components/TableCellString'
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  breakdowns: state.project.activeProject.tables.find(table => table.id === state.modal.activeModalTableId).breakdowns,
-  columns: state.project.activeProject.tables.find(table => table.id === state.modal.activeModalTableId).columns,
+  breakdowns: state.table.tables.find(table => table.id === state.modal.activeModalTableId).breakdowns,
+  columns: state.table.tables.find(table => table.id === state.modal.activeModalTableId).columns,
   tableId: state.modal.activeModalTableId
 })
 

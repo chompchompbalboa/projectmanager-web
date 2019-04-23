@@ -394,13 +394,10 @@ const tableReducers = (state = defaultState, action) => {
         nextName
       } = action
       const nextColumns = state.columns.map(column => {
-        if(column.id === columnId) {
-          return {
-            ...column,
-            name: nextName
-          }
+        return {
+          ...column,
+          name: column.id === columnId ? nextName : column.name
         }
-        return column
       })
       return {
         ...state,

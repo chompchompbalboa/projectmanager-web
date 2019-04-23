@@ -13,6 +13,12 @@ export const getOrganizationProjects = async (organzationId) => {
   })
 }
 
+export const getOrganizationTables = async (organzationId) => {
+  return axios.get('/app/organizations/' + organzationId + '/tables').then(response => {
+    return response.data
+  })
+}
+
 export const getTable = async (tableId) => {
   return axios.get('/app/tables/' + tableId).then(response => {
     return response.data

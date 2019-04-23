@@ -12,12 +12,8 @@ import UnderConstruction from './UnderConstruction'
 //-----------------------------------------------------------------------------
 export default class AppMe extends Component {
   render() {
-    const {
-      isActive
-    } = this.props
     return (
-      <AppContentContainer
-        isActive={isActive}>
+      <AppContentContainer>
         <UnderConstruction
           from='AppMe'/>
       </AppContentContainer>
@@ -29,5 +25,4 @@ export default class AppMe extends Component {
 // Props
 //-----------------------------------------------------------------------------
 AppMe.propTypes = {
-  isActive: bool
 }

@@ -10,8 +10,7 @@ import styled from 'styled-components'
 //-----------------------------------------------------------------------------
 const AppContentContainer = ({ children, isActive }) => {
   return (
-    <Container
-      isActive={isActive}>
+    <Container>
       {children}
     </Container>
   )
@@ -28,7 +27,6 @@ AppContentContainer.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  display: ${ props => props.isActive ? 'initial' : 'none'};
   width: 100%;
 `
 

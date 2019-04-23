@@ -25,6 +25,7 @@ Route::prefix('app')->group(function () {
   });
 
   Route::get('organizations/{organization}/projects', 'OrganizationController@projects');
+  Route::get('organizations/{organization}/tables', 'OrganizationController@tables');
   
   Route::patch('/view', 'ViewController@updateView');
 

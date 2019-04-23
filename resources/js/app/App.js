@@ -8,6 +8,10 @@ import styled from 'styled-components'
 
 import { colors, enums } from '../_config'
 
+import { 
+  updateActiveContent as updateActiveContentAction
+} from './redux/view/viewActions'
+
 import AppBusiness from './content/AppBusiness'
 import AppContent from './content/AppContent'
 import AppMe from './content/AppMe'
@@ -20,33 +24,48 @@ import AppSidebar from './content/AppSidebar'
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
+  activeContent: state.view.activeContent,
   activeModal: state.modal.activeModal
+})
+
+const mapDispatchToProps = dispatch => ({
+  updateActiveContent: nextActiveContent => dispatch(updateActiveContentAction(nextActiveContent))
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 class App extends Component {
+  
 	state = {
-    activeContent: 'PROJECTS',
     userId: userId
   }
 
+  contentComponents = {
+    ME: AppMe,
+    PROJECTS: AppProjects,
+    BUSINESS: AppBusiness,
+    SETTINGS: AppSettings
+  }
+
   changeActiveContent = (nextActiveContent) => {
-    this.setState({
-      activeContent: nextActiveContent
-    })
+    const {
+      updateActiveContent
+    } = this.props
+    updateActiveContent(nextActiveContent)
   }
 
 	render() {
     const {
+      activeContent,
       activeModal
     } = this.props
     const { 
-      activeContent,
       userId 
     } = this.state
     
+    const ContentComponent = this.contentComponents[activeContent]
+
 		return (
       <Container>
         <AppSidebar
@@ -54,15 +73,8 @@ class App extends Component {
           activeContentChoices={enums.CONTENT}
           changeActiveContent={this.changeActiveContent}/>
         <AppContent>
-          <AppMe 
-            isActive={activeContent === 'ME'}/>
-          <AppProjects
-            isActive={activeContent === 'PROJECTS'}
+          <ContentComponent
             userId={userId}/>
-          <AppBusiness 
-            isActive={activeContent === 'BUSINESS'}/>
-          <AppSettings 
-            isActive={activeContent === 'SETTINGS'}/>
         </AppContent>
         {activeModal !== null &&
           <AppModal
@@ -89,5 +101,6 @@ const Container = styled.div`
 `
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(App)

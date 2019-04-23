@@ -194,7 +194,7 @@ export const createTable = () => {
     dispatch(createTableReducer())
     const state = getState()
     const tableId = state.table.tables.find(table => table.id < 0).id
-    const projectId = state.table.id
+    const projectId = state.project.activeProject.id
     dispatch(setTableId(tableId))
     dispatch(createTableServer(projectId, tableId))
   }

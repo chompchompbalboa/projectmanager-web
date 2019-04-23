@@ -15,10 +15,12 @@ class CreateTable extends Migration
     {
         Schema::create('tables', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('project_id');
+            $table->unsignedInteger('organization_id')->nullable();
+            $table->unsignedInteger('project_id')->nullable();
             $table->string('name')->nullable();
             $table->timestamps();
 
+            $table->foreign('organization_id')->references('id')->on('organizations');
             $table->foreign('project_id')->references('id')->on('projects');
         });
     }

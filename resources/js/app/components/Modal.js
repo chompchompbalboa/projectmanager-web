@@ -78,7 +78,7 @@ const Container = styled.div`
 `
 
 const ContentContainer = styled.div`
-  background-color: ${colors.BACKGROUND};
+  background-color: white;
   padding: 3vw;
   display: flex;
   justify-content: center;

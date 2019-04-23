@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Organization;
 use App\Models\Project;
+use App\Models\Table;
 
 class OrganizationController extends Controller
 {
@@ -107,6 +108,22 @@ class OrganizationController extends Controller
         'activeProject' => $activeProject,
         'activeTableId' => $activeTableId,
         'projects' => Project::where('organization_id', $organization->id)->get()
+      ];
+    }
+
+    /**
+     * Retrieve the list of projects that belong to the organization
+     *
+     * @param  \App\Organization  $organization
+     * @return \Illuminate\Http\Response
+     */
+    public function tables(Organization $organization)
+    {
+      $tables = Table::where('organization_id', $organization->id)->where('project_id', null)->get();
+      $activeTableId = $tables->first()->id;
+      return [
+        'activeTableId' => $activeTableId,
+        'tables' => $tables
       ];
     }
 }

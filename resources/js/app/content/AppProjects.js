@@ -17,7 +17,7 @@ import {
 } from '../redux/table/tableActions'
 import { 
   updateLeftColumnWidth as updateLeftColumnWidthAction
-} from '../redux/view/viewActions';
+} from '../redux/view/viewActions'
 
 import AppContentContainer from './AppContentContainer'
 import AppProject from './AppProject'
@@ -45,6 +45,10 @@ class AppProjects extends Component {
   }
 
   componentDidMount = () => {
+    this.loadTables()
+  }
+  
+  loadTables = () => {
     const {
       setActiveProject,
       setProjects,
@@ -72,15 +76,11 @@ class AppProjects extends Component {
 
   render() {
     const {
-      isActive
-    } = this.props
-    const {
       isLoading
     } = this.state
 
     return (
-      <AppContentContainer
-        isActive={isActive}>
+      <AppContentContainer>
         {isLoading
           ? <Loading 
               height="100vh"/>
@@ -97,7 +97,6 @@ class AppProjects extends Component {
 // Props
 //-----------------------------------------------------------------------------
 AppProjects.propTypes = {
-  isActive: bool,
   setActiveProject: func,
   setProjects: func,
   setTableId: func,

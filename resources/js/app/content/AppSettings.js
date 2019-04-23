@@ -12,12 +12,8 @@ import UnderConstruction from './UnderConstruction'
 //-----------------------------------------------------------------------------
 export default class AppSettings extends Component {
   render() {
-    const {
-      isActive
-    } = this.props
     return (
-      <AppContentContainer
-        isActive={isActive}>
+      <AppContentContainer>
         <UnderConstruction
           from='AppSettings'/>
       </AppContentContainer>

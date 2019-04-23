@@ -13,6 +13,39 @@ class OrganizationTableSeeder extends Seeder
     {
       $organizations = factory(App\Models\Organization::class, 1)->create();
       $organizations->each(function($organization) {
+        
+        // Organization
+        
+        $tables = factory(App\Models\Table::class, 1)->create();
+        $tables->each(function($table) use ($organization, $tables) {
+          $table->organization_id = $organization->id;
+          $table->project_id = null;
+          $table->name = "Employees";
+          $table->save();
+
+          $columns = factory(App\Models\Column::class, 5)->create();
+          $columns->each(function($column, $key) use ($table, $tables) {
+            $column->table_id = $table->id;
+            $column->position = $key;
+            $column->save();
+          });
+
+          $rows = factory(App\Models\Row::class, 50)->create();
+          $rows->each(function($row) use($columns, $table, $tables) {
+            $row->table_id = $table->id;
+            $row->save();
+
+            $columns->each(function($column) use($row, $table) {
+              $cell = factory(App\Models\Cell::class)->create();
+              $cell->table_id = $table->id;
+              $cell->row_id = $row->id;
+              $cell->column_id = $column->id;
+              $cell->save();
+            });
+          });
+        });
+        
+        // Projects
 
         $projects = factory(App\Models\Project::class, 5)->create();
         $projects->each(function($project) use ($organization) {

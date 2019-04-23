@@ -10,6 +10,14 @@ import {
 //-----------------------------------------------------------------------------
 // Update Left Column Width
 //-----------------------------------------------------------------------------
+export const updateActiveContent = nextActiveContent => ({
+  type: 'UPDATE_ACTIVE_CONTENT',
+  nextActiveContent: nextActiveContent
+})
+
+//-----------------------------------------------------------------------------
+// Update Left Column Width
+//-----------------------------------------------------------------------------
 export const updateLeftColumnWidth = (nextLeftColumnWidth, isInitialLoad) => {
   return dispatch => {
     dispatch(updateLeftColumnWidthReducer(nextLeftColumnWidth))

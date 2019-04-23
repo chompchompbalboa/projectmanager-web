@@ -2,6 +2,7 @@
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
+  activeContent: 'PROJECTS',
   leftColumnWidth: 0.13
 }
 
@@ -10,6 +11,16 @@ const defaultState = {
 //-----------------------------------------------------------------------------
 const viewReducers = (state = defaultState, action) => {
   switch(action.type) {
+
+    case 'UPDATE_ACTIVE_CONTENT': {
+      const {
+        nextActiveContent
+      } = action
+      return {
+        ...state,
+        activeContent: nextActiveContent
+      }
+    }
 
     case 'UPDATE_LEFT_COLUMN_WIDTH': {
       const {

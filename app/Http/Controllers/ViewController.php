@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+use App\Models\View;
+
 class ViewController extends Controller
 {
 
@@ -17,8 +19,9 @@ class ViewController extends Controller
   public function updateView(Request $request) 
   {
     $user = Auth::user();
-    $user->active_left_column_width = $request->input('nextLeftColumnWidth');
-    if($user->save()) {
+    $view = View::find($user->view()->first()->id);
+    $view->active_left_column_width = $request->input('nextLeftColumnWidth');
+    if($view->save()) {
       return [
         'success' => true
       ];

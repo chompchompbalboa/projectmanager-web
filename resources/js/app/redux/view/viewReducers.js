@@ -1,8 +1,12 @@
 //-----------------------------------------------------------------------------
+// Import
+//-----------------------------------------------------------------------------
+import { enums } from '../../../_config'
+//-----------------------------------------------------------------------------
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  activeContent: 'ORGANIZATION',
+  activeContent: enums.CONTENT.includes(initialData.activeContent) ? initialData.activeContent : 'PROJECTS',
   leftColumnWidth: 0.13
 }
 

@@ -32,5 +32,12 @@ class User extends Authenticatable
     public function organization() {
       return $this->belongsTo('App\Models\Organization');
     }
+  
+    /**
+     * Get the view state for this user
+     */
+    public function view() {
+      return $this->hasOne('App\Models\View');
+    }
     
 }

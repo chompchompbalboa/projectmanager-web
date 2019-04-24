@@ -9,6 +9,7 @@ use App\Models\Cell;
 use App\Models\Column;
 use App\Models\Row;
 use App\Models\Table;
+use App\Models\View;
 
 class TableController extends Controller
 {
@@ -53,9 +54,10 @@ class TableController extends Controller
         $firstColumn->type = 'STRING';
         if($firstColumn->save()) {
           $user = Auth::user();
-          $user->active_project_id = $newTable->project_id;
-          $user->active_table_id = $newTable->id;
-          $user->save();
+          $view = View::find($user->view()->first()->id);
+          $view->active_project_id = $newTable->project_id;
+          $view->active_table_id = $newTable->id;
+          $view->save();
           return [
             'tableId' => $request->input('tableId'),
             'nextTableId' => $newTable->id,
@@ -74,9 +76,10 @@ class TableController extends Controller
     public function show(Table $table)
     {
       $user = Auth::user();
-      $user->active_project_id = $table->project_id;
-      $user->active_table_id = $table->id;
-      $user->save();
+      $view = View::find($user->view()->first()->id);
+      $view->active_project_id = $table->project_id;
+      $view->active_table_id = $table->id;
+      $view->save();
       $columns = Column::where('table_id', $table->id)->get();
       $rows = Row::where('table_id', $table->id)->get();
       return [

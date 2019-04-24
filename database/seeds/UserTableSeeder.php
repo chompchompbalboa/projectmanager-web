@@ -11,6 +11,13 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-      factory(App\Models\User::class, 1)->create();
+      $users = factory(App\Models\User::class, 1)->create();
+      $users->each(function($user) {
+        $views = factory(App\Models\View::class, 1)->create();
+        $views->each(function($view) use($user) {
+          $view->user_id = $user->id;
+          $view->save();
+        });
+      });
     }
 }

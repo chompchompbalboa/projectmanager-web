@@ -10,13 +10,15 @@ import { colors, layout } from '../../_config'
 import { query } from '../../_api'
 
 import { 
+  setOrganizationName as setOrganizationNameAction
+} from '../redux/organization/organizationActions'
+import { 
   setTableId as setTableIdAction,
   setTables as setTablesAction
 } from '../redux/table/tableActions'
-
 import { 
-  setOrganizationName as setOrganizationNameAction
-} from '../redux/organization/organizationActions'
+  updateLeftColumnWidth as updateLeftColumnWidthAction
+} from '../redux/view/viewActions'
 
 import AppOrganizationHeader from './AppOrganizationHeader'
 import AppContentContainer from './AppContentContainer'
@@ -33,7 +35,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setTableId: nextTableId => dispatch(setTableIdAction(nextTableId)),
   setTables: nextTables => dispatch(setTablesAction(nextTables)),
-  setOrganizationName: nextOrganizationName => dispatch(setOrganizationNameAction(nextOrganizationName))
+  setOrganizationName: nextOrganizationName => dispatch(setOrganizationNameAction(nextOrganizationName)),
+  updateLeftColumnWidth: (nextLeftColumnWidth, isInitialLoad) => dispatch(updateLeftColumnWidthAction(nextLeftColumnWidth, isInitialLoad))
 })
 
 //-----------------------------------------------------------------------------
@@ -55,13 +58,16 @@ class AppOrganization extends Component {
       setOrganizationName,
       setTableId,
       setTables,
+      updateLeftColumnWidth
     } = this.props
     query.getOrganizationTables(organizationId).then(organization => {
       const {
         name,
+        activeLeftColumnWidth,
         activeTableId,
         tables
       } = organization
+      updateLeftColumnWidth(activeLeftColumnWidth, true)
       setOrganizationName(name)
       setTables(tables)
       setTableId(activeTableId)
@@ -100,7 +106,8 @@ AppOrganization.propTypes = {
   organizationId: number,
   setOrganizationName: func,
   setTables: func,
-  setTableId: func
+  setTableId: func,
+  updateLeftColumnWidth: func
 }
 
 //-----------------------------------------------------------------------------

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Organization;
 use App\Models\Project;
 use App\Models\Table;
+use App\Models\View;
 
 class OrganizationController extends Controller
 {
@@ -96,15 +97,18 @@ class OrganizationController extends Controller
     public function projects(Organization $organization)
     {
       $user = Auth::user();
+      $view = View::find($user->view()->first()->id);
       $projects = Project::where('organization_id', $organization->id)->get();
-      $activeProjectId = $user->active_project_id !== null ? $user->active_project_id : $projects[0]->id ;
+      $activeProjectId = $view->active_project_id !== null ? $view->active_project_id : $projects[0]->id ;
       $activeProject = $projects->firstWhere('id', $activeProjectId);
       $activeTableId = 
-        $user->active_table_id !== null && $activeProject->tables()->get()->contains('id', $user->active_table_id) 
-        ? $user->active_table_id
+        $view->active_table_id !== null && $activeProject->tables()->get()->contains('id', $view->active_table_id) 
+        ? $view->active_table_id
         : $activeProject->tables()->first()->id;
+      $view->active_content = 'PROJECTS';
+      $view->save();
       return [
-        'activeLeftColumnWidth' => $user->active_left_column_width,
+        'activeLeftColumnWidth' => $view->activeLeftColumnWidth,
         'activeProject' => $activeProject,
         'activeTableId' => $activeTableId,
         'projects' => Project::where('organization_id', $organization->id)->get()
@@ -119,10 +123,18 @@ class OrganizationController extends Controller
      */
     public function tables(Organization $organization)
     {
+      $user = Auth::user();
+      $view = View::find($user->view()->first()->id);
+      $view->active_content = 'ORGANIZATION';
+      $view->save();
       $tables = Table::where('organization_id', $organization->id)->where('project_id', null)->get();
-      $activeTableId = $tables->first()->id;
+      $activeTableId = 
+        $view->active_table_id !== null && $tables->contains('id', $view->active_table_id) 
+        ? $view->active_table_id
+        : $tables->first()->id;
       return [
         'name' => $organization->name,
+        'activeLeftColumnWidth' => $view->activeLeftColumnWidth,
         'activeTableId' => $activeTableId,
         'tables' => $tables
       ];

@@ -82,9 +82,9 @@ class TableCell extends PureComponent {
       updateCell
     } = this.props
     const {
-      value
+      values
     } = this.state
-    updateCell(rowId, id, type, value === "" ? null : value)
+    updateCell(rowId, id, type, values[type] === "" ? null : values[type])
   }
 
   render() {
@@ -116,7 +116,7 @@ TableCell.propTypes = {
 	values: shape({
     BOOLEAN: oneOfType([bool, number]),
     DATETIME: string,
-    NUMBER: number,
+    NUMBER: oneOfType([number, string]),
     STRING: string,
   })
 }

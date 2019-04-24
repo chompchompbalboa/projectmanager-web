@@ -57,6 +57,7 @@ class App extends Component {
       activeModal
     } = this.props
     
+    
     const ContentComponent = this.contentComponents[activeContent]
 
 		return (

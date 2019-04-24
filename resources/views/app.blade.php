@@ -12,6 +12,7 @@
     <section id="react-container"></section>
     <script>
       let initialData = {
+        activeContent: '{{ $activeContent }}',
         userId: '{{ $userId }}',
         organizationId: '{{ $organizationId }}'
       }

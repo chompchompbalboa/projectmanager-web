@@ -41,6 +41,7 @@ class TableController extends Controller
     public function store(Request $request)
     {
       $newTable = new Table;
+      $newTable->organization_id = $request->input('organizationId');
       $newTable->project_id = $request->input('projectId');
       if($newTable->save()) {
         // Add the first column to the table. If you make changes to the defaults

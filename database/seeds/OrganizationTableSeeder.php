@@ -54,7 +54,8 @@ class OrganizationTableSeeder extends Seeder
           print('Project: '.$project->id.PHP_EOL);
 
           $tables = factory(App\Models\Table::class, 5)->create();
-          $tables->each(function($table) use ($project, $tables) {
+          $tables->each(function($table) use ($organization, $project, $tables) {
+            $table->organization_id = $organization->id;
             $table->project_id = $project->id;
             $table->save();
             

@@ -18,8 +18,7 @@
     "plugin:react/recommended"
   ],
   "globals": {
-    "organizationId": true,
-    "userId": true
+    "initialData": true
   },
   "plugins": [
     "react",

@@ -41,8 +41,9 @@ export const createFormula = async (breakdownId, newFormula) => {
   })
 }
 
-export const createTable = async (projectId, tableId) => {  
+export const createTable = async (organizationId, projectId, tableId) => {  
   return axios.post('/app/tables', {
+    organizationId: organizationId,
     projectId: projectId,
     tableId: tableId
   }).then(response => {

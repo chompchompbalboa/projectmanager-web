@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { string } from 'prop-types'
+import { string, func } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
@@ -12,10 +12,10 @@ import {
   updateActiveContent as updateActiveContentAction
 } from './redux/view/viewActions'
 
-import AppBusiness from './content/AppBusiness'
 import AppContent from './content/AppContent'
 import AppMe from './content/AppMe'
 import AppModal from './content/AppModal'
+import AppOrganization from './content/AppOrganization'
 import AppProjects from './content/AppProjects'
 import AppSettings from './content/AppSettings'
 import AppSidebar from './content/AppSidebar'
@@ -36,15 +36,11 @@ const mapDispatchToProps = dispatch => ({
 // Component
 //-----------------------------------------------------------------------------
 class App extends Component {
-  
-	state = {
-    userId: userId
-  }
 
   contentComponents = {
     ME: AppMe,
     PROJECTS: AppProjects,
-    BUSINESS: AppBusiness,
+    ORGANIZATION: AppOrganization,
     SETTINGS: AppSettings
   }
 
@@ -60,9 +56,6 @@ class App extends Component {
       activeContent,
       activeModal
     } = this.props
-    const { 
-      userId 
-    } = this.state
     
     const ContentComponent = this.contentComponents[activeContent]
 
@@ -73,8 +66,7 @@ class App extends Component {
           activeContentChoices={enums.CONTENT}
           changeActiveContent={this.changeActiveContent}/>
         <AppContent>
-          <ContentComponent
-            userId={userId}/>
+          <ContentComponent/>
         </AppContent>
         {activeModal !== null &&
           <AppModal
@@ -89,7 +81,9 @@ class App extends Component {
 // Props
 //-----------------------------------------------------------------------------
 App.propTypes = {
-  activeModal: string
+  activeContent: string,
+  activeModal: string,
+  updateActiveContent: func
 }
 
 //-----------------------------------------------------------------------------

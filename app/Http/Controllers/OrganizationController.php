@@ -122,6 +122,7 @@ class OrganizationController extends Controller
       $tables = Table::where('organization_id', $organization->id)->where('project_id', null)->get();
       $activeTableId = $tables->first()->id;
       return [
+        'name' => $organization->name,
         'activeTableId' => $activeTableId,
         'tables' => $tables
       ];

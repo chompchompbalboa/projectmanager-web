@@ -2,33 +2,24 @@
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  activeContent: 'ORGANIZATION',
-  leftColumnWidth: 0.13
+  id: Number(initialData.organizationId),
+  name: null
 }
 
 //-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
-const viewReducers = (state = defaultState, action) => {
+const organizationReducers = (state = defaultState, action) => {
   switch(action.type) {
 
-    case 'UPDATE_ACTIVE_CONTENT': {
+    case 'SET_ORGANIZATION_NAME': {
       const {
-        nextActiveContent
+        nextName
       } = action
-      return {
-        ...state,
-        activeContent: nextActiveContent
-      }
-    }
 
-    case 'UPDATE_LEFT_COLUMN_WIDTH': {
-      const {
-        nextLeftColumnWidth
-      } = action
       return {
         ...state,
-        leftColumnWidth: nextLeftColumnWidth !== null ? nextLeftColumnWidth : state.leftColumnWidth
+        name: nextName
       }
     }
 
@@ -37,4 +28,4 @@ const viewReducers = (state = defaultState, action) => {
   }
 }
 
-export default viewReducers
+export default organizationReducers

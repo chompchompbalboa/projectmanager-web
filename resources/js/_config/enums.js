@@ -1,3 +1,3 @@
 export default {
-	CONTENT: ['ME', 'PROJECTS', 'BUSINESS', 'SETTINGS']
+	CONTENT: ['ME', 'PROJECTS', 'ORGANIZATION', 'SETTINGS']
 }

@@ -17,13 +17,16 @@ const AppSidebar = ({
 	activeContentChoices,
 	changeActiveContent
 }) => {
+  
+  const contentChoiceNames = {
+    ME: "Me",
+    ORGANIZATION: "Org",
+    PROJECTS: "Projects",
+    SETTINGS: "Settings"
+  }
 	return (
 		<Container>
 			{activeContentChoices.map((activeContentChoice, index) => {
-				// Convert the name from uppercase to first letter uppercase
-				const activeContentChoiceName =
-					activeContentChoice.slice(0, 1) +
-					activeContentChoice.slice(1, activeContentChoice.length).toLowerCase()
 				return (
 					<ActiveContentChoice
 						key={index}
@@ -34,7 +37,7 @@ const AppSidebar = ({
                 icon={activeContentChoice} 
                 size={"calc(" + layout.SIDEBAR_WIDTH + " / 2.25)"}/>
 							<ActiveContentChoiceName>
-								{activeContentChoiceName}
+								{contentChoiceNames[activeContentChoice]}
 							</ActiveContentChoiceName>
 						</NameAndIconContainer>
 					</ActiveContentChoice>

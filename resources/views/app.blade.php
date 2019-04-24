@@ -10,7 +10,12 @@
   </head>
   <body>
     <section id="react-container"></section>
-    <script>let userId = '{{ $userId }}'; let organizationId = '{{ $organizationId }}';</script>
+    <script>
+      let initialData = {
+        userId: '{{ $userId }}',
+        organizationId: '{{ $organizationId }}'
+      }
+    </script>
     <script src="{{ mix('js/app.js') }}"></script>
   </body>
 </html>

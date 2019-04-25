@@ -16,13 +16,13 @@ Route::prefix('app')->group(function () {
     $user = Auth::loginUsingId(1, true);
     $view = View::find($user->view()->first()->id);
     return view('app')->with([
-      'activeContent' => $view->activeContent,
+      'activeContainer' => $view->container,
       'organizationId' => $user->organization()->first()->id,
       'userId' => $user->id
     ]);
   });
 
-  Route::get('organizations/{organization}/projects', 'OrganizationController@projects');
+  Route::get('organizations/{organization}/containers', 'OrganizationController@containers');
   Route::get('organizations/{organization}/tables', 'OrganizationController@tables');
   
   Route::patch('/view', 'ViewController@updateView');

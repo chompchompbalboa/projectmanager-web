@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTable extends Migration
+class CreateDropdown extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,17 @@ class CreateTable extends Migration
      */
     public function up()
     {
-        Schema::create('tables', function (Blueprint $table) {
+        Schema::create('dropdowns', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('organization_id')->nullable();
-            $table->unsignedInteger('project_id')->nullable();
+            $table->unsignedInteger('organization_id');
+            $table->unsignedInteger('collection_id')->nullable();
             $table->string('name')->nullable();
+            $table->unsignedInteger('column_id');
             $table->timestamps();
-
+          
             $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->foreign('project_id')->references('id')->on('projects');
+            $table->foreign('collection_id')->references('id')->on('collections');
+            $table->foreign('column_id')->references('id')->on('columns');
         });
     }
 
@@ -32,6 +34,6 @@ class CreateTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tables');
+        Schema::dropIfExists('dropdowns');
     }
 }

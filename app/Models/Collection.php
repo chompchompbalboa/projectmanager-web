@@ -4,23 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Project extends Model
+class Collection extends Model
 {
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'unique_code', 'name', 'tables'];
+  protected $visible = ['id', 'name', 'tables'];
   
   /**
    * Build custom attributes
    */
   protected $appends = ['tables'];
   
+  public function dropdowns() {
+    return $this->hasMany('App\Models\Dropdown');
+  }
+  
   /**
-   * Get the organization the user belongs to
+   * Get the container the collection belongs to
    */
-  public function organization() {
-    return $this->belongsTo('App\Models\Organization');
+  public function container() {
+    return $this->belongsTo('App\Models\Container');
   }
   
   /**

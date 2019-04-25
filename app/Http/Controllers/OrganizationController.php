@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 use App\Models\Organization;
-use App\Models\Project;
+use App\Models\Container;
 use App\Models\Table;
 use App\Models\View;
 
@@ -89,34 +89,34 @@ class OrganizationController extends Controller
     }
 
     /**
-     * Retrieve the list of projects that belong to the organization
+     * Retrieve the list of containers that belong to the organization
      *
      * @param  \App\Organization  $organization
      * @return \Illuminate\Http\Response
      */
-    public function projects(Organization $organization)
+    public function containers(Organization $organization)
     {
       $user = Auth::user();
       $view = View::find($user->view()->first()->id);
-      $projects = Project::where('organization_id', $organization->id)->get();
-      $activeProjectId = $view->active_project_id !== null ? $view->active_project_id : $projects[0]->id ;
-      $activeProject = $projects->firstWhere('id', $activeProjectId);
+      $containers = Container::where('organization_id', $organization->id)->get();
+      $activeContainerId = $view->container_id !== null ? $view->container_id : $containers[0]->id ;
+      $activeContainer = $containers->firstWhere('id', $activeContainerId);
       $activeTableId = 
-        $view->active_table_id !== null && $activeProject->tables()->get()->contains('id', $view->active_table_id) 
-        ? $view->active_table_id
-        : $activeProject->tables()->first()->id;
-      $view->active_content = 'PROJECTS';
+        $view->table_id !== null && $activeContainer->tables()->get()->contains('id', $view->table_id) 
+        ? $view->table_id
+        : $activeContainer->tables()->first()->id;
+      $view->container_id = 'PROJECTS';
       $view->save();
       return [
-        'activeLeftColumnWidth' => $view->activeLeftColumnWidth,
-        'activeProject' => $activeProject,
+        'activeLeftColumnWidth' => $view->leftColumnWidth,
+        'activeContainer' => $activeContainerId,
         'activeTableId' => $activeTableId,
-        'projects' => Project::where('organization_id', $organization->id)->get()
+        'containers' => $containers
       ];
     }
 
     /**
-     * Retrieve the list of projects that belong to the organization
+     * Retrieve the list of tables that belong to the organization
      *
      * @param  \App\Organization  $organization
      * @return \Illuminate\Http\Response
@@ -125,12 +125,12 @@ class OrganizationController extends Controller
     {
       $user = Auth::user();
       $view = View::find($user->view()->first()->id);
-      $view->active_content = 'ORGANIZATION';
+      $view->container_id = 'ORGANIZATION';
       $view->save();
-      $tables = Table::where('organization_id', $organization->id)->where('project_id', null)->get();
+      $tables = Table::where('organization_id', $organization->id)->where('container_id', null)->get();
       $activeTableId = 
-        $view->active_table_id !== null && $tables->contains('id', $view->active_table_id) 
-        ? $view->active_table_id
+        $view->table_id !== null && $tables->contains('id', $view->table_id) 
+        ? $view->table_id
         : $tables->first()->id;
       return [
         'name' => $organization->name,

@@ -11,12 +11,15 @@ class Organization extends Model
    */
   protected $visible = ['id', 'name'];
   
+  public function dropdowns() {
+    return $this->hasMany('App\Models\Dropdown')->where('project_id', null);
+  }
   
   public function users() {
     return $this->hasMany('App\Models\User');
   }
   
-  public function projects() {
-    return $this->hasMany('App\Models\Project');
+  public function containers() {
+    return $this->hasMany('App\Models\Container');
   }
 }

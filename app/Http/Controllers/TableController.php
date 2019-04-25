@@ -43,7 +43,7 @@ class TableController extends Controller
     {
       $newTable = new Table;
       $newTable->organization_id = $request->input('organizationId');
-      $newTable->project_id = $request->input('projectId');
+      $newTable->collection_id = $request->input('collectionId');
       if($newTable->save()) {
         // Add the first column to the table. If you make changes to the defaults
         // here, you also need to update the column defaults on the front end.
@@ -55,8 +55,8 @@ class TableController extends Controller
         if($firstColumn->save()) {
           $user = Auth::user();
           $view = View::find($user->view()->first()->id);
-          $view->active_project_id = $newTable->project_id;
-          $view->active_table_id = $newTable->id;
+          $view->collection_id = $newTable->collection_id;
+          $view->table_id = $newTable->id;
           $view->save();
           return [
             'tableId' => $request->input('tableId'),
@@ -77,8 +77,8 @@ class TableController extends Controller
     {
       $user = Auth::user();
       $view = View::find($user->view()->first()->id);
-      $view->active_project_id = $table->project_id;
-      $view->active_table_id = $table->id;
+      $view->collection_id = $table->collection_id;
+      $view->table_id = $table->id;
       $view->save();
       $columns = Column::where('table_id', $table->id)->get();
       $rows = Row::where('table_id', $table->id)->get();

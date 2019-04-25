@@ -2,13 +2,10 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, func, shape, string } from 'prop-types'
-import { connect } from 'react-redux'
+import { array, bool, func } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout } from '../../_config'
-
-import Icon from '../components/Icon'
+import { colors } from '../../_config'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -93,7 +90,9 @@ class Dropdown extends Component {
 // Props
 //-----------------------------------------------------------------------------
 Dropdown.propTypes = {
+  closeDropdown: func,
 	chooseOption: func,
+  isDropdownVisible: bool,
 	options: array
 }
 

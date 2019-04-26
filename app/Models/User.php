@@ -30,14 +30,14 @@ class User extends Authenticatable
      * Get the organization the user belongs to
      */
     public function organization() {
-      return $this->belongsTo('App\Models\Organization');
+      return $this->belongsTo('App\Models\Organization')->first();
     }
   
     /**
      * Get the view state for this user
      */
     public function view() {
-      return $this->hasOne('App\Models\View');
+      return $this->hasOne('App\Models\View')->first();
     }
     
 }

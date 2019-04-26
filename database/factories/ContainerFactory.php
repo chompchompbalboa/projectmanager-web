@@ -13,11 +13,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Models\Table::class, function (Faker $faker) {
+$factory->define(App\Models\Container::class, function (Faker $faker) {
     return [
-        'organization_id' => null,
-        'container_id' => null,
-        'collection_id' => null,
-        'name' => $faker->jobTitle
+        'organization_id' => 1,
+        'name' => $faker->word,
+        'icon' => $faker->word
     ];
 });

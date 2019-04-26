@@ -13,10 +13,10 @@
 $factory->define(App\Models\View::class, function () {
     return [
       'user_id' => 1,
-      'active_content' => null,
-      'active_project_id' => null,
-      'active_table_id' => null,
-      'active_breakdown_id' => null,
-      'active_left_column_width' => null
+      'container_id' => null,
+      'collection_id' => null,
+      'table_id' => null,
+      'breakdown_id' => null,
+      'left_column_width' => null
     ];
 });

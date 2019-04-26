@@ -9,7 +9,7 @@ class Container extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name', 'icon', 'collections'];
+  protected $visible = ['id', 'name', 'icon'];
   
   /**
    * Build custom attributes

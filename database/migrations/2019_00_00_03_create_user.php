@@ -18,7 +18,7 @@ class CreateUser extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->unsignedInteger('organization_id');
+            $table->unsignedInteger('organization_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

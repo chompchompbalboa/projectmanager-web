@@ -2,33 +2,26 @@
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  activeContainerId: null,
-  leftColumnWidth: 0.13
+  activeModal: null,
+  activeModalTableId: null
 }
 
 //-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
-const viewReducers = (state = defaultState, action) => {
+const modalReducers = (state = defaultState, action) => {
   switch(action.type) {
 
-    case 'UPDATE_ACTIVE_CONTAINER_ID': {
+    case 'UPDATE_ACTIVE_MODAL': {
       const {
-        nextActiveContainerId
+        nextActiveModal,
+        nextActiveId
       } = action
-      return {
-        ...state,
-        activeContainerId: nextActiveContainerId
-      }
-    }
 
-    case 'UPDATE_LEFT_COLUMN_WIDTH': {
-      const {
-        nextLeftColumnWidth
-      } = action
       return {
         ...state,
-        leftColumnWidth: nextLeftColumnWidth !== null ? nextLeftColumnWidth : state.leftColumnWidth
+        activeModal: nextActiveModal,
+        activeModalTableId: nextActiveModal === 'BREAKDOWNS' ? nextActiveId : null
       }
     }
 
@@ -37,4 +30,4 @@ const viewReducers = (state = defaultState, action) => {
   }
 }
 
-export default viewReducers
+export default modalReducers

@@ -12,8 +12,8 @@
     <section id="react-container"></section>
     <script>
       let initialData = {
-        activeContent: '{{ $activeContent }}',
-        userId: '{{ $userId }}',
+        activeContainerId: '{{ $activeContainerId }}',
+        containers: '{{ $containers }}',
         organizationId: '{{ $organizationId }}'
       }
     </script>

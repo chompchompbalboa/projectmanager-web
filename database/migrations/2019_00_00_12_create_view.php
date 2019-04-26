@@ -16,7 +16,7 @@ class CreateView extends Migration
         Schema::create('views', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
-            $table->string('container_id')->nullable();
+            $table->unsignedInteger('container_id')->nullable();
             $table->unsignedInteger('collection_id')->nullable();
             $table->unsignedInteger('table_id')->nullable();
             $table->unsignedInteger('breakdown_id')->nullable();

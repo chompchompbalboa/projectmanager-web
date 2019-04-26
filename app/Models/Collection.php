@@ -28,6 +28,13 @@ class Collection extends Model
   }
   
   /**
+   * Get the organization the collection belongs to
+   */
+  public function organization() {
+    return $this->belongsTo('App\Models\Organization');
+  }
+  
+  /**
    * Get all the tables that belong to this project
    */
   public function tables() {

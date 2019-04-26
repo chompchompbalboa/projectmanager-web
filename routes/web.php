@@ -5,6 +5,7 @@
 
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Container;
 use App\Models\View;
 
 //-----------------------------------------------------------------------------
@@ -14,11 +15,12 @@ Route::prefix('app')->group(function () {
 
   Route::get('/', function () {
     $user = Auth::loginUsingId(1, true);
-    $view = View::find($user->view()->first()->id);
+    $view = $user->view();
+    $organization = $user->organization();
     return view('app')->with([
-      'activeContainer' => $view->container,
-      'organizationId' => $user->organization()->first()->id,
-      'userId' => $user->id
+      'activeContainerId' => $view->container_id,
+      'containers' => $organization->containers(),
+      'organizationId' => $organization->id
     ]);
   });
 

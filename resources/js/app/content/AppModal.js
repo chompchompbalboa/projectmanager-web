@@ -2,35 +2,40 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { oneOf } from 'prop-types'
+import { string } from 'prop-types'
+import { connect } from 'react-redux'
 
 import AppModalBreakdowns from './AppModalBreakdowns'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeModal: state.view.activeModal
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const AppModal = ({ activeModal }) => {
-  
-  const modals = {
-    BREAKDOWNS: AppModalBreakdowns
+  if (activeModal !== null) {
+    const modals = {
+      BREAKDOWNS: AppModalBreakdowns
+    }
+    const ActiveModal = modals[activeModal]
+    
+    return <ActiveModal />
   }
-
-  const ActiveModal = modals[activeModal]
-
-  return (
-    <ActiveModal />
-  )
+  return null
 }
 
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
 AppModal.propTypes = {
-  activeModal: oneOf([
-    'BREAKDOWNS'
-  ])
-}
-AppModal.defaultProps = {
-  activeModal: 'BREAKDOWNS'
+  activeModal: string
 }
 
-export default AppModal
+export default connect(
+  mapStateToProps
+)(AppModal)

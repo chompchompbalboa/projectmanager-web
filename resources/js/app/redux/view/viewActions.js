@@ -8,11 +8,19 @@ import {
 } from '../status/statusActions'
 
 //-----------------------------------------------------------------------------
-// Update Left Column Width
+// Update Active Container Id
 //-----------------------------------------------------------------------------
-export const updateActiveContent = nextActiveContent => ({
-  type: 'UPDATE_ACTIVE_CONTENT',
-  nextActiveContent: nextActiveContent
+export const updateActiveContainerId = nextActiveContainerId => ({
+  type: 'UPDATE_ACTIVE_CONTAINER_ID',
+  nextActiveContainerId: nextActiveContainerId
+})
+
+//-----------------------------------------------------------------------------
+// Update Active Modal
+//-----------------------------------------------------------------------------
+export const updateActiveModal = nextActiveModal => ({
+  type: 'UPDATE_ACTIVE_MODAL',
+  nextActiveModal: nextActiveModal
 })
 
 //-----------------------------------------------------------------------------

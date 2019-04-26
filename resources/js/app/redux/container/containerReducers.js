@@ -1,33 +1,25 @@
 //-----------------------------------------------------------------------------
+// Imports
+//-----------------------------------------------------------------------------
+import containerNormalizer from './containerNormalizer'
+
+//-----------------------------------------------------------------------------
 // Default State
 //-----------------------------------------------------------------------------
+const normalizedContainers = containerNormalizer(initialData.containers)
 const defaultState = {
-  activeModal: null,
-  activeModalTableId: null
+  containers: normalizedContainers.entities.containers,
+  containerIds: normalizedContainers.result
 }
 
 //-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
-const modalReducers = (state = defaultState, action) => {
+const containerReducers = (state = defaultState, action) => {
   switch(action.type) {
-
-    case 'UPDATE_ACTIVE_MODAL': {
-      const {
-        nextActiveModal,
-        nextActiveId
-      } = action
-
-      return {
-        ...state,
-        activeModal: nextActiveModal,
-        activeModalTableId: nextActiveModal === 'BREAKDOWNS' ? nextActiveId : null
-      }
-    }
-
     default:
       return state
   }
 }
 
-export default modalReducers
+export default containerReducers

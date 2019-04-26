@@ -2,45 +2,61 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, func, oneOf } from 'prop-types'
+import { array, func, number, object, shape, string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { colors, enums, layout } from '../../_config'
+import { colors, layout } from '../../_config'
+
+import {
+  updateActiveContainerId as updateActiveContainerIdAction
+} from '../redux/view/viewActions'
+
+import { selectContainerIds, selectContainers } from '../redux/container/containerSelectors'
 
 import Icon from '../components/Icon'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeContainerId: state.view.activeContainerId,
+  containerIds: selectContainerIds(state),
+  containers: selectContainers(state)
+})
+
+const mapDispatchToProps = dispatch => ({
+  updateActiveContainerId: nextActiveContainerId => dispatch(updateActiveContainerIdAction(nextActiveContainerId))
+})
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const AppSidebar = ({
-	activeContent,
-	activeContentChoices,
-	changeActiveContent
+  activeContainerId,
+  containerIds,
+  containers,
+  updateActiveContainerId
 }) => {
   
-  const contentChoiceNames = {
-    ME: "Me",
-    ORGANIZATION: "Org",
-    PROJECTS: "Projects",
-    SETTINGS: "Settings"
-  }
 	return (
 		<Container>
-			{activeContentChoices.map((activeContentChoice, index) => {
+			{containerIds.map(containerId => {
+        const container = containers[containerId]
 				return (
-					<ActiveContentChoice
-						key={index}
-						isActive={activeContentChoice === activeContent}
-						onClick={() => changeActiveContent(activeContentChoice)}>
+					<ActiveContainerChoice
+						key={container.id}
+						isActive={container.id === activeContainerId}
+						onClick={() => updateActiveContainerId(container.id)}>
 						<NameAndIconContainer>
               <Icon 
-                icon={activeContentChoice} 
+                icon={container.icon} 
                 size={"calc(" + layout.SIDEBAR_WIDTH + " / 2.25)"}/>
-							<ActiveContentChoiceName>
-								{contentChoiceNames[activeContentChoice]}
-							</ActiveContentChoiceName>
+							<ActiveContainerChoiceName>
+								{container.name}
+							</ActiveContainerChoiceName>
 						</NameAndIconContainer>
-					</ActiveContentChoice>
+					</ActiveContainerChoice>
 				)
 			})}
 		</Container>
@@ -51,9 +67,10 @@ const AppSidebar = ({
 // Props
 //-----------------------------------------------------------------------------
 AppSidebar.propTypes = {
-	activeContent: oneOf(enums.CONTENT),
-	activeContentChoices: array,
-	changeActiveContent: func
+  activeContainerId: number,
+  containerIds: array,
+  containers: object,
+  updateActiveContainerId: func
 }
 
 //-----------------------------------------------------------------------------
@@ -69,13 +86,12 @@ const Container = styled.div`
   box-shadow: 0px 0px 2px ${ colors.BOX_SHADOW }
 `
 
-const ActiveContentChoice = styled.div`
+const ActiveContainerChoice = styled.div`
 	cursor: pointer;
 	width: 100%;
 	height: 100%;
 	height: ${layout.SIDEBAR_WIDTH};
-	background-color: ${props =>
-		props.isActive ? colors.BACKGROUND_SECONDARY : 'transparent'};
+	background-color: ${props => props.isActive ? colors.BACKGROUND_SECONDARY : 'transparent'};
 	color: ${props => (props.isActive ? colors.PRIMARY : colors.TEXT_INACTIVE)};
   display: flex;
   border-right: 3px solid ${props => props.isActive ? colors.PRIMARY : 'transparent'};
@@ -90,10 +106,13 @@ const NameAndIconContainer = styled.div`
 	align-items: center;
 `
 
-const ActiveContentChoiceName = styled.div`
+const ActiveContainerChoiceName = styled.div`
 	color: 
 	margin-top: 0.5vh;
 	font-size: 10px;
 `
 
-export default AppSidebar
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AppSidebar)

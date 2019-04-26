@@ -2,7 +2,8 @@
 // Default State
 //-----------------------------------------------------------------------------
 const defaultState = {
-  activeContainerId: null,
+  activeContainerId: initialData.activeContainerId,
+  activeModal: null,
   leftColumnWidth: 0.13
 }
 
@@ -19,6 +20,16 @@ const viewReducers = (state = defaultState, action) => {
       return {
         ...state,
         activeContainerId: nextActiveContainerId
+      }
+    }
+
+    case 'UPDATE_ACTIVE_MODAL': {
+      const {
+        nextActiveModal
+      } = action
+      return {
+        ...state,
+        activeModal: nextActiveModal
       }
     }
 

@@ -54,18 +54,21 @@ class OrganizationTableSeeder extends Seeder
         });
 
         // Containers
-
-        $containers = factory(App\Models\Container::class, 1)->create();
-        $containers->each(function($container) use($organization) {
+        $containerMap = [
+          ['name' => "Projects", 'icon' => "PROJECTS", 'collections' => 5],
+          ['name' => "Org", 'icon' => "ORGANIZATION", 'collections' => 0]
+        ];
+        $containers = factory(App\Models\Container::class, count($containerMap))->create();
+        $containers->each(function($container, $containerKey) use($containerMap, $organization) {
           $container->organization_id = $organization->id;
-          $container->name = "Projects";
-          $container->icon = "PROJECTS";
+          $container->name = $containerMap[$containerKey]['name'];
+          $container->icon = $containerMap[$containerKey]['icon'];
           $container->save();
           print('Container: '.$container->id.PHP_EOL);
         
           // Collections
   
-          $collections = factory(App\Models\Collection::class, 5)->create();
+          $collections = factory(App\Models\Collection::class, $containerMap[$containerKey]['collections'])->create();
           $collections->each(function($collection) use ($container) {
             $collection->container_id = $container->id;
             $collection->save();

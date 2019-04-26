@@ -12,9 +12,9 @@
     <section id="react-container"></section>
     <script>
       let initialData = {
-        activeContainerId: '{{ $activeContainerId }}',
-        containers: '{{ $containers }}',
-        organizationId: '{{ $organizationId }}'
+        activeContainerId: @json($activeContainerId),
+        containers: @json($containers),
+        organizationId: @json($organizationId)
       }
     </script>
     <script src="{{ mix('js/app.js') }}"></script>

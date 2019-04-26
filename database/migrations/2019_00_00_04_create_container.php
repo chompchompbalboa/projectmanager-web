@@ -15,11 +15,13 @@ class CreateContainer extends Migration
     {
         Schema::create('containers', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('organization_id');
+            $table->unsignedInteger('user_id')->nullable();
+            $table->unsignedInteger('organization_id')->nullable();
             $table->string('name');
             $table->string('icon');
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('organization_id')->references('id')->on('organizations');
         });
     }

@@ -26,6 +26,10 @@ class User extends Authenticatable
       'created_at', 'password', 'remember_token', 'updated_at'
     ];
   
+    public function containers() {
+      return $this->hasMany('App\Models\Container')->get();
+    }
+  
     /**
      * Get the organization the user belongs to
      */

@@ -1,18 +1,19 @@
-import { combineReducers } from 'redux'
+//-----------------------------------------------------------------------------
+// Imports
+//-----------------------------------------------------------------------------
+import { combineReducers } from 'redux-immutable'
+
+import activeReducers from './active/activeReducers'
+import collectionReducers from './collection/collectionReducers'
 import containerReducers from './container/containerReducers'
-import modalReducers from './modal/modalReducers'
-import organizationReducers from './organization/organizationReducers'
-import projectReducers from './project/projectReducers'
-import statusReducers from './status/statusReducers'
-import tableReducers from './table/tableReducers'
 import viewReducers from './view/viewReducers'
 
+//-----------------------------------------------------------------------------
+// Combine Reducers
+//-----------------------------------------------------------------------------
 export default combineReducers({
+  active: activeReducers,
+  collection: collectionReducers,
   container: containerReducers,
-  modal: modalReducers,
-  organization: organizationReducers,
-  project: projectReducers,
-  status: statusReducers,
-  table: tableReducers,
-  view: viewReducers
+  view: viewReducers,
 })

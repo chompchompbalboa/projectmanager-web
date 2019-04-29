@@ -1,5 +1,5 @@
 import { mutation } from '../../../_api'
-import { timing } from '../../../_config'
+import { timing } from '../../config'
 import clone from '../../../_utils/clone'
 
 import { setStatus } from '../status/statusActions'

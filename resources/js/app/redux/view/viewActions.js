@@ -1,50 +1,15 @@
 //-----------------------------------------------------------------------------
-// Imports
+// Update Views
 //-----------------------------------------------------------------------------
-import { mutation } from '../../../_api'
-
-import { 
-  setStatus 
-} from '../status/statusActions'
-
-//-----------------------------------------------------------------------------
-// Update Active Container Id
-//-----------------------------------------------------------------------------
-export const updateActiveContainerId = nextActiveContainerId => ({
-  type: 'UPDATE_ACTIVE_CONTAINER_ID',
-  nextActiveContainerId: nextActiveContainerId
+export const updateViews = nextViews => ({
+  type: 'UPDATE_VIEWS',
+  nextViews: nextViews
 })
 
 //-----------------------------------------------------------------------------
-// Update Active Modal
+// Update View Ids
 //-----------------------------------------------------------------------------
-export const updateActiveModal = nextActiveModal => ({
-  type: 'UPDATE_ACTIVE_MODAL',
-  nextActiveModal: nextActiveModal
+export const updateViewIds = nextViewIds => ({
+  type: 'UPDATE_VIEW_IDS',
+  nextViewIds: nextViewIds
 })
-
-//-----------------------------------------------------------------------------
-// Update Left Column Width
-//-----------------------------------------------------------------------------
-export const updateLeftColumnWidth = (nextLeftColumnWidth, isInitialLoad) => {
-  return dispatch => {
-    dispatch(updateLeftColumnWidthReducer(nextLeftColumnWidth))
-    if (!isInitialLoad) {
-      dispatch(updateLeftColumnWidthServer(nextLeftColumnWidth))
-    }
-  }
-}
-
-const updateLeftColumnWidthReducer = nextLeftColumnWidth => ({
-  type: 'UPDATE_LEFT_COLUMN_WIDTH',
-  nextLeftColumnWidth: nextLeftColumnWidth
-})
-
-const updateLeftColumnWidthServer = nextLeftColumnWidth => {
-  return dispatch => {
-    dispatch(setStatus('SAVING'))
-    mutation.updateView(nextLeftColumnWidth).then(success => {
-      success && dispatch(setStatus('SAVED'))
-    })
-  }
-}

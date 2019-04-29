@@ -5,33 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class View extends Model
-{  
+{
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'containerId', 'projectId', 'tableId', 'breakdownId', 'leftColumnWidth'];
-
+  protected $visible = ['id', 'name'];
+  
   /**
-   * Build custom attributes
+   * Get the collections the view belongs to
    */
-  protected $appends = ['containerId', 'projectId', 'tableId', 'breakdownId', 'leftColumnWidth'];
-
+  public function collections() {
+    return $this->belongsToMany('App\Models\Collection');
+  }
+  
   /**
-   * Rename table columns from snake case to camel case
+   * Get all the modules that belong to this view
    */
-  public function getContainerIdAttribute() {
-    return $this->attributes['container_id'];
-  }
-  public function getProjectIdAttribute() {
-    return $this->attributes['project_id'];
-  }
-  public function getTableIdAttribute() {
-    return $this->attributes['table_id'];
-  }
-  public function getBreakdownIdAttribute() {
-    return $this->attributes['breakdown_id'];
-  }
-  public function getLeftColumnWidthAttribute() {
-    return $this->attributes['left_column_width'];
+  public function modules() {
+    return $this->belongsToMany('App\Models\Module');
   }
 }

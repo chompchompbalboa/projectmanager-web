@@ -12,25 +12,23 @@ class Container extends Model
   protected $visible = ['id', 'name', 'icon'];
   
   /**
-   * Build custom attributes
+   * Get all the collections that belong to this container
    */
-  protected $appends = ['collections'];
+  public function collections() {
+    return $this->belongsToMany('App\Models\Collection');
+  }
   
   /**
    * Get the organization the container belongs to
    */
-  public function container() {
-    return $this->belongsTo('App\Models\Organization');
+  public function organization() {
+    return $this->belongsTo('App\Models\Organization'); 
   }
   
   /**
-   * Get all the collections that belong to this container
+   * Get the user the container belongs to
    */
-  public function collections() {
-    return $this->hasMany('App\Models\Collection');
-  }
-  
-  public function getCollectionsAttribute() {
-    return $this->collections()->get();
+  public function user() {
+    return $this->belongsTo('App\Models\User'); 
   }
 }

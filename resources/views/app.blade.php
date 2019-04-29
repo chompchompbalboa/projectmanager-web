@@ -12,9 +12,12 @@
     <section id="react-container"></section>
     <script>
       let initialData = {
+        activeCollectionId: @json($activeCollectionId),
+        collections: @json($collections),
         activeContainerId: @json($activeContainerId),
         containers: @json($containers),
-        organizationId: @json($organizationId)
+        activeViewId: @json($activeViewId),
+        views: @json($views),
       }
     </script>
     <script src="{{ mix('js/app.js') }}"></script>

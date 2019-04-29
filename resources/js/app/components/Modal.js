@@ -6,7 +6,7 @@ import { func } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { colors } from '../../_config'
+import { colors } from '../config'
 
 import {
   updateActiveModal as updateActiveModalAction

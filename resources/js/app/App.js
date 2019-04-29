@@ -1,13 +1,13 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
+import React from 'react'
 import { string, func } from 'prop-types'
 import styled from 'styled-components'
 
-import AppContainer from './content/AppContainer'
-import AppModal from './content/AppModal'
-import AppSidebar from './content/AppSidebar'
+import AppContainer from './components/AppContainer'
+//import AppModal from './components/AppModal'
+import AppSidebar from './components/AppSidebar'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -17,7 +17,6 @@ const App = () => {
     <Container>
       <AppSidebar/>
       <AppContainer/>
-      <AppModal/>
     </Container>
   )
 }

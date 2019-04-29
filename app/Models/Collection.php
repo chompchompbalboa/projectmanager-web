@@ -9,22 +9,13 @@ class Collection extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name', 'tables'];
-  
-  /**
-   * Build custom attributes
-   */
-  protected $appends = ['tables'];
-  
-  public function dropdowns() {
-    return $this->hasMany('App\Models\Dropdown');
-  }
+  protected $visible = ['id', 'name'];
   
   /**
    * Get the container the collection belongs to
    */
   public function container() {
-    return $this->belongsTo('App\Models\Container');
+    return $this->belongsToMany('App\Models\Container');
   }
   
   /**
@@ -35,13 +26,9 @@ class Collection extends Model
   }
   
   /**
-   * Get all the tables that belong to this project
+   * Get all the views that belong to this collection
    */
-  public function tables() {
-    return $this->hasMany('App\Models\Table');
-  }
-  
-  public function getTablesAttribute() {
-    return $this->tables()->get();
+  public function views() {
+    return $this->belongsToMany('App\Models\View');
   }
 }

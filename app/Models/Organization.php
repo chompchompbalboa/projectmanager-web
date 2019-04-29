@@ -20,6 +20,6 @@ class Organization extends Model
   }
   
   public function containers() {
-    return $this->hasMany('App\Models\Container')->get();
+    return $this->hasMany('App\Models\Container');
   }
 }

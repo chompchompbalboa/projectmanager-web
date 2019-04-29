@@ -46,7 +46,13 @@ class CollectionController extends Controller
      */
     public function show(Collection $collection)
     {
-        //
+      $nextViews = $collection->views()->get();
+      $nextActiveViewId = $nextViews[0]->id;
+
+      return [
+        'nextActiveViewId' => $nextActiveViewId,
+        'nextViews' => $nextViews,
+      ];
     }
 
     /**

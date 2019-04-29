@@ -15,8 +15,6 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Collection::class, function (Faker $faker) {
     return [
-        'organization_id' => null,
-        'container_id' => null,
         'name' => $faker->company
     ];
 });

@@ -26,22 +26,25 @@ class User extends Authenticatable
       'created_at', 'password', 'remember_token', 'updated_at'
     ];
   
+    /**
+     * Get the active state for this user
+     */
+    public function active() {
+      return $this->hasOne('App\Models\Active');
+    }
+  
+    /**
+     * Get the containers for this user
+     */
     public function containers() {
-      return $this->hasMany('App\Models\Container')->get();
+      return $this->hasMany('App\Models\Container');
     }
   
     /**
      * Get the organization the user belongs to
      */
     public function organization() {
-      return $this->belongsTo('App\Models\Organization')->first();
-    }
-  
-    /**
-     * Get the view state for this user
-     */
-    public function view() {
-      return $this->hasOne('App\Models\View')->first();
+      return $this->belongsTo('App\Models\Organization');
     }
     
 }

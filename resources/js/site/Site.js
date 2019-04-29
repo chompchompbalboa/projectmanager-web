@@ -4,7 +4,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { colors } from '../_config'
+import { colors } from './config'
 
 import Button from '../_components/Button'
 import Logo from '../_components/Logo'
@@ -26,6 +26,7 @@ const Site = () => {
         <Tagline/>
         <Spacer/>
         <Button 
+          backgroundColor={colors.BACKGROUND}
           onClick={() => window.location = './app'}
           text="Give it a try&nbsp;&nbsp;&rarr;"/>
       </RightColumn>
@@ -50,7 +51,7 @@ const Column = styled.div`
 `
 
 const LeftColumn = styled(Column)`
-  background-color: ${ colors.PRIMARY };
+  background-color: ${ colors.BACKGROUND };
   color: white;
 `
 

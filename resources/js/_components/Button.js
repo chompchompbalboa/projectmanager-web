@@ -5,14 +5,13 @@ import React from 'react'
 import { func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors } from '../_config'
-
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const Button = ({ text, onClick }) => {
+const Button = ({ backgroundColor, text, onClick }) => {
   return (
     <Container
+      backgroundColor={backgroundColor}
       onClick={() => onClick()}>
       {text}
     </Container>
@@ -23,6 +22,7 @@ const Button = ({ text, onClick }) => {
 // Styled Components
 //-----------------------------------------------------------------------------
 Button.propTypes = {
+  backgroundColor: string,
   onClick: func,
   text: string
 }
@@ -39,8 +39,8 @@ const Container = styled.div`
   cursor: pointer;
   padding: 1.5vh 3vh;
   border-radius: 5px;
-  background-color: ${ colors.PRIMARY };
-  color: ${ colors.PRIMARY_BACKGROUND_TEXT_COLOR };
+  background-color: ${ props => props.backgroundColor };
+  color: white;
   font-family: Open Sans, sans-serif;
 `
 

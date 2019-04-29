@@ -8,7 +8,7 @@ import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import styled from 'styled-components'
 
-import { date as dateConfig } from '../../_config'
+import { date as dateConfig } from '../config'
 
 //-----------------------------------------------------------------------------
 // Component

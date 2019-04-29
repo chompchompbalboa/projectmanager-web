@@ -5,8 +5,9 @@
 
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Collection;
 use App\Models\Container;
-use App\Models\View;
+use App\Models\Active;
 
 //-----------------------------------------------------------------------------
 // App
@@ -14,27 +15,39 @@ use App\Models\View;
 Route::prefix('app')->group(function () {
 
   Route::get('/', function () {
+
     $user = Auth::loginUsingId(1, true);
-    $view = $user->view();
-    $userContainers = $user->containers();
-    $organization = $user->organization();
-    $organizationContainers = $organization->containers();
+    $organization = $user->organization()->first();
+    $active = $user->active()->first();
+
+    $userContainers = $user->containers()->get();
+    $organizationContainers = $organization->containers()->get();
+
+    $containers = $userContainers->merge($organizationContainers);
+    $activeContainerId = $active->containerId !== null ? $active->containerId : $organizationContainers[0]->id;
+
+    $collections = Container::find($activeContainerId)->collections()->get();
+    $activeCollectionId = $active->collectionId !== null ? $active->collectionId : $collections[0]->id;
+    
+    $views = Collection::find($activeCollectionId)->views()->get();
+    $activeViewId = $active->viewId !== null ? $active->viewId : $views[0]->id;
+    
     return view('app')->with([
-      'activeContainerId' => $view->container_id !== null ? $view->container_id : $userContainers[0]->id,
-      'containers' => $userContainers->merge($organizationContainers),
-      'organizationId' => $organization->id
+      'activeCollectionId' => $activeCollectionId,
+      'collections' => $collections,
+      'activeContainerId' => $activeContainerId,
+      'containers' => $containers,
+      'activeViewId' => $activeViewId,
+      'views' => $views,
     ]);
   });
-
-  Route::get('organizations/{organization}/containers', 'OrganizationController@containers');
-  Route::get('organizations/{organization}/tables', 'OrganizationController@tables');
-  
-  Route::patch('/view', 'ViewController@updateView');
 
   Route::resources([
     'breakdowns' => 'BreakdownController',
     'cells' => 'CellController',
+    'collections' => 'CollectionController',
     'columns' => 'ColumnController',
+    'containers' => 'ContainerController',
     'formulas' => 'FormulaController',
     'rows' => 'RowController',
     'tables' => 'TableController',

@@ -1,46 +1,37 @@
 //-----------------------------------------------------------------------------
-// Default State
+// Imports
 //-----------------------------------------------------------------------------
-const defaultState = {
-  activeContainerId: initialData.activeContainerId,
-  activeModal: null,
-  leftColumnWidth: 0.13
-}
+import { fromJS } from 'immutable'
+
+import viewNormalizer from './viewNormalizer'
+
+//-----------------------------------------------------------------------------
+// Initial
+//-----------------------------------------------------------------------------
+const normalizedViews = viewNormalizer(initialData.views)
+const initialState = fromJS({
+  views: normalizedViews.entities.views,
+  viewIds: normalizedViews.result
+})
 
 //-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
-const viewReducers = (state = defaultState, action) => {
+const viewReducers = (state = initialState, action) => {
   switch(action.type) {
 
-    case 'UPDATE_ACTIVE_CONTAINER_ID': {
+    case 'UPDATE_VIEW_IDS': {
       const {
-        nextActiveContainerId
+        nextViewIds
       } = action
-      return {
-        ...state,
-        activeContainerId: nextActiveContainerId
-      }
+      return state.set('viewIds', nextViewIds)
     }
 
-    case 'UPDATE_ACTIVE_MODAL': {
+    case 'UPDATE_VIEWS': {
       const {
-        nextActiveModal
+        nextViews
       } = action
-      return {
-        ...state,
-        activeModal: nextActiveModal
-      }
-    }
-
-    case 'UPDATE_LEFT_COLUMN_WIDTH': {
-      const {
-        nextLeftColumnWidth
-      } = action
-      return {
-        ...state,
-        leftColumnWidth: nextLeftColumnWidth !== null ? nextLeftColumnWidth : state.leftColumnWidth
-      }
+      return state.set('views', nextViews)
     }
 
     default:

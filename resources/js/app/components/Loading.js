@@ -5,7 +5,7 @@ import React from 'react'
 import { string } from 'prop-types' 
 import styled, { keyframes } from 'styled-components'
 
-import { colors } from '../../_config'
+import { colors } from '../config'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -15,7 +15,9 @@ const Loading = ({ height, width }) => {
     <Container
       height={height}
       width={width}>
-      <LoadingIcon/>
+      <Dot />
+      <Dot />
+      <Dot />
     </Container>
   )
 }
@@ -44,30 +46,31 @@ const Container = styled.div`
   align-items: center;
 `
 
-const spinLoadingIcon = keyframes`
-  0% {
-    transform: rotate(0deg);
+const scaleDown = keyframes`
+  0%, 80%, 100%{
+    -webkit-transform: scale(0);
+            transform: scale(0);
   }
-  100% {
-    transform: rotate(360deg);
+  40%{
+    -webkit-transform: scale(1);
+            transform: scale(1);
   }
 `
 
-const LoadingIcon = styled.div`
-  display: inline-block;
-  width: 64px;
-  height: 64px;
-  &:after {
-    content: " ";
-    display: block;
-    width: 46px;
-    height: 46px;
-    margin: 1px;
-    border-radius: 50%;
-    border: 5px solid ${ colors.PRIMARY };
-    border-color: ${ colors.PRIMARY } transparent ${ colors.PRIMARY } transparent;
-    animation: ${ spinLoadingIcon } 1.2s linear infinite;
+const Dot = styled.div`
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  background-color: ${ colors.TEXT_WHITE };
+  position: relative;
+  animation: 1.2s ${ scaleDown } ease-in-out infinite;
+  &:nth-child(2){
+    margin: 0 15px;
+    animation: 1.2s ${ scaleDown } ease-in-out infinite .2s;
   }
+  &:nth-child(3){
+    animation: 1.2s ${ scaleDown } ease-in-out infinite .4s;
+}
 `
 
 export default Loading

@@ -1,4 +1,7 @@
 <?php
+
+use Faker\Generator as Faker;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -10,13 +13,8 @@
 |
 */
 
-$factory->define(App\Models\View::class, function () {
+$factory->define(App\Models\View::class, function (Faker $faker) {
     return [
-      'user_id' => 1,
-      'container_id' => null,
-      'collection_id' => null,
-      'table_id' => null,
-      'breakdown_id' => null,
-      'left_column_width' => null
+        'name' => $faker->streetName()
     ];
 });

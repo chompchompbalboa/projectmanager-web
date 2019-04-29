@@ -15,13 +15,8 @@ class CreateCollection extends Migration
     {
         Schema::create('collections', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('organization_id')->nullable();
-            $table->unsignedInteger('container_id')->nullable();
             $table->string('name');
             $table->timestamps();
-
-            $table->foreign('organization_id')->references('id')->on('organizations');
-            $table->foreign('container_id')->references('id')->on('containers');
         });
     }
 

@@ -2,22 +2,41 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { shape, string } from 'prop-types'
+import { bool, func, number, shape, string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors } from '../config'
+
+import { 
+  updateActiveViewId as updateActiveViewIdAction 
+} from '../redux/active/activeActions'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapDispatchToProps = dispatch => ({
+  updateActiveViewId: nextActiveViewId => dispatch(updateActiveViewIdAction(nextActiveViewId))
+})
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const AppContainerSidebarCollectionView = ({
+  isActiveView,
   view: {
+    id,
     name
-  }
+  },
+  updateActiveViewId
 }) => {
   return (
     <Container>
-      {name}
+      <Name
+        isActiveView={isActiveView}
+        onClick={() => updateActiveViewId(id)}>
+        {name}
+      </Name>
     </Container>
   )
 }
@@ -26,17 +45,34 @@ const AppContainerSidebarCollectionView = ({
 // Props
 //-----------------------------------------------------------------------------
 AppContainerSidebarCollectionView.propTypes = {
+  isActiveView: bool,
   view: shape({
+    id: number,
     name: string
-  })
+  }),
+  updateActiveViewId: func
 }
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  width: 100%;
-  padding: 0.25vh 1vw;
-  color: ${ colors.TEXT_WHITE };
+  padding: 0.25vh 0.5vw;
 `
 
-export default AppContainerSidebarCollectionView
+const Name = styled.div`
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 0.25vw 0.5vw;
+  color: ${ colors.TEXT_WHITE };
+  background-color: ${ props => props.isActiveView ? colors.CONTAINER_SIDEBAR_VIEWS_ACTIVE : colors.CONTAINER_SIDEBAR_VIEWS_INACTIVE };
+  border-radius: 5px;
+  &:hover {
+    background-color: ${ colors.CONTAINER_SIDEBAR_VIEWS_ACTIVE };
+  }
+`
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AppContainerSidebarCollectionView)

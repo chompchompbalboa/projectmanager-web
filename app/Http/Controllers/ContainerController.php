@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Collection;
 use App\Models\Container;
+use App\Models\View;
 
 class ContainerController extends Controller
 {
@@ -53,10 +54,13 @@ class ContainerController extends Controller
     
       $nextViews = Collection::find($nextActiveCollectionId)->views()->get();
       $nextActiveViewId = $nextViews[0]->id;
+    
+      $nextModules = View::find($nextActiveViewId)->modules()->get();
 
       return [
         'nextActiveCollectionId' => $nextActiveCollectionId,
         'nextCollections' => $nextCollections,
+        'nextModules' => $nextModules,
         'nextActiveViewId' => $nextActiveViewId,
         'nextViews' => $nextViews,
       ];

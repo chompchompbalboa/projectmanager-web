@@ -6,6 +6,7 @@ import { combineReducers } from 'redux-immutable'
 import activeReducers from './active/activeReducers'
 import collectionReducers from './collection/collectionReducers'
 import containerReducers from './container/containerReducers'
+import moduleReducers from './module/moduleReducers'
 import viewReducers from './view/viewReducers'
 
 //-----------------------------------------------------------------------------
@@ -15,5 +16,6 @@ export default combineReducers({
   active: activeReducers,
   collection: collectionReducers,
   container: containerReducers,
+  module: moduleReducers,
   view: viewReducers,
 })

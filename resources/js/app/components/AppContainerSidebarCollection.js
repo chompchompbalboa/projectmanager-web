@@ -9,6 +9,7 @@ import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { colors } from '../config'
 
+import { selectActiveViewId } from '../redux/active/activeSelectors'
 import { selectViewIds, selectViews } from '../redux/view/viewSelectors'
 import { 
   updateActiveCollectionId as updateActiveCollectionIdAction 
@@ -20,6 +21,7 @@ import AppContainerSidebarCollectionView from './AppContainerSidebarCollectionVi
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
+  activeViewId: selectActiveViewId(state),
   viewIds: selectViewIds(state),
   views: selectViews(state)
 })
@@ -32,6 +34,7 @@ const mapDispatchToProps = dispatch => ({
 // Component
 //-----------------------------------------------------------------------------
 const AppContainerSidebarCollection = ({ 
+  activeViewId,
   collection: {
     id,
     name
@@ -53,6 +56,7 @@ const AppContainerSidebarCollection = ({
           {viewIds !== null && viewIds.map(viewId => (
             <AppContainerSidebarCollectionView
               key={viewId}
+              isActiveView={viewId === activeViewId}
               view={views[viewId]}/>
           ))}
         </Views>
@@ -65,6 +69,7 @@ const AppContainerSidebarCollection = ({
 // Props
 //-----------------------------------------------------------------------------
 AppContainerSidebarCollection.propTypes = {
+  activeViewId: number,
   collection: shape({
     id: number,
     name: string
@@ -96,7 +101,7 @@ const CollectionName = styled.div`
 
 const Views = styled.div`
   width: 100%;
-  background-color: ${ colors.CONTAINER_SIDEBAR_MODULES_BACKGROUND};
+  background-color: ${ colors.CONTAINER_SIDEBAR_VIEWS_BACKGROUND};
   border-left: 3px solid ${ colors.CONTAINER_SIDEBAR_BORDER_ACTIVE };
 `
 

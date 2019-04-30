@@ -12,7 +12,7 @@ const Tagline = ({ fontSize }) => {
   return (
     <Container
       fontSize={fontSize}>
-      Project management for people who build things
+      Custom built software to power your business
     </Container>
   )
 }

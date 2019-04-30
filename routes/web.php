@@ -5,9 +5,10 @@
 
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Active;
 use App\Models\Collection;
 use App\Models\Container;
-use App\Models\Active;
+use App\Models\View;
 
 //-----------------------------------------------------------------------------
 // App
@@ -32,11 +33,14 @@ Route::prefix('app')->group(function () {
     $views = Collection::find($activeCollectionId)->views()->get();
     $activeViewId = $active->viewId !== null ? $active->viewId : $views[0]->id;
     
+    $modules = View::find($activeViewId)->modules()->get();
+    
     return view('app')->with([
       'activeCollectionId' => $activeCollectionId,
       'collections' => $collections,
       'activeContainerId' => $activeContainerId,
       'containers' => $containers,
+      'modules' => $modules,
       'activeViewId' => $activeViewId,
       'views' => $views,
     ]);

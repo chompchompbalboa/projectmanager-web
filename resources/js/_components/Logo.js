@@ -13,9 +13,15 @@ import Tagline from './Tagline'
 const Logo = ({ fontSize, showTagline }) => {
   return (
     <Container>
-      <Name
-        fontSize={fontSize}>
-        <Build>build</Build><That>that</That>
+      <Name>
+        <Build
+          fontSize={fontSize}>
+          build
+        </Build>
+        <That
+          fontSize={fontSize}>
+          that
+        </That>
       </Name>
       {showTagline && 
         <Tagline
@@ -51,14 +57,15 @@ const Container = styled.h1`
 
 const Name = styled.div`
   display: flex;
-  font-size: ${ props => props.fontSize };
 `
 
 const Build = styled.div`
+  font-size: ${ props => props.fontSize };
+  font-weight: bold;
 `
 
 const That = styled.div`
-  font-weight: normal;
+  font-size: ${ props => props.fontSize };
 `
 
 export default Logo

@@ -48,9 +48,12 @@ class CollectionController extends Controller
     {
       $nextViews = $collection->views()->get();
       $nextActiveViewId = $nextViews[0]->id;
+    
+      $nextModules = View::find($nextActiveViewId)->modules()->get();
 
       return [
         'nextActiveViewId' => $nextActiveViewId,
+        'nextModules' => $nextModules,
         'nextViews' => $nextViews,
       ];
     }

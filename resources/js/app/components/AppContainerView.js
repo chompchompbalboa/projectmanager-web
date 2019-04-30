@@ -2,17 +2,49 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { array, object } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
+import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { colors, layout } from '../config'
+
+import { selectModuleIds, selectModules } from '../redux/module/moduleSelectors'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  moduleIds: selectModuleIds(state),
+  modules: selectModules(state)
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerModules = () => {
+const AppContainerView = ({
+  moduleIds,
+  modules
+}) => {
+  console.log(modules)
   return (
     <Container>
+      {moduleIds !== null && moduleIds.map(moduleId => (
+        <Module
+          key={moduleId}>
+          {moduleId}
+        </Module>
+      ))}
     </Container>
   )
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+AppContainerView.propTypes = {
+  moduleIds: array,
+  modules: object
 }
 
 //-----------------------------------------------------------------------------
@@ -28,4 +60,8 @@ const Container = styled.div`
   border-top-left-radius: 5px;
 `
 
-export default AppContainerModules
+const Module = styled.div``
+
+export default connect(
+  mapStateToProps
+)(withImmutablePropsToJS(AppContainerView))

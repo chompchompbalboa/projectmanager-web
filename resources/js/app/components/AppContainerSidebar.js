@@ -14,6 +14,7 @@ import { selectActiveContainer } from '../redux/container/containerSelectors'
 import { selectActiveCollectionId } from '../redux/active/activeSelectors'
 
 import AppContainerSidebarCollection from './AppContainerSidebarCollection'
+import HiddenScrollbarContainer from './HiddenScrollbarContainer'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -66,7 +67,7 @@ AppContainerSidebar.propTypes = {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div`
+const Container = styled(HiddenScrollbarContainer)`
   position: fixed;
   top: 0;
   left: ${ layout.SIDEBAR_WIDTH };
@@ -74,7 +75,6 @@ const Container = styled.div`
   height: 100vh;
   background-color: ${ colors.CONTAINER_SIDEBAR_BACKGROUND };
   border-left: 0.5px dashed ${ colors.CONTAINER_SIDEBAR_BORDER };
-  overflow-y: scroll;
 `
 
 const ContainerName = styled.h3`

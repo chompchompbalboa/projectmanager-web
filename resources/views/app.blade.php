@@ -16,6 +16,7 @@
         collections: @json($collections),
         activeContainerId: @json($activeContainerId),
         containers: @json($containers),
+        modules: @json($modules),
         activeViewId: @json($activeViewId),
         views: @json($views),
       }

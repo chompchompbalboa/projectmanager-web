@@ -11,21 +11,30 @@ import collectionNormalizer from '../collection/collectionNormalizer'
 import moduleNormalizer from '../module/moduleNormalizer'
 import viewNormalizer from '../view/viewNormalizer'
 
+import { 
+  selectActiveCollectionId,
+  selectActiveContainerId, 
+  selectActiveViewId
+} from '../active/activeSelectors'
+
 //-----------------------------------------------------------------------------
 // Update Active Container Id
 //-----------------------------------------------------------------------------
 export const updateActiveContainerId = nextActiveContainerId => {
-  return dispatch => {
-    dispatch(updateActiveContainerIdReducer(nextActiveContainerId))
-    dispatch(updateActiveCollectionIdReducer(null))
-    dispatch(updateActiveViewIdReducer(null))
-    dispatch(updateCollections(null))
-    dispatch(updateCollectionIds(null))
-    dispatch(updateViews(null))
-    dispatch(updateViewIds(null))
-    dispatch(updateModules(null))
-    dispatch(updateModuleIds(null))
-    dispatch(updateActiveContainerIdServer(nextActiveContainerId))
+  return (dispatch, getState) => {
+    const activeContainerId = selectActiveContainerId(getState())
+    if(nextActiveContainerId !== activeContainerId) {
+      dispatch(updateActiveContainerIdReducer(nextActiveContainerId))
+      dispatch(updateActiveCollectionIdReducer(null))
+      dispatch(updateActiveViewIdReducer(null))
+      dispatch(updateCollections(null))
+      dispatch(updateCollectionIds(null))
+      dispatch(updateViews(null))
+      dispatch(updateViewIds(null))
+      dispatch(updateModules(null))
+      dispatch(updateModuleIds(null))
+      dispatch(updateActiveContainerIdServer(nextActiveContainerId))
+    }
   }
 }
 
@@ -63,12 +72,17 @@ const updateActiveContainerIdServer = nextActiveContainerId => {
 // Update Active Collection Id
 //-----------------------------------------------------------------------------
 export const updateActiveCollectionId = nextActiveCollectionId => {
-  return dispatch => {
-    dispatch(updateActiveCollectionIdReducer(nextActiveCollectionId))
-    dispatch(updateActiveViewIdReducer(null))
-    dispatch(updateViews(null))
-    dispatch(updateViewIds(null))
-    dispatch(updateActiveCollectionIdServer(nextActiveCollectionId))
+  return (dispatch, getState) => {
+    const activeCollectionId = selectActiveCollectionId(getState())
+    if(nextActiveCollectionId !== activeCollectionId) {
+      dispatch(updateActiveCollectionIdReducer(nextActiveCollectionId))
+      dispatch(updateActiveViewIdReducer(null))
+      dispatch(updateViews(null))
+      dispatch(updateViewIds(null))
+      dispatch(updateModules(null))
+      dispatch(updateModuleIds(null))
+      dispatch(updateActiveCollectionIdServer(nextActiveCollectionId))
+    }
   }
 }
 
@@ -101,8 +115,14 @@ const updateActiveCollectionIdServer = nextActiveCollectionId => {
 // Update Active View Id
 //-----------------------------------------------------------------------------
 export const updateActiveViewId = nextActiveViewId => {
-  return dispatch => {
-    dispatch(updateActiveViewIdReducer(nextActiveViewId))
+  return (dispatch, getState) => {
+    const activeViewId = selectActiveViewId(getState())
+    if(nextActiveViewId !== activeViewId) {
+      dispatch(updateActiveViewIdReducer(nextActiveViewId))
+      dispatch(updateModules(null))
+      dispatch(updateModuleIds(null))
+      dispatch(updateActiveViewIdServer(nextActiveViewId))
+    }
   }
 }
 
@@ -110,3 +130,16 @@ const updateActiveViewIdReducer = nextActiveViewId => ({
   type: 'UPDATE_ACTIVE_VIEW_ID',
   nextActiveViewId: nextActiveViewId
 })
+
+const updateActiveViewIdServer = nextActiveViewId => {
+  return dispatch => {
+    query.getView(nextActiveViewId).then(nextActiveView => {
+      const {
+        nextModules
+      } = nextActiveView
+      const normalizedModules = moduleNormalizer(nextModules)
+      dispatch(updateModules(normalizedModules.entities.modules))
+      dispatch(updateModuleIds(normalizedModules.result))
+    })
+  }
+}

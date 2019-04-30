@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\View;
 use Illuminate\Http\Request;
 
-use App\Models\Collection;
-use App\Models\View;
-
-class CollectionController extends Controller
+class ViewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,30 +41,25 @@ class CollectionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Collection  $collection
+     * @param  \App\View  $view
      * @return \Illuminate\Http\Response
      */
-    public function show(Collection $collection)
+    public function show(View $view)
     {
-      $nextViews = $collection->views()->get();
-      $nextActiveViewId = $nextViews[0]->id;
-    
-      $nextModules = View::find($nextActiveViewId)->modules()->get();
+      $nextModules = $view->modules()->get();
 
       return [
-        'nextActiveViewId' => $nextActiveViewId,
         'nextModules' => $nextModules,
-        'nextViews' => $nextViews,
       ];
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Collection  $collection
+     * @param  \App\View  $view
      * @return \Illuminate\Http\Response
      */
-    public function edit(Collection $collection)
+    public function edit(View $view)
     {
         //
     }
@@ -75,10 +68,10 @@ class CollectionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Collection  $collection
+     * @param  \App\View  $view
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Collection $collection)
+    public function update(Request $request, View $view)
     {
         //
     }
@@ -86,10 +79,10 @@ class CollectionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Collection  $collection
+     * @param  \App\View  $view
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Collection $collection)
+    public function destroy(View $view)
     {
         //
     }

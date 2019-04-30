@@ -4,16 +4,28 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { colors, layout } from '../config'
-
-import AppContainerHeaderBreadcrumbs from './AppContainerHeaderBreadcrumbs'
+import { colors } from '../config'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerHeader = () => {
+const AppContainerHeaderBreadcrumbs = () => {
   return (
     <Container>
-      <AppContainerHeaderBreadcrumbs />
+      <Breadcrumb>
+        Container
+      </Breadcrumb>
+      <Separator>
+      >
+      </Separator>
+      <Breadcrumb>
+        Collection
+      </Breadcrumb>
+      <Separator>
+      >
+      </Separator>
+      <Breadcrumb>
+        View
+      </Breadcrumb>
     </Container>
   )
 }
@@ -22,16 +34,20 @@ const AppContainerHeader = () => {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  width: calc(100vw - ${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  height: ${ layout.CONTAINER_HEADER_HEIGHT };
-  background-color: ${ colors.CONTAINER_HEADER_BACKGROUND };
   display: flex;
-  align-items: center;
-  color: ${ colors.TEXT_WHITE };
-  font-size: 0.75rem;
 `
 
-export default AppContainerHeader
+const Breadcrumb = styled.div`
+  cursor: pointer;
+  margin-top: 1px;
+  border-bottom: 1px solid transparent;
+  &:hover {
+    border-bottom: 1px solid ${ colors.TEXT_WHITE};
+  }
+`
+
+const Separator = styled.div`
+  margin: 0 0.5rem;
+`
+
+export default AppContainerHeaderBreadcrumbs

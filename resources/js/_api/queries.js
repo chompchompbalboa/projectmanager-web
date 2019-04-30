@@ -19,6 +19,12 @@ export const getContainer = async containerId => {
   })
 }
 
+export const getView = async viewId => {
+  return axios.get('/app/views/' + viewId).then(response => {
+    return response.data
+  })
+}
+
 export const getOrganizationProjects = async organzationId => {
   return axios.get('/app/organizations/' + organzationId + '/projects').then(response => {
     return response.data

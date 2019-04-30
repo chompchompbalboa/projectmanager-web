@@ -55,6 +55,7 @@ Route::prefix('app')->group(function () {
     'formulas' => 'FormulaController',
     'rows' => 'RowController',
     'tables' => 'TableController',
+    'views' => 'ViewController'
   ]);
 });
 

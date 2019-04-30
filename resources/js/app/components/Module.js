@@ -2,36 +2,41 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { number, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors, layout } from '../config'
+//import Table from './Table'
 
-import AppContainerHeaderBreadcrumbs from './AppContainerHeaderBreadcrumbs'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerHeader = () => {
+const Module = ({
+  module: {
+    type,
+    typeId
+  }
+}) => {
   return (
     <Container>
-      <AppContainerHeaderBreadcrumbs />
+      {typeId} / {type}
     </Container>
   )
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+Module.propTypes = {
+  module: shape({
+    type: string,
+    typeId: number
+  })
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  width: calc(100vw - ${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  height: ${ layout.CONTAINER_HEADER_HEIGHT };
-  background-color: ${ colors.CONTAINER_HEADER_BACKGROUND };
-  display: flex;
-  align-items: center;
-  color: ${ colors.TEXT_WHITE };
-  font-size: 0.75rem;
 `
 
-export default AppContainerHeader
+export default Module

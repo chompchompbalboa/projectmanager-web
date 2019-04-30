@@ -11,6 +11,8 @@ import { colors, layout } from '../config'
 
 import { selectModuleIds, selectModules } from '../redux/module/moduleSelectors'
 
+import Module from './Module'
+
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
@@ -26,14 +28,12 @@ const AppContainerView = ({
   moduleIds,
   modules
 }) => {
-  console.log(modules)
   return (
     <Container>
       {moduleIds !== null && moduleIds.map(moduleId => (
         <Module
-          key={moduleId}>
-          {moduleId}
-        </Module>
+          key={moduleId}
+          module={modules[moduleId]}/>
       ))}
     </Container>
   )
@@ -59,8 +59,6 @@ const Container = styled.div`
   background-color: ${ colors.CONTAINER_MODULES_BACKGROUND };
   border-top-left-radius: 5px;
 `
-
-const Module = styled.div``
 
 export default connect(
   mapStateToProps

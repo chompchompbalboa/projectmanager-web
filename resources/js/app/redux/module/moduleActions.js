@@ -1,7 +1,13 @@
 //-----------------------------------------------------------------------------
 // Update Modules
 //-----------------------------------------------------------------------------
-export const updateModules = nextModules => ({
+export const updateModules = nextModules => {
+  return dispatch => {
+    dispatch(updateModulesReducer(nextModules))
+  }
+}
+
+const updateModulesReducer = nextModules => ({
   type: 'UPDATE_MODULES',
   nextModules: nextModules
 })

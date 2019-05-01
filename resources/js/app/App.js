@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { selectActiveContent } from './redux/active/activeSelectors'
 
 import AppContainer from './components/AppContainer'
+import AppSettings from './components/AppSettings'
 import AppSidebar from './components/AppSidebar'
 
 //-----------------------------------------------------------------------------
@@ -26,7 +27,8 @@ const App = ({
 }) => {
 
   const contentComponents = {
-    CONTAINER: AppContainer
+    CONTAINER: AppContainer,
+    SETTINGS: AppSettings
   }
 
   const AppActiveContent = contentComponents[activeContent]
@@ -43,7 +45,8 @@ const App = ({
 //-----------------------------------------------------------------------------
 App.propTypes = {
   activeContent: oneOf([
-    'CONTAINER'
+    'CONTAINER',
+    'SETTINGS'
   ])
 }
 

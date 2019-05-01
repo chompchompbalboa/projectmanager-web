@@ -6,14 +6,14 @@ import styled from 'styled-components'
 
 import { colors, layout } from '../config'
 
-import AppContainerHeaderBreadcrumbs from './AppContainerHeaderBreadcrumbs'
+import AppContentHeaderBreadcrumbs from './AppContentHeaderBreadcrumbs'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerHeader = () => {
+const AppContentHeader = () => {
   return (
     <Container>
-      <AppContainerHeaderBreadcrumbs />
+      <AppContentHeaderBreadcrumbs />
     </Container>
   )
 }
@@ -34,4 +34,4 @@ const Container = styled.div`
   font-size: 0.75rem;
 `
 
-export default AppContainerHeader
+export default AppContentHeader

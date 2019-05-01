@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 import React from 'react'
 
-import AppContainerHeader from './AppContainerHeader'
+import AppContentHeader from './AppContentHeader'
 import AppContainerSidebar from './AppContainerSidebar'
 import AppContainerView from './AppContainerView'
 import AppContent from './AppContent'
@@ -15,7 +15,7 @@ const AppContainer = () => {
   return (
     <AppContent>
       <AppContainerSidebar />
-      <AppContainerHeader />
+      <AppContentHeader />
       <AppContainerView />
     </AppContent>
   )

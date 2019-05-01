@@ -1,29 +1,24 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
-import { bool } from 'prop-types'
+import React from 'react'
 
-import AppContentContainer from './AppContentContainer'
-import UnderConstruction from './UnderConstruction'
+import AppContentHeader from './AppContentHeader'
+import AppSettingsSidebar from './AppSettingsSidebar'
+import AppContainerView from './AppContainerView'
+import AppContent from './AppContent'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class AppSettings extends Component {
-  render() {
-    return (
-      <AppContentContainer>
-        <UnderConstruction
-          from='AppSettings'/>
-      </AppContentContainer>
-    )
-  }
+const AppSettings = () => {
+  return (
+    <AppContent>
+      <AppSettingsSidebar />
+      <AppContentHeader />
+      <AppContainerView />
+    </AppContent>
+  )
 }
 
-//-----------------------------------------------------------------------------
-// Props
-//-----------------------------------------------------------------------------
-AppSettings.propTypes = {
-  isActive: bool
-}
+export default AppSettings

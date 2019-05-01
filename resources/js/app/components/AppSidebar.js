@@ -2,17 +2,20 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, func, number, object } from 'prop-types'
+import { array, func, number, object, oneOf } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { colors, layout } from '../config'
 
-import { updateActiveContainerId as updateActiveContainerIdAction } from '../redux/active/activeActions'
+import { 
+  updateActiveContainerId as updateActiveContainerIdAction,
+  updateActiveContent as updateActiveContentAction 
+} from '../redux/active/activeActions'
 
 import { selectContainerIds, selectContainers } from '../redux/container/containerSelectors'
-import { selectActiveContainerId } from '../redux/active/activeSelectors'
+import { selectActiveContainerId, selectActiveContent } from '../redux/active/activeSelectors'
 
 import Icon from '../components/Icon'
 
@@ -21,12 +24,14 @@ import Icon from '../components/Icon'
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
   activeContainerId: selectActiveContainerId(state),
+  activeContent: selectActiveContent(state),
   containerIds: selectContainerIds(state),
   containers: selectContainers(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateActiveContainerId: nextActiveContainerId => dispatch(updateActiveContainerIdAction(nextActiveContainerId))
+  updateActiveContainerId: nextActiveContainerId => dispatch(updateActiveContainerIdAction(nextActiveContainerId)),
+  updateActiveContent: nextActiveContent => dispatch(updateActiveContentAction(nextActiveContent))
 })
 
 //-----------------------------------------------------------------------------
@@ -34,11 +39,12 @@ const mapDispatchToProps = dispatch => ({
 //-----------------------------------------------------------------------------
 const AppSidebar = ({
   activeContainerId,
+  activeContent,
   containerIds,
   containers,
-  updateActiveContainerId
+  updateActiveContainerId,
+  updateActiveContent
 }) => {
-
 	return (
 		<Container>
       <TopContainer>
@@ -47,7 +53,7 @@ const AppSidebar = ({
           return (
             <ActiveContainerChoice
               key={container.id}
-              isActive={container.id === activeContainerId}
+              isActive={activeContent === 'CONTAINER' && container.id === activeContainerId}
               onClick={() => updateActiveContainerId(container.id)}>
               <IconContainer>
                 <Icon 
@@ -60,8 +66,8 @@ const AppSidebar = ({
       </TopContainer>
       <BottomContainer>
         <ActiveContainerChoice
-          isActive={false}
-          onClick={() => updateActiveContainerId()}>
+          isActive={activeContent === 'SETTINGS'}
+          onClick={() => updateActiveContent('SETTINGS')}>
           <IconContainer>
             <Icon 
               icon="SETTINGS" 
@@ -78,9 +84,14 @@ const AppSidebar = ({
 //-----------------------------------------------------------------------------
 AppSidebar.propTypes = {
   activeContainerId: number,
+  activeContent: oneOf([
+    'CONTAINER',
+    'SETTINGS'
+  ]),
   containerIds: array,
   containers: object,
-  updateActiveContainerId: func
+  updateActiveContainerId: func,
+  updateActiveContent: func
 }
 
 //-----------------------------------------------------------------------------

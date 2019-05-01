@@ -2,14 +2,15 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { bool, func, number, shape, string } from 'prop-types'
+import { bool, func } from 'prop-types'
 import { connect } from 'react-redux'
+import styled from 'styled-components'
+
+import { colors } from '../config'
 
 import { 
   updateActiveViewId as updateActiveViewIdAction 
 } from '../redux/active/activeActions'
-
-import AppContentSidebarItemSubitem from './AppContentSidebarItemSubitem'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -22,19 +23,18 @@ const mapDispatchToProps = dispatch => ({
 // Component
 //-----------------------------------------------------------------------------
 const AppContainerSidebarCollectionView = ({
-  isActiveView,
-  view: {
-    id,
-    name
-  },
-  updateActiveViewId
+  children,
+  isActiveSubitem,
+  onClick,
 }) => {
   return (
-    <AppContentSidebarItemSubitem
-      isActiveSubitem={isActiveView}
-      onClick={() => updateActiveViewId(id)}>
-      {name}
-    </AppContentSidebarItemSubitem>
+    <Container>
+      <Subitem
+        isActiveSubitem={isActiveSubitem}
+        onClick={onClick}>
+        {children}
+      </Subitem>
+    </Container>
   )
 }
 
@@ -42,13 +42,28 @@ const AppContainerSidebarCollectionView = ({
 // Props
 //-----------------------------------------------------------------------------
 AppContainerSidebarCollectionView.propTypes = {
-  isActiveView: bool,
-  view: shape({
-    id: number,
-    name: string
-  }),
-  updateActiveViewId: func
+  isActiveSubitem: bool,
+  onClick: func
 }
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
+const Container = styled.div`
+  padding: 0.25vh 0.5vw;
+`
+
+const Subitem = styled.div`
+  cursor: pointer;
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 0.25vw 0.5vw;
+  color: ${ colors.TEXT_WHITE };
+  background-color: ${ props => props.isActiveSubitem ? colors.CONTAINER_SIDEBAR_VIEWS_ACTIVE : colors.CONTAINER_SIDEBAR_VIEWS_INACTIVE };
+  border-radius: 5px;
+  &:hover {
+    background-color: ${ colors.CONTAINER_SIDEBAR_VIEWS_ACTIVE };
+  }
+`
 
 export default connect(
   null,

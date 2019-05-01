@@ -38,36 +38,36 @@ const AppSidebar = ({
   containers,
   updateActiveContainerId
 }) => {
-  
-  const activeContainerChoice = container => (
-    <ActiveContainerChoice
-      key={container.id}
-      isActive={container.id === activeContainerId}
-      onClick={() => updateActiveContainerId(container.id)}>
-      <NameAndIconContainer>
-        <Icon 
-          icon={container.icon} 
-          size={"calc(" + layout.SIDEBAR_WIDTH + " / 2)"}/>
-      </NameAndIconContainer>
-    </ActiveContainerChoice>
-  )
-  
-  const topContainerIds = containerIds.filter(containerId => containers[containerId].sidebarLocation === 'TOP')
-  const bottomContainerIds = containerIds.filter(containerId => containers[containerId].sidebarLocation === 'BOTTOM')
 
 	return (
 		<Container>
       <TopContainer>
-        {topContainerIds.map(containerId => {
+        {containerIds.map(containerId => {
           const container = containers[containerId]
-          return activeContainerChoice(container)
+          return (
+            <ActiveContainerChoice
+              key={container.id}
+              isActive={container.id === activeContainerId}
+              onClick={() => updateActiveContainerId(container.id)}>
+              <IconContainer>
+                <Icon 
+                  icon={container.icon} 
+                  size={"calc(" + layout.SIDEBAR_WIDTH + " / 2)"}/>
+              </IconContainer>
+            </ActiveContainerChoice>
+          )
         })}
       </TopContainer>
       <BottomContainer>
-        {bottomContainerIds.map(containerId => {
-          const container = containers[containerId]
-          return activeContainerChoice(container)
-        })}
+        <ActiveContainerChoice
+          isActive={false}
+          onClick={() => updateActiveContainerId()}>
+          <IconContainer>
+            <Icon 
+              icon="SETTINGS" 
+              size={"calc(" + layout.SIDEBAR_WIDTH + " / 2)"}/>
+          </IconContainer>
+        </ActiveContainerChoice>
       </BottomContainer>
 		</Container>
 	)
@@ -119,7 +119,7 @@ const ActiveContainerChoice = styled.div`
   }
 `
 
-const NameAndIconContainer = styled.div`
+const IconContainer = styled.div`
 	width: calc(100% - 3px);
 	height: 100%;
 	display: flex;

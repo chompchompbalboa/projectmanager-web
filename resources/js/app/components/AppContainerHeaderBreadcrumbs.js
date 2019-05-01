@@ -7,12 +7,8 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
-import { 
-  updateActiveContainerId as updateActiveContainerIdAction
-} from '../redux/active/activeActions'
-
 import { selectActiveCollection } from '../redux/collection/collectionSelectors'
-import { selectActiveContainer, selectSettingsContainerId } from '../redux/container/containerSelectors'
+import { selectActiveContainer } from '../redux/container/containerSelectors'
 import { selectActiveView, selectViewsCount } from '../redux/view/viewSelectors'
 
 import { colors } from '../config'
@@ -24,12 +20,10 @@ const mapStateToProps = state => ({
   activeCollection: selectActiveCollection(state),
   activeContainer: selectActiveContainer(state),
   activeView: selectActiveView(state),
-  settingsContainerId: selectSettingsContainerId(state),
   viewsCount: selectViewsCount(state),
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateActiveContainerId: nextActiveContainerId => dispatch(updateActiveContainerIdAction(nextActiveContainerId))
 })
 
 //-----------------------------------------------------------------------------
@@ -39,14 +33,11 @@ const AppContainerHeaderBreadcrumbs = ({
   activeCollection,
   activeContainer,
   activeView,
-  settingsContainerId,
-  updateActiveContainerId,
   viewsCount
 }) => {
   if (activeContainer && activeCollection && activeView) {
     return (
-      <Container
-        onClick={() => updateActiveContainerId(settingsContainerId)}>
+      <Container>
         <Breadcrumb>
           {activeContainer.name}
         </Breadcrumb>

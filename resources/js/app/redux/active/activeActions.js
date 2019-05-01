@@ -33,6 +33,7 @@ export const updateActiveContainerId = nextActiveContainerId => {
       dispatch(updateViewIds(null))
       dispatch(updateModules(null))
       dispatch(updateModuleIds(null))
+      dispatch(updateActiveContent('CONTAINER'))
       dispatch(updateActiveContainerIdServer(nextActiveContainerId))
     }
   }
@@ -67,6 +68,20 @@ const updateActiveContainerIdServer = nextActiveContainerId => {
     })
   }
 }
+
+//-----------------------------------------------------------------------------
+// Update Active Content
+//-----------------------------------------------------------------------------
+export const updateActiveContent = nextActiveContent => {
+  return dispatch => {
+    dispatch(updateActiveContentReducer(nextActiveContent))
+  }
+}
+
+const updateActiveContentReducer = nextActiveContent => ({
+  type: 'UPDATE_ACTIVE_CONTENT',
+  nextActiveContent: nextActiveContent
+})
 
 //-----------------------------------------------------------------------------
 // Update Active Collection Id

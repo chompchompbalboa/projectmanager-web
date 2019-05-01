@@ -2,32 +2,49 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { string, func } from 'prop-types'
+import { oneOf } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
+import { selectActiveContent } from './redux/active/activeSelectors'
+
 import AppContainer from './components/AppContainer'
-//import AppModal from './components/AppModal'
 import AppSidebar from './components/AppSidebar'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeContent: selectActiveContent(state)
+})
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const App = () => {
+const App = ({
+  activeContent
+}) => {
+
+  const contentComponents = {
+    CONTAINER: AppContainer
+  }
+
+  const AppActiveContent = contentComponents[activeContent]
   return (
     <Container>
       <AppSidebar/>
-      <AppContainer/>
+      <AppActiveContent/>
     </Container>
   )
 }
 
 //-----------------------------------------------------------------------------
-// Props
+// Redux
 //-----------------------------------------------------------------------------
 App.propTypes = {
-  activeContent: string,
-  activeModal: string,
-  updateActiveContent: func
+  activeContent: oneOf([
+    'CONTAINER'
+  ])
 }
 
 //-----------------------------------------------------------------------------
@@ -35,4 +52,6 @@ App.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.div``
 
-export default App
+export default connect(
+  mapStateToProps
+)(App)

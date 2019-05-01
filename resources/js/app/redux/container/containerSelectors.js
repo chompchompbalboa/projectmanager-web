@@ -12,12 +12,3 @@ export const selectContainerIds = state => state.getIn(['container', 'containerI
 // Select Containers
 //-----------------------------------------------------------------------------
 export const selectContainers = state => state.getIn(['container', 'containers'])
-
-//-----------------------------------------------------------------------------
-// Select Settings Container Id
-//-----------------------------------------------------------------------------
-export const selectSettingsContainerId = state => {
-  const containers = selectContainers(state)
-  const settingsContainer = containers.find(container => container.get('sidebarLocation') === 'BOTTOM')
-  return settingsContainer.get('id')
-}

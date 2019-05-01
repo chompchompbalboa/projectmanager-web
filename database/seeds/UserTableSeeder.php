@@ -18,15 +18,13 @@ class UserTableSeeder extends Seeder
 
         // Containers
         $containerMap = [
-          ['name' => "Me", 'icon' => "ME", 'sidebar_location' => 'TOP', 'collections' => 1, 'views' => 1, 'modules' => 1],
-          ['name' => "Settings", 'icon' => "SETTINGS", 'sidebar_location' => 'BOTTOM', 'collections' => 1, 'views' => 1, 'modules' => 1]
+          ['name' => "Me", 'icon' => "ME", 'collections' => 1, 'views' => 1, 'modules' => 1]
         ];
         $containers = factory(App\Models\Container::class, count($containerMap))->create();
         $containers->each(function($container, $containerKey) use($containerMap, $user) {
           $container->user_id = $user->id;
           $container->name = $containerMap[$containerKey]['name'];
           $container->icon = $containerMap[$containerKey]['icon'];
-          $container->sidebar_location = $containerMap[$containerKey]['sidebar_location'];
           $container->save();
           print('Container: '.$container->id.PHP_EOL);
         

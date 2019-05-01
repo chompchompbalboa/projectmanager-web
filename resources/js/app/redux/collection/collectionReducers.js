@@ -24,14 +24,14 @@ const collectionReducers = (state = initialState, action) => {
       const {
         nextCollectionIds
       } = action
-      return state.set('collectionIds', nextCollectionIds)
+      return state.set('collectionIds', fromJS(nextCollectionIds))
     }
 
     case 'UPDATE_COLLECTIONS': {
       const {
         nextCollections
       } = action
-      return state.set('collections', nextCollections)
+      return state.set('collections', fromJS(nextCollections))
     }
 
     default:

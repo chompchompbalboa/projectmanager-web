@@ -10,7 +10,7 @@ import withImmutablePropsToJS from 'with-immutable-props-to-js'
 import { colors } from '../config'
 
 import { selectActiveViewId } from '../redux/active/activeSelectors'
-import { selectViewIds, selectViews } from '../redux/view/viewSelectors'
+import { selectViewIds, selectViews, selectViewsCount } from '../redux/view/viewSelectors'
 import { 
   updateActiveCollectionId as updateActiveCollectionIdAction 
 } from '../redux/active/activeActions'
@@ -23,7 +23,8 @@ import AppContainerSidebarCollectionView from './AppContainerSidebarCollectionVi
 const mapStateToProps = state => ({
   activeViewId: selectActiveViewId(state),
   viewIds: selectViewIds(state),
-  views: selectViews(state)
+  views: selectViews(state),
+  viewsCount: selectViewsCount(state),
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -42,7 +43,8 @@ const AppContainerSidebarCollection = ({
   viewIds,
   views,
   isActiveCollection,
-  updateActiveCollectionId
+  updateActiveCollectionId,
+  viewsCount
 }) => {
   return (
     <Container>
@@ -51,7 +53,7 @@ const AppContainerSidebarCollection = ({
         onClick={() => updateActiveCollectionId(id)}>
         {name}
       </CollectionName>
-      {isActiveCollection && 
+      {(isActiveCollection && viewsCount > 1) &&
         <Views>
           {viewIds !== null && viewIds.map(viewId => (
             <AppContainerSidebarCollectionView

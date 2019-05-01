@@ -19,14 +19,15 @@ class OrganizationTableSeeder extends Seeder
 
         // Containers
         $containerMap = [
-          ['name' => "Projects", 'icon' => "PROJECTS", 'collections' => 5, 'views' => 5, 'modules' => 1],
-          ['name' => "Organization", 'icon' => "ORGANIZATION", 'collections' => 2, 'views' => 2, 'modules' => 1]
+          ['name' => "Projects", 'icon' => "PROJECTS", 'sidebar_location' => 'TOP', 'collections' => 5, 'views' => 5, 'modules' => 1],
+          ['name' => "Organization", 'icon' => "ORGANIZATION", 'sidebar_location' => 'TOP', 'collections' => 2, 'views' => 2, 'modules' => 1]
         ];
         $containers = factory(App\Models\Container::class, count($containerMap))->create();
         $containers->each(function($container, $containerKey) use($containerMap, $organization) {
           $container->organization_id = $organization->id;
           $container->name = $containerMap[$containerKey]['name'];
           $container->icon = $containerMap[$containerKey]['icon'];
+          $container->sidebar_location = $containerMap[$containerKey]['sidebar_location'];
           $container->save();
           print('Container: '.$container->id.PHP_EOL);
         
@@ -109,8 +110,7 @@ class OrganizationTableSeeder extends Seeder
                 });
               });
             });
-
-            });
+          });
         });
 
         $organization->save();

@@ -1,14 +1,30 @@
 //-----------------------------------------------------------------------------
-// Select Active Container Id
+// Imports
 //-----------------------------------------------------------------------------
-export const selectActiveContainerId = state => state.getIn(['active', 'containerId'])
+import React from 'react'
+import styled from 'styled-components'
 
 //-----------------------------------------------------------------------------
-// Select Active Collection Id
+// Component
 //-----------------------------------------------------------------------------
-export const selectActiveCollectionId = state => state.getIn(['active', 'collectionId'])
+const Structure = () => {
+  return (
+    <Container>
+      Structurity Structure
+    </Container>
+  )
+}
 
 //-----------------------------------------------------------------------------
-// Select Active View Id
+// Props
 //-----------------------------------------------------------------------------
-export const selectActiveViewId = state => state.getIn(['active', 'viewId'])
+Structure.propTypes = {
+}
+
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
+const Container = styled.div`
+`
+
+export default Structure

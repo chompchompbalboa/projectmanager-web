@@ -18,6 +18,7 @@ $factory->define(App\Models\Container::class, function (Faker $faker) {
         'user_id' => null,
         'organization_id' => null,
         'name' => $faker->word,
-        'icon' => $faker->word
+        'icon' => $faker->word,
+        'sidebar_location' => 'TOP'
     ];
 });

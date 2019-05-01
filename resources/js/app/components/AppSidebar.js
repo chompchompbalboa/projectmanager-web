@@ -39,23 +39,36 @@ const AppSidebar = ({
   updateActiveContainerId
 }) => {
   
+  const activeContainerChoice = container => (
+    <ActiveContainerChoice
+      key={container.id}
+      isActive={container.id === activeContainerId}
+      onClick={() => updateActiveContainerId(container.id)}>
+      <NameAndIconContainer>
+        <Icon 
+          icon={container.icon} 
+          size={"calc(" + layout.SIDEBAR_WIDTH + " / 2)"}/>
+      </NameAndIconContainer>
+    </ActiveContainerChoice>
+  )
+  
+  const topContainerIds = containerIds.filter(containerId => containers[containerId].sidebarLocation === 'TOP')
+  const bottomContainerIds = containerIds.filter(containerId => containers[containerId].sidebarLocation === 'BOTTOM')
+
 	return (
 		<Container>
-			{containerIds.map(containerId => {
-        const container = containers[containerId]
-				return (
-					<ActiveContainerChoice
-						key={container.id}
-						isActive={container.id === activeContainerId}
-						onClick={() => updateActiveContainerId(container.id)}>
-						<NameAndIconContainer>
-              <Icon 
-                icon={container.icon} 
-                size={"calc(" + layout.SIDEBAR_WIDTH + " / 2)"}/>
-						</NameAndIconContainer>
-					</ActiveContainerChoice>
-				)
-			})}
+      <TopContainer>
+        {topContainerIds.map(containerId => {
+          const container = containers[containerId]
+          return activeContainerChoice(container)
+        })}
+      </TopContainer>
+      <BottomContainer>
+        {bottomContainerIds.map(containerId => {
+          const container = containers[containerId]
+          return activeContainerChoice(container)
+        })}
+      </BottomContainer>
 		</Container>
 	)
 }
@@ -80,6 +93,17 @@ const Container = styled.div`
 	width: ${layout.SIDEBAR_WIDTH};
 	height: 100vh;
   background-color: ${colors.SIDEBAR_BACKGROUND};
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
+
+const TopContainer = styled.div`
+  width: 100%;
+`
+
+const BottomContainer = styled.div`
+  width: 100%;
 `
 
 const ActiveContainerChoice = styled.div`

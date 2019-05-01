@@ -19,6 +19,7 @@ class CreateContainer extends Migration
             $table->unsignedInteger('organization_id')->nullable();
             $table->string('name');
             $table->string('icon');
+            $table->string('sidebar_location');
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

@@ -2,32 +2,92 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { func, number, shape, string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
+import withImmutablePropsToJS from 'with-immutable-props-to-js'
+
+import { 
+  updateActiveContainerId as updateActiveContainerIdAction
+} from '../redux/active/activeActions'
+
+import { selectActiveCollection } from '../redux/collection/collectionSelectors'
+import { selectActiveContainer, selectSettingsContainerId } from '../redux/container/containerSelectors'
+import { selectActiveView, selectViewsCount } from '../redux/view/viewSelectors'
 
 import { colors } from '../config'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeCollection: selectActiveCollection(state),
+  activeContainer: selectActiveContainer(state),
+  activeView: selectActiveView(state),
+  settingsContainerId: selectSettingsContainerId(state),
+  viewsCount: selectViewsCount(state),
+})
+
+const mapDispatchToProps = dispatch => ({
+  updateActiveContainerId: nextActiveContainerId => dispatch(updateActiveContainerIdAction(nextActiveContainerId))
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerHeaderBreadcrumbs = () => {
-  return (
-    <Container>
-      <Breadcrumb>
-        Container
-      </Breadcrumb>
-      <Separator>
-      >
-      </Separator>
-      <Breadcrumb>
-        Collection
-      </Breadcrumb>
-      <Separator>
-      >
-      </Separator>
-      <Breadcrumb>
-        View
-      </Breadcrumb>
-    </Container>
-  )
+const AppContainerHeaderBreadcrumbs = ({
+  activeCollection,
+  activeContainer,
+  activeView,
+  settingsContainerId,
+  updateActiveContainerId,
+  viewsCount
+}) => {
+  if (activeContainer && activeCollection && activeView) {
+    return (
+      <Container
+        onClick={() => updateActiveContainerId(settingsContainerId)}>
+        <Breadcrumb>
+          {activeContainer.name}
+        </Breadcrumb>
+        <Separator>
+        >
+        </Separator>
+        <Breadcrumb>
+          {activeCollection.name}
+        </Breadcrumb>
+        {viewsCount > 1 && 
+          <>
+            <Separator>
+            >
+            </Separator>
+            <Breadcrumb>
+              {activeView.name}
+            </Breadcrumb>
+          </>
+        }
+      </Container>
+    )
+  }
+  return null
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+AppContainerHeaderBreadcrumbs.propTypes = {
+  activeCollection: shape({
+    name: string
+  }),
+  activeContainer: shape({
+    name: string
+  }),
+  activeView: shape({
+    name: string
+  }),
+  settingsContainerId: number,
+  updateActiveContainerId: func,
+  viewsCount: number
 }
 
 //-----------------------------------------------------------------------------
@@ -50,4 +110,7 @@ const Separator = styled.div`
   margin: 0 0.5rem;
 `
 
-export default AppContainerHeaderBreadcrumbs
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withImmutablePropsToJS(AppContainerHeaderBreadcrumbs))

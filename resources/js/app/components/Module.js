@@ -5,6 +5,7 @@ import React from 'react'
 import { number, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
+import Structure from './Structure'
 //import Table from './Table'
 
 //-----------------------------------------------------------------------------
@@ -16,11 +17,14 @@ const Module = ({
     typeId
   }
 }) => {
-  return (
-    <Container>
-      {typeId} / {type}
-    </Container>
-  )
+  const modules = {
+    STRUCTURE: Structure
+  }
+  if (type === 'STRUCTURE') {
+    const ModuleType = modules[type]
+    return <ModuleType />
+  }
+  return null
 }
 
 //-----------------------------------------------------------------------------

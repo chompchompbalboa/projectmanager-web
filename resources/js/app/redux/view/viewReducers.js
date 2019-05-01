@@ -24,14 +24,14 @@ const viewReducers = (state = initialState, action) => {
       const {
         nextViewIds
       } = action
-      return state.set('viewIds', nextViewIds)
+      return state.set('viewIds', fromJS(nextViewIds))
     }
 
     case 'UPDATE_VIEWS': {
       const {
         nextViews
       } = action
-      return state.set('views', nextViews)
+      return state.set('views', fromJS(nextViews))
     }
 
     default:

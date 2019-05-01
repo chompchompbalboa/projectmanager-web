@@ -22,21 +22,21 @@ const activeReducers = (state = initialState, action) => {
       const {
         nextActiveCollectionId
       } = action
-      return state.set('collectionId', nextActiveCollectionId)
+      return state.set('collectionId', fromJS(nextActiveCollectionId))
     }
 
     case 'UPDATE_ACTIVE_CONTAINER_ID': {
       const {
         nextActiveContainerId
       } = action
-      return state.set('containerId', nextActiveContainerId)
+      return state.set('containerId', fromJS(nextActiveContainerId))
     }
 
     case 'UPDATE_ACTIVE_VIEW_ID': {
       const {
         nextActiveViewId
       } = action
-      return state.set('viewId', nextActiveViewId)
+      return state.set('viewId', fromJS(nextActiveViewId))
     }
 
     default:

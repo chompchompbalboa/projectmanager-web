@@ -2,41 +2,37 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, object } from 'prop-types'
+import { oneOf } from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
-import { colors, layout } from '../config'
-
-import { selectModuleIds, selectModules } from '../redux/module/moduleSelectors'
+import { selectActiveSettingsContent } from '../redux/active/activeSelectors'
 
 import AppContentView from './AppContentView'
-import Module from './Module'
+import AppSettingsStructure from './AppSettingsStructure'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  moduleIds: selectModuleIds(state),
-  modules: selectModules(state)
+  activeSettingsContent: selectActiveSettingsContent(state)
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerView = ({
-  moduleIds,
-  modules
+const AppSettingsContent = ({
+  activeSettingsContent
 }) => {
+  
+  const appSettingsContentMap = {
+    STRUCTURE: AppSettingsStructure
+  }
+  
+  const AppSettingsContentType = appSettingsContentMap[activeSettingsContent]
+  
   return (
     <AppContentView>
-      AppContainerView
-      {moduleIds !== null && moduleIds.map(moduleId => (
-        <Module
-          key={moduleId}
-          module={modules[moduleId]}/>
-      ))}
+      <AppSettingsContentType />
     </AppContentView>
   )
 }
@@ -44,11 +40,12 @@ const AppContainerView = ({
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-AppContainerView.propTypes = {
-  moduleIds: array,
-  modules: object
+AppSettingsContent.propTypes = {
+  activeSettingsContent: oneOf([
+    'STRUCTURE'
+  ])
 }
 
 export default connect(
   mapStateToProps
-)(withImmutablePropsToJS(AppContainerView))
+)(AppSettingsContent)

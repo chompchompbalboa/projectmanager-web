@@ -2,23 +2,23 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-
-import AppContentHeader from './AppContentHeader'
-import AppSettingsSidebar from './AppSettingsSidebar'
-import AppSettingsContent from './AppSettingsContent'
-import AppContent from './AppContent'
+import styled from 'styled-components'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppSettings = () => {
+const AppSettingsStructure = () => {
   return (
-    <AppContent>
-      <AppSettingsSidebar />
-      <AppContentHeader />
-      <AppSettingsContent />
-    </AppContent>
+    <Container>
+      AppSettingsStructure
+    </Container>
   )
 }
 
-export default AppSettings
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
+const Container = styled.div`
+`
+
+export default AppSettingsStructure

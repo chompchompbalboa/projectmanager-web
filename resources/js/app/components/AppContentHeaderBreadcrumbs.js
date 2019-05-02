@@ -7,6 +7,11 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
+
+import { 
+  updateActiveSettingsContent as updateActiveSettingsContentAction 
+} from '../redux/active/activeActions'
+
 import { selectActiveContent } from '../redux/active/activeSelectors'
 import { selectActiveCollection } from '../redux/collection/collectionSelectors'
 import { selectActiveContainer } from '../redux/container/containerSelectors'
@@ -25,6 +30,10 @@ const mapStateToProps = state => ({
   viewsCount: selectViewsCount(state)
 })
 
+const mapDispatchToProps = dispatch => ({
+  updateActiveSettingsContent: nextActiveSettingsContent => dispatch(updateActiveSettingsContentAction(nextActiveSettingsContent))
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -33,6 +42,7 @@ const AppContentHeaderBreadcrumbs = ({
   activeContainer,
   activeContent,
   activeView,
+  updateActiveSettingsContent,
   viewsCount
 }) => {
 
@@ -40,7 +50,7 @@ const AppContentHeaderBreadcrumbs = ({
     CONTAINER: [
       activeContainer ? activeContainer.name : null,
       activeCollection ? activeCollection.name : null,
-      activeView && viewsCount > 1 ? activeView.name : null
+      activeCollection && activeView && viewsCount > 1 ? activeView.name : null
     ].filter(breadcrumb => breadcrumb !== null),
     SETTINGS: [
       'Settings',
@@ -53,14 +63,16 @@ const AppContentHeaderBreadcrumbs = ({
   return (
     <Container>
       {breadcrumbs.map((breadcrumb, index) => (
-        <>
-          <Breadcrumb>
+        <React.Fragment
+           key={index}>
+          <Breadcrumb
+            onClick={() => updateActiveSettingsContent('STRUCTURE')}>
             {breadcrumb}
           </Breadcrumb>
           {index < (breadcrumbs.length - 1) &&
             <Separator>&gt;</Separator>
           }
-        </>
+        </React.Fragment>
       ))}
     </Container>
   )
@@ -83,8 +95,7 @@ AppContentHeaderBreadcrumbs.propTypes = {
   activeView: shape({
     name: string
   }),
-  settingsContainerId: number,
-  updateActiveContainerId: func,
+  updateActiveSettingsContent: func,
   viewsCount: number
 }
 
@@ -111,4 +122,5 @@ const Separator = styled.div`
 
 export default connect(
   mapStateToProps,
+  mapDispatchToProps
 )(withImmutablePropsToJS(AppContentHeaderBreadcrumbs))

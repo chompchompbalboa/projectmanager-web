@@ -14,6 +14,11 @@ export const selectActiveContent = state => state.getIn(['active', 'content'])
 export const selectActiveCollectionId = state => state.getIn(['active', 'collectionId'])
 
 //-----------------------------------------------------------------------------
+// Select Active Settings Content
+//-----------------------------------------------------------------------------
+export const selectActiveSettingsContent = state => state.getIn(['active', 'settingsContent'])
+
+//-----------------------------------------------------------------------------
 // Select Active View Id
 //-----------------------------------------------------------------------------
 export const selectActiveViewId = state => state.getIn(['active', 'viewId'])

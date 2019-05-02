@@ -22,6 +22,7 @@ import {
 //-----------------------------------------------------------------------------
 export const updateActiveContainerId = nextActiveContainerId => {
   return (dispatch, getState) => {
+    dispatch(updateActiveContent('CONTAINER'))
     const activeContainerId = selectActiveContainerId(getState())
     if(nextActiveContainerId !== activeContainerId) {
       dispatch(updateActiveContainerIdReducer(nextActiveContainerId))
@@ -33,7 +34,6 @@ export const updateActiveContainerId = nextActiveContainerId => {
       dispatch(updateViewIds(null))
       dispatch(updateModules(null))
       dispatch(updateModuleIds(null))
-      dispatch(updateActiveContent('CONTAINER'))
       dispatch(updateActiveContainerIdServer(nextActiveContainerId))
     }
   }
@@ -125,6 +125,21 @@ const updateActiveCollectionIdServer = nextActiveCollectionId => {
     })
   }
 }
+
+//-----------------------------------------------------------------------------
+// Update Active Settings Content
+//-----------------------------------------------------------------------------
+export const updateActiveSettingsContent = nextActiveSettingsContent => {
+  return dispatch => {
+    dispatch(updateActiveContentReducer('SETTINGS'))
+    dispatch(updateActiveSettingsContentReducer(nextActiveSettingsContent))
+  }
+}
+
+const updateActiveSettingsContentReducer = nextActiveSettingsContent => ({
+  type: 'UPDATE_ACTIVE_SETTINGS_CONTENT',
+  nextActiveSettingsContent: nextActiveSettingsContent
+})
 
 //-----------------------------------------------------------------------------
 // Update Active View Id

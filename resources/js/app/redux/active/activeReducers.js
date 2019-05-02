@@ -10,6 +10,7 @@ const initialState = fromJS({
   collectionId: initialData.activeCollectionId,
   containerId: initialData.activeContainerId,
   content: 'CONTAINER',
+  settingsContent: 'STRUCTURE',
   viewId: initialData.activeViewId
 })
 
@@ -33,18 +34,25 @@ const activeReducers = (state = initialState, action) => {
       return state.set('containerId', fromJS(nextActiveContainerId))
     }
 
-    case 'UPDATE_ACTIVE_VIEW_ID': {
-      const {
-        nextActiveViewId
-      } = action
-      return state.set('viewId', fromJS(nextActiveViewId))
-    }
-
     case 'UPDATE_ACTIVE_CONTENT': {
       const {
         nextActiveContent
       } = action
       return state.set('content', fromJS(nextActiveContent))
+    }
+
+    case 'UPDATE_ACTIVE_SETTINGS_CONTENT': {
+      const {
+        nextActiveSettingsContent
+      } = action
+      return state.set('settingsContent', fromJS(nextActiveSettingsContent))
+    }
+
+    case 'UPDATE_ACTIVE_VIEW_ID': {
+      const {
+        nextActiveViewId
+      } = action
+      return state.set('viewId', fromJS(nextActiveViewId))
     }
 
     default:

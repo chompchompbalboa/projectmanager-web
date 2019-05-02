@@ -3,6 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+use App\Models\Active;
+use App\Models\Collection;
+use App\Models\Container;
+use App\Models\View;
 
 class StructureController extends Controller
 {
@@ -45,7 +51,31 @@ class StructureController extends Controller
      */
     public function show($id)
     {
-        //
+      $user = Auth::user();
+      $organization = $user->organization()->first();
+      $active = $user->active()->first();
+  
+      $userContainers = $user->containers()->get();
+      $organizationContainers = $organization->containers()->get();
+  
+      $containers = $userContainers->merge($organizationContainers);
+
+      return $containers->map(function($container) {
+        return [
+          'id' => $container->id,
+          'collections' => $container->collections()->get()->map(function($collection) {
+            return [
+              'id' => $collection->id,
+              'views' => $collection->views()->get()->map(function($view) {
+                return [
+                  'id' => $view->id,
+                  'modules' =>  $view->modules()->get()
+                ];
+              })
+            ];
+          })
+        ];
+      });
     }
 
     /**

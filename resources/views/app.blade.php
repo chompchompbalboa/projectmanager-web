@@ -12,6 +12,7 @@
     <section id="react-container"></section>
     <script>
       let initialData = {
+        user: @json($user),
         activeCollectionId: @json($activeCollectionId),
         collections: @json($collections),
         activeContainerId: @json($activeContainerId),

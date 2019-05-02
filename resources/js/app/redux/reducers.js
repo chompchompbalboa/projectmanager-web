@@ -7,6 +7,8 @@ import activeReducers from './active/activeReducers'
 import collectionReducers from './collection/collectionReducers'
 import containerReducers from './container/containerReducers'
 import moduleReducers from './module/moduleReducers'
+import structureReducers from './structure/structureReducers'
+import userReducers from './user/userReducers'
 import viewReducers from './view/viewReducers'
 
 //-----------------------------------------------------------------------------
@@ -17,5 +19,7 @@ export default combineReducers({
   collection: collectionReducers,
   container: containerReducers,
   module: moduleReducers,
-  view: viewReducers,
+  structure: structureReducers,
+  user: userReducers,
+  view: viewReducers
 })

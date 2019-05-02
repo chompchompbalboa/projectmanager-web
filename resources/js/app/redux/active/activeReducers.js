@@ -9,7 +9,7 @@ import { fromJS } from 'immutable'
 const initialState = fromJS({
   collectionId: initialData.activeCollectionId,
   containerId: initialData.activeContainerId,
-  content: 'CONTAINER',
+  content: 'SETTINGS',
   settingsContent: 'STRUCTURE',
   viewId: initialData.activeViewId
 })

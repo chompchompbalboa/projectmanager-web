@@ -19,6 +19,12 @@ export const getContainer = async containerId => {
   })
 }
 
+export const getStructure = async userId => {
+  return axios.get('/app/structure/' + userId).then(response => {
+    return response.data
+  })
+}
+
 export const getView = async viewId => {
   return axios.get('/app/views/' + viewId).then(response => {
     return response.data

@@ -36,6 +36,7 @@ Route::prefix('app')->group(function () {
     $modules = View::find($activeViewId)->modules()->get();
     
     return view('app')->with([
+      'user' => $user,
       'activeCollectionId' => $activeCollectionId,
       'collections' => $collections,
       'activeContainerId' => $activeContainerId,
@@ -54,6 +55,7 @@ Route::prefix('app')->group(function () {
     'containers' => 'ContainerController',
     'formulas' => 'FormulaController',
     'rows' => 'RowController',
+    'structure' => 'StructureController',
     'tables' => 'TableController',
     'views' => 'ViewController'
   ]);

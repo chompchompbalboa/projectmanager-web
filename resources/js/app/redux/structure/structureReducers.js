@@ -3,15 +3,14 @@
 //-----------------------------------------------------------------------------
 import { fromJS } from 'immutable'
 
-import viewNormalizer from './viewNormalizer'
+import structureNormalizer from './structureNormalizer'
 
 //-----------------------------------------------------------------------------
 // Initial
 //-----------------------------------------------------------------------------
-const normalizedViews = viewNormalizer(initialData.views)
 const initialState = fromJS({
-  views: normalizedViews.entities.views,
-  viewIds: normalizedViews.result
+  containers: null,
+  containerIds: null
 })
 
 //-----------------------------------------------------------------------------
@@ -32,6 +31,19 @@ const viewReducers = (state = initialState, action) => {
         nextViews
       } = action
       return state.set('views', fromJS(nextViews))
+    }
+
+    case 'SET_STRUCTURE': {
+      const {
+        structure
+      } = action
+      console.log(structure)
+      const normalizedStructure = structureNormalizer(structure)
+      console.log(normalizedStructure)
+      return fromJS({
+        containers: normalizedStructure.entities.containers,
+        containerIds: normalizedStructure.result
+      })
     }
 
     default:

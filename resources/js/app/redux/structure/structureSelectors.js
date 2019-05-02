@@ -1,22 +1,21 @@
 //-----------------------------------------------------------------------------
-// Select Active View
+// Select Structure Collections
 //-----------------------------------------------------------------------------
-export const selectActiveView = state => state.getIn(['view', 'views', state.getIn(['active', 'viewId']) + ""])
+export const selectStructureCollections = state => state.getIn(['structure', 'collections'])
 
 //-----------------------------------------------------------------------------
-// Select View Ids
+// Select Structure Containers
 //-----------------------------------------------------------------------------
-export const selectViewIds = state => state.getIn(['view', 'viewIds'])
+export const selectStructureContainers = state => state.getIn(['structure', 'containers'])
 
 //-----------------------------------------------------------------------------
-// Select Views
+// Select Structure Modules
 //-----------------------------------------------------------------------------
-export const selectViews = state => state.getIn(['view', 'views'])
+export const selectStructureModules = state => state.getIn(['structure', 'modules'])
 
 //-----------------------------------------------------------------------------
-// Select Views Count
+// Select Structure Views
 //-----------------------------------------------------------------------------
-export const selectViewsCount = state => {
-  const views = selectViews(state)
-  return views !== null ? views.size : 0
+export const selectStructureViews = state => {
+  return state.getIn(['structure', 'views'])
 }

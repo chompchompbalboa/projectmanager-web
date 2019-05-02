@@ -4,17 +4,15 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { colors, layout } from '../config'
-
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContentView = ({
-  children
+const AppSettingsStructureView = ({
+  view
 }) => {
   return (
     <Container>
-      {children}
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{view.name}
     </Container>
   )
 }
@@ -22,15 +20,6 @@ const AppContentView = ({
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div`
-  position: fixed;
-  top: ${ layout.CONTAINER_HEADER_HEIGHT };
-  left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  width: calc(100vw - ${ layout.SIDEBAR_WIDTH } - ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  height calc(100vh - ${ layout.CONTAINER_HEADER_HEIGHT });
-  background-color: ${ colors.CONTAINER_MODULES_BACKGROUND };
-  border-top-left-radius: 5px;
-  overflow-y: scroll;
-`
+const Container = styled.div``
 
-export default AppContentView
+export default AppSettingsStructureView

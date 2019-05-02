@@ -10,39 +10,27 @@ import structureNormalizer from './structureNormalizer'
 //-----------------------------------------------------------------------------
 const initialState = fromJS({
   containers: null,
-  containerIds: null
+  collections: null,
+  views: null,
+  modules: null
 })
 
 //-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
-const viewReducers = (state = initialState, action) => {
+const structureReducers = (state = initialState, action) => {
   switch(action.type) {
-
-    case 'UPDATE_VIEW_IDS': {
-      const {
-        nextViewIds
-      } = action
-      return state.set('viewIds', fromJS(nextViewIds))
-    }
-
-    case 'UPDATE_VIEWS': {
-      const {
-        nextViews
-      } = action
-      return state.set('views', fromJS(nextViews))
-    }
 
     case 'SET_STRUCTURE': {
       const {
         structure
       } = action
-      console.log(structure)
       const normalizedStructure = structureNormalizer(structure)
-      console.log(normalizedStructure)
       return fromJS({
         containers: normalizedStructure.entities.containers,
-        containerIds: normalizedStructure.result
+        collections: normalizedStructure.entities.collections,
+        views: normalizedStructure.entities.views,
+        modules: normalizedStructure.entities.modules
       })
     }
 
@@ -51,4 +39,4 @@ const viewReducers = (state = initialState, action) => {
   }
 }
 
-export default viewReducers
+export default structureReducers

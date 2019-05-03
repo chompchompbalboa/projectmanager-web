@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, func, object } from 'prop-types'
+import { func, object } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
@@ -11,7 +11,7 @@ import { setStructure as setStructureAction } from '../redux/structure/structure
 
 import { selectStructureContainers } from '../redux/structure/structureSelectors'
 
-import AppSettingsStructureContainer from './AppSettingsStructureContainer'
+import AppSettingsStructureContainer, { AddContainer } from './AppSettingsStructureContainer'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -47,15 +47,19 @@ class AppSettingsStructure extends Component {
     const {
       containers
     } = this.props
-    return (
-      <Container>
-        {containers && containers !== null && Object.keys(containers).map(containerId => (
-           <AppSettingsStructureContainer
-             key={containerId}
-             container={containers[containerId]}/>
-         ))}
-      </Container>
-    )
+    if(containers && containers !== null) {
+      return (
+        <Container>
+          {Object.keys(containers).map(containerId => (
+             <AppSettingsStructureContainer
+               key={containerId}
+               container={containers[containerId]}/>
+           ))}
+           <AddContainer />
+        </Container>
+      )
+    }
+    return null
   }
 }
 

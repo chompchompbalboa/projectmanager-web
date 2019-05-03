@@ -28,6 +28,7 @@ const Container = styled.div`
   left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
   width: calc(100vw - ${ layout.SIDEBAR_WIDTH } - ${ layout.CONTAINER_SIDEBAR_WIDTH });
   height calc(100vh - ${ layout.CONTAINER_HEADER_HEIGHT });
+  padding: 1vh 1vw; 
   background-color: ${ colors.CONTAINER_MODULES_BACKGROUND };
   border-top-left-radius: 5px;
   overflow-y: scroll;

@@ -4,10 +4,7 @@
 import React from 'react'
 import { array, object } from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
-
-import { colors, layout } from '../config'
 
 import { selectModuleIds, selectModules } from '../redux/module/moduleSelectors'
 
@@ -31,7 +28,6 @@ const AppContainerView = ({
 }) => {
   return (
     <AppContentView>
-      AppContainerView
       {moduleIds !== null && moduleIds.map(moduleId => (
         <Module
           key={moduleId}

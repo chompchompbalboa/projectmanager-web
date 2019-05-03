@@ -3,10 +3,6 @@
 //-----------------------------------------------------------------------------
 import React from 'react'
 import { number, shape, string } from 'prop-types'
-import styled from 'styled-components'
-
-import Structure from './Structure'
-//import Table from './Table'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -18,13 +14,12 @@ const Module = ({
   }
 }) => {
   const modules = {
-    STRUCTURE: Structure
   }
-  if (type === 'STRUCTURE') {
+  if (typeof modules[type] !== 'undefined') {
     const ModuleType = modules[type]
     return <ModuleType />
   }
-  return null
+  return type + '-' + typeId
 }
 
 //-----------------------------------------------------------------------------
@@ -36,11 +31,5 @@ Module.propTypes = {
     typeId: number
   })
 }
-
-//-----------------------------------------------------------------------------
-// Styled Components
-//-----------------------------------------------------------------------------
-const Container = styled.div`
-`
 
 export default Module

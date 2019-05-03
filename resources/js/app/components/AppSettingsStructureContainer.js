@@ -10,6 +10,7 @@ import withImmutablePropsToJS from 'with-immutable-props-to-js'
 import { selectStructureCollections } from '../redux/structure/structureSelectors'
 
 import AppSettingsStructureCollection, { AddCollection } from './AppSettingsStructureCollection'
+import Icon from './Icon'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -37,10 +38,14 @@ class AppSettingsStructureContainer extends Component {
     } = this.state
     return (
       <Container>
-        <Name
-          onClick={() => this.setState({ isCollectionsVisible: !isCollectionsVisible})}>
-          {container.name}
-        </Name>
+        <ContainerInfo>
+          <Icon 
+            icon={container.icon}/>
+          <Name
+            onClick={() => this.setState({ isCollectionsVisible: !isCollectionsVisible})}>
+            {container.name}
+          </Name>
+        </ContainerInfo>
         <Collections
           isCollectionsVisible={isCollectionsVisible}>
           {collections && collections !== null && container.collections.map(collectionId => (
@@ -56,9 +61,13 @@ class AppSettingsStructureContainer extends Component {
 }
 
 export const AddContainer = () => (
-  <Name>
-    Add...
-  </Name>
+  <ContainerInfo>
+    <Icon 
+      icon="ADD"/>
+    <Name>
+      Add...
+    </Name>
+  </ContainerInfo>
 )
 
 //-----------------------------------------------------------------------------
@@ -78,7 +87,13 @@ AppSettingsStructureContainer.propTypes = {
 const Container = styled.div`
 `
 
+const ContainerInfo = styled.div`
+  display: flex;
+  align-items: center;
+`
+
 const Name = styled.h2`
+  margin-left: 1vw;
   cursor: pointer;
   &:hover {
     text-decoration: underline;

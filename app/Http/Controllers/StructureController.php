@@ -64,6 +64,7 @@ class StructureController extends Controller
         return [
           'id' => $container->id,
           'name' => $container->name,
+          'icon' => $container->icon,
           'collections' => $container->collections()->get()->map(function($collection) {
             return [
               'id' => $collection->id,

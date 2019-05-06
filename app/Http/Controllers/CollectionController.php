@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Collection;
+use App\Models\Container;
 use App\Models\View;
 
 class CollectionController extends Controller
@@ -37,7 +38,10 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $collection = Collection::create($request->input('collection'));
+      $container = Container::find($request->input('containerId'));
+      $container->collections()->attach($collection->id);
+      return response()->json($container, 200);
     }
 
     /**

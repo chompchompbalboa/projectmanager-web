@@ -7,6 +7,37 @@ import { createContainer, deleteContainer, updateContainerId, updateContainerRed
 import { selectUserId } from '../user/userSelectors'
 
 //-----------------------------------------------------------------------------
+// Create Collection
+//-----------------------------------------------------------------------------
+export const createStructureCollection = containerId => {
+  console.log(containerId)
+  return (dispatch, getState) => {
+    dispatch(createStructureCollectionReducer(containerId))
+    const newCollection = getState().getIn(['structure', 'collections']).find(collection => Number(collection.get('id')) < 0).delete('views').delete('isCollectionRenaming')
+    const newCollectionId = newCollection.get('id')
+    mutation.createCollection(containerId, newCollectionId, newCollection.toJS()).then(collectionIds => {
+      const {
+        collectionId,
+        nextCollectionId
+      } = collectionIds
+      console.log(collectionId, nextCollectionId)
+      dispatch(updateStructureCollectionId(collectionId, nextCollectionId))
+    })
+  }
+}
+
+const createStructureCollectionReducer = containerId => ({
+  type: 'CREATE_STRUCTURE_COLLECTION',
+  containerId: containerId
+})
+
+const updateStructureCollectionId = (collectionId, nextCollectionId) => ({
+  type: 'UPDATE_STRUCTURE_COLLECTION_ID',
+  collectionId: collectionId,
+  nextCollectionId: nextCollectionId
+})
+
+//-----------------------------------------------------------------------------
 // Create Container
 //-----------------------------------------------------------------------------
 export const createStructureContainer = () => {
@@ -36,6 +67,23 @@ const updateStructureContainerId = (containerId, nextContainerId) => ({
   containerId: containerId,
   nextContainerId: nextContainerId
 })
+
+//-----------------------------------------------------------------------------
+// Delete Collection
+//-----------------------------------------------------------------------------
+export const deleteStructureCollection = (containerId, collectionId) => {
+  return dispatch => {
+    dispatch(deleteStructureCollectionReducer(containerId, collectionId))
+    //mutation.deleteCollection(collectionId)
+  }
+}
+
+const deleteStructureCollectionReducer = (containerId, collectionId) => ({
+  type: 'DELETE_STRUCTURE_COLLECTION',
+  collectionId: collectionId,
+  containerId: containerId
+})
+
 
 //-----------------------------------------------------------------------------
 // Delete Container

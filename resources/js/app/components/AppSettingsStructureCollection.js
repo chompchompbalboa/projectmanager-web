@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, func, object, shape, string } from 'prop-types'
+import { array, func, number, object, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
@@ -28,8 +28,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  createStructureCollection: () => dispatch(createStructureCollectionAction()),
-  deleteStructureCollection: collectionId => dispatch(deleteStructureCollectionAction(collectionId)),
+  createStructureCollection: containerId => dispatch(createStructureCollectionAction(containerId)),
+  deleteStructureCollection: (containerId, collectionId) => dispatch(deleteStructureCollectionAction(containerId, collectionId)),
   updateStructureCollection: (id, nextCollection) => dispatch(updateStructureCollectionAction(id, nextCollection))
 })
 
@@ -40,7 +40,7 @@ class AppSettingsStructureCollection extends Component {
 
   state = {
     collectionName: this.props.collection.name,
-    isCollectionRenaming: false,
+    isCollectionRenaming: this.props.collection.isCollectionRenaming ? this.props.collection.isCollectionRenaming : false, 
     isViewsVisible: false,
     isDeleteDropdownVisible: false,
     isActionsDropdownVisible: false,
@@ -70,6 +70,7 @@ class AppSettingsStructureCollection extends Component {
   render() {
     const {
       collection,
+      containerId, 
       deleteStructureCollection,
       views
     } = this.props
@@ -115,7 +116,7 @@ class AppSettingsStructureCollection extends Component {
                   text="Delete"/>
               </Dropdown>
             <DeleteDropdown
-              onDelete={() => deleteStructureCollection(collection.id)}
+              onDelete={() => deleteStructureCollection(containerId, collection.id)}
               closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
               isDropdownVisible={isDeleteDropdownVisible}
               textToMatch={collection.name}
@@ -137,8 +138,12 @@ class AppSettingsStructureCollection extends Component {
   }
 }
 
-export const AddCollectionComponents = () => (
-  <Collection>
+export const AddCollectionComponents = ({
+  containerId,
+  createStructureCollection
+}) => (
+  <Collection
+    onClick={() => createStructureCollection(containerId)}>
     <Bullet/>
     <Name
       editable={false}
@@ -155,6 +160,7 @@ AppSettingsStructureCollection.propTypes = {
     name: string,
     views: array
   }),
+  containerId: number,
   deleteStructureCollection: func,
   updateStructureCollection: func,
   views: object

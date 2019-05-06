@@ -33,6 +33,18 @@ export const createContainer = async (userId, newContainerId, newContainer) => {
   })
 }
 
+export const createCollection = async (containerId, newCollectionId, newCollection) => {  
+  return axios.post('/app/collections', { 
+    collection: newCollection,
+    containerId: containerId
+  }).then(response => {
+    return {
+      collectionId: newCollectionId,
+      nextCollectionId: response.data.id
+    }
+  })
+}
+
 export const createRow = async (newRow) => {  
   return axios.post('/app/rows', {
     newRow: newRow

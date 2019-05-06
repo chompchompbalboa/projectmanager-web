@@ -138,9 +138,11 @@ class AppSettingsStructureContainer extends Component {
           {collections && collections !== null && container.collections.map(collectionId => (
             <AppSettingsStructureCollection 
               key={collectionId}
-              collection={collections[collectionId]}/>
+              collection={collections[collectionId]}
+              containerId={container.id}/>
           ))}
-          <AddCollection />
+          <AddCollection
+            containerId={container.id}/>
         </Collections>
       </Container>
     )

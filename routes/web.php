@@ -37,6 +37,7 @@ Route::prefix('app')->group(function () {
     
     return view('app')->with([
       'user' => $user,
+      'organization' => $organization,
       'activeCollectionId' => $activeCollectionId,
       'collections' => $collections,
       'activeContainerId' => $activeContainerId,

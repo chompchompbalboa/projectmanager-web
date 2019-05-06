@@ -24,6 +24,15 @@ export const createColumn = async (newColumn, rowIds, columnPositions) => {
   })
 }
 
+export const createContainer = async (userId, newContainerId, newContainer) => {  
+  return axios.post('/app/containers', { ...newContainer, user_id: userId }).then(response => {
+    return {
+      containerId: newContainerId,
+      nextContainerId: response.data.id
+    }
+  })
+}
+
 export const createRow = async (newRow) => {  
   return axios.post('/app/rows', {
     newRow: newRow
@@ -57,9 +66,14 @@ export const deleteBreakdown = async (breakdownId) => {
   })
 }
 
-
 export const deleteColumn = async (columnId) => {  
   return axios.delete('/app/columns/' + columnId).then(response => {
+    return response.data
+  })
+}
+
+export const deleteContainer = async containerId => {  
+  return axios.delete('/app/containers/' + containerId).then(response => {
     return response.data
   })
 }
@@ -96,6 +110,12 @@ export const updateFormula = async (id, formula) => {
     id: id,
     formula: formula
   }).then(response => {
+    return response.data
+  })
+}
+
+export const updateContainer = async (id, updates) => {
+  return axios.patch('/app/containers/' + id, updates).then(response => {
     return response.data
   })
 }

@@ -27,7 +27,6 @@ class ContainerController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -38,7 +37,7 @@ class ContainerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      return Container::create($request->all());
     }
 
     /**
@@ -86,7 +85,8 @@ class ContainerController extends Controller
      */
     public function update(Request $request, Container $container)
     {
-        //
+      $container->update($request->all());
+      return response()->json($container, 200);
     }
 
     /**
@@ -97,6 +97,7 @@ class ContainerController extends Controller
      */
     public function destroy(Container $container)
     {
-        //
+      $container->delete();
+      return response()->json(null, 204);
     }
 }

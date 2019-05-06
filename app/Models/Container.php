@@ -10,6 +10,11 @@ class Container extends Model
    * Define which attributes will be visible
    */
   protected $visible = ['id', 'name', 'icon'];
+
+  /**
+   * Define which attributes will be mass assignable
+   */
+  protected $fillable = ['name', 'icon', 'user_id'];
   
   /**
    * Get all the collections that belong to this container

@@ -13,6 +13,7 @@
     <script>
       let initialData = {
         user: @json($user),
+        organization: @json($organization),
         activeCollectionId: @json($activeCollectionId),
         collections: @json($collections),
         activeContainerId: @json($activeContainerId),

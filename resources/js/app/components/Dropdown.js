@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { array, bool, func } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors } from '../../_config'
+import { colors } from '../config'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -100,16 +100,13 @@ Dropdown.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-	z-index: 100000;
+  z-index: 100000;
 	display: ${props => (props.isDropdownVisible ? 'block' : 'none')};
-	position: absolute;
-	max-height: 50vh;
-	min-width: 20vw;;
-	background-color: white;
-	border-top: 1.25px solid ${colors.BACKGROUND};
-	border-left: 1.25px solid ${colors.BACKGROUND};
-	box-shadow: 1.25px 1.25px 1.25px rgba(0, 0, 0, 0.16);
-	font-size: 14px;
+  position: absolute;
+  background-color: ${ colors.DROPDOWN_BACKGROUND };
+  color: white;
+  font-size: 0.9rem;
+  border-top-left-radius: 5px;
 	overflow-y: scroll;
 	scrollbar-width: none;
 	-ms-overflow-style: none;

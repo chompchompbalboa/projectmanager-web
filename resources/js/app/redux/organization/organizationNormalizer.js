@@ -1,24 +1,16 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import { fromJS } from 'immutable'
+import { schema, normalize } from 'normalizr';
 
 //-----------------------------------------------------------------------------
-// Initial
+// Schema
 //-----------------------------------------------------------------------------
-const initialState = fromJS({
-  id: initialData.organization.id,
-})
+const view = new schema.Entity('views');
+const viewsList = [view];
 
 //-----------------------------------------------------------------------------
-// Reducers
+// Normalizer
 //-----------------------------------------------------------------------------
-const organizationReducers = (state = initialState, action) => {
-  switch(action.type) {
-
-    default:
-      return state
-  }
-}
-
-export default organizationReducers
+const viewNormalizer = views => normalize(views, viewsList);
+export default viewNormalizer;

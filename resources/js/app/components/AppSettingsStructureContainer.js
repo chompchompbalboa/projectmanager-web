@@ -2,14 +2,24 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, object, shape, string } from 'prop-types'
+import { array, func, object, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
+import { 
+  createStructureContainer as createStructureContainerAction,
+  deleteStructureContainer as deleteStructureContainerAction,
+  updateStructureContainer as updateStructureContainerAction 
+} from '../redux/structure/structureActions'
 import { selectStructureCollections } from '../redux/structure/structureSelectors'
 
 import AppSettingsStructureCollection, { AddCollection } from './AppSettingsStructureCollection'
+import ChangeIconDropdown from './ChangeIconDropdown'
+import ContentEditable from './ContentEditable'
+import DeleteDropdown from './DeleteDropdown'
+import Dropdown from './Dropdown'
+import DropdownItem from './DropdownItem'
 import Icon from './Icon'
 
 //-----------------------------------------------------------------------------
@@ -19,32 +29,109 @@ const mapStateToProps = state => ({
   collections: selectStructureCollections(state)
 })
 
+const mapDispatchToProps = dispatch => ({
+  createStructureContainer: () => dispatch(createStructureContainerAction()),
+  deleteStructureContainer: containerId => dispatch(deleteStructureContainerAction(containerId)),
+  updateStructureContainer: (id, nextContainer) => dispatch(updateStructureContainerAction(id, nextContainer))
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 class AppSettingsStructureContainer extends Component {
 
   state = {
-    isCollectionsVisible: false
+    containerName: this.props.container.name,
+    isActionsDropdownVisible: false,
+    isCollectionsVisible: false,
+    isContainerRenaming: this.props.container.isContainerRenaming ? this.props.container.isContainerRenaming : false,
+    isDeleteDropdownVisible: false,
+    isIconDropdownVisible: false
+  }
+
+  handleNameBlur = () => {
+    const {
+      container,
+      updateStructureContainer
+    } = this.props
+    const {
+      containerName
+    } = this.state
+    this.setState({ isContainerRenaming: false })
+    updateStructureContainer(container.id, {
+      name: containerName
+    })
+  }
+
+  handleNameClick = () => {
+    const {
+      isCollectionsVisible
+    } = this.state
+    this.setState({ isCollectionsVisible: !isCollectionsVisible })
   }
 
   render() {
-      const {
+    const {
       collections,
-      container
+      container,
+      deleteStructureContainer,
+      updateStructureContainer
     } = this.props
     const {
-      isCollectionsVisible
+      containerName,
+      isActionsDropdownVisible,
+      isCollectionsVisible,
+      isContainerRenaming,
+      isDeleteDropdownVisible,
+      isIconDropdownVisible
     } = this.state
     return (
       <Container>
         <ContainerInfo>
-          <Icon 
-            icon={container.icon}/>
+          <IconContainer>
+            <Icon 
+              icon={container.icon}/>
+          </IconContainer>
           <Name
-            onClick={() => this.setState({ isCollectionsVisible: !isCollectionsVisible})}>
-            {container.name}
-          </Name>
+            focus
+            editable={isContainerRenaming}
+            isContainerRenaming={isContainerRenaming}
+            onBlur={() => this.handleNameBlur()}
+            onChange={(e, value) => this.setState({ containerName: value })}
+            onClick={!isContainerRenaming ? () => this.handleNameClick() : null}
+            tagName="h2"
+            value={containerName}/>
+          {isCollectionsVisible &&
+            <SettingsContainer
+              onClick={() => this.setState({ isActionsDropdownVisible: !isActionsDropdownVisible })}>
+              <Ellipsis>
+                ...
+              </Ellipsis>
+              <Dropdown
+                closeDropdown={() => this.setState({ isActionsDropdownVisible: false })}
+                isDropdownVisible={isActionsDropdownVisible}>
+                <DropdownItem
+                  onClick={() => this.setState({ isContainerRenaming: true })}
+                  text="Rename"/>
+                <DropdownItem
+                  onClick={() => this.setState({ isIconDropdownVisible: true })}
+                  text="Change Icon"/>
+                <DropdownItem
+                  onClick={() => this.setState({ isDeleteDropdownVisible: true })}
+                  text="Delete"/>
+              </Dropdown>
+            <ChangeIconDropdown
+              onIconClick={nextIcon => updateStructureContainer(container.id, { icon: nextIcon })}
+              closeDropdown={() => this.setState({ isIconDropdownVisible: false })}
+              isDropdownVisible={isIconDropdownVisible}/>
+            <DeleteDropdown
+              onDelete={() => deleteStructureContainer(container.id)}
+              closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
+              isDropdownVisible={isDeleteDropdownVisible}
+              textToMatch={container.name}
+              type="container"/>
+            </SettingsContainer>
+          }
         </ContainerInfo>
         <Collections
           isCollectionsVisible={isCollectionsVisible}>
@@ -60,13 +147,17 @@ class AppSettingsStructureContainer extends Component {
   }
 }
 
-export const AddContainer = () => (
-  <ContainerInfo>
+export const AddContainerComponents = ({
+  createStructureContainer
+}) => (
+  <ContainerInfo
+    onClick={() => createStructureContainer()}>
     <Icon 
       icon="ADD"/>
-    <Name>
-      Add...
-    </Name>
+    <Name
+      editable={false}
+      tagName="h2"
+      value="Add..."/>
   </ContainerInfo>
 )
 
@@ -74,11 +165,19 @@ export const AddContainer = () => (
 // Props
 //-----------------------------------------------------------------------------
 AppSettingsStructureContainer.propTypes = {
+  addContainer: func,
+  deleteContainer: func,
   collections: object,
   container: shape({
     collections: array,
     name: string
-  })
+  }),
+  deleteStructureContainer: func,
+  updateStructureContainer: func
+}
+
+AddContainerComponents.propTypes = {
+  createStructureContainer: func
 }
 
 //-----------------------------------------------------------------------------
@@ -87,14 +186,29 @@ AppSettingsStructureContainer.propTypes = {
 const Container = styled.div`
 `
 
+const IconContainer = styled.div`
+`
+
 const ContainerInfo = styled.div`
   display: flex;
   align-items: center;
 `
 
-const Name = styled.h2`
+const Name = styled(ContentEditable)`
   margin-left: 1vw;
   cursor: pointer;
+  &:hover {
+    text-decoration: ${ props => props.isContainerRenaming ? 'none' : 'underline'};
+  }
+`
+
+const SettingsContainer = styled.div`
+`
+
+const Ellipsis = styled.h2`
+  cursor: pointer;
+  margin-left: 0.25vw;
+  letter-spacing: 0.1rem;
   &:hover {
     text-decoration: underline;
   }
@@ -104,6 +218,10 @@ const Collections = styled.div`
   display: ${ props => props.isCollectionsVisible ? 'block' : 'none'};
 `
 
-export default connect(
-  mapStateToProps
-)(withImmutablePropsToJS(AppSettingsStructureContainer))
+const sharedConnector = component => connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withImmutablePropsToJS(component))
+
+export const AddContainer = sharedConnector(AddContainerComponents)
+export default sharedConnector(AppSettingsStructureContainer)

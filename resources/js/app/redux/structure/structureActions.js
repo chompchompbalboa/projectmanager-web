@@ -7,10 +7,9 @@ import { createContainer, deleteContainer, updateContainerId, updateContainerRed
 import { selectUserId } from '../user/userSelectors'
 
 //-----------------------------------------------------------------------------
-// Create Collection
+// Create Structure Collection
 //-----------------------------------------------------------------------------
 export const createStructureCollection = containerId => {
-  console.log(containerId)
   return (dispatch, getState) => {
     dispatch(createStructureCollectionReducer(containerId))
     const newCollection = getState().getIn(['structure', 'collections']).find(collection => Number(collection.get('id')) < 0).delete('views').delete('isCollectionRenaming')
@@ -20,8 +19,7 @@ export const createStructureCollection = containerId => {
         collectionId,
         nextCollectionId
       } = collectionIds
-      console.log(collectionId, nextCollectionId)
-      dispatch(updateStructureCollectionId(collectionId, nextCollectionId))
+      dispatch(updateStructureCollectionId(containerId, collectionId, nextCollectionId))
     })
   }
 }
@@ -31,14 +29,15 @@ const createStructureCollectionReducer = containerId => ({
   containerId: containerId
 })
 
-const updateStructureCollectionId = (collectionId, nextCollectionId) => ({
+const updateStructureCollectionId = (containerId, collectionId, nextCollectionId) => ({
   type: 'UPDATE_STRUCTURE_COLLECTION_ID',
+  containerId: containerId,
   collectionId: collectionId,
   nextCollectionId: nextCollectionId
 })
 
 //-----------------------------------------------------------------------------
-// Create Container
+// Create Structure Container
 //-----------------------------------------------------------------------------
 export const createStructureContainer = () => {
   return (dispatch, getState) => {
@@ -69,12 +68,42 @@ const updateStructureContainerId = (containerId, nextContainerId) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Delete Collection
+// Create Structure View
+//-----------------------------------------------------------------------------
+export const createStructureView = collectionId => {
+  return (dispatch, getState) => {
+    dispatch(createStructureViewReducer(collectionId))
+    const newView = getState().getIn(['structure', 'views']).find(view => Number(view.get('id')) < 0).delete('modules').delete('isViewRenaming')
+    const newViewId = newView.get('id')
+    mutation.createView(collectionId, newViewId, newView.toJS()).then(viewIds => {
+      const {
+        viewId,
+        nextViewId
+      } = viewIds
+      dispatch(updateStructureViewId(collectionId, viewId, nextViewId))
+    })
+  }
+}
+
+const createStructureViewReducer = collectionId => ({
+  type: 'CREATE_STRUCTURE_VIEW',
+  collectionId: collectionId
+})
+
+const updateStructureViewId = (collectionId, viewId, nextViewId) => ({
+  type: 'UPDATE_STRUCTURE_VIEW_ID',
+  collectionId: collectionId,
+  viewId: viewId,
+  nextViewId: nextViewId
+})
+
+//-----------------------------------------------------------------------------
+// Delete Structure Collection
 //-----------------------------------------------------------------------------
 export const deleteStructureCollection = (containerId, collectionId) => {
   return dispatch => {
     dispatch(deleteStructureCollectionReducer(containerId, collectionId))
-    //mutation.deleteCollection(collectionId)
+    mutation.deleteCollection(collectionId)
   }
 }
 
@@ -86,7 +115,7 @@ const deleteStructureCollectionReducer = (containerId, collectionId) => ({
 
 
 //-----------------------------------------------------------------------------
-// Delete Container
+// Delete Structure Container
 //-----------------------------------------------------------------------------
 export const deleteStructureContainer = containerId => {
   return dispatch => {
@@ -99,6 +128,22 @@ export const deleteStructureContainer = containerId => {
 const deleteStructureContainerReducer = containerId => ({
   type: 'DELETE_STRUCTURE_CONTAINER',
   containerId: containerId
+})
+
+//-----------------------------------------------------------------------------
+// Delete Structure View
+//-----------------------------------------------------------------------------
+export const deleteStructureView = ( collectionId, viewId) => {
+  return dispatch => {
+    dispatch(deleteStructureViewReducer(collectionId, viewId))
+    mutation.deleteView(viewId)
+  }
+}
+
+const deleteStructureViewReducer = (collectionId, viewId) => ({
+  type: 'DELETE_STRUCTURE_VIEW',
+  collectionId: collectionId,
+  viewId: viewId
 })
 
 //-----------------------------------------------------------------------------
@@ -119,16 +164,26 @@ const setStructureReducer = structure => ({
 })
 
 //-----------------------------------------------------------------------------
-// Update Container Reducer
+// Update Structure Collection
 //-----------------------------------------------------------------------------
-const updateStructureContainerReducer = (containerId, nextContainer) => ({
-  type: 'UPDATE_STRUCTURE_CONTAINER',
-  containerId: containerId,
-  nextContainer: nextContainer
+export const updateStructureCollection = (collectionId, updates) => {
+  return dispatch => {
+    dispatch(updateStructureCollectionReducer(collectionId, updates))
+    mutation.updateCollection(collectionId, updates)
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Update Structure Collection Reducer
+//-----------------------------------------------------------------------------
+const updateStructureCollectionReducer = (collectionId, updates) => ({
+  type: 'UPDATE_STRUCTURE_COLLECTION',
+  collectionId: collectionId,
+  updates: updates
 })
 
 //-----------------------------------------------------------------------------
-// Update Container Name
+// Update Structure Container
 //-----------------------------------------------------------------------------
 export const updateStructureContainer = (containerId, updates) => {
   return dispatch => {
@@ -137,5 +192,33 @@ export const updateStructureContainer = (containerId, updates) => {
     mutation.updateContainer(containerId, updates).then(nextContainer => {})
   }
 }
+
+//-----------------------------------------------------------------------------
+// Update Structure Container Reducer
+//-----------------------------------------------------------------------------
+const updateStructureContainerReducer = (containerId, updates) => ({
+  type: 'UPDATE_STRUCTURE_CONTAINER',
+  containerId: containerId,
+  updates: updates
+})
+
+//-----------------------------------------------------------------------------
+// Update Structure View
+//-----------------------------------------------------------------------------
+export const updateStructureView = (viewId, updates) => {
+  return dispatch => {
+    dispatch(updateStructureViewReducer(viewId, updates))
+    mutation.updateView(viewId, updates)
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Update Structure View Reducer
+//-----------------------------------------------------------------------------
+const updateStructureViewReducer = (viewId, updates) => ({
+  type: 'UPDATE_STRUCTURE_VIEW',
+  viewId: viewId,
+  updates: updates
+})
 
 

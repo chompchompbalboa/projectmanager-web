@@ -30,7 +30,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createStructureCollection: containerId => dispatch(createStructureCollectionAction(containerId)),
   deleteStructureCollection: (containerId, collectionId) => dispatch(deleteStructureCollectionAction(containerId, collectionId)),
-  updateStructureCollection: (id, nextCollection) => dispatch(updateStructureCollectionAction(id, nextCollection))
+  updateStructureCollection: (id, updates) => dispatch(updateStructureCollectionAction(id, updates))
 })
 
 //-----------------------------------------------------------------------------
@@ -109,9 +109,6 @@ class AppSettingsStructureCollection extends Component {
                   onClick={() => this.setState({ isCollectionRenaming: true })}
                   text="Rename"/>
                 <DropdownItem
-                  onClick={() => this.setState({ isIconDropdownVisible: true })}
-                  text="Change Icon"/>
-                <DropdownItem
                   onClick={() => this.setState({ isDeleteDropdownVisible: true })}
                   text="Delete"/>
               </Dropdown>
@@ -129,9 +126,12 @@ class AppSettingsStructureCollection extends Component {
           {views && views !== null && collection.views && collection.views.map(viewId => (
             <AppSettingsStructureView
               key={viewId}
+              collectionId={collection.id}
+              containerId={containerId}
               view={views[viewId]}/>
           ))}
-          <AddView />
+          <AddView
+            collectionId={collection.id}/>
         </Views>
       </Container>
     )
@@ -189,7 +189,7 @@ const Name = styled(ContentEditable)`
   margin-left: 1vw;
   cursor: pointer;
   &:hover {
-    text-decoration: ${ props => props.isContainerRenaming ? 'none' : 'underline'};
+    text-decoration: ${ props => props.isCollectionRenaming ? 'none' : 'underline'};
   }
 `
 

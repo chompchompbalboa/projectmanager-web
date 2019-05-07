@@ -10,6 +10,11 @@ class View extends Model
    * Define which attributes will be visible
    */
   protected $visible = ['id', 'name'];
+
+  /**
+   * Define which attributes will be mass assignable
+   */
+  protected $fillable = ['name'];
   
   /**
    * Get the collections the view belongs to

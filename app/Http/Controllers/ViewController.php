@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\View;
 use Illuminate\Http\Request;
+
+use App\Models\Collection;
+use App\Models\View;
 
 class ViewController extends Controller
 {
@@ -35,7 +37,10 @@ class ViewController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $view = View::create($request->input('view'));
+      $collection = Collection::find($request->input('collectionId'));
+      $collection->views()->attach($view->id);
+      return response()->json($view, 200);
     }
 
     /**
@@ -73,7 +78,8 @@ class ViewController extends Controller
      */
     public function update(Request $request, View $view)
     {
-        //
+      $view->update($request->all());
+      return response()->json($view, 200);
     }
 
     /**
@@ -84,6 +90,7 @@ class ViewController extends Controller
      */
     public function destroy(View $view)
     {
-        //
+      $view->delete();
+      return response()->json(null, 204);
     }
 }

@@ -72,6 +72,18 @@ export const createTable = async (organizationId, projectId, tableId) => {
   })
 }
 
+export const createView = async (collectionId, newViewId, newView) => {  
+  return axios.post('/app/views', { 
+    view: newView,
+    collectionId: collectionId
+  }).then(response => {
+    return {
+      viewId: newViewId,
+      nextViewId: response.data.id
+    }
+  })
+}
+
 export const deleteBreakdown = async (breakdownId) => {  
   return axios.delete('/app/breakdowns/' + breakdownId).then(response => {
     return response.data
@@ -80,6 +92,12 @@ export const deleteBreakdown = async (breakdownId) => {
 
 export const deleteColumn = async (columnId) => {  
   return axios.delete('/app/columns/' + columnId).then(response => {
+    return response.data
+  })
+}
+
+export const deleteCollection = async collectionId => {  
+  return axios.delete('/app/collections/' + collectionId).then(response => {
     return response.data
   })
 }
@@ -108,6 +126,12 @@ export const deleteTable = async (tableId) => {
   })
 }
 
+export const deleteView = async viewId => {  
+  return axios.delete('/app/views/' + viewId).then(response => {
+    return response.data
+  })
+}
+
 export const updateBreakdown = async (id, breakdown) => {  
   return axios.patch('/app/breakdowns/' + id, {
     id: id,
@@ -122,6 +146,12 @@ export const updateFormula = async (id, formula) => {
     id: id,
     formula: formula
   }).then(response => {
+    return response.data
+  })
+}
+
+export const updateCollection = async (id, updates) => {
+  return axios.patch('/app/collections/' + id, updates).then(response => {
     return response.data
   })
 }
@@ -159,10 +189,8 @@ export const updateTable = async (id, table) => {
   })
 }
 
-export const updateView = async nextLeftColumnWidth => {  
-  return axios.patch('/app/view', {
-    nextLeftColumnWidth: nextLeftColumnWidth,
-  }).then(response => {
+export const updateView = async (id, updates) => {
+  return axios.patch('/app/views/' + id, updates).then(response => {
     return response.data
   })
 }

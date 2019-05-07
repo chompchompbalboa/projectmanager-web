@@ -32,7 +32,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createStructureContainer: () => dispatch(createStructureContainerAction()),
   deleteStructureContainer: containerId => dispatch(deleteStructureContainerAction(containerId)),
-  updateStructureContainer: (id, nextContainer) => dispatch(updateStructureContainerAction(id, nextContainer))
+  updateStructureContainer: (id, updates) => dispatch(updateStructureContainerAction(id, updates))
 })
 
 //-----------------------------------------------------------------------------

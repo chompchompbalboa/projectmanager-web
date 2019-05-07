@@ -41,7 +41,7 @@ class CollectionController extends Controller
       $collection = Collection::create($request->input('collection'));
       $container = Container::find($request->input('containerId'));
       $container->collections()->attach($collection->id);
-      return response()->json($container, 200);
+      return response()->json($collection, 200);
     }
 
     /**
@@ -84,7 +84,8 @@ class CollectionController extends Controller
      */
     public function update(Request $request, Collection $collection)
     {
-        //
+      $collection->update($request->all());
+      return response()->json($collection, 200);
     }
 
     /**
@@ -95,6 +96,7 @@ class CollectionController extends Controller
      */
     public function destroy(Collection $collection)
     {
-        //
+      $collection->delete();
+      return response()->json(null, 204);
     }
 }

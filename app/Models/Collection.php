@@ -14,20 +14,13 @@ class Collection extends Model
   /**
    * Define which attributes will be mass assignable
    */
-  protected $fillable = ['name', 'container_id'];
+  protected $fillable = ['name'];
   
   /**
    * Get the container the collection belongs to
    */
   public function container() {
     return $this->belongsToMany('App\Models\Container');
-  }
-  
-  /**
-   * Get the organization the collection belongs to
-   */
-  public function organization() {
-    return $this->belongsTo('App\Models\Organization');
   }
   
   /**

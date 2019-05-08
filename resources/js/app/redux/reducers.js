@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import { combineReducers } from 'redux-immutable'
+import { combineReducers } from 'redux'
 
 import activeReducers from './active/activeReducers'
 import collectionReducers from './collection/collectionReducers'

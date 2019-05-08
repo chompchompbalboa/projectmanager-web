@@ -1,2 +1,9 @@
-export const selectModuleIds = state => state.getIn(['module', 'moduleIds'])
-export const selectModules = state => state.getIn(['module', 'modules'])
+//-----------------------------------------------------------------------------
+// Select Module Ids
+//-----------------------------------------------------------------------------
+export const selectModuleIds = state => state.module.moduleIds
+
+//-----------------------------------------------------------------------------
+// Select Modules
+//-----------------------------------------------------------------------------
+export const selectModules = state => state.module.modules

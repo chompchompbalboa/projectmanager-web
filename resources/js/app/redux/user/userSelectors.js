@@ -1,4 +1,4 @@
 //-----------------------------------------------------------------------------
 // Select User Id
 //-----------------------------------------------------------------------------
-export const selectUserId = state => state.getIn(['user', 'id'])
+export const selectUserId = state => state.user.id

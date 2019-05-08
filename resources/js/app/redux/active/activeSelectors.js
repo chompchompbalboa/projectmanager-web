@@ -1,24 +1,24 @@
 //-----------------------------------------------------------------------------
 // Select Active Container Id
 //-----------------------------------------------------------------------------
-export const selectActiveContainerId = state => state.getIn(['active', 'containerId'])
+export const selectActiveContainerId = state => state.active.containerId
 
 //-----------------------------------------------------------------------------
 // Select Active Content
 //-----------------------------------------------------------------------------
-export const selectActiveContent = state => state.getIn(['active', 'content'])
+export const selectActiveContent = state => state.active.content
 
 //-----------------------------------------------------------------------------
 // Select Active Collection Id
 //-----------------------------------------------------------------------------
-export const selectActiveCollectionId = state => state.getIn(['active', 'collectionId'])
+export const selectActiveCollectionId = state => state.active.collectionId
 
 //-----------------------------------------------------------------------------
 // Select Active Settings Content
 //-----------------------------------------------------------------------------
-export const selectActiveSettingsContent = state => state.getIn(['active', 'settingsContent'])
+export const selectActiveSettingsContent = state => state.active.settingsContent
 
 //-----------------------------------------------------------------------------
 // Select Active View Id
 //-----------------------------------------------------------------------------
-export const selectActiveViewId = state => state.getIn(['active', 'viewId'])
+export const selectActiveViewId = state => state.active.viewId

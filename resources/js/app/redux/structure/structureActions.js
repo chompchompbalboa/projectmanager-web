@@ -12,14 +12,15 @@ import { selectUserId } from '../user/userSelectors'
 export const createStructureCollection = containerId => {
   return (dispatch, getState) => {
     dispatch(createStructureCollectionReducer(containerId))
-    const newCollection = getState().getIn(['structure', 'collections']).find(collection => Number(collection.get('id')) < 0).delete('views').delete('isCollectionRenaming')
-    const newCollectionId = newCollection.get('id')
-    mutation.createCollection(containerId, newCollectionId, newCollection.toJS()).then(collectionIds => {
+    const tempId = Object.keys(getState().structure.collections).find(id => id < 0)
+    const newCollection = getState().structure.collections[tempId]
+    const { isCollectionRenaming, views, ...newCollectionForServer } = newCollection // Remove properties that aren't stored in the db
+    mutation.createCollection(containerId, newCollection.id, newCollectionForServer).then(collectionIds => {
       const {
         collectionId,
         nextCollectionId
       } = collectionIds
-      dispatch(updateStructureCollectionId(containerId, collectionId, nextCollectionId))
+      //dispatch(updateStructureCollectionId(containerId, collectionId, nextCollectionId))
     })
   }
 }
@@ -42,11 +43,12 @@ const updateStructureCollectionId = (containerId, collectionId, nextCollectionId
 export const createStructureContainer = () => {
   return (dispatch, getState) => {
     dispatch(createStructureContainerReducer())
-    const newContainer = getState().getIn(['structure', 'containers']).find(container => Number(container.get('id')) < 0).delete('collections').delete('isContainerRenaming')
-    const newContainerId = newContainer.get('id')
-    const userId = getState().getIn(['user', 'id'])
-    dispatch(createContainer(newContainerId, newContainer))
-    mutation.createContainer(userId, newContainerId, newContainer.toJS()).then(containerIds => {
+    const userId = selectUserId(getState())
+    const tempId = Object.keys(getState().structure.containers).find(id => id < 0)
+    const newContainer = getState().structure.containers[tempId]
+    const { isContainerRenaming, collections, ...newContainerForServer } = newContainer // Remove properties that aren't stored in the db
+    dispatch(createContainer(newContainer.id, newContainer))
+    mutation.createContainer(userId, newContainer.id, newContainerForServer).then(containerIds => {
       const {
         containerId,
         nextContainerId
@@ -73,9 +75,10 @@ const updateStructureContainerId = (containerId, nextContainerId) => ({
 export const createStructureView = collectionId => {
   return (dispatch, getState) => {
     dispatch(createStructureViewReducer(collectionId))
-    const newView = getState().getIn(['structure', 'views']).find(view => Number(view.get('id')) < 0).delete('modules').delete('isViewRenaming')
-    const newViewId = newView.get('id')
-    mutation.createView(collectionId, newViewId, newView.toJS()).then(viewIds => {
+    const tempId = Object.keys(getState().structure.views).find(id => id < 0)
+    const newView = getState().structure.views[tempId]
+    const { isViewRenaming, modules, ...newViewForServer } = newView // Remove properties that aren't stored in the db
+    mutation.createView(collectionId, newView.id, newViewForServer).then(viewIds => {
       const {
         viewId,
         nextViewId

@@ -1,7 +1,6 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import { fromJS } from 'immutable'
 import _ from 'lodash'
 
 import containerNormalizer from './containerNormalizer'
@@ -10,10 +9,10 @@ import containerNormalizer from './containerNormalizer'
 // Default State
 //-----------------------------------------------------------------------------
 const normalizedContainers = containerNormalizer(_.sortBy(initialData.containers, ['name']))
-const initialState = fromJS({
+const initialState = {
   containers: normalizedContainers.entities.containers,
   containerIds: normalizedContainers.result
-})
+}
 
 //-----------------------------------------------------------------------------
 // Reducers
@@ -26,25 +25,38 @@ const containerReducers = (state = initialState, action) => {
         newContainerId,
         newContainer
       } = action
-      return state.setIn(['containers', newContainerId], newContainer)
-                  .setIn(['containerIds', state.get('containerIds').size], newContainerId)
+      return {
+        ...state,
+        containerIds: [ ...state.containerIds, newContainerId ],
+        containers: { ...state.containers, [newContainerId]: newContainer }
+      }
     }
 
     case 'DELETE_CONTAINER':  {
       const {
         containerId
       } = action
-      return state.deleteIn(['containers', containerId])
-                  .deleteIn(['containerIds', state.get('containerIds').findIndex(container => container === containerId)])
+      const nextState = { ...state }
+      delete nextState.containers[containerId]
+      return {
+        ...state,
+        containerIds: state.containerIds.filter(id => id !== containerId),
+        containers: nextState.containers
+      }
     }
 
     case 'UPDATE_CONTAINER':  {
       const {
         containerId,
-        nextContainer
+        updates
       } = action
-      const container = state.getIn(['containers', containerId])
-      return state.setIn(['containers', containerId], container.merge(fromJS(nextContainer)))
+      return {
+        ...state, containers: {
+          ...state.containers, [containerId]: {
+            ...state.containers[containerId], ...updates
+          }
+        }
+      }
     }
 
     case 'UPDATE_CONTAINER_ID':  {
@@ -52,12 +64,22 @@ const containerReducers = (state = initialState, action) => {
         containerId,
         nextContainerId
       } = action
-      const container = state.getIn(['containers', containerId]).set('id', nextContainerId)
-      const nextState = state.setIn(['containers', nextContainerId], container)
-                              .deleteIn(['containers', containerId])
-                              .setIn(['containerIds', state.get('containerIds').size], nextContainerId)
-                              .deleteIn(['containerIds', state.get('containerIds').findIndex(container => container === containerId)])
-      return nextState
+      const nextState = { ...state }
+      
+      const container = nextState.containers[containerId]
+      container.id = nextContainerId
+      delete container.isContainerRenaming
+      
+      nextState.containers[nextContainerId] = container
+      delete nextState.containers[containerId]
+      
+      const containerIndex = nextState.containerIds.findIndex(id => id === containerId)
+      nextState.containerIds[containerIndex]= nextContainerId
+      return {
+        ...state,
+        containers: nextState.containers,
+        containerIds: nextState.containerIds
+      }
     }
 
     default:

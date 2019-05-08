@@ -1,18 +1,13 @@
 //-----------------------------------------------------------------------------
-// Imports
-//-----------------------------------------------------------------------------
-import { fromJS } from 'immutable'
-
-//-----------------------------------------------------------------------------
 // Initial State
 //-----------------------------------------------------------------------------
-const initialState = fromJS({
+const initialState = {
   collectionId: initialData.activeCollectionId,
   containerId: initialData.activeContainerId,
   content: 'SETTINGS',
   settingsContent: 'STRUCTURE',
   viewId: initialData.activeViewId
-})
+}
 
 //-----------------------------------------------------------------------------
 // Reducers
@@ -24,35 +19,35 @@ const activeReducers = (state = initialState, action) => {
       const {
         nextActiveCollectionId
       } = action
-      return state.set('collectionId', fromJS(nextActiveCollectionId))
+      return {...state, collectionId: nextActiveCollectionId}
     }
 
     case 'UPDATE_ACTIVE_CONTAINER_ID': {
       const {
         nextActiveContainerId
       } = action
-      return state.set('containerId', fromJS(nextActiveContainerId))
+      return {...state, containerId: nextActiveContainerId}
     }
 
     case 'UPDATE_ACTIVE_CONTENT': {
       const {
         nextActiveContent
       } = action
-      return state.set('content', fromJS(nextActiveContent))
+      return {...state, content: nextActiveContent}
     }
 
     case 'UPDATE_ACTIVE_SETTINGS_CONTENT': {
       const {
         nextActiveSettingsContent
       } = action
-      return state.set('settingsContent', fromJS(nextActiveSettingsContent))
+      return {...state, settingsContent: nextActiveSettingsContent}
     }
 
     case 'UPDATE_ACTIVE_VIEW_ID': {
       const {
         nextActiveViewId
       } = action
-      return state.set('viewId', fromJS(nextActiveViewId))
+      return {...state, viewId: nextActiveViewId}
     }
 
     default:

@@ -22,7 +22,7 @@ const ContentEditable = ({
 }) => {
   return (
     <SaneContentEditable
-      focus={focus}
+      focus={focus && editable}
       tagName={tagName}
       caretPosition={caretPosition}
       className={className}
@@ -50,8 +50,8 @@ ContentEditable.propTypes = {
 }
 
 ContentEditable.defaultProps = {
-  caretPosition: 'start',
+  caretPosition: 'end',
   focus: false
 }
 
-export default ContentEditable
+export default React.memo(ContentEditable)

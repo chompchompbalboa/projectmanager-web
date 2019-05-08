@@ -66,12 +66,12 @@ const structureReducers = (state = initialState, action) => {
         collectionId
       } = action
       const tempId = _.random(-100000, -900000)
-      const newView = fromJS({
+      const newView = {
           id: tempId,
           name: 'Name',
           modules: [],
           isViewRenaming: true
-      })
+      }
       return {
         ...state,
         views: {...state.views, [tempId]: newView},
@@ -90,13 +90,13 @@ const structureReducers = (state = initialState, action) => {
         containerId,
         collectionId
       } = action
-      const newState = { ...state }
-      delete newState.collections[collectionId]
+      const nextState = { ...state }
+      delete nextState.collections[collectionId]
       return {
-        ...newState, containers: {
-          ...newState.containers, [containerId]: {
-            ...newState.containers[containerId], collections: 
-              newState.containers[containerId].collections.filter(id => id !== collectionId)
+        ...nextState, containers: {
+          ...nextState.containers, [containerId]: {
+            ...nextState.containers[containerId], collections: 
+              nextState.containers[containerId].collections.filter(id => id !== collectionId)
           }
         }
       }
@@ -106,9 +106,9 @@ const structureReducers = (state = initialState, action) => {
       const {
         containerId
       } = action
-      const newState = { ...state }
-      delete newState.containers[containerId]
-      return newState
+      const nextState = { ...state }
+      delete nextState.containers[containerId]
+      return nextState
     }
 
     case 'DELETE_STRUCTURE_VIEW':  {
@@ -116,13 +116,13 @@ const structureReducers = (state = initialState, action) => {
         collectionId,
         viewId
       } = action
-      const newState = { ...state }
-      delete newState.views[viewId]
+      const nextState = { ...state }
+      delete nextState.views[viewId]
       return {
-        ...newState, collections: {
-          ...newState.collections, [collectionId]: {
-            ...newState.collections[collectionId], views: 
-              newState.collections[collectionId].views.filter(id => id !== viewId)
+        ...nextState, collections: {
+          ...nextState.collections, [collectionId]: {
+            ...nextState.collections[collectionId], views: 
+              nextState.collections[collectionId].views.filter(id => id !== viewId)
           }
         }
       }
@@ -146,11 +146,13 @@ const structureReducers = (state = initialState, action) => {
         collectionId,
         updates
       } = action
-      const collection = state.getIn(['collections', collectionId])
-      return state.setIn([
-        'collections',
-        collectionId
-      ], collection.merge(fromJS(updates)))
+      return {
+        ...state, collections: {
+          ...state.collections, [collectionId]: {
+            ...state.collections[collectionId], ...updates
+          }
+        }
+      }
     }
 
     case 'UPDATE_STRUCTURE_COLLECTION_ID':  {
@@ -159,11 +161,21 @@ const structureReducers = (state = initialState, action) => {
         collectionId,
         nextCollectionId
       } = action
-      const collection = state.getIn(['collections', collectionId]).set('id', nextCollectionId)
-      const collectionIndex = state.getIn(['containers', containerId, 'collections']).findIndex(collection => collection === collectionId)
-      return state.setIn(['collections', nextCollectionId], collection)
-                  .deleteIn(['collections', collectionId])
-                  .setIn(['containers', containerId, 'collections', collectionIndex], nextCollectionId)
+      const nextState = { ...state }
+      
+      const collection = nextState.collections[collectionId]
+      collection.id = nextCollectionId
+      
+      nextState.collections[nextCollectionId] = collection
+      delete nextState.collections[collectionId]
+      
+      const collectionIndex = nextState.containers[containerId].collections.findIndex(id => id === collectionId)
+      nextState.containers[containerId].collections[collectionIndex] = nextCollectionId
+      return {
+        ...state,
+        collections: nextState.collections,
+        containers: nextState.containers
+      }
     }
 
     case 'UPDATE_STRUCTURE_CONTAINER':  {
@@ -171,11 +183,13 @@ const structureReducers = (state = initialState, action) => {
         containerId,
         updates
       } = action
-      const container = state.getIn(['containers', containerId])
-      return state.setIn([
-        'containers',
-        containerId
-      ], container.merge(fromJS(updates)))
+      return {
+        ...state, containers: {
+          ...state.containers, [containerId]: {
+            ...state.containers[containerId], ...updates
+          }
+        }
+      }
     }
 
     case 'UPDATE_STRUCTURE_CONTAINER_ID':  {
@@ -183,8 +197,18 @@ const structureReducers = (state = initialState, action) => {
         containerId,
         nextContainerId
       } = action
-      const container = state.getIn(['containers', containerId]).set('id', nextContainerId)
-      return state.setIn(['containers', nextContainerId], container).deleteIn(['containers', containerId])
+      const nextState = { ...state }
+      
+      const container = nextState.containers[containerId]
+      container.id = nextContainerId
+      
+      nextState.containers[nextContainerId] = container
+      delete nextState.containers[containerId]
+      
+      return {
+        ...state,
+        containers: nextState.containers
+      }
     }
 
     case 'UPDATE_STRUCTURE_VIEW':  {
@@ -192,11 +216,13 @@ const structureReducers = (state = initialState, action) => {
         viewId,
         updates
       } = action
-      const view = state.getIn(['views', viewId])
-      return state.setIn([
-        'views',
-        viewId
-      ], view.merge(fromJS(updates)))
+      return {
+        ...state, views: {
+          ...state.views, [viewId]: {
+            ...state.views[viewId], ...updates
+          }
+        }
+      }
     }
 
     case 'UPDATE_STRUCTURE_VIEW_ID':  {
@@ -205,11 +231,21 @@ const structureReducers = (state = initialState, action) => {
         viewId,
         nextViewId
       } = action
-      const view = state.getIn(['views', viewId]).set('id', nextViewId)
-      const viewIndex = state.getIn(['collections', collectionId, 'views']).findIndex(view => view === viewId)
-      return state.setIn(['views', nextViewId], view)
-                  .deleteIn(['views', viewId])
-                  .setIn(['collections', collectionId, 'views', viewIndex], nextViewId)
+      const nextState = { ...state }
+
+      const view = nextState.views[viewId]
+      view.id = nextViewId
+      
+      nextState.views[nextViewId] = view
+      delete nextState.views[viewId]
+      
+      const viewIndex = nextState.collections[collectionId].views.findIndex(id => id === viewId)
+      nextState.collections[collectionId].views[viewIndex] = nextViewId
+      return {
+        ...state,
+        collections: nextState.collections,
+        views: nextState.views
+      }
     }
 
 

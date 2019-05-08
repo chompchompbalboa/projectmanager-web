@@ -1,21 +1,19 @@
 //-----------------------------------------------------------------------------
 // Select Structure Collections
 //-----------------------------------------------------------------------------
-export const selectStructureCollections = state => state.getIn(['structure', 'collections'])
+export const selectStructureCollections = state => state.structure.collections
 
 //-----------------------------------------------------------------------------
 // Select Structure Containers
 //-----------------------------------------------------------------------------
-export const selectStructureContainers = state => state.getIn(['structure', 'containers'])
+export const selectStructureContainers = state => state.structure.containers
 
 //-----------------------------------------------------------------------------
 // Select Structure Modules
 //-----------------------------------------------------------------------------
-export const selectStructureModules = state => state.getIn(['structure', 'modules'])
+export const selectStructureModules = state => state.structure.modules
 
 //-----------------------------------------------------------------------------
 // Select Structure Views
 //-----------------------------------------------------------------------------
-export const selectStructureViews = state => {
-  return state.getIn(['structure', 'views'])
-}
+export const selectStructureViews = state => state.structure.views

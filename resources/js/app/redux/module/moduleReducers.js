@@ -1,18 +1,16 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import { fromJS } from 'immutable'
-
 import moduleNormalizer from './moduleNormalizer'
 
 //-----------------------------------------------------------------------------
 // Initial
 //-----------------------------------------------------------------------------
 const normalizedModules = moduleNormalizer(initialData.modules)
-const initialState = fromJS({
+const initialState = {
   modules: normalizedModules.entities.modules,
   moduleIds: normalizedModules.result
-})
+}
 
 //-----------------------------------------------------------------------------
 // Reducers
@@ -24,14 +22,14 @@ const moduleReducers = (state = initialState, action) => {
       const {
         nextModuleIds
       } = action
-      return state.set('moduleIds', nextModuleIds)
+      return { ...state, moduleIds: nextModuleIds }
     }
 
     case 'UPDATE_MODULES': {
       const {
         nextModules
       } = action
-      return state.set('modules', nextModules)
+      return { ...state, modules: nextModules }
     }
 
     default:

@@ -9,7 +9,7 @@ class Module extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'type', 'typeId'];
+  protected $visible = ['id', 'type', 'typeId', 'name'];
 
   /**
    * Custom attributes

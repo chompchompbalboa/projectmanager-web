@@ -61,6 +61,7 @@ class OrganizationTableSeeder extends Seeder
   
                   $module->type = 'TABLE';
                   $module->type_id = $table->id;
+                  $module->name = 'Table - '.$table->id;
                   $module->save();
     
                   // Columns

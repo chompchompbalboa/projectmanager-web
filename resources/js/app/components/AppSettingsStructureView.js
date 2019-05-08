@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, object, shape, string } from 'prop-types'
+import { array, func, number, object, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import withImmutablePropsToJS from 'with-immutable-props-to-js'
@@ -72,7 +72,6 @@ class AppSettingsStructureView extends Component {
   render() {
     const {
       collectionId,
-      containerId,
       deleteStructureView,
       modules,
       view
@@ -87,11 +86,8 @@ class AppSettingsStructureView extends Component {
     return (
       <Container>
         <View>
-          <Bullet>
-            {isModulesVisible ? "-" : "+"}
-          </Bullet>
           <Name
-            focus
+            focus={isViewRenaming}
             editable={isViewRenaming}
             isViewRenaming={isViewRenaming}
             onBlur={() => this.handleNameBlur()}
@@ -115,12 +111,12 @@ class AppSettingsStructureView extends Component {
                   onClick={() => this.setState({ isDeleteDropdownVisible: true })}
                   text="Delete"/>
               </Dropdown>
-            <DeleteDropdown
-              onDelete={() => deleteStructureView(collectionId, view.id)}
-              closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
-              isDropdownVisible={isDeleteDropdownVisible}
-              textToMatch={view.name}
-              type="view"/>
+              <DeleteDropdown
+                onDelete={() => deleteStructureView(collectionId, view.id)}
+                closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
+                isDropdownVisible={isDeleteDropdownVisible}
+                textToMatch={view.name}
+                type="view"/>
             </SettingsContainer>
           }
         </View>
@@ -129,7 +125,8 @@ class AppSettingsStructureView extends Component {
           {modules && modules !== null && view.modules && view.modules.map(moduleId => (
             <AppSettingsStructureModule
               key={moduleId}
-              module={modules[moduleId]}/>
+              module={modules[moduleId]}
+              viewId={view.id}/>
           ))}
           <AddModule/>
         </Modules>
@@ -138,48 +135,51 @@ class AppSettingsStructureView extends Component {
   }
 }
 
-export const AddViewComponents = ({
+const AddViewComponents = ({
   collectionId,
   createStructureView
-}) => (
-  <View
-    onClick={() => createStructureView(collectionId)}>
-    <Bullet/>
-    <Name
-      editable={false}
-      tagName="h4"
-      value="Add..."/>
-  </View>
-)
+}) => {
+  return (
+    <View
+      onClick={() => createStructureView(collectionId)}>
+      <Name
+        editable={false}
+        tagName="h4"
+        value="Add..."/>
+    </View>
+  )
+}
 
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
 AppSettingsStructureView.propTypes = {
+  collectionId: number,
+  containerId: number,
+  deleteStructureView: func,
+  modules: object,
+  updateStructureView: func,
   view: shape({
     name: string,
     modules: array
-  }),
-  modules: object
+  })
+}
+
+AddViewComponents.propTypes = {
+  collectionId: number,
+  createStructureView: func
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  margin: 0.35vh 0;
+  margin: 0.5vh 0;
 `
 
 const View = styled.div`
   cursor: pointer;
-  margin-left: 3vw;
-  display: flex;
-  align-items: center;
-`
-
-const Bullet = styled.h4`
-  min-height: 1px;
-  width: 1.5vw;
+  margin-left: 5vw;
   display: flex;
   align-items: center;
 `

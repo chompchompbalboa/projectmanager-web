@@ -93,7 +93,7 @@ class AppSettingsStructureContainer extends Component {
               icon={container.icon}/>
           </IconContainer>
           <Name
-            focus
+            focus={isContainerRenaming}
             editable={isContainerRenaming}
             isContainerRenaming={isContainerRenaming}
             onBlur={() => this.handleNameBlur()}
@@ -149,7 +149,7 @@ class AppSettingsStructureContainer extends Component {
   }
 }
 
-export const AddContainerComponents = ({
+const AddContainerComponents = ({
   createStructureContainer
 }) => (
   <ContainerInfo

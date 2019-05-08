@@ -84,11 +84,8 @@ class AppSettingsStructureCollection extends Component {
     return (
       <Container>
         <Collection>
-          <Bullet>
-            {isViewsVisible ? "-" : "+"}
-          </Bullet>
           <Name
-            focus
+            focus={isCollectionRenaming}
             editable={isCollectionRenaming}
             isCollectionRenaming={isCollectionRenaming}
             onBlur={() => this.handleNameBlur()}
@@ -138,19 +135,20 @@ class AppSettingsStructureCollection extends Component {
   }
 }
 
-export const AddCollectionComponents = ({
+const AddCollectionComponents = ({
   containerId,
   createStructureCollection
-}) => (
-  <Collection
-    onClick={() => createStructureCollection(containerId)}>
-    <Bullet/>
-    <Name
-      editable={false}
-      tagName="h3"
-      value="Add..."/>
-  </Collection>
-)
+}) => {
+  return (
+    <Collection
+      onClick={() => createStructureCollection(containerId)}>
+      <Name
+        editable={false}
+        tagName="h3"
+        value="Add..."/>
+    </Collection>
+  )
+}
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -166,6 +164,11 @@ AppSettingsStructureCollection.propTypes = {
   views: object
 }
 
+AddCollectionComponents.propTypes = {
+  containerId: number,
+  createStructureCollection: func
+}
+
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
@@ -173,20 +176,12 @@ const Container = styled.div`
 `
 
 const Collection = styled.div`
-  margin-left: 1vw;
-  display: flex;
-  align-items: center;
-`
-
-const Bullet = styled.h3`
-  min-height: 1px;
-  width: 1.5vw;
+  margin-left: 3vw;
   display: flex;
   align-items: center;
 `
 
 const Name = styled(ContentEditable)`
-  margin-left: 1vw;
   cursor: pointer;
   &:hover {
     text-decoration: ${ props => props.isCollectionRenaming ? 'none' : 'underline'};

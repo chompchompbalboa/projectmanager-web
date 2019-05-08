@@ -27,14 +27,14 @@ const containerReducers = (state = initialState, action) => {
         newContainer
       } = action
       return state.setIn(['containers', newContainerId], newContainer)
-                  .setIn(['containerIds', state.get('containerIds').size], newContainerId + "")
+                  .setIn(['containerIds', state.get('containerIds').size], newContainerId)
     }
 
     case 'DELETE_CONTAINER':  {
       const {
         containerId
       } = action
-      return state.deleteIn(['containers', containerId + ""])
+      return state.deleteIn(['containers', containerId])
                   .deleteIn(['containerIds', state.get('containerIds').findIndex(container => container === containerId)])
     }
 
@@ -43,8 +43,8 @@ const containerReducers = (state = initialState, action) => {
         containerId,
         nextContainer
       } = action
-      const container = state.getIn(['containers', containerId + ""])
-      return state.setIn(['containers', containerId + ""], container.merge(fromJS(nextContainer)))
+      const container = state.getIn(['containers', containerId])
+      return state.setIn(['containers', containerId], container.merge(fromJS(nextContainer)))
     }
 
     case 'UPDATE_CONTAINER_ID':  {
@@ -52,9 +52,9 @@ const containerReducers = (state = initialState, action) => {
         containerId,
         nextContainerId
       } = action
-      const container = state.getIn(['containers', containerId + ""]).set('id', nextContainerId)
-      const nextState = state.setIn(['containers', nextContainerId + ""], container)
-                              .deleteIn(['containers', containerId + ""])
+      const container = state.getIn(['containers', containerId]).set('id', nextContainerId)
+      const nextState = state.setIn(['containers', nextContainerId], container)
+                              .deleteIn(['containers', containerId])
                               .setIn(['containerIds', state.get('containerIds').size], nextContainerId)
                               .deleteIn(['containerIds', state.get('containerIds').findIndex(container => container === containerId)])
       return nextState

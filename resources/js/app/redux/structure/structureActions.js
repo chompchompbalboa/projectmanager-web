@@ -189,7 +189,7 @@ export const updateStructureContainer = (containerId, updates) => {
   return dispatch => {
     dispatch(updateStructureContainerReducer(containerId, updates))
     dispatch(updateContainerReducer(containerId, updates))
-    mutation.updateContainer(containerId, updates).then(nextContainer => {})
+    mutation.updateContainer(containerId, updates)
   }
 }
 

@@ -3,7 +3,6 @@
 //-----------------------------------------------------------------------------
 import React from 'react'
 import { bool, func, string } from 'prop-types'
-import styled from 'styled-components'
 
 import SaneContentEditable from 'react-sane-contenteditable'
 
@@ -51,12 +50,8 @@ ContentEditable.propTypes = {
 }
 
 ContentEditable.defaultProps = {
-  caretPosition: 'end'
+  caretPosition: 'start',
+  focus: false
 }
-
-//-----------------------------------------------------------------------------
-// Styled Components
-//-----------------------------------------------------------------------------
-const Container = styled.div``
 
 export default ContentEditable

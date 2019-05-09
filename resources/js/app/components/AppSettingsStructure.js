@@ -12,6 +12,9 @@ import { selectContainerIds } from '../redux/container/containerSelectors'
 import { selectStructureContainers } from '../redux/structure/structureSelectors'
 
 import AppSettingsStructureContainers from './AppSettingsStructureContainers'
+import AppSettingsStructureCollections from './AppSettingsStructureCollections'
+import AppSettingsStructureModules from './AppSettingsStructureModules'
+import AppSettingsStructureViews from './AppSettingsStructureViews'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -52,6 +55,9 @@ class AppSettingsStructure extends Component {
       return (
         <Container>
           <AppSettingsStructureContainers />
+          <AppSettingsStructureCollections />
+          <AppSettingsStructureViews />
+          <AppSettingsStructureModules />
         </Container>
       )
     }

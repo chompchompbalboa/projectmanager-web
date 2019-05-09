@@ -55,9 +55,9 @@ export default class AppSettingsStructureColumnItem extends Component {
     } = this.state
     return (
       <Container
-        isActive={isActive}>
-        <NameContainer
+        isActive={isActive}
         onClick={onClick}>
+        <NameContainer>
           <IconContainer>
             {icon && <Icon icon={icon}/>}
           </IconContainer>
@@ -139,12 +139,15 @@ const IconContainer = styled.div`
 `
 
 const Name = styled(ContentEditable)`
+  white-space: nowrap;
 `
 
 const ActionsContainer = styled.div`
+  z-index: 10;
   height: 100%;
 `
 
 const Ellipsis = styled.div`
   height: 100%;
+  white-space: nowrap;
 `

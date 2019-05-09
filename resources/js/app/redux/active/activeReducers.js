@@ -7,7 +7,10 @@ const initialState = {
   content: 'SETTINGS',
   settingsContent: 'STRUCTURE',
   viewId: initialData.activeViewId,
+  settingsStructureCollectionId: null,
   settingsStructureContainerId: null,
+  settingsStructureModuleId: null,
+  settingsStructureViewId: null,
 }
 
 //-----------------------------------------------------------------------------
@@ -44,11 +47,50 @@ const activeReducers = (state = initialState, action) => {
       return {...state, settingsContent: nextActiveSettingsContent}
     }
 
+    case 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_COLLECTION_ID': {
+      const {
+        nextActiveSettingsStructureCollectionId
+      } = action
+      return {
+        ...state, 
+        settingsStructureCollectionId: nextActiveSettingsStructureCollectionId,
+        settingsStructureModuleId: null,
+        settingsStructureViewId: null
+      }
+    }
+
     case 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_CONTAINER_ID': {
       const {
         nextActiveSettingsStructureContainerId
       } = action
-      return {...state, settingsStructureContainerId: nextActiveSettingsStructureContainerId}
+      return {
+        ...state,
+        settingsStructureCollectionId: null,
+        settingsStructureContainerId: nextActiveSettingsStructureContainerId,
+        settingsStructureModuleId: null,
+        settingsStructureViewId: null
+      }
+    }
+
+    case 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_MODULE_ID': {
+      const {
+        nextActiveSettingsStructureModuleId
+      } = action
+      return {
+        ...state,
+        settingsStructureModuleId: nextActiveSettingsStructureModuleId
+      }
+    }
+
+    case 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_VIEW_ID': {
+      const {
+        nextActiveSettingsStructureViewId
+      } = action
+      return {
+        ...state,
+        settingsStructureViewId: nextActiveSettingsStructureViewId,
+        settingsStructureModuleId: null
+      }
     }
 
     case 'UPDATE_ACTIVE_VIEW_ID': {

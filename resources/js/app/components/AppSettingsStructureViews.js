@@ -1,215 +1,91 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
-import { array, func, number, object, shape, string } from 'prop-types'
+import React from 'react'
+import { array, func, number, object } from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 
+import { 
+  updateActiveSettingsStructureViewId as updateActiveSettingsStructureViewIdAction,
+} from '../redux/active/activeActions'
 import { 
   createStructureView as createStructureViewAction,
   deleteStructureView as deleteStructureViewAction,
   updateStructureView as updateStructureViewAction 
 } from '../redux/structure/structureActions'
-import { selectStructureModules } from '../redux/structure/structureSelectors'
 
-import AppSettingsStructureModule, { AddModule } from './AppSettingsStructureModule'
+import { selectActiveSettingsStructureViewId, selectActiveSettingsStructureCollectionId } from '../redux/active/activeSelectors'
+import { selectStructureViewIds, selectStructureViews } from '../redux/structure/structureSelectors'
 
-import ContentEditable from './ContentEditable'
-import DeleteDropdown from './DeleteDropdown'
-import Dropdown from './Dropdown'
-import DropdownItem from './DropdownItem'
+import AppSettingsStructureColumn from './AppSettingsStructureColumn'
+import AppSettingsStructureColumnItem from './AppSettingsStructureColumnItem'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  modules: selectStructureModules(state)
+  activeSettingsStructureViewId: selectActiveSettingsStructureViewId(state),
+  activeSettingsStructureCollectionId: selectActiveSettingsStructureCollectionId(state),
+  viewIds: selectStructureViewIds(state),
+  views: selectStructureViews(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  createStructureView: (containerId, collectionId) => dispatch(createStructureViewAction(containerId, collectionId)),
-  deleteStructureView: (collectionId, viewId) => dispatch(deleteStructureViewAction(collectionId, viewId)),
-  updateStructureView: (id, updates) => dispatch(updateStructureViewAction(id, updates))
+  createStructureView: () => dispatch(createStructureViewAction()),
+  deleteStructureView: viewId => dispatch(deleteStructureViewAction(viewId)),
+  updateStructureView: (id, updates) => dispatch(updateStructureViewAction(id, updates)),
+  updateActiveSettingsStructureViewId: nextActiveId => dispatch(updateActiveSettingsStructureViewIdAction(nextActiveId))
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class AppSettingsStructureView extends Component {
-
-
-  state = {
-    isViewRenaming: this.props.view.isViewRenaming ? this.props.view.isViewRenaming : false,
-    isModulesVisible: false,
-    isDeleteDropdownVisible: false,
-    isActionsDropdownVisible: false,
-    viewName: this.props.view.name
-  }
-
-  handleNameBlur = () => {
-    const {
-      view,
-      updateStructureView
-    } = this.props
-    const {
-      viewName
-    } = this.state
-    this.setState({ isViewRenaming: false })
-    updateStructureView(view.id, {
-      name: viewName
-    })
-  }
-
-  handleNameClick = () => {
-    const {
-      isModulesVisible
-    } = this.state
-    this.setState({ isModulesVisible: !isModulesVisible })
-  }
-
-  render() {
-    const {
-      collectionId,
-      deleteStructureView,
-      modules,
-      view
-    } = this.props
-    const {
-      isActionsDropdownVisible,
-      isViewRenaming,
-      isDeleteDropdownVisible,
-      isModulesVisible,
-      viewName
-    } = this.state
-    return (
-      <Container>
-        <View>
-          <Name
-            focus={isViewRenaming}
-            editable={isViewRenaming}
-            isViewRenaming={isViewRenaming}
-            onBlur={() => this.handleNameBlur()}
-            onChange={(e, value) => this.setState({ viewName: value })}
-            onClick={!isViewRenaming ? () => this.handleNameClick() : null}
-            tagName="h4"
-            value={viewName}/>
-          {isModulesVisible &&
-            <SettingsContainer
-              onClick={() => this.setState({ isActionsDropdownVisible: !isActionsDropdownVisible })}>
-              <Ellipsis>
-                ...
-              </Ellipsis>
-              <Dropdown
-                closeDropdown={() => this.setState({ isActionsDropdownVisible: false })}
-                isDropdownVisible={isActionsDropdownVisible}>
-                <DropdownItem
-                  onClick={() => this.setState({ isViewRenaming: true })}
-                  text="Rename"/>
-                <DropdownItem
-                  onClick={() => this.setState({ isDeleteDropdownVisible: true })}
-                  text="Delete"/>
-              </Dropdown>
-              <DeleteDropdown
-                onDelete={() => deleteStructureView(collectionId, view.id)}
-                closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
-                isDropdownVisible={isDeleteDropdownVisible}
-                textToMatch={view.name}
-                type="view"/>
-            </SettingsContainer>
-          }
-        </View>
-        <Modules
-          isModulesVisible={isModulesVisible}>
-          {modules && modules !== null && view.modules && view.modules.map(moduleId => (
-            <AppSettingsStructureModule
-              key={moduleId}
-              module={modules[moduleId]}
-              viewId={view.id}/>
-          ))}
-          <AddModule/>
-        </Modules>
-      </Container>
-    )
-  }
-}
-
-const AddViewComponents = ({
-  collectionId,
-  createStructureView
+const AppSettingsStructureViews = ({
+  activeSettingsStructureViewId,
+  activeSettingsStructureCollectionId,
+  viewIds,
+  views,
+  deleteStructureView,
+  updateActiveSettingsStructureViewId,
+  updateStructureView,
 }) => {
   return (
-    <View
-      onClick={() => createStructureView(collectionId)}>
-      <Name
-        editable={false}
-        tagName="h4"
-        value="Add..."/>
-    </View>
+    <AppSettingsStructureColumn
+      hasBorder={activeSettingsStructureCollectionId !== null}>
+      {activeSettingsStructureCollectionId !== null && viewIds.map(viewId => {
+        const view = views[viewId]
+        return (
+          <AppSettingsStructureColumnItem 
+            key={view.id}
+            deleteItem={deleteStructureView}
+            icon={view.icon}
+            id={view.id}
+            isActive={view.id === activeSettingsStructureViewId}
+            onClick={() => updateActiveSettingsStructureViewId(view.id)}
+            name={view.name}
+            type="VIEW"
+            updateItem={updateStructureView}/>
+        )
+        }
+      )}
+    </AppSettingsStructureColumn>
   )
 }
 
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-AppSettingsStructureView.propTypes = {
-  collectionId: number,
-  containerId: number,
+AppSettingsStructureViews.propTypes = {
+  activeSettingsStructureViewId: number,
+  activeSettingsStructureCollectionId: number,
+  viewIds: array,
+  views: object,
   deleteStructureView: func,
-  modules: object,
-  updateStructureView: func,
-  view: shape({
-    name: string,
-    modules: array
-  })
+  updateActiveSettingsStructureViewId: func,
+  updateStructureView: func
 }
 
-AddViewComponents.propTypes = {
-  collectionId: number,
-  createStructureView: func
-}
-
-//-----------------------------------------------------------------------------
-// Styled Components
-//-----------------------------------------------------------------------------
-const Container = styled.div`
-  margin: 0.5vh 0;
-`
-
-const View = styled.div`
-  cursor: pointer;
-  margin-left: 5vw;
-  display: flex;
-  align-items: center;
-`
-
-const Name = styled(ContentEditable)`
-  cursor: pointer;
-  &:hover {
-    text-decoration: ${ props => props.isViewRenaming ? 'none' : 'underline'};
-  }
-`
-
-const SettingsContainer = styled.div`
-`
-
-const Ellipsis = styled.h3`
-  cursor: pointer;
-  margin-left: 0.25vw;
-  letter-spacing: 0.1rem;
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
-const Modules = styled.div`
-  display: ${ props => props.isModulesVisible ? 'block' : 'none'};
-`
-
-const sharedConnector = component => connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(component)
-
-export const AddView = sharedConnector(AddViewComponents)
-export default sharedConnector(AppSettingsStructureView)
+)(AppSettingsStructureViews)

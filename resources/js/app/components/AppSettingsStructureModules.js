@@ -1,114 +1,92 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React, { Component } from 'react'
-import { func, number, shape, string } from 'prop-types'
+import React from 'react'
+import { array, func, number, object } from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 
-import {
-  createStructureModule as createStructureModuleAction
+import { 
+  updateActiveSettingsStructureModuleId as updateActiveSettingsStructureModuleIdAction,
+} from '../redux/active/activeActions'
+import { 
+  createStructureModule as createStructureModuleAction,
+  deleteStructureModule as deleteStructureModuleAction,
+  updateStructureModule as updateStructureModuleAction 
 } from '../redux/structure/structureActions'
 
-import AppSettingsStructureModuleAddModule from './AppSettingsStructureModuleAddModule'
-import DeleteDropdown from './DeleteDropdown'
-import Dropdown from './Dropdown'
-import DropdownItem from './DropdownItem'
+import { selectActiveSettingsStructureModuleId, selectActiveSettingsStructureViewId } from '../redux/active/activeSelectors'
+import { selectStructureModuleIds, selectStructureModules } from '../redux/structure/structureSelectors'
+
+import AppSettingsStructureColumn from './AppSettingsStructureColumn'
+import AppSettingsStructureColumnItem from './AppSettingsStructureColumnItem'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  activeSettingsStructureModuleId: selectActiveSettingsStructureModuleId(state),
+  activeSettingsStructureViewId: selectActiveSettingsStructureViewId(state),
+  moduleIds: selectStructureModuleIds(state),
+  modules: selectStructureModules(state)
+})
+
 const mapDispatchToProps = dispatch => ({
-  createStructureModule: (containerId, collectionId) => dispatch(createStructureModuleAction(containerId, collectionId)),
-  //deleteStructureModule: (collectionId, viewId) => dispatch(deleteStructureModuleAction(collectionId, viewId)),
-  //updateStructureModule: (id, updates) => dispatch(updateStructureModuleAction(id, updates))
+  createStructureModule: () => dispatch(createStructureModuleAction()),
+  deleteStructureModule: moduleId => dispatch(deleteStructureModuleAction(moduleId)),
+  updateStructureModule: (id, updates) => dispatch(updateStructureModuleAction(id, updates)),
+  updateActiveSettingsStructureModuleId: nextActiveId => dispatch(updateActiveSettingsStructureModuleIdAction(nextActiveId))
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class AppSettingsStructureModule extends Component {
-
-  state = {
-    isActionsDropdownVisible: false,
-    isDeleteDropdownVisible: false
-  }
-  
-  render() {
-    const {
-      deleteStructureModule,
-      module,
-      viewId
-    } = this.props
-    const {
-      isActionsDropdownVisible,
-      isDeleteDropdownVisible
-    } = this.state
-
-    return (
-      <Container
-        onClick={() => this.setState({ isActionsDropdownVisible: !isActionsDropdownVisible})}>
-        {module.type} - {module.typeId}
-        <Dropdown
-          closeDropdown={() => this.setState({ isActionsDropdownVisible: false })}
-          isDropdownVisible={isActionsDropdownVisible}>
-          <DropdownItem
-            onClick={() => this.setState({ isViewRenaming: true })}
-            text="Rename"/>
-          <DropdownItem
-            onClick={() => this.setState({ isDeleteDropdownVisible: true })}
-            text="Delete"/>
-        </Dropdown>
-        <DeleteDropdown
-          onDelete={() => deleteStructureModule(viewId, module.id)}
-          closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
-          isDropdownVisible={isDeleteDropdownVisible}
-          textToMatch={module.name}
-          type="module"/>
-      </Container>
-    )
-  }
+const AppSettingsStructureModules = ({
+  activeSettingsStructureModuleId,
+  activeSettingsStructureViewId,
+  moduleIds,
+  modules,
+  deleteStructureModule,
+  updateActiveSettingsStructureModuleId,
+  updateStructureModule,
+}) => {
+  return (
+    <AppSettingsStructureColumn
+      hasBorder={false}
+      width="51%">
+      {activeSettingsStructureViewId !== null && moduleIds.map(moduleId => {
+        const module = modules[moduleId]
+        return (
+          <AppSettingsStructureColumnItem 
+            key={module.id}
+            deleteItem={deleteStructureModule}
+            icon={module.icon}
+            id={module.id}
+            isActive={module.id === activeSettingsStructureModuleId}
+            onClick={() => updateActiveSettingsStructureModuleId(module.id)}
+            name={module.type + " - " + module.id}
+            type="VIEW"
+            updateItem={updateStructureModule}/>
+        )
+        }
+      )}
+    </AppSettingsStructureColumn>
+  )
 }
-
-const AddModuleComponents = ({
-  createStructureModule
-}) => (
-  <AppSettingsStructureModuleAddModule
-    createStructureModule={createStructureModule}/>
-)
 
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-AppSettingsStructureModule.propTypes = {
+AppSettingsStructureModules.propTypes = {
+  activeSettingsStructureModuleId: number,
+  activeSettingsStructureViewId: number,
+  moduleIds: array,
+  modules: object,
   deleteStructureModule: func,
-  module: shape({
-    type: string,
-    typeId: number
-  }),
-  viewId: number
+  updateActiveSettingsStructureModuleId: func,
+  updateStructureModule: func
 }
 
-AddModuleComponents.propTypes = {
-  createStructureModule: func,
-}
-
-//-----------------------------------------------------------------------------
-// Styled Components
-//-----------------------------------------------------------------------------
-const Container = styled.h5`
-  margin-left: 7vw;
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-`
-
-
-const sharedConnector = component => connect(
-  null,
+export default connect(
+  mapStateToProps,
   mapDispatchToProps
-)(component)
-
-export const AddModule = sharedConnector(AddModuleComponents)
-export default sharedConnector(AppSettingsStructureModule)
+)(AppSettingsStructureModules)

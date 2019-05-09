@@ -14,13 +14,14 @@ export const createStructureCollection = containerId => {
     dispatch(createStructureCollectionReducer(containerId))
     const tempId = Object.keys(getState().structure.collections).find(id => id < 0)
     const newCollection = getState().structure.collections[tempId]
+    //eslint-disable-next-line
     const { isCollectionRenaming, views, ...newCollectionForServer } = newCollection // Remove properties that aren't stored in the db
     mutation.createCollection(containerId, newCollection.id, newCollectionForServer).then(collectionIds => {
       const {
         collectionId,
         nextCollectionId
       } = collectionIds
-      //dispatch(updateStructureCollectionId(containerId, collectionId, nextCollectionId))
+      dispatch(updateStructureCollectionId(containerId, collectionId, nextCollectionId))
     })
   }
 }
@@ -46,6 +47,7 @@ export const createStructureContainer = () => {
     const userId = selectUserId(getState())
     const tempId = Object.keys(getState().structure.containers).find(id => id < 0)
     const newContainer = getState().structure.containers[tempId]
+    //eslint-disable-next-line
     const { isContainerRenaming, collections, ...newContainerForServer } = newContainer // Remove properties that aren't stored in the db
     dispatch(createContainer(newContainer.id, newContainer))
     mutation.createContainer(userId, newContainer.id, newContainerForServer).then(containerIds => {
@@ -70,6 +72,38 @@ const updateStructureContainerId = (containerId, nextContainerId) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Create Structure Module
+//-----------------------------------------------------------------------------
+export const createStructureModule = viewId => {
+  return (dispatch, getState) => {
+    dispatch(createStructureModuleReducer(viewId))
+    const tempId = Object.keys(getState().structure.modules).find(id => id < 0)
+    const newModule = getState().structure.modules[tempId]
+    //eslint-disable-next-line
+    const { isModuleRenaming, modules, ...newModuleForServer } = newModule // Remove properties that aren't stored in the db
+    mutation.createModule(viewId, newModule.id, newModuleForServer).then(moduleIds => {
+      const {
+        moduleId,
+        nextModuleId
+      } = moduleIds
+      dispatch(updateStructureModuleId(viewId, moduleId, nextModuleId))
+    })
+  }
+}
+
+const createStructureModuleReducer = viewId => ({
+  type: 'CREATE_STRUCTURE_MODULE',
+  viewId: viewId
+})
+
+const updateStructureModuleId = (viewId, moduleId, nextModuleId) => ({
+  type: 'UPDATE_STRUCTURE_MODULE_ID',
+  viewId: viewId,
+  moduleId: moduleId,
+  nextModuleId: nextModuleId
+})
+
+//-----------------------------------------------------------------------------
 // Create Structure View
 //-----------------------------------------------------------------------------
 export const createStructureView = collectionId => {
@@ -77,6 +111,7 @@ export const createStructureView = collectionId => {
     dispatch(createStructureViewReducer(collectionId))
     const tempId = Object.keys(getState().structure.views).find(id => id < 0)
     const newView = getState().structure.views[tempId]
+    //eslint-disable-next-line
     const { isViewRenaming, modules, ...newViewForServer } = newView // Remove properties that aren't stored in the db
     mutation.createView(collectionId, newView.id, newViewForServer).then(viewIds => {
       const {
@@ -121,6 +156,7 @@ const deleteStructureCollectionReducer = (containerId, collectionId) => ({
 // Delete Structure Container
 //-----------------------------------------------------------------------------
 export const deleteStructureContainer = containerId => {
+  console.log(containerId)
   return dispatch => {
     dispatch(deleteStructureContainerReducer(containerId))
     dispatch(deleteContainer(containerId))

@@ -9,9 +9,7 @@ import { colors, layout } from '../config'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContentView = ({
-  children
-}) => {
+const AppSettingsStructureContent = ({ children }) => {
   return (
     <Container>
       {children}
@@ -23,14 +21,10 @@ const AppContentView = ({
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  position: fixed;
-  top: ${ layout.CONTAINER_HEADER_HEIGHT };
-  left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  width: calc(100vw - ${ layout.SIDEBAR_WIDTH } - ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  height calc(100vh - ${ layout.CONTAINER_HEADER_HEIGHT });
-  background-color: ${ colors.CONTAINER_MODULES_BACKGROUND };
-  border-top-left-radius: 5px;
+  width: 25%;
+  height: calc(100vh - ${ layout.CONTAINER_HEADER_HEIGHT });
   overflow-y: scroll;
+  border-right: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
 `
 
-export default AppContentView
+export default AppSettingsStructureContent

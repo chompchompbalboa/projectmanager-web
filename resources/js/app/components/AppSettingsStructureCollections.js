@@ -5,7 +5,6 @@ import React, { Component } from 'react'
 import { array, func, number, object, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { 
   createStructureCollection as createStructureCollectionAction,
@@ -206,7 +205,7 @@ const Views = styled.div`
 const sharedConnector = component => connect(
   mapStateToProps,
   mapDispatchToProps
-)(withImmutablePropsToJS(component))
+)(component)
 
 export const AddCollection = sharedConnector(AddCollectionComponents)
 export default sharedConnector(AppSettingsStructureCollection)

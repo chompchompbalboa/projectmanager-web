@@ -5,7 +5,6 @@ import React from 'react'
 import { func, number, oneOf, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 
 import { 
@@ -123,4 +122,4 @@ const Separator = styled.div`
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withImmutablePropsToJS(AppContentHeaderBreadcrumbs))
+)(AppContentHeaderBreadcrumbs)

@@ -4,7 +4,6 @@
 import React from 'react'
 import { array, object } from 'prop-types'
 import { connect } from 'react-redux'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { selectModuleIds, selectModules } from '../redux/module/moduleSelectors'
 
@@ -47,4 +46,4 @@ AppContainerView.propTypes = {
 
 export default connect(
   mapStateToProps
-)(withImmutablePropsToJS(AppContainerView))
+)(AppContainerView)

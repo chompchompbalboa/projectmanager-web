@@ -5,7 +5,6 @@ import React from 'react'
 import { array, func, number, object, oneOf } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { colors, layout } from '../config'
 
@@ -142,4 +141,4 @@ const IconContainer = styled.div`
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withImmutablePropsToJS(AppSidebar))
+)(AppSidebar)

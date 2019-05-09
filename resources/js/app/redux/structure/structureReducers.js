@@ -1,7 +1,6 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import { fromJS } from 'immutable'
 import _ from 'lodash'
 
 import structureNormalizer from './structureNormalizer'
@@ -58,6 +57,31 @@ const structureReducers = (state = initialState, action) => {
       return {
         ...state,
         containers: {...state.containers, [tempId]: newContainer}
+      }
+    }
+
+    case 'CREATE_STRUCTURE_MODULE': {
+      const {
+        type,
+        viewId
+      } = action
+      const tempId = _.random(-100000, -900000)
+      const newModule = {
+          id: tempId,
+          type: type,
+          typeId: null,
+          name: type,
+      }
+      return {
+        ...state,
+        modules: {...state.modules, [tempId]: newModule},
+        views: {
+          ...state.views, [viewId]: {
+            ...state.views[viewId], modules: [
+              ...state.views[viewId].modules, tempId
+            ]
+          }
+        }
       }
     }
 
@@ -165,6 +189,7 @@ const structureReducers = (state = initialState, action) => {
       
       const collection = nextState.collections[collectionId]
       collection.id = nextCollectionId
+      delete collection.isCollectionRenaming
       
       nextState.collections[nextCollectionId] = collection
       delete nextState.collections[collectionId]
@@ -201,6 +226,7 @@ const structureReducers = (state = initialState, action) => {
       
       const container = nextState.containers[containerId]
       container.id = nextContainerId
+      delete container.isContainerRenaming
       
       nextState.containers[nextContainerId] = container
       delete nextState.containers[containerId]
@@ -235,6 +261,7 @@ const structureReducers = (state = initialState, action) => {
 
       const view = nextState.views[viewId]
       view.id = nextViewId
+      delete view.isViewRenaming
       
       nextState.views[nextViewId] = view
       delete nextState.views[viewId]

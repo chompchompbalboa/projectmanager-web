@@ -142,6 +142,22 @@ const updateActiveSettingsContentReducer = nextActiveSettingsContent => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Active Settings Container Id
+//-----------------------------------------------------------------------------
+export const updateActiveSettingsStructureContainerId = nextActiveSettingsStructureContainerId => {
+  return dispatch => {
+    dispatch(updateActiveContentReducer('SETTINGS'))
+    dispatch(updateActiveSettingsContentReducer('STRUCTURE'))
+    dispatch(updateActiveSettingsStructureContainerIdReducer(nextActiveSettingsStructureContainerId))
+  }
+}
+
+const updateActiveSettingsStructureContainerIdReducer = nextActiveSettingsStructureContainerId => ({
+  type: 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_CONTAINER_ID',
+  nextActiveSettingsStructureContainerId: nextActiveSettingsStructureContainerId
+})
+
+//-----------------------------------------------------------------------------
 // Update Active View Id
 //-----------------------------------------------------------------------------
 export const updateActiveViewId = nextActiveViewId => {

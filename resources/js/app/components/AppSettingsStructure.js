@@ -2,17 +2,16 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, func, object } from 'prop-types'
+import { func, object } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { setStructure as setStructureAction } from '../redux/structure/structureActions'
 
 import { selectContainerIds } from '../redux/container/containerSelectors'
 import { selectStructureContainers } from '../redux/structure/structureSelectors'
 
-import AppSettingsStructureContainer, { AddContainer } from './AppSettingsStructureContainer'
+import AppSettingsStructureContainers from './AppSettingsStructureContainers'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -47,18 +46,12 @@ class AppSettingsStructure extends Component {
 
   render() {
     const {
-      containerIds,
       containers
     } = this.props
     if(containers && containers !== null) {
       return (
         <Container>
-          {containerIds.map(containerId => containers[containerId] && (
-             <AppSettingsStructureContainer
-               key={containerId}
-               container={containers[containerId]}/>
-           ))}
-           <AddContainer />
+          <AppSettingsStructureContainers />
         </Container>
       )
     }
@@ -70,7 +63,6 @@ class AppSettingsStructure extends Component {
 // Props
 //-----------------------------------------------------------------------------
 AppSettingsStructure.propTypes = {
-  containerIds: array,
   containers: object,
   setStructure: func
 }
@@ -79,9 +71,11 @@ AppSettingsStructure.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
+  width: 100%;
+  display: flex;
 `
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withImmutablePropsToJS(AppSettingsStructure))
+)(AppSettingsStructure)

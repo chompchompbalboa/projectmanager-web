@@ -4,7 +4,6 @@
 import React from 'react'
 import { array, number, object, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { selectCollectionIds, selectCollections } from '../redux/collection/collectionSelectors'
 import { selectActiveContainer } from '../redux/container/containerSelectors'
@@ -59,4 +58,4 @@ AppContainerSidebar.propTypes = {
 
 export default connect(
   mapStateToProps
-)(withImmutablePropsToJS(AppContainerSidebar))
+)(AppContainerSidebar)

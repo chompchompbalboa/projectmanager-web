@@ -5,7 +5,10 @@ import React, { Component } from 'react'
 import { func, number, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
+
+import {
+  createStructureModule as createStructureModuleAction
+} from '../redux/structure/structureActions'
 
 import AppSettingsStructureModuleAddModule from './AppSettingsStructureModuleAddModule'
 import DeleteDropdown from './DeleteDropdown'
@@ -16,7 +19,7 @@ import DropdownItem from './DropdownItem'
 // Redux
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
-  //createStructureModule: (containerId, collectionId) => dispatch(createStructureModuleAction(containerId, collectionId)),
+  createStructureModule: (containerId, collectionId) => dispatch(createStructureModuleAction(containerId, collectionId)),
   //deleteStructureModule: (collectionId, viewId) => dispatch(deleteStructureModuleAction(collectionId, viewId)),
   //updateStructureModule: (id, updates) => dispatch(updateStructureModuleAction(id, updates))
 })
@@ -67,8 +70,11 @@ class AppSettingsStructureModule extends Component {
   }
 }
 
-const AddModuleComponents = () => (
-  <AppSettingsStructureModuleAddModule />
+const AddModuleComponents = ({
+  createStructureModule
+}) => (
+  <AppSettingsStructureModuleAddModule
+    createStructureModule={createStructureModule}/>
 )
 
 //-----------------------------------------------------------------------------
@@ -81,6 +87,10 @@ AppSettingsStructureModule.propTypes = {
     typeId: number
   }),
   viewId: number
+}
+
+AddModuleComponents.propTypes = {
+  createStructureModule: func,
 }
 
 //-----------------------------------------------------------------------------
@@ -98,7 +108,7 @@ const Container = styled.h5`
 const sharedConnector = component => connect(
   null,
   mapDispatchToProps
-)(withImmutablePropsToJS(component))
+)(component)
 
 export const AddModule = sharedConnector(AddModuleComponents)
 export default sharedConnector(AppSettingsStructureModule)

@@ -6,7 +6,8 @@ const initialState = {
   containerId: initialData.activeContainerId,
   content: 'SETTINGS',
   settingsContent: 'STRUCTURE',
-  viewId: initialData.activeViewId
+  viewId: initialData.activeViewId,
+  settingsStructureContainerId: null,
 }
 
 //-----------------------------------------------------------------------------
@@ -41,6 +42,13 @@ const activeReducers = (state = initialState, action) => {
         nextActiveSettingsContent
       } = action
       return {...state, settingsContent: nextActiveSettingsContent}
+    }
+
+    case 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_CONTAINER_ID': {
+      const {
+        nextActiveSettingsStructureContainerId
+      } = action
+      return {...state, settingsStructureContainerId: nextActiveSettingsStructureContainerId}
     }
 
     case 'UPDATE_ACTIVE_VIEW_ID': {

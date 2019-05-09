@@ -4,7 +4,6 @@
 import React from 'react'
 import { array, func, number, object, oneOf, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
-import withImmutablePropsToJS from 'with-immutable-props-to-js'
 
 import { 
   updateActiveSettingsContent as updateActiveSettingsContentAction 
@@ -62,4 +61,4 @@ AppSettingsSidebar.propTypes = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withImmutablePropsToJS(AppSettingsSidebar))
+)(AppSettingsSidebar)

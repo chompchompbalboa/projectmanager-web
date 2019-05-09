@@ -68,7 +68,7 @@ ChangeIconDropdown.propTypes = {
 //-----------------------------------------------------------------------------
 const DeleteContainer = styled.div`
   padding: 2vh
-  width: 20vw;
+  width: 30vw;
   display: flex;
   flex-direction: column;
   justify-content: center;

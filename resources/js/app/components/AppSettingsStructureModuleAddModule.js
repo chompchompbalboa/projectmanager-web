@@ -2,11 +2,11 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
+import { func, number } from 'prop-types'
 import styled from 'styled-components'
 
 import Dropdown from './Dropdown'
 import DropdownItem from './DropdownItem'
-
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -23,6 +23,10 @@ export default class AppSettingsStructureModuleAddModule extends Component {
 
   render() {
     const {
+      createStructureModule,
+      viewId
+    } = this.props
+    const {
       isActionsDropdownVisible
     } = this.state
     return (
@@ -37,13 +41,21 @@ export default class AppSettingsStructureModuleAddModule extends Component {
           {this.types.map((type, index) => (
             <DropdownItem
               key={index}
-              onClick={() => console.log(type.type)}
+              onClick={() => createStructureModule(viewId, type.type)}
               text={type.text}/>
           ))}
         </Dropdown>
       </Container>
     )
   }
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+AppSettingsStructureModuleAddModule.propTypes = {
+  createStructureModule: func,
+  viewId: number
 }
 
 //-----------------------------------------------------------------------------

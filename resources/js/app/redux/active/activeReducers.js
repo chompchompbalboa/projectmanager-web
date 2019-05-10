@@ -37,7 +37,13 @@ const activeReducers = (state = initialState, action) => {
       const {
         nextActiveContent
       } = action
-      return {...state, content: nextActiveContent}
+      return {
+        ...state, 
+        content: nextActiveContent,
+        containerId: null,
+        collectionId: null,
+        viewId: null
+      }
     }
 
     case 'UPDATE_ACTIVE_SETTINGS_CONTENT': {

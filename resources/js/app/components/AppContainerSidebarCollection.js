@@ -6,7 +6,7 @@ import { array, bool, func, number, object, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 
 import { selectActiveViewId } from '../redux/active/activeSelectors'
-import { selectViewIds, selectViews, selectViewsCount } from '../redux/view/viewSelectors'
+import { selectViewIds, selectViews } from '../redux/view/viewSelectors'
 import { 
   updateActiveCollectionId as updateActiveCollectionIdAction 
 } from '../redux/active/activeActions'
@@ -20,8 +20,7 @@ import AppContentSidebarItem from './AppContentSidebarItem'
 const mapStateToProps = state => ({
   activeViewId: selectActiveViewId(state),
   viewIds: selectViewIds(state),
-  views: selectViews(state),
-  viewsCount: selectViewsCount(state),
+  views: selectViews(state)
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -40,15 +39,14 @@ const AppContainerSidebarCollection = ({
   viewIds,
   views,
   isActiveCollection,
-  updateActiveCollectionId,
-  viewsCount
+  updateActiveCollectionId
 }) => {
   return (
     <AppContentSidebarItem
       isActiveItem={isActiveCollection}
       name={name}
       onClick={() => updateActiveCollectionId(id)}>
-      {(isActiveCollection && viewsCount > 1 && viewIds !== null) && viewIds.map(viewId => (
+      {(isActiveCollection && viewIds !== null) && viewIds.map(viewId => (
         <AppContainerSidebarCollectionView
           key={viewId}
           isActiveView={viewId === activeViewId}
@@ -70,7 +68,6 @@ AppContainerSidebarCollection.propTypes = {
   isActiveCollection: bool,
   viewIds: array,
   views: object,
-  viewsCount: number,
   updateActiveCollectionId: func
 }
 

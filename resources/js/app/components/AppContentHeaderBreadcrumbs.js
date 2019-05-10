@@ -8,13 +8,13 @@ import styled from 'styled-components'
 
 
 import { 
-  updateActiveSettingsContent as updateActiveSettingsContentAction 
+  updateActiveSettingsStructure as updateActiveSettingsStructureAction 
 } from '../redux/active/activeActions'
 
 import { selectActiveContent } from '../redux/active/activeSelectors'
 import { selectActiveCollection } from '../redux/collection/collectionSelectors'
 import { selectActiveContainer } from '../redux/container/containerSelectors'
-import { selectActiveView, selectViewsCount } from '../redux/view/viewSelectors'
+import { selectActiveView } from '../redux/view/viewSelectors'
 
 import { colors } from '../config'
 
@@ -25,12 +25,11 @@ const mapStateToProps = state => ({
   activeCollection: selectActiveCollection(state),
   activeContainer: selectActiveContainer(state),
   activeContent: selectActiveContent(state),
-  activeView: selectActiveView(state),
-  viewsCount: selectViewsCount(state)
+  activeView: selectActiveView(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  updateActiveSettingsContent: nextActiveSettingsContent => dispatch(updateActiveSettingsContentAction(nextActiveSettingsContent))
+  updateActiveSettingsStructure: (containerId, collectionId, viewId) => dispatch(updateActiveSettingsStructureAction(containerId, collectionId, viewId))
 })
 
 //-----------------------------------------------------------------------------
@@ -41,15 +40,14 @@ const AppContentHeaderBreadcrumbs = ({
   activeContainer,
   activeContent,
   activeView,
-  updateActiveSettingsContent,
-  viewsCount
+  updateActiveSettingsStructure
 }) => {
 
   const breadcrumbsMap = {
     CONTAINER: [
       activeContainer ? activeContainer.name : null,
       activeCollection ? activeCollection.name : null,
-      activeCollection && activeView && viewsCount > 1 ? activeView.name : null
+      activeCollection && activeView ? activeView.name : null
     ].filter(breadcrumb => breadcrumb !== null),
     SETTINGS: [
       'Settings',
@@ -65,7 +63,7 @@ const AppContentHeaderBreadcrumbs = ({
         <React.Fragment
            key={index}>
           <Breadcrumb
-            onClick={() => updateActiveSettingsContent('STRUCTURE')}>
+            onClick={() => updateActiveSettingsStructure(activeContainer.id, index > 0 ? activeCollection.id : null, index > 1 ? activeView.id : null)}>
             {breadcrumb}
           </Breadcrumb>
           {index < (breadcrumbs.length - 1) &&
@@ -94,8 +92,7 @@ AppContentHeaderBreadcrumbs.propTypes = {
   activeView: shape({
     name: string
   }),
-  updateActiveSettingsContent: func,
-  viewsCount: number
+  updateActiveSettingsStructure: func
 }
 
 //-----------------------------------------------------------------------------

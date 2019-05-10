@@ -127,32 +127,9 @@ const updateActiveCollectionIdServer = nextActiveCollectionId => {
 }
 
 //-----------------------------------------------------------------------------
-// Update Active Settings Content
-//-----------------------------------------------------------------------------
-export const updateActiveSettingsContent = nextActiveSettingsContent => {
-  return dispatch => {
-    dispatch(updateActiveContentReducer('SETTINGS'))
-    dispatch(updateActiveSettingsContentReducer(nextActiveSettingsContent))
-  }
-}
-
-const updateActiveSettingsContentReducer = nextActiveSettingsContent => ({
-  type: 'UPDATE_ACTIVE_SETTINGS_CONTENT',
-  nextActiveSettingsContent: nextActiveSettingsContent
-})
-
-//-----------------------------------------------------------------------------
 // Update Active Settings Collection Id
 //-----------------------------------------------------------------------------
-export const updateActiveSettingsStructureCollectionId = nextActiveSettingsStructureCollectionId => {
-  return dispatch => {
-    dispatch(updateActiveContentReducer('SETTINGS'))
-    dispatch(updateActiveSettingsContentReducer('STRUCTURE'))
-    dispatch(updateActiveSettingsStructureCollectionIdReducer(nextActiveSettingsStructureCollectionId))
-  }
-}
-
-const updateActiveSettingsStructureCollectionIdReducer = nextActiveSettingsStructureCollectionId => ({
+export const updateActiveSettingsStructureCollectionId = nextActiveSettingsStructureCollectionId => ({
   type: 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_COLLECTION_ID',
   nextActiveSettingsStructureCollectionId: nextActiveSettingsStructureCollectionId
 })
@@ -160,47 +137,48 @@ const updateActiveSettingsStructureCollectionIdReducer = nextActiveSettingsStruc
 //-----------------------------------------------------------------------------
 // Update Active Settings Container Id
 //-----------------------------------------------------------------------------
-export const updateActiveSettingsStructureContainerId = nextActiveSettingsStructureContainerId => {
-  return dispatch => {
-    dispatch(updateActiveContentReducer('SETTINGS'))
-    dispatch(updateActiveSettingsContentReducer('STRUCTURE'))
-    dispatch(updateActiveSettingsStructureContainerIdReducer(nextActiveSettingsStructureContainerId))
-  }
-}
-
-const updateActiveSettingsStructureContainerIdReducer = nextActiveSettingsStructureContainerId => ({
+export const updateActiveSettingsStructureContainerId = nextActiveSettingsStructureContainerId => ({
   type: 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_CONTAINER_ID',
   nextActiveSettingsStructureContainerId: nextActiveSettingsStructureContainerId
 })
 
 //-----------------------------------------------------------------------------
+// Update Active Settings Content
+//-----------------------------------------------------------------------------
+export const updateActiveSettingsContent = nextActiveSettingsContent => ({
+  type: 'UPDATE_ACTIVE_SETTINGS_CONTENT',
+  nextActiveSettingsContent: nextActiveSettingsContent
+})
+
+//-----------------------------------------------------------------------------
 // Update Active Settings Module Id
 //-----------------------------------------------------------------------------
-export const updateActiveSettingsStructureModuleId = nextActiveSettingsStructureModuleId => {
-  return dispatch => {
-    dispatch(updateActiveContentReducer('SETTINGS'))
-    dispatch(updateActiveSettingsContentReducer('STRUCTURE'))
-    dispatch(updateActiveSettingsStructureModuleIdReducer(nextActiveSettingsStructureModuleId))
-  }
-}
-
-const updateActiveSettingsStructureModuleIdReducer = nextActiveSettingsStructureModuleId => ({
+export const updateActiveSettingsStructureModuleId = nextActiveSettingsStructureModuleId => ({
   type: 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_MODULE_ID',
   nextActiveSettingsStructureModuleId: nextActiveSettingsStructureModuleId
 })
 
 //-----------------------------------------------------------------------------
-// Update Active Settings View Id
+// Update Active Settings Structure
 //-----------------------------------------------------------------------------
-export const updateActiveSettingsStructureViewId = nextActiveSettingsStructureViewId => {
+export const updateActiveSettingsStructure = (
+  nextActiveSettingsStructureContainerId,
+  nextActiveSettingsStructureCollectionId,
+  nextActiveSettingsStructureViewId,
+) => {
   return dispatch => {
     dispatch(updateActiveContentReducer('SETTINGS'))
-    dispatch(updateActiveSettingsContentReducer('STRUCTURE'))
-    dispatch(updateActiveSettingsStructureViewIdReducer(nextActiveSettingsStructureViewId))
+    dispatch(updateActiveSettingsContent('STRUCTURE'))
+    dispatch(updateActiveSettingsStructureContainerId(nextActiveSettingsStructureContainerId))
+    dispatch(updateActiveSettingsStructureCollectionId(nextActiveSettingsStructureCollectionId))
+    dispatch(updateActiveSettingsStructureViewId(nextActiveSettingsStructureViewId))
   }
 }
 
-const updateActiveSettingsStructureViewIdReducer = nextActiveSettingsStructureViewId => ({
+//-----------------------------------------------------------------------------
+// Update Active Settings View Id
+//-----------------------------------------------------------------------------
+export const updateActiveSettingsStructureViewId = nextActiveSettingsStructureViewId => ({
   type: 'UPDATE_ACTIVE_SETTINGS_STRUCTURE_VIEW_ID',
   nextActiveSettingsStructureViewId: nextActiveSettingsStructureViewId
 })

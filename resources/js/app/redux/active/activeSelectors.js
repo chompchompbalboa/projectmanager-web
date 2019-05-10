@@ -17,7 +17,7 @@ export const selectActiveCollectionId = state => state.active.collectionId
 // Select Active Settings Structure Collection Id
 //-----------------------------------------------------------------------------
 export const selectActiveSettingsStructureCollectionId = state => {
-  if(state.structure.collections[state.active.settingsStructureCollectionId]) {
+  if(state.structure.collections && state.structure.collections[state.active.settingsStructureCollectionId]) {
     return state.active.settingsStructureCollectionId
   }
   return null
@@ -27,7 +27,7 @@ export const selectActiveSettingsStructureCollectionId = state => {
 // Select Active Settings Structure Container Id
 //-----------------------------------------------------------------------------
 export const selectActiveSettingsStructureContainerId = state => {
-  if(state.structure.containers[state.active.settingsStructureContainerId]) {
+  if(state.structure.containers && state.structure.containers[state.active.settingsStructureContainerId]) {
     return state.active.settingsStructureContainerId
   }
   return null
@@ -37,7 +37,7 @@ export const selectActiveSettingsStructureContainerId = state => {
 // Select Active Settings Structure Module Id
 //-----------------------------------------------------------------------------
 export const selectActiveSettingsStructureModuleId = state => {
-  if(state.structure.modules[state.active.settingsStructureModuleId]) {
+  if(state.structure.modules && state.structure.modules[state.active.settingsStructureModuleId]) {
     return state.active.settingsStructureModuleId
   }
   return null
@@ -47,7 +47,7 @@ export const selectActiveSettingsStructureModuleId = state => {
 // Select Active Settings Structure View Id
 //-----------------------------------------------------------------------------
 export const selectActiveSettingsStructureViewId = state => {
-  if(state.structure.views[state.active.settingsStructureViewId]) {
+  if(state.structure.views && state.structure.views[state.active.settingsStructureViewId]) {
     return state.active.settingsStructureViewId
   }
   return null

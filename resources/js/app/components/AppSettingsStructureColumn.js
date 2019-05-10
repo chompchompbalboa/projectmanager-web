@@ -33,7 +33,9 @@ class AppSettingsStructureColumn extends Component {
   render() {
     const { 
       children, 
+      isDropdownsRightAligned,
       isVisible,
+      hasBorder,
       header,
       width
     } = this.props
@@ -42,6 +44,7 @@ class AppSettingsStructureColumn extends Component {
     } = this.state
     return (
       <Container
+        hasBorder={hasBorder}
         isVisible={isVisible}
         width={width}>
         {isVisible &&
@@ -52,16 +55,19 @@ class AppSettingsStructureColumn extends Component {
             <Ellipsis
               onClick={() => this.setState({ isHeaderDropdownVisible: !isHeaderDropdownVisible })}>
               . . .
-              <Dropdown
-                closeDropdown={() => this.setState({ isHeaderDropdownVisible: false })}
-                isDropdownVisible={isHeaderDropdownVisible}>
-                <DropdownItem
-                  onClick={() => this.handleAddClick()}
-                  text="Add New"/>
-                <DropdownItem
-                  onClick={() => null}
-                  text="Create Template"/>
-              </Dropdown>
+              {isHeaderDropdownVisible && 
+                <Dropdown
+                  closeDropdown={() => this.setState({ isHeaderDropdownVisible: false })}
+                  isDropdownVisible={isHeaderDropdownVisible}
+                  isRightAligned={isDropdownsRightAligned}>
+                  <DropdownItem
+                    onClick={() => this.handleAddClick()}
+                    text="Add New"/>
+                  <DropdownItem
+                    onClick={() => null}
+                    text="Create Template"/>
+                </Dropdown>
+              }
             </Ellipsis>
           </Header>
         }
@@ -75,6 +81,7 @@ class AppSettingsStructureColumn extends Component {
 //-----------------------------------------------------------------------------
 AppSettingsStructureColumn.propTypes = {
   addItem: func,
+  isDropdownsRightAligned: bool,
   isVisible: bool,
   hasBorder: bool,
   header: string,
@@ -82,6 +89,7 @@ AppSettingsStructureColumn.propTypes = {
 }
 
 AppSettingsStructureColumn.defaultProps = {
+  isDropdownsRightAligned: false,
   isVisible: true,
   hasBorder: true,
   header: "Header",
@@ -94,8 +102,9 @@ AppSettingsStructureColumn.defaultProps = {
 const Container = styled(HiddenScrollbarContainer)`
   width: ${ props => props.width };
   height: calc(100vh - ${ layout.CONTAINER_HEADER_HEIGHT });
+  overflow-x: visible;
   overflow-y: scroll;
-  border-right: 1px dashed ${ props => props.isVisible ? colors.SETTINGS_STRUCTURE_COLUMN_BORDER : 'transparent' };
+  border-right: 1px dashed ${ props => props.isVisible && props.hasBorder ? colors.SETTINGS_STRUCTURE_COLUMN_BORDER : 'transparent' };
 `
 
 const Header = styled.div`

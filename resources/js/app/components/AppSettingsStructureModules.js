@@ -53,6 +53,7 @@ const AppSettingsStructureModules = ({
   return (
     <AppSettingsStructureColumn
       addItem={createStructureModule}
+      isDropdownsRightAligned={true}
       isVisible={activeSettingsStructureViewId !== null}
       header="Modules"
       hasBorder={false}
@@ -66,6 +67,7 @@ const AppSettingsStructureModules = ({
             icon={module.icon}
             id={module.id}
             isActive={module.id === activeSettingsStructureModuleId}
+            isDropdownsRightAligned={true}
             onClick={() => updateActiveSettingsStructureModuleId(module.id)}
             name={module.type + " - " + module.id}
             type="VIEW"

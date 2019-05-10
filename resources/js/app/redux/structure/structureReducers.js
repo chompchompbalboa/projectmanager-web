@@ -174,7 +174,7 @@ const structureReducers = (state = initialState, action) => {
       return {
         ...state, collections: {
           ...state.collections, [collectionId]: {
-            ...state.collections[collectionId], ...updates
+            ...state.collections[collectionId], ...updates, isCollectionRenaming: false
           }
         }
       }
@@ -211,7 +211,7 @@ const structureReducers = (state = initialState, action) => {
       return {
         ...state, containers: {
           ...state.containers, [containerId]: {
-            ...state.containers[containerId], ...updates
+            ...state.containers[containerId], ...updates, isContainerRenaming: false
           }
         }
       }
@@ -244,7 +244,7 @@ const structureReducers = (state = initialState, action) => {
       return {
         ...state, views: {
           ...state.views, [viewId]: {
-            ...state.views[viewId], ...updates
+            ...state.views[viewId], ...updates, isViewRenaming: false
           }
         }
       }

@@ -23,7 +23,8 @@ class ChangeIconDropdown extends Component {
       isDropdownVisible,
       onDelete,
       textToMatch,
-      type 
+      type,
+      ...props
     } = this.props
     const {
       inputValue
@@ -32,7 +33,8 @@ class ChangeIconDropdown extends Component {
       <Dropdown
         closeDropdown={closeDropdown}
         isDropdownVisible={isDropdownVisible}
-        width="auto">
+        width="auto"
+        {...props}>
         <DeleteContainer
           >
           <Prompt>

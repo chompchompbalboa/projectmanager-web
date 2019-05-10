@@ -16,12 +16,14 @@ import Icon from './Icon'
 const ChangeIconDropdown = ({
   closeDropdown,
   isDropdownVisible,
-  onIconClick
+  onIconClick,
+  ...props
 }) => {
   return (
     <Dropdown
       closeDropdown={closeDropdown}
-      isDropdownVisible={isDropdownVisible}>
+      isDropdownVisible={isDropdownVisible}
+      {...props}>
       <IconsContainer>
         {Object.keys(icons).map(iconKey => (
           <DropdownItem

@@ -25,15 +25,15 @@ Route::prefix('app')->group(function () {
     $organizationContainers = $organization->containers()->get();
 
     $containers = $userContainers->merge($organizationContainers);
-    $activeContainerId = $active->containerId !== null ? $active->containerId : $organizationContainers[0]->id;
+    $activeContainerId = $active->containerId !== null ? $active->containerId : (isset($containers[0]) ? $containers[0]->id : null);
 
-    $collections = Container::find($activeContainerId)->collections()->get();
-    $activeCollectionId = $active->collectionId !== null ? $active->collectionId : $collections[0]->id;
+    $collections = isset($activeContainerId) ? Container::find($activeContainerId)->collections()->get() : [];
+    $activeCollectionId = $active->collectionId !== null ? $active->collectionId : (isset($collections[0]) ? $collections[0]->id : null);
     
-    $views = Collection::find($activeCollectionId)->views()->get();
-    $activeViewId = $active->viewId !== null ? $active->viewId : $views[0]->id;
+    $views = isset($activeCollectionId) ? Collection::find($activeCollectionId)->views()->get() : [];
+    $activeViewId = $active->viewId !== null ? $active->viewId : (isset($views[0]) ? $views[0]->id : null);
     
-    $modules = View::find($activeViewId)->modules()->get();
+    $modules = isset($activeViewId) ? View::find($activeViewId)->modules()->get() : [];
     
     return view('app')->with([
       'user' => $user,

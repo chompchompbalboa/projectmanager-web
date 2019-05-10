@@ -53,7 +53,7 @@ const AppSettingsStructureContainers = ({
     <AppSettingsStructureColumn
       addItem={createStructureContainer}
       header="Containers">
-      {containerIds.map(containerId => {
+      {containers !== null && containerIds.map(containerId => {
         const container = containers[containerId]
         return (
           <AppSettingsStructureColumnItem 

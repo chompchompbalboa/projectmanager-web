@@ -11,6 +11,12 @@ import { colors } from '../config'
 // Component
 //-----------------------------------------------------------------------------
 class Dropdown extends Component {
+  
+  constructor(props) {
+    super(props)
+    this.dropdownContainer = React.createRef()
+  }
+  
 	state = {
 		isEventListenersRegistered: false,
 	}
@@ -74,12 +80,14 @@ class Dropdown extends Component {
 		const { 
       children,
       isDropdownVisible,
+      isRightAligned,
       width
     } = this.props
 
 		return (
       <Container
         ref={c => (this.dropdownContainer = c)}
+        containerMarginLeft={isRightAligned ? '-' + this.dropdownContainer.offsetWidth + 'px' : '0'}
         isDropdownVisible={isDropdownVisible}
         containerWidth={width}>
         { children }
@@ -95,11 +103,13 @@ Dropdown.propTypes = {
   closeDropdown: func,
 	chooseOption: func,
   isDropdownVisible: bool,
+  isRightAligned: bool,
   options: array,
   width: string
 }
 
 Dropdown.defaultProps = {
+  isRightAligned: false,
   width: 'auto'
 }
 
@@ -108,9 +118,9 @@ Dropdown.defaultProps = {
 //-----------------------------------------------------------------------------
 const Container = styled.div`
   z-index: 100000;
-	display: ${props => (props.isDropdownVisible ? 'block' : 'none')};
+	display: ${ props => props.isDropdownVisible ? 'block' : 'none' };
   position: absolute;
-  margin-right: 100%;
+  margin-left: ${ props => props.containerMarginLeft };
   background-color: ${ colors.DROPDOWN_BACKGROUND };
   color: white;
   font-size: 0.9rem;

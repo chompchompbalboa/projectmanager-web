@@ -18,10 +18,10 @@ export const deleteContainer = containerId => ({
 //-----------------------------------------------------------------------------
 // Update Container Reducer
 //-----------------------------------------------------------------------------
-export const updateContainerReducer = (containerId, nextContainer) => ({
+export const updateContainerReducer = (containerId, updates) => ({
   type: 'UPDATE_CONTAINER',
   containerId: containerId,
-  nextContainer: nextContainer
+  updates: updates
 })
 
 //-----------------------------------------------------------------------------

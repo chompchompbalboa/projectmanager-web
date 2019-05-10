@@ -38,6 +38,7 @@ const Container = styled.div`
   cursor: pointer;
   padding: 0.45rem 1rem;
   border-right: 5px solid ${ colors.DROPDOWN_ITEM_BORDER };
+  white-space: nowrap;
   &:hover {
     background-color: ${ colors.DROPDOWN_ITEM_BACKGROUND_HOVER };
     border-right: 5px solid ${ colors.DROPDOWN_ITEM_BORDER_HOVER };

@@ -12,7 +12,7 @@ import {
 //-----------------------------------------------------------------------------
 export const selectStructureCollectionIds = state => {
   const activeSettingsStructureContainerId = selectActiveSettingsStructureContainerId(state)
-  if (activeSettingsStructureContainerId === null) {
+  if (activeSettingsStructureContainerId === null || typeof state.structure.containers[activeSettingsStructureContainerId] === 'undefined') {
     return []
   }
   return state.structure.containers[activeSettingsStructureContainerId].collections
@@ -23,7 +23,7 @@ export const selectStructureCollectionIds = state => {
 //-----------------------------------------------------------------------------
 export const selectStructureModuleIds = state => {
   const activeSettingsStructureViewId = selectActiveSettingsStructureViewId(state)
-  if (activeSettingsStructureViewId === null) {
+  if (activeSettingsStructureViewId === null || typeof state.structure.views[activeSettingsStructureViewId] === 'undefined') {
     return []
   }
   return state.structure.views[activeSettingsStructureViewId].modules
@@ -34,7 +34,7 @@ export const selectStructureModuleIds = state => {
 //-----------------------------------------------------------------------------
 export const selectStructureViewIds = state => {
   const activeSettingsStructureCollectionId = selectActiveSettingsStructureCollectionId(state)
-  if (activeSettingsStructureCollectionId === null) {
+  if (activeSettingsStructureCollectionId === null || typeof state.structure.collections[activeSettingsStructureCollectionId] === 'undefined') {
     return []
   }
   return state.structure.collections[activeSettingsStructureCollectionId].views

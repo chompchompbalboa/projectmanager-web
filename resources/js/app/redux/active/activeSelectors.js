@@ -16,22 +16,42 @@ export const selectActiveCollectionId = state => state.active.collectionId
 //-----------------------------------------------------------------------------
 // Select Active Settings Structure Collection Id
 //-----------------------------------------------------------------------------
-export const selectActiveSettingsStructureCollectionId = state => state.active.settingsStructureCollectionId
+export const selectActiveSettingsStructureCollectionId = state => {
+  if(state.structure.collections[state.active.settingsStructureCollectionId]) {
+    return state.active.settingsStructureCollectionId
+  }
+  return null
+}
 
 //-----------------------------------------------------------------------------
 // Select Active Settings Structure Container Id
 //-----------------------------------------------------------------------------
-export const selectActiveSettingsStructureContainerId = state => state.active.settingsStructureContainerId
+export const selectActiveSettingsStructureContainerId = state => {
+  if(state.structure.containers[state.active.settingsStructureContainerId]) {
+    return state.active.settingsStructureContainerId
+  }
+  return null
+}
 
 //-----------------------------------------------------------------------------
 // Select Active Settings Structure Module Id
 //-----------------------------------------------------------------------------
-export const selectActiveSettingsStructureModuleId = state => state.active.settingsStructureModuleId
+export const selectActiveSettingsStructureModuleId = state => {
+  if(state.structure.modules[state.active.settingsStructureModuleId]) {
+    return state.active.settingsStructureModuleId
+  }
+  return null
+}
 
 //-----------------------------------------------------------------------------
 // Select Active Settings Structure View Id
 //-----------------------------------------------------------------------------
-export const selectActiveSettingsStructureViewId = state => state.active.settingsStructureViewId
+export const selectActiveSettingsStructureViewId = state => {
+  if(state.structure.views[state.active.settingsStructureViewId]) {
+    return state.active.settingsStructureViewId
+  }
+  return null
+}
 
 //-----------------------------------------------------------------------------
 // Select Active Settings Content

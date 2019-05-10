@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, bool, func } from 'prop-types'
+import { array, bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
 import { colors } from '../config'
@@ -73,13 +73,15 @@ class Dropdown extends Component {
 	render() {
 		const { 
       children,
-			isDropdownVisible
+      isDropdownVisible,
+      width
     } = this.props
 
 		return (
       <Container
         ref={c => (this.dropdownContainer = c)}
-        isDropdownVisible={isDropdownVisible}>
+        isDropdownVisible={isDropdownVisible}
+        containerWidth={width}>
         { children }
       </Container>
 		)
@@ -93,7 +95,12 @@ Dropdown.propTypes = {
   closeDropdown: func,
 	chooseOption: func,
   isDropdownVisible: bool,
-	options: array
+  options: array,
+  width: string
+}
+
+Dropdown.defaultProps = {
+  width: 'auto'
 }
 
 //-----------------------------------------------------------------------------
@@ -103,6 +110,7 @@ const Container = styled.div`
   z-index: 100000;
 	display: ${props => (props.isDropdownVisible ? 'block' : 'none')};
   position: absolute;
+  margin-right: 100%;
   background-color: ${ colors.DROPDOWN_BACKGROUND };
   color: white;
   font-size: 0.9rem;

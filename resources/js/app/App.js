@@ -32,6 +32,7 @@ const App = ({
   }
 
   const AppActiveContent = contentComponents[activeContent]
+  
   return (
     <Container>
       <AppSidebar/>

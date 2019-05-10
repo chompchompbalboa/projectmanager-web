@@ -5,8 +5,6 @@ import React from 'react'
 import { bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import ContentEditable from 'react-input-autosize'
-
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -39,16 +37,17 @@ Input.propTypes = {
 }
 
 Input.defaultProps = {
-  onChange: () =>
+  onChange: () => null
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const StyledInput = styled(AutosizeInput)`
+const StyledInput = styled.input`
   border: none;
   outline: none;
-  font-size: 36px;
+  background-color: transparent;
+  font-size: inherit;
 `
 
 export default Input

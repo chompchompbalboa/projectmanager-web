@@ -31,7 +31,8 @@ class ChangeIconDropdown extends Component {
     return (
       <Dropdown
         closeDropdown={closeDropdown}
-        isDropdownVisible={isDropdownVisible}>
+        isDropdownVisible={isDropdownVisible}
+        width="auto">
         <DeleteContainer
           >
           <Prompt>
@@ -73,6 +74,7 @@ const DeleteContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  white-space: normal;
 `
 
 const Prompt = styled.div`

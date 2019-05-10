@@ -2,6 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import _ from 'lodash'
+import clone from '../../../_utils/clone'
 
 import structureNormalizer from './structureNormalizer'
 
@@ -28,7 +29,7 @@ const structureReducers = (state = initialState, action) => {
       const tempId = _.random(-100000, -900000)
       const newCollection = {
           id: tempId,
-          name: 'Name',
+          name: 'New Collection',
           views: [],
           isCollectionRenaming: true
       }
@@ -49,7 +50,7 @@ const structureReducers = (state = initialState, action) => {
       const tempId = _.random(-100000, -900000)
       const newContainer = {
         id: tempId,
-        name: 'Name',
+        name: 'New Container',
         icon: 'PROJECTS',
         collections: [],
         isContainerRenaming: true
@@ -92,7 +93,7 @@ const structureReducers = (state = initialState, action) => {
       const tempId = _.random(-100000, -900000)
       const newView = {
           id: tempId,
-          name: 'Name',
+          name: 'New View',
           modules: [],
           isViewRenaming: true
       }
@@ -185,11 +186,10 @@ const structureReducers = (state = initialState, action) => {
         collectionId,
         nextCollectionId
       } = action
-      const nextState = { ...state }
+      const nextState = clone(state)
       
       const collection = nextState.collections[collectionId]
       collection.id = nextCollectionId
-      delete collection.isCollectionRenaming
       
       nextState.collections[nextCollectionId] = collection
       delete nextState.collections[collectionId]
@@ -222,11 +222,10 @@ const structureReducers = (state = initialState, action) => {
         containerId,
         nextContainerId
       } = action
-      const nextState = { ...state }
+      const nextState = clone(state)
       
       const container = nextState.containers[containerId]
       container.id = nextContainerId
-      delete container.isContainerRenaming
       
       nextState.containers[nextContainerId] = container
       delete nextState.containers[containerId]
@@ -257,17 +256,17 @@ const structureReducers = (state = initialState, action) => {
         viewId,
         nextViewId
       } = action
-      const nextState = { ...state }
+      const nextState = clone(state)
 
       const view = nextState.views[viewId]
       view.id = nextViewId
-      delete view.isViewRenaming
       
       nextState.views[nextViewId] = view
       delete nextState.views[viewId]
       
       const viewIndex = nextState.collections[collectionId].views.findIndex(id => id === viewId)
       nextState.collections[collectionId].views[viewIndex] = nextViewId
+
       return {
         ...state,
         collections: nextState.collections,

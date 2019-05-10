@@ -20,7 +20,7 @@ export default class AppSettingsStructureColumnItem extends Component {
   state = {
     isActionsDropdownVisible: false,
     isDeleteDropdownVisible: false,
-    isItemRenaming: false,
+    isItemRenaming: this.props.isItemRenaming ? this.props.isItemRenaming : false,
     name: this.props.name
   }
 
@@ -55,15 +55,16 @@ export default class AppSettingsStructureColumnItem extends Component {
     } = this.state
     return (
       <Container
-        isActive={isActive}
-        onClick={onClick}>
-        <NameContainer>
+        isActive={isActive}>
+        <NameContainer
+          onClick={onClick}>
           <IconContainer>
             {icon && <Icon icon={icon}/>}
           </IconContainer>
           <Name
             focus={isItemRenaming}
             editable={isItemRenaming}
+            id={id}
             isItemRenaming={isItemRenaming}
             onBlur={() => this.handleNameBlur()}
             onChange={(e, value) => this.setState({ name: value })}
@@ -71,10 +72,9 @@ export default class AppSettingsStructureColumnItem extends Component {
         </NameContainer>
         <ActionsContainer>
           <Ellipsis
-            onClick={() => this.setState({ isActionsDropdownVisible: true })}>
+            onClick={() => this.setState({ isActionsDropdownVisible: !isActionsDropdownVisible })}>
             . . .
-          </Ellipsis>
-          {isActionsDropdownVisible && 
+            {isActionsDropdownVisible && 
               <Dropdown
                 closeDropdown={() => this.setState({ isActionsDropdownVisible: false })}
                 isDropdownVisible={isActionsDropdownVisible}>
@@ -85,13 +85,14 @@ export default class AppSettingsStructureColumnItem extends Component {
                   onClick={() => this.setState({ isActionsDropdownVisible: false, isDeleteDropdownVisible: true })}
                   text="Delete"/>
               </Dropdown>}
-          {isDeleteDropdownVisible &&
-            <DeleteDropdown
-              onDelete={() => deleteItem(id)}
-              closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
-              isDropdownVisible={isDeleteDropdownVisible}
-              textToMatch={name}
-              type={type.toLowerCase()}/>}
+            {isDeleteDropdownVisible &&
+              <DeleteDropdown
+                onDelete={() => deleteItem(id)}
+                closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
+                isDropdownVisible={isDeleteDropdownVisible}
+                textToMatch={name}
+                type={type.toLowerCase()}/>}
+          </Ellipsis>
         </ActionsContainer>
       </Container>
     )
@@ -106,6 +107,7 @@ AppSettingsStructureColumnItem.propTypes = {
   icon: string,
   id: number,
   isActive: bool,
+  isItemRenaming: bool,
   onClick: func,
   name: string,
   updateItem: func,
@@ -117,7 +119,6 @@ AppSettingsStructureColumnItem.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.div`
   cursor: pointer;
-  padding: 0.7vh 1vw;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -129,6 +130,8 @@ const Container = styled.div`
 `
 
 const NameContainer = styled.div`
+  padding: 0.7vh 0 0.7vh 1vw;
+  height: 100%;
   display: flex;
   flex-grow: 1;
   align-items: center;
@@ -143,11 +146,11 @@ const Name = styled(ContentEditable)`
 `
 
 const ActionsContainer = styled.div`
-  z-index: 10;
   height: 100%;
 `
 
 const Ellipsis = styled.div`
+  padding: 0.7vh 1vw 0.7vh;
   height: 100%;
   white-space: nowrap;
 `

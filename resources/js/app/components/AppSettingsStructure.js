@@ -39,12 +39,9 @@ class AppSettingsStructure extends Component {
 
   componentDidMount = () => {
     const {
-      containers,
       setStructure
     } = this.props
-    if(!containers || containers === null) {
-      setStructure()
-    }
+    setStructure()
   }
 
   render() {

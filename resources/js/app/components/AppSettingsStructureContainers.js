@@ -44,12 +44,15 @@ const AppSettingsStructureContainers = ({
   activeSettingsStructureContainerId,
   containerIds,
   containers,
+  createStructureContainer,
   deleteStructureContainer,
   updateActiveSettingsStructureContainerId,
   updateStructureContainer,
 }) => {
   return (
-    <AppSettingsStructureColumn>
+    <AppSettingsStructureColumn
+      addItem={createStructureContainer}
+      header="Containers">
       {containerIds.map(containerId => {
         const container = containers[containerId]
         return (
@@ -59,6 +62,7 @@ const AppSettingsStructureContainers = ({
             icon={container.icon}
             id={container.id}
             isActive={container.id === activeSettingsStructureContainerId}
+            isItemRenaming={container.isContainerRenaming}
             onClick={() => updateActiveSettingsStructureContainerId(container.id)}
             name={container.name}
             type="CONTAINER"
@@ -77,6 +81,7 @@ AppSettingsStructureContainers.propTypes = {
   activeSettingsStructureContainerId: number,
   containerIds: array,
   containers: object,
+  createStructureContainer: func,
   deleteStructureContainer: func,
   updateActiveSettingsStructureContainerId: func,
   updateStructureContainer: func

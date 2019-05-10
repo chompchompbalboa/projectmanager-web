@@ -43,15 +43,18 @@ const mapDispatchToProps = dispatch => ({
 const AppSettingsStructureViews = ({
   activeSettingsStructureViewId,
   activeSettingsStructureCollectionId,
-  viewIds,
-  views,
+  createStructureView,
   deleteStructureView,
   updateActiveSettingsStructureViewId,
   updateStructureView,
+  viewIds,
+  views
 }) => {
   return (
     <AppSettingsStructureColumn
-      hasBorder={activeSettingsStructureCollectionId !== null}>
+      addItem={createStructureView}
+      header="Views"
+      isVisible={activeSettingsStructureCollectionId !== null}>
       {activeSettingsStructureCollectionId !== null && viewIds.map(viewId => {
         const view = views[viewId]
         return (
@@ -61,6 +64,7 @@ const AppSettingsStructureViews = ({
             icon={view.icon}
             id={view.id}
             isActive={view.id === activeSettingsStructureViewId}
+            isItemRenaming={view.isViewRenaming}
             onClick={() => updateActiveSettingsStructureViewId(view.id)}
             name={view.name}
             type="VIEW"
@@ -78,11 +82,12 @@ const AppSettingsStructureViews = ({
 AppSettingsStructureViews.propTypes = {
   activeSettingsStructureViewId: number,
   activeSettingsStructureCollectionId: number,
-  viewIds: array,
-  views: object,
+  createStructureView: func,
   deleteStructureView: func,
   updateActiveSettingsStructureViewId: func,
-  updateStructureView: func
+  updateStructureView: func,
+  viewIds: array,
+  views: object,
 }
 
 export default connect(

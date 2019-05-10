@@ -43,14 +43,18 @@ const mapDispatchToProps = dispatch => ({
 const AppSettingsStructureModules = ({
   activeSettingsStructureModuleId,
   activeSettingsStructureViewId,
+  createStructureModule,
+  deleteStructureModule,
   moduleIds,
   modules,
-  deleteStructureModule,
   updateActiveSettingsStructureModuleId,
   updateStructureModule,
 }) => {
   return (
     <AppSettingsStructureColumn
+      addItem={createStructureModule}
+      isVisible={activeSettingsStructureViewId !== null}
+      header="Modules"
       hasBorder={false}
       width="51%">
       {activeSettingsStructureViewId !== null && moduleIds.map(moduleId => {
@@ -79,9 +83,10 @@ const AppSettingsStructureModules = ({
 AppSettingsStructureModules.propTypes = {
   activeSettingsStructureModuleId: number,
   activeSettingsStructureViewId: number,
+  createStructureModule: func,
+  deleteStructureModule: func,
   moduleIds: array,
   modules: object,
-  deleteStructureModule: func,
   updateActiveSettingsStructureModuleId: func,
   updateStructureModule: func
 }

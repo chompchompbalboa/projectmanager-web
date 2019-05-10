@@ -45,13 +45,16 @@ const AppSettingsStructureCollections = ({
   activeSettingsStructureContainerId,
   collectionIds,
   collections,
+  createStructureCollection,
   deleteStructureCollection,
   updateActiveSettingsStructureCollectionId,
   updateStructureCollection,
 }) => {
   return (
     <AppSettingsStructureColumn
-      hasBorder={activeSettingsStructureContainerId !== null}>
+      addItem={createStructureCollection}
+      header="Collections"
+      isVisible={activeSettingsStructureContainerId !== null}>
       {activeSettingsStructureContainerId !== null && collectionIds.map(collectionId => {
         const collection = collections[collectionId]
         return (
@@ -61,6 +64,7 @@ const AppSettingsStructureCollections = ({
             icon={collection.icon}
             id={collection.id}
             isActive={collection.id === activeSettingsStructureCollectionId}
+            isItemRenaming={collection.isCollectionRenaming}
             onClick={() => updateActiveSettingsStructureCollectionId(collection.id)}
             name={collection.name}
             type="COLLECTION"
@@ -80,6 +84,7 @@ AppSettingsStructureCollections.propTypes = {
   activeSettingsStructureContainerId: number,
   collectionIds: array,
   collections: object,
+  createStructureCollection: func,
   deleteStructureCollection: func,
   updateActiveSettingsStructureCollectionId: func,
   updateStructureCollection: func

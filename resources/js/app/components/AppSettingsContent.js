@@ -28,11 +28,11 @@ const AppSettingsContent = ({
     STRUCTURE: AppSettingsStructure
   }
   
-  const AppSettingsContentType = appSettingsContentMap[activeSettingsContent]
+  const AppSettingsActiveContent = appSettingsContentMap[activeSettingsContent]
   
   return (
     <AppContentView>
-      <AppSettingsContentType />
+      <AppSettingsActiveContent />
     </AppContentView>
   )
 }

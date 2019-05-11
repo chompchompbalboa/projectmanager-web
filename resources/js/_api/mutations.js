@@ -45,6 +45,18 @@ export const createCollection = async (containerId, newCollectionId, newCollecti
   })
 }
 
+export const createModule = async (viewId, newModuleId, newModule) => {  
+  return axios.post('/app/modules', { 
+    module: newModule,
+    viewId: viewId
+  }).then(response => {
+    return {
+      moduleId: newModuleId,
+      nextModuleId: response.data.id
+    }
+  })
+}
+
 export const createRow = async (newRow) => {  
   return axios.post('/app/rows', {
     newRow: newRow
@@ -114,6 +126,12 @@ export const deleteFormula = async (formulaId) => {
   })
 }
 
+export const deleteModule = async moduleId => {  
+  return axios.delete('/app/modules/' + moduleId).then(response => {
+    return response.data
+  })
+}
+
 export const deleteRow = async (rowId) => {  
   return axios.delete('/app/rows/' + rowId).then(response => {
     return response.data
@@ -176,6 +194,12 @@ export const updateColumn = async (id, column) => {
     id: id,
     column: column
   }).then(response => {
+    return response.data
+  })
+}
+
+export const updateModule = async (id, updates) => {
+  return axios.patch('/app/modules/' + id, updates).then(response => {
     return response.data
   })
 }

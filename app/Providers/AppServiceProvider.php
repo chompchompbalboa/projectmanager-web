@@ -10,6 +10,8 @@ use App\Models\Collection;
 use App\Observers\CollectionObserver;
 use App\Models\Container;
 use App\Observers\ContainerObserver;
+use App\Models\Module;
+use App\Observers\ModuleObserver;
 use App\Models\View;
 use App\Observers\ViewObserver;
 
@@ -43,5 +45,6 @@ class AppServiceProvider extends ServiceProvider
       Collection::observe(CollectionObserver::class);
       Container::observe(ContainerObserver::class);
       View::observe(ViewObserver::class);
+      Module::observe(ModuleObserver::class);
     }
 }

@@ -6,6 +6,7 @@ import { array, func, number, object } from 'prop-types'
 import { connect } from 'react-redux'
 
 import { 
+  updateActiveContainerId as updateActiveContainerIdAction,
   updateActiveSettingsStructureCollectionId as updateActiveSettingsStructureCollectionIdAction,
 } from '../redux/active/activeActions'
 import { 
@@ -34,6 +35,7 @@ const mapDispatchToProps = dispatch => ({
   createStructureCollection: () => dispatch(createStructureCollectionAction()),
   deleteStructureCollection: collectionId => dispatch(deleteStructureCollectionAction(collectionId)),
   updateStructureCollection: (id, updates) => dispatch(updateStructureCollectionAction(id, updates)),
+  updateActiveContainerId: (containerId, collectionId) => dispatch(updateActiveContainerIdAction(containerId, collectionId)),
   updateActiveSettingsStructureCollectionId: nextActiveId => dispatch(updateActiveSettingsStructureCollectionIdAction(nextActiveId))
 })
 
@@ -47,6 +49,7 @@ const AppSettingsStructureCollections = ({
   collections,
   createStructureCollection,
   deleteStructureCollection,
+  updateActiveContainerId,
   updateActiveSettingsStructureCollectionId,
   updateStructureCollection,
 }) => {
@@ -66,6 +69,7 @@ const AppSettingsStructureCollections = ({
             isActive={collection.id === activeSettingsStructureCollectionId}
             isItemRenaming={collection.isCollectionRenaming}
             onClick={() => updateActiveSettingsStructureCollectionId(collection.id)}
+            onGoToItem={() => updateActiveContainerId(activeSettingsStructureContainerId, collection.id)}
             name={collection.name}
             type="COLLECTION"
             updateItem={updateStructureCollection}/>
@@ -86,6 +90,7 @@ AppSettingsStructureCollections.propTypes = {
   collections: object,
   createStructureCollection: func,
   deleteStructureCollection: func,
+  updateActiveContainerId: func,
   updateActiveSettingsStructureCollectionId: func,
   updateStructureCollection: func
 }

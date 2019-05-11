@@ -46,15 +46,15 @@ class ContainerController extends Controller
      * @param  \App\Container  $container
      * @return \Illuminate\Http\Response
      */
-    public function show(Container $container)
+    public function show(Request $request, Container $container)
     {
       $nextCollections = $container->collections()->get();
-      $nextActiveCollectionId = $nextCollections[0]->id;
+      $nextActiveCollectionId = $request->input('collectionId') ? intval($request->input('collectionId')) : (isset($nextCollections[0]) ? $nextCollections[0]->id : null);
     
-      $nextViews = Collection::find($nextActiveCollectionId)->views()->get();
-      $nextActiveViewId = $nextViews[0]->id;
+      $nextViews = $nextActiveCollectionId ? Collection::find($nextActiveCollectionId)->views()->get() : [];
+      $nextActiveViewId = $request->input('viewId') ? intval($request->input('viewId')) : (isset($nextViews[0]) ? $nextViews[0]->id : null);
     
-      $nextModules = View::find($nextActiveViewId)->modules()->get();
+      $nextModules = $nextActiveViewId ? View::find($nextActiveViewId)->modules()->get() : [];
 
       return [
         'nextActiveCollectionId' => $nextActiveCollectionId,

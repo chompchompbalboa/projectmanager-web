@@ -20,7 +20,7 @@ import {
 //-----------------------------------------------------------------------------
 // Update Active Container Id
 //-----------------------------------------------------------------------------
-export const updateActiveContainerId = nextActiveContainerId => {
+export const updateActiveContainerId = (nextActiveContainerId, nextActiveCollectionId, nextActiveViewId) => {
   return (dispatch, getState) => {
     dispatch(updateActiveContent('CONTAINER'))
     const activeContainerId = selectActiveContainerId(getState())
@@ -34,7 +34,7 @@ export const updateActiveContainerId = nextActiveContainerId => {
       dispatch(updateViewIds(null))
       dispatch(updateModules(null))
       dispatch(updateModuleIds(null))
-      dispatch(updateActiveContainerIdServer(nextActiveContainerId))
+      dispatch(updateActiveContainerIdServer(nextActiveContainerId, nextActiveCollectionId, nextActiveViewId))
     }
   }
 }
@@ -44,9 +44,9 @@ const updateActiveContainerIdReducer = nextActiveContainerId => ({
   nextActiveContainerId: nextActiveContainerId
 })
 
-const updateActiveContainerIdServer = nextActiveContainerId => {
+const updateActiveContainerIdServer = (containerId, collectionId, viewId) => {
   return dispatch => {
-    query.getContainer(nextActiveContainerId).then(nextActiveContainer => {
+    query.getContainer(containerId, collectionId, viewId).then(nextActiveContainer => {
       const {
         nextActiveCollectionId,
         nextActiveViewId,

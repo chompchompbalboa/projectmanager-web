@@ -6,6 +6,7 @@ import { array, func, number, object } from 'prop-types'
 import { connect } from 'react-redux'
 
 import { 
+  updateActiveContainerId as updateActiveContainerIdAction,
   updateActiveSettingsStructureViewId as updateActiveSettingsStructureViewIdAction,
 } from '../redux/active/activeActions'
 import { 
@@ -14,7 +15,7 @@ import {
   updateStructureView as updateStructureViewAction 
 } from '../redux/structure/structureActions'
 
-import { selectActiveSettingsStructureViewId, selectActiveSettingsStructureCollectionId } from '../redux/active/activeSelectors'
+import { selectActiveSettingsStructureViewId, selectActiveSettingsStructureCollectionId, selectActiveSettingsStructureContainerId } from '../redux/active/activeSelectors'
 import { selectStructureViewIds, selectStructureViews } from '../redux/structure/structureSelectors'
 
 import AppSettingsStructureColumn from './AppSettingsStructureColumn'
@@ -26,6 +27,7 @@ import AppSettingsStructureColumnItem from './AppSettingsStructureColumnItem'
 const mapStateToProps = state => ({
   activeSettingsStructureViewId: selectActiveSettingsStructureViewId(state),
   activeSettingsStructureCollectionId: selectActiveSettingsStructureCollectionId(state),
+  activeSettingsStructureContainerId: selectActiveSettingsStructureContainerId(state),
   viewIds: selectStructureViewIds(state),
   views: selectStructureViews(state)
 })
@@ -33,6 +35,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   createStructureView: () => dispatch(createStructureViewAction()),
   deleteStructureView: viewId => dispatch(deleteStructureViewAction(viewId)),
+  updateActiveContainerId: (containerId, collectionId, viewId) => dispatch(updateActiveContainerIdAction(containerId, collectionId, viewId)),
   updateStructureView: (id, updates) => dispatch(updateStructureViewAction(id, updates)),
   updateActiveSettingsStructureViewId: nextActiveId => dispatch(updateActiveSettingsStructureViewIdAction(nextActiveId))
 })
@@ -41,10 +44,12 @@ const mapDispatchToProps = dispatch => ({
 // Component
 //-----------------------------------------------------------------------------
 const AppSettingsStructureViews = ({
-  activeSettingsStructureViewId,
   activeSettingsStructureCollectionId,
+  activeSettingsStructureContainerId,
+  activeSettingsStructureViewId,
   createStructureView,
   deleteStructureView,
+  updateActiveContainerId,
   updateActiveSettingsStructureViewId,
   updateStructureView,
   viewIds,
@@ -66,6 +71,7 @@ const AppSettingsStructureViews = ({
             isActive={view.id === activeSettingsStructureViewId}
             isItemRenaming={view.isViewRenaming}
             onClick={() => updateActiveSettingsStructureViewId(view.id)}
+            onGoToItem={() => updateActiveContainerId(activeSettingsStructureContainerId, activeSettingsStructureCollectionId, view.id)}
             name={view.name}
             type="VIEW"
             updateItem={updateStructureView}/>
@@ -82,8 +88,10 @@ const AppSettingsStructureViews = ({
 AppSettingsStructureViews.propTypes = {
   activeSettingsStructureViewId: number,
   activeSettingsStructureCollectionId: number,
+  activeSettingsStructureContainerId: number,
   createStructureView: func,
   deleteStructureView: func,
+  updateActiveContainerId: func,
   updateActiveSettingsStructureViewId: func,
   updateStructureView: func,
   viewIds: array,

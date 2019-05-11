@@ -13,6 +13,7 @@ import DeleteDropdown from './DeleteDropdown'
 import Dropdown from './Dropdown'
 import DropdownItem from './DropdownItem'
 import Icon from './Icon'
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -48,6 +49,7 @@ export default class AppSettingsStructureColumnItem extends Component {
       isActive,
       isDropdownsRightAligned,
       onClick,
+      onGoToItem,
       type,
       updateItem
     } = this.props
@@ -81,37 +83,40 @@ export default class AppSettingsStructureColumnItem extends Component {
           <Ellipsis
             onClick={() => this.setState({ isActionsDropdownVisible: !isActionsDropdownVisible })}>
             . . .
-            {isActionsDropdownVisible && 
-              <Dropdown
-                closeDropdown={() => this.setState({ isActionsDropdownVisible: false })}
-                isDropdownVisible={isActionsDropdownVisible}
-                isRightAligned={isDropdownsRightAligned}>
-                <DropdownItem
-                  onClick={() => this.setState({ isActionsDropdownVisible: false, isItemRenaming: true })}
-                  text="Rename"/>
-                <DropdownItem
-                  onClick={() => this.setState({ isActionsDropdownVisible: false, isDeleteDropdownVisible: true })}
-                  text="Delete"/>
-                {icon && 
-                  <DropdownItem
-                    onClick={() => this.setState({ isActionsDropdownVisible: false, isIconDropdownVisible: true })}
-                    text="Change Icon"/>}
-              </Dropdown>}
-            {isDeleteDropdownVisible &&
-              <DeleteDropdown
-                onDelete={() => deleteItem(id)}
-                closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
-                isDropdownVisible={isDeleteDropdownVisible}
-                isRightAligned={isDropdownsRightAligned}
-                textToMatch={name}
-                type={type.toLowerCase()}/>}
-            {icon && isIconDropdownVisible &&
-              <ChangeIconDropdown
-                closeDropdown={() => this.setState({ isIconDropdownVisible: false })}
-                isDropdownVisible={isIconDropdownVisible}
-                isRightAligned={isDropdownsRightAligned}
-                onIconClick={icon => updateItem(id, { icon: icon })}/>}
           </Ellipsis>
+          {isActionsDropdownVisible && 
+            <Dropdown
+              closeDropdown={() => this.setState({ isActionsDropdownVisible: false })}
+              isDropdownVisible={isActionsDropdownVisible}
+              isRightAligned={isDropdownsRightAligned}>
+              <DropdownItem
+                onClick={onGoToItem}
+                text="Go To"/>
+              <DropdownItem
+                onClick={() => this.setState({ isActionsDropdownVisible: false, isItemRenaming: true })}
+                text="Rename"/>
+              <DropdownItem
+                onClick={() => this.setState({ isActionsDropdownVisible: false, isDeleteDropdownVisible: true })}
+                text="Delete"/>
+              {icon && 
+                <DropdownItem
+                  onClick={() => this.setState({ isActionsDropdownVisible: false, isIconDropdownVisible: true })}
+                  text="Change Icon"/>}
+            </Dropdown>}
+          {isDeleteDropdownVisible &&
+            <DeleteDropdown
+              onDelete={() => deleteItem(id)}
+              closeDropdown={() => this.setState({ isDeleteDropdownVisible: false })}
+              isDropdownVisible={isDeleteDropdownVisible}
+              isRightAligned={isDropdownsRightAligned}
+              textToMatch={name}
+              type={type.toLowerCase()}/>}
+          {icon && isIconDropdownVisible &&
+            <ChangeIconDropdown
+              closeDropdown={() => this.setState({ isIconDropdownVisible: false })}
+              isDropdownVisible={isIconDropdownVisible}
+              isRightAligned={isDropdownsRightAligned}
+              onIconClick={icon => updateItem(id, { icon: icon })}/>}
         </ActionsContainer>
       </Container>
     )
@@ -129,6 +134,7 @@ AppSettingsStructureColumnItem.propTypes = {
   isDropdownsRightAligned: bool,
   isItemRenaming: bool,
   onClick: func,
+  onGoToItem: func,
   name: string,
   updateItem: func,
   type: string

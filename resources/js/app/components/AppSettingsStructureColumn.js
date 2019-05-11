@@ -10,6 +10,7 @@ import { colors, layout } from '../config'
 import HiddenScrollbarContainer from './HiddenScrollbarContainer'
 import Dropdown from './Dropdown'
 import DropdownItem from './DropdownItem'
+import ModuleTypeDropdown from './ModuleTypeDropdown'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -17,21 +18,32 @@ import DropdownItem from './DropdownItem'
 class AppSettingsStructureColumn extends Component {
 
   state = {
-    isHeaderDropdownVisible: false
+    isHeaderDropdownVisible: false,
+    isModuleTypeDropdownVisible: false
   }
 
   handleAddClick = () => {
     const {
-      addItem
+      addItem,
+      isModules
     } = this.props
-    this.setState({
-      isHeaderDropdownVisible: false
-    })
-    addItem()
+    if(isModules) {
+      this.setState({
+        isHeaderDropdownVisible: false,
+        isModuleTypeDropdownVisible: true
+      })
+    }
+    else {
+      this.setState({
+        isHeaderDropdownVisible: false
+      })
+      addItem()
+    }
   }
   
   render() {
     const { 
+      addItem,
       children, 
       isDropdownsRightAligned,
       isVisible,
@@ -40,6 +52,7 @@ class AppSettingsStructureColumn extends Component {
       width
     } = this.props
     const {
+      isModuleTypeDropdownVisible,
       isHeaderDropdownVisible
     } = this.state
     return (
@@ -52,9 +65,11 @@ class AppSettingsStructureColumn extends Component {
             <HeaderText>
               {header}
             </HeaderText>
-            <Ellipsis
-              onClick={() => this.setState({ isHeaderDropdownVisible: !isHeaderDropdownVisible })}>
-              . . .
+            <ActionsContainer>
+              <Ellipsis
+                onClick={() => this.setState({ isHeaderDropdownVisible: !isHeaderDropdownVisible })}>
+                . . .
+              </Ellipsis>
               {isHeaderDropdownVisible && 
                 <Dropdown
                   closeDropdown={() => this.setState({ isHeaderDropdownVisible: false })}
@@ -68,7 +83,14 @@ class AppSettingsStructureColumn extends Component {
                     text="Create Template"/>
                 </Dropdown>
               }
-            </Ellipsis>
+              {isModuleTypeDropdownVisible && 
+                <ModuleTypeDropdown
+                  closeDropdown={() => this.setState({ isModuleTypeDropdownVisible: false })}
+                  isDropdownVisible={isModuleTypeDropdownVisible}
+                  isRightAligned={true}
+                  onModuleTypeClick={type => addItem(type)}/>
+              }
+            </ActionsContainer>
           </Header>
         }
         {children}
@@ -82,6 +104,7 @@ class AppSettingsStructureColumn extends Component {
 AppSettingsStructureColumn.propTypes = {
   addItem: func,
   isDropdownsRightAligned: bool,
+  isModules: bool,
   isVisible: bool,
   hasBorder: bool,
   header: string,
@@ -90,6 +113,7 @@ AppSettingsStructureColumn.propTypes = {
 
 AppSettingsStructureColumn.defaultProps = {
   isDropdownsRightAligned: false,
+  isModules: false,
   isVisible: true,
   hasBorder: true,
   header: "Header",
@@ -120,7 +144,12 @@ const HeaderText = styled.h4`
   padding: 1vh 1vw;
 `
 
+const ActionsContainer = styled.div`
+  height: 100%;
+`
+
 const Ellipsis = styled.div`
+  height: 100%;
   cursor: pointer;
   padding: 1vh calc(1vw - 5px) 1vh 1vw;
 `

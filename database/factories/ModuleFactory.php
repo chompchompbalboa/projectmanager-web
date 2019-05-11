@@ -17,6 +17,6 @@ $factory->define(App\Models\Module::class, function (Faker $faker) {
     return [
         'type' => 'TABLE',
         'type_id' => null,
-        'name' => null
+        'name' => 'Table'
     ];
 });

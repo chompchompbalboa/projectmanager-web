@@ -81,14 +81,15 @@ const updateStructureContainerId = (containerId, nextContainerId) => ({
 //-----------------------------------------------------------------------------
 // Create Structure Module
 //-----------------------------------------------------------------------------
-export const createStructureModule = () => {
+export const createStructureModule = type => {
   return (dispatch, getState) => {
     const viewId = selectActiveSettingsStructureViewId(getState())
-    dispatch(createStructureModuleReducer(viewId))
+    dispatch(createStructureModuleReducer(viewId, type))
     const tempId = Object.keys(getState().structure.modules).find(id => id < 0)
     const newModule = clone(getState().structure.modules[tempId])
     //eslint-disable-next-line
-    const { isModuleRenaming, modules, ...newModuleForServer } = newModule // Remove properties that aren't stored in the db
+    const { isModuleRenaming, modules, typeId, ...newModuleForServer } = newModule // Remove properties that aren't stored in the db
+    newModuleForServer.type_id = typeId
     mutation.createModule(viewId, newModule.id, newModuleForServer).then(moduleIds => {
       const {
         moduleId,
@@ -99,8 +100,9 @@ export const createStructureModule = () => {
   }
 }
 
-const createStructureModuleReducer = viewId => ({
+const createStructureModuleReducer = (viewId, moduleType) => ({
   type: 'CREATE_STRUCTURE_MODULE',
+  moduleType: moduleType,
   viewId: viewId
 })
 
@@ -179,6 +181,23 @@ const deleteStructureContainerReducer = containerId => ({
 })
 
 //-----------------------------------------------------------------------------
+// Delete Structure Module
+//-----------------------------------------------------------------------------
+export const deleteStructureModule = (moduleId) => {
+  return (dispatch, getState) => {
+    const viewId = selectActiveSettingsStructureViewId(getState())
+    dispatch(deleteStructureModuleReducer(viewId, moduleId))
+    mutation.deleteModule(moduleId)
+  }
+}
+
+const deleteStructureModuleReducer = (viewId, moduleId) => ({
+  type: 'DELETE_STRUCTURE_MODULE',
+  viewId: viewId,
+  moduleId: moduleId
+})
+
+//-----------------------------------------------------------------------------
 // Delete Structure View
 //-----------------------------------------------------------------------------
 export const deleteStructureView = (viewId) => {
@@ -248,6 +267,25 @@ export const updateStructureContainer = (containerId, updates) => {
 const updateStructureContainerReducer = (containerId, updates) => ({
   type: 'UPDATE_STRUCTURE_CONTAINER',
   containerId: containerId,
+  updates: updates
+})
+
+//-----------------------------------------------------------------------------
+// Update Structure Module
+//-----------------------------------------------------------------------------
+export const updateStructureModule = (moduleId, updates) => {
+  return dispatch => {
+    dispatch(updateStructureModuleReducer(moduleId, updates))
+    mutation.updateModule(moduleId, updates)
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Update Structure Module Reducer
+//-----------------------------------------------------------------------------
+const updateStructureModuleReducer = (moduleId, updates) => ({
+  type: 'UPDATE_STRUCTURE_MODULE',
+  moduleId: moduleId,
   updates: updates
 })
 

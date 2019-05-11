@@ -63,15 +63,16 @@ const structureReducers = (state = initialState, action) => {
 
     case 'CREATE_STRUCTURE_MODULE': {
       const {
-        type,
+        moduleType,
         viewId
       } = action
       const tempId = _.random(-100000, -900000)
       const newModule = {
           id: tempId,
-          type: type,
+          type: moduleType,
           typeId: null,
-          name: type,
+          name: moduleType,
+          isModuleRenaming: true
       }
       return {
         ...state,
@@ -134,6 +135,23 @@ const structureReducers = (state = initialState, action) => {
       const nextState = { ...state }
       delete nextState.containers[containerId]
       return nextState
+    }
+
+    case 'DELETE_STRUCTURE_MODULE':  {
+      const {
+        viewId,
+        moduleId
+      } = action
+      const nextState = { ...state }
+      delete nextState.modules[moduleId]
+      return {
+        ...nextState, views: {
+          ...nextState.views, [viewId]: {
+            ...nextState.views[viewId], modules: 
+              nextState.views[viewId].modules.filter(id => id !== moduleId)
+          }
+        }
+      }
     }
 
     case 'DELETE_STRUCTURE_VIEW':  {
@@ -233,6 +251,44 @@ const structureReducers = (state = initialState, action) => {
       return {
         ...state,
         containers: nextState.containers
+      }
+    }
+
+    case 'UPDATE_STRUCTURE_MODULE':  {
+      const {
+        moduleId,
+        updates
+      } = action
+      return {
+        ...state, modules: {
+          ...state.modules, [moduleId]: {
+            ...state.modules[moduleId], ...updates, isModuleRenaming: false
+          }
+        }
+      }
+    }
+
+    case 'UPDATE_STRUCTURE_MODULE_ID':  {
+      const {
+        viewId,
+        moduleId,
+        nextModuleId
+      } = action
+      const nextState = clone(state)
+
+      const module = nextState.modules[moduleId]
+      module.id = nextModuleId
+      
+      nextState.modules[nextModuleId] = module
+      delete nextState.modules[moduleId]
+      
+      const moduleIndex = nextState.views[viewId].modules.findIndex(id => id === moduleId)
+      nextState.views[viewId].modules[moduleIndex] = nextModuleId
+
+      return {
+        ...state,
+        views: nextState.views,
+        modules: nextState.modules
       }
     }
 

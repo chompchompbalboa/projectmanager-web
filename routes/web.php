@@ -55,6 +55,7 @@ Route::prefix('app')->group(function () {
     'columns' => 'ColumnController',
     'containers' => 'ContainerController',
     'formulas' => 'FormulaController',
+    'modules' => 'ModuleController',
     'rows' => 'RowController',
     'structure' => 'StructureController',
     'tables' => 'TableController',

@@ -4,11 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Collection;
-use App\Models\Container;
+use App\Models\Module;
 use App\Models\View;
 
-class CollectionController extends Controller
+class ModuleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,39 +37,30 @@ class CollectionController extends Controller
      */
     public function store(Request $request)
     {
-      $collection = Collection::create($request->input('collection'));
-      $container = Container::find($request->input('containerId'));
-      $container->collections()->attach($collection->id);
-      return response()->json($collection, 200);
+      $module = Module::create($request->input('module'));
+      $view = View::find($request->input('viewId'));
+      $view->modules()->attach($module->id);
+      return response()->json($module, 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Collection  $collection
+     * @param  \App\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function show(Collection $collection)
+    public function show(Module $module)
     {
-      $nextViews = $collection->views()->get();
-      $nextActiveViewId = isset($nextViews[0]) ? $nextViews[0]->id : null;
-    
-      $nextModules = $nextActiveViewId ? View::find($nextActiveViewId)->modules()->get() : [];
-
-      return [
-        'nextActiveViewId' => $nextActiveViewId,
-        'nextModules' => $nextModules,
-        'nextViews' => $nextViews,
-      ];
+        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Collection  $collection
+     * @param  \App\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function edit(Collection $collection)
+    public function edit(Module $module)
     {
         //
     }
@@ -79,24 +69,24 @@ class CollectionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Collection  $collection
+     * @param  \App\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Collection $collection)
+    public function update(Request $request, Module $module)
     {
-      $collection->update($request->all());
-      return response()->json($collection, 200);
+      $module->update($request->all());
+      return response()->json($module, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Collection  $collection
+     * @param  \App\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Collection $collection)
+    public function destroy(Module $module)
     {
-      $collection->delete();
+      $module->delete();
       return response()->json(null, 204);
     }
 }

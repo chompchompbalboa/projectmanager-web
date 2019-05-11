@@ -12,6 +12,11 @@ class Module extends Model
   protected $visible = ['id', 'type', 'typeId', 'name'];
 
   /**
+   * Define which attributes will be mass assignable
+   */
+  protected $fillable = ['type', 'type_id', 'name'];
+
+  /**
    * Custom attributes
    */
   protected $appends = ['typeId'];

@@ -31,7 +31,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  createStructureModule: () => dispatch(createStructureModuleAction()),
+  createStructureModule: type => dispatch(createStructureModuleAction(type)),
   deleteStructureModule: moduleId => dispatch(deleteStructureModuleAction(moduleId)),
   updateStructureModule: (id, updates) => dispatch(updateStructureModuleAction(id, updates)),
   updateActiveSettingsStructureModuleId: nextActiveId => dispatch(updateActiveSettingsStructureModuleIdAction(nextActiveId))
@@ -52,8 +52,9 @@ const AppSettingsStructureModules = ({
 }) => {
   return (
     <AppSettingsStructureColumn
-      addItem={createStructureModule}
+      addItem={type => createStructureModule(type)}
       isDropdownsRightAligned={true}
+      isModules={true}
       isVisible={activeSettingsStructureViewId !== null}
       header="Modules"
       hasBorder={false}
@@ -68,8 +69,9 @@ const AppSettingsStructureModules = ({
             id={module.id}
             isActive={module.id === activeSettingsStructureModuleId}
             isDropdownsRightAligned={true}
+            isItemRenaming={module.isModuleRenaming}
             onClick={() => updateActiveSettingsStructureModuleId(module.id)}
-            name={module.type + " - " + module.id}
+            name={module.name}
             type="VIEW"
             updateItem={updateStructureModule}/>
         )

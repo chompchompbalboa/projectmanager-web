@@ -16,12 +16,20 @@ class ChangeIconDropdown extends Component {
   state = {
     inputValue: ''
   }
+
+  handleDelete = () => {
+    const {
+      closeDropdown,
+      onDelete
+    } = this.props
+    closeDropdown()
+    onDelete()
+  }
   
   render() {
     const {
       closeDropdown,
       isDropdownVisible,
-      onDelete,
       textToMatch,
       type,
       ...props
@@ -46,7 +54,7 @@ class ChangeIconDropdown extends Component {
             onChange={e => this.setState({ inputValue: e.target.value })}
             value={inputValue}/>
           <DeleteButton
-            onClick={inputValue === textToMatch ? onDelete : null}
+            onClick={inputValue === textToMatch ? this.handleDelete : null}
             isTextMatched={inputValue === textToMatch}>
             Delete
           </DeleteButton>

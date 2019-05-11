@@ -6,6 +6,7 @@ import { array, func, number, object } from 'prop-types'
 import { connect } from 'react-redux'
 
 import { 
+  updateActiveContainerId as updateActiveContainerIdAction,
   updateActiveSettingsStructureContainerId as updateActiveSettingsStructureContainerIdAction,
 } from '../redux/active/activeActions'
 import { 
@@ -34,6 +35,7 @@ const mapDispatchToProps = dispatch => ({
   createStructureContainer: () => dispatch(createStructureContainerAction()),
   deleteStructureContainer: containerId => dispatch(deleteStructureContainerAction(containerId)),
   updateStructureContainer: (id, updates) => dispatch(updateStructureContainerAction(id, updates)),
+  updateActiveContainerId: nextActiveId => dispatch(updateActiveContainerIdAction(nextActiveId)),
   updateActiveSettingsStructureContainerId: nextActiveId => dispatch(updateActiveSettingsStructureContainerIdAction(nextActiveId))
 })
 
@@ -46,6 +48,7 @@ const AppSettingsStructureContainers = ({
   containers,
   createStructureContainer,
   deleteStructureContainer,
+  updateActiveContainerId,
   updateActiveSettingsStructureContainerId,
   updateStructureContainer,
 }) => {
@@ -64,6 +67,7 @@ const AppSettingsStructureContainers = ({
             isActive={container.id === activeSettingsStructureContainerId}
             isItemRenaming={container.isContainerRenaming}
             onClick={() => updateActiveSettingsStructureContainerId(container.id)}
+            onGoToItem={() => updateActiveContainerId(container.id)}
             name={container.name}
             type="CONTAINER"
             updateItem={updateStructureContainer}/>
@@ -83,6 +87,7 @@ AppSettingsStructureContainers.propTypes = {
   containers: object,
   createStructureContainer: func,
   deleteStructureContainer: func,
+  updateActiveContainerId: func,
   updateActiveSettingsStructureContainerId: func,
   updateStructureContainer: func
 }

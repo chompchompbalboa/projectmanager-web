@@ -13,8 +13,14 @@ export const getCollection = async collectionId => {
   })
 }
 
-export const getContainer = async containerId => {
-  return axios.get('/app/containers/' + containerId).then(response => {
+export const getContainer = async (containerId, collectionId, viewId) => {
+  return axios.get('/app/containers/' + containerId, {
+    params: {
+      containerId: containerId,
+      collectionId: collectionId,
+      viewId: viewId
+    }
+  }).then(response => {
     return response.data
   })
 }

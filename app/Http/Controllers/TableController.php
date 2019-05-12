@@ -5,11 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-use App\Models\Cell;
-use App\Models\Column;
-use App\Models\Row;
+use App\Models\TableCell;
+use App\Models\TableColumn;
+use App\Models\TableRow;
 use App\Models\Table;
-use App\Models\View;
 
 class TableController extends Controller
 {
@@ -47,17 +46,12 @@ class TableController extends Controller
       if($newTable->save()) {
         // Add the first column to the table. If you make changes to the defaults
         // here, you also need to update the column defaults on the front end.
-        $firstColumn = new Column;
+        $firstColumn = new TableColumn;
         $firstColumn->table_id = $newTable->id;
         $firstColumn->position = 1;
         $firstColumn->width = 1;
         $firstColumn->type = 'STRING';
         if($firstColumn->save()) {
-          $user = Auth::user();
-          $view = View::find($user->view()->first()->id);
-          $view->collection_id = $newTable->collection_id;
-          $view->table_id = $newTable->id;
-          $view->save();
           return [
             'tableId' => $request->input('tableId'),
             'nextTableId' => $newTable->id,
@@ -75,13 +69,8 @@ class TableController extends Controller
      */
     public function show(Table $table)
     {
-      $user = Auth::user();
-      $view = View::find($user->view()->first()->id);
-      $view->collection_id = $table->collection_id;
-      $view->table_id = $table->id;
-      $view->save();
-      $columns = Column::where('table_id', $table->id)->get();
-      $rows = Row::where('table_id', $table->id)->get();
+      $columns = TableColumn::where('table_id', $table->id)->get();
+      $rows = TableRow::where('table_id', $table->id)->get();
       return [
         'id' => $table->id,
         'name' => $table->name,
@@ -131,12 +120,12 @@ class TableController extends Controller
      */
     public function destroy(Table $table)
     {
-      $rowsToDelete = Row::where('table_id', $table->id)->get();
+      $rowsToDelete = TableRow::where('table_id', $table->id)->get();
       foreach($rowsToDelete as $rowToDelete) {
-        Cell::where('row_id', $rowToDelete->id)->delete();
-        Row::destroy($rowToDelete->id);
+        TableCell::where('table_row_id', $rowToDelete->id)->delete();
+        TableRow::destroy($rowToDelete->id);
       }
-      Column::where('table_id', $table->id)->delete();
+      TableColumn::where('table_id', $table->id)->delete();
       return Table::destroy($table->id);
     }
 }

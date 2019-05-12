@@ -4,22 +4,27 @@
 import React from 'react'
 import { number, shape, string } from 'prop-types'
 
+import Table from './Table'
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const Module = ({
-  module: {
-    type,
-    typeId
-  }
+  module
 }) => {
+  
   const modules = {
+    TABLE: Table
   }
-  if (typeof modules[type] !== 'undefined') {
-    const ModuleType = modules[type]
-    return <ModuleType />
+
+  if (typeof modules[module.type] !== 'undefined') {
+    const ModuleType = modules[module.type]
+    return (
+      <ModuleType
+        moduleTypeId={module.typeId}/>
+    )
   }
-  return type + '-' + typeId
+  return null
 }
 
 //-----------------------------------------------------------------------------

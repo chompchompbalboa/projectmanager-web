@@ -2,6 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { string } from 'prop-types'
 import styled from 'styled-components'
 
 import { colors, layout } from '../config'
@@ -10,13 +11,22 @@ import { colors, layout } from '../config'
 // Component
 //-----------------------------------------------------------------------------
 const AppContentView = ({
-  children
+  children,
+  className // Required by styled components
 }) => {
   return (
-    <Container>
+    <Container
+      className={className}>
       {children}
     </Container>
   )
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+AppContentView.propTypes = {
+  className: string
 }
 
 //-----------------------------------------------------------------------------

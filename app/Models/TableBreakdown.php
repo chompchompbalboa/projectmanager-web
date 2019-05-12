@@ -27,7 +27,7 @@ class TableBreakdown extends Model
    * Get all the formulas that belong to this breakdown
    */
   public function formulas() {
-    return $this->hasMany('App\Models\Formula');
+    return $this->hasMany('App\Models\TableBreakdownFormula');
   }
   public function getFormulasAttribute() {
     return $this->formulas()->get();

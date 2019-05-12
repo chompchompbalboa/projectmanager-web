@@ -6,7 +6,7 @@ import { bool, func, number, object, oneOfType, shape, string } from 'prop-types
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { colors, layout, timing } from '../../_config'
+import { colors, layout, timing } from '../config'
 
 import {
   updateCell as updateCellAction
@@ -126,8 +126,9 @@ TableCell.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.td`
   height: 100%;
-	padding: calc(${ layout.TABLE_PADDING }/2) calc(${ layout.TABLE_PADDING }/4);
-  border: 0.25px solid ${ colors.TABLE_BORDER };
+  padding: ${ layout.TABLE_CELL_PADDING };
+  border-bottom: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
+  border-right: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
   font-weight: ${props => props.fontWeight};
 `
 

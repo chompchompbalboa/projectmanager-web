@@ -49,17 +49,19 @@ Route::prefix('app')->group(function () {
   });
 
   Route::resources([
-    'breakdowns' => 'BreakdownController',
-    'cells' => 'CellController',
+    // Structure
     'collections' => 'CollectionController',
-    'columns' => 'ColumnController',
     'containers' => 'ContainerController',
-    'formulas' => 'FormulaController',
     'modules' => 'ModuleController',
-    'rows' => 'RowController',
     'structure' => 'StructureController',
     'tables' => 'TableController',
-    'views' => 'ViewController'
+    'views' => 'ViewController',
+    // Table
+    'tables/breakdowns' => 'TableBreakdownController',
+    'tables/cells' => 'TableCellController',
+    'tables/columns' => 'TableColumnController',
+    'tables/breakdowns/formulas' => 'TableBreakdownFormulaController',
+    'tables/rows' => 'TableRowController'
   ]);
 });
 

@@ -9,6 +9,7 @@ import containerReducers from './container/containerReducers'
 import moduleReducers from './module/moduleReducers'
 import organizationReducers from './organization/organizationReducers'
 import structureReducers from './structure/structureReducers'
+import tableReducers from './table/tableReducers'
 import userReducers from './user/userReducers'
 import viewReducers from './view/viewReducers'
 
@@ -22,6 +23,7 @@ export default combineReducers({
   module: moduleReducers,
   organization: organizationReducers,
   structure: structureReducers,
+  table: tableReducers,
   user: userReducers,
   view: viewReducers
 })

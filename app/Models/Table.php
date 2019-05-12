@@ -17,17 +17,10 @@ class Table extends Model
   protected $appends = ['breakdowns', 'rows', 'columns'];
   
   /**
-   * Get the project this table belongs to
-   */
-  public function project() {
-    return $this->belongsTo('App\Models\Project');
-  }
-  
-  /**
    * Get all the rows that belong to this table
    */
   public function rows() {
-    return $this->hasMany('App\Models\Row');
+    return $this->hasMany('App\Models\TableRow');
   }
   public function getRowsAttribute() {
     return $this->rows()->get();
@@ -37,7 +30,7 @@ class Table extends Model
    * Get all the breakdowns that belong to this table
    */
   public function breakdowns() {
-    return $this->hasMany('App\Models\Breakdown');
+    return $this->hasMany('App\Models\TableBreakdown');
   }
   public function getBreakdownsAttribute() {
     return $this->breakdowns()->get();
@@ -47,7 +40,7 @@ class Table extends Model
    * Get all the columns that belong to this table
    */
   public function columns() {
-    return $this->hasMany('App\Models\Column');
+    return $this->hasMany('App\Models\TableColumn');
   }
   public function getColumnsAttribute() {
     return $this->columns()->get();

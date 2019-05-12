@@ -22,7 +22,7 @@ const createBreakdownReducer = (tableId) => ({
 const createBreakdownServer = (tableId) => {
   return (dispatch, getState) => {
     const newBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id < 0)
-    mutation.createBreakdown(tableId, newBreakdown).then(breakdownIds => {
+    mutation.createTableBreakdown(tableId, newBreakdown).then(breakdownIds => {
       const {
         breakdownId,
         nextBreakdownId
@@ -63,7 +63,7 @@ const createBreakdownFormulaReducer = (tableId, breakdownId, defaultColumnId) =>
 const createBreakdownFormulaServer = (tableId, breakdownId) => {
   return (dispatch, getState) => {
     const newFormula = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId).formulas.find(formula => formula.id < 0)
-    mutation.createFormula(breakdownId, newFormula).then(formulaIds => {
+    mutation.createTableBreakdownFormula(breakdownId, newFormula).then(formulaIds => {
       const {
         formulaId,
         nextFormulaId
@@ -112,7 +112,7 @@ const createColumnReducer = (columnId, beforeOrAfter) => ({
 const createColumnServer = (newColumn, rowIds, columnPositions) => {
   return (dispatch, getState) => {
     dispatch(setStatus('SAVING'))
-    mutation.createColumn(newColumn, rowIds, columnPositions).then(saveResults => {
+    mutation.createTableColumn(newColumn, rowIds, columnPositions).then(saveResults => {
       const {
         nextCellIds,
         nextColumnId,
@@ -159,7 +159,7 @@ const createRowReducer = () => ({
 const createRowServer = newRow => {
   return (dispatch, getState) => {
     dispatch(setStatus('ADDING_ROW'))
-    mutation.createRow(newRow).then(savedRow => {
+    mutation.createTableRow(newRow).then(savedRow => {
       const {
         nextCellIds,
         nextRowId,
@@ -234,7 +234,7 @@ const deleteBreakdownReducer = (tableId, breakdownId) => ({
 })
 const deleteBreakdownServer = (tableId, breakdownId) => {
   return (dispatch, getState) => {
-    mutation.deleteBreakdown(breakdownId).then(success => {
+    mutation.deleteTableBreakdown(breakdownId).then(success => {
       if(success) {
         if(tableId === getState().table.id && getState().table.breakdown !== null && getState().table.breakdown.id === breakdownId) {
           dispatch(setBreakdown(tableId, null))
@@ -263,7 +263,7 @@ const deleteBreakdownFormulaReducer = (tableId, breakdownId, formulaId) => ({
 })
 const deleteBreakdownFormulaServer = (tableId, breakdownId, formulaId) => {
   return (dispatch, getState) => {
-    mutation.deleteFormula(formulaId).then(success => {
+    mutation.deleteTableFormula(formulaId).then(success => {
       if(success) {
         if(tableId === getState().table.id && getState().table.breakdown !== null) {
           const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
@@ -304,7 +304,7 @@ const deleteColumnReducer = columnId => ({
 })
 const deleteColumnServer = columnId => {
   return async dispatch => {
-    return mutation.deleteColumn(columnId).then(success => {
+    return mutation.deleteTableColumn(columnId).then(success => {
       success && dispatch(setStatus('DELETED'))
     })
   }
@@ -326,7 +326,7 @@ const deleteRowReducer = rowId => ({
 })
 const deleteRowServer = rowId => {
   return async dispatch => {
-    return mutation.deleteRow(rowId).then(success => {
+    return mutation.deleteTableRow(rowId).then(success => {
       success && dispatch(setStatus('DELETED'))
     })
   }
@@ -445,7 +445,7 @@ const updateBreakdownFormulaColumnIdReducer = (tableId, breakdownId, formulaId, 
 const updateBreakdownFormulaServer = (tableId, breakdownId, formulaId) => {
   return (dispatch, getState) => {
     const nextFormula = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId).formulas.find(formula => formula.id === formulaId)
-    mutation.updateFormula(formulaId, nextFormula).then(formula => {
+    mutation.updateTableBreakdownFormula(formulaId, nextFormula).then(formula => {
       if(tableId === getState().table.id && getState().table.breakdown !== null) {
         const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
         dispatch(setBreakdown(tableId, nextBreakdown))
@@ -519,7 +519,7 @@ const updateBreakdownNameReducer = (tableId, breakdownId, nextBreakdownName) => 
 const updateBreakdownNameServer = (tableId, breakdownId) => {
   return (dispatch, getState) => {
     const nextBreakdown = getState().table.tables.find(table => table.id === tableId).breakdowns.find(breakdown => breakdown.id === breakdownId)
-    mutation.updateBreakdown(breakdownId, nextBreakdown).then(breakdown => {
+    mutation.updateTableBreakdown(breakdownId, nextBreakdown).then(breakdown => {
       if(tableId === getState().table.id && getState().table.breakdown !== null) {
         dispatch(setBreakdown(tableId, breakdown))
       }
@@ -551,7 +551,7 @@ const updateCellReducer = (rowId, cellId, nextCell) => ({
 const updateCellServer = (rowId, cellId, value) => {
   return dispatch => {
     dispatch(setStatus('UPDATING_CELL'))
-    mutation.updateCell(cellId, value).then(updatedCell => {
+    mutation.updateTableCell(cellId, value).then(updatedCell => {
       dispatch(updateCellReducer(rowId, cellId, updatedCell))
       dispatch(setStatus('UPDATED_CELL'))
     })
@@ -599,7 +599,7 @@ const updateColumnNameServer = columnId => {
     const columns = getState().table.columns
     const columnToSave = columns.find(column => column.id === columnId)
     if(columnToSave.name !== "") {
-      mutation.updateColumn(columnToSave.id, columnToSave).then(success => {
+      mutation.updateTableColumn(columnToSave.id, columnToSave).then(success => {
         if(success) {
           dispatch(setStatus('SAVED'))
         }
@@ -632,7 +632,7 @@ const updateColumnTypeServer = columnId => {
     dispatch(setStatus('SAVING'))
     const columns = getState().table.columns
     const columnToSave = columns.find(column => column.id === columnId)
-    mutation.updateColumn(columnToSave.id, columnToSave).then(success => {
+    mutation.updateTableColumn(columnToSave.id, columnToSave).then(success => {
       if(success) {
         dispatch(setStatus('SAVED'))
       }
@@ -666,7 +666,7 @@ const updateColumnWidthsServer = nextColumnWidths => {
     const columns = getState().table.columns
     nextColumnWidths.map(columnWidth => {
       const columnToSave = columns.find(column => column.id === columnWidth.id)
-      mutation.updateColumn(columnToSave.id, columnToSave).then(success => {
+      mutation.updateTableColumn(columnToSave.id, columnToSave).then(success => {
         if(success) {
           numberOfColumnsSaved < numberOfColumnsToSave - 1 
             ? numberOfColumnsSaved++ 

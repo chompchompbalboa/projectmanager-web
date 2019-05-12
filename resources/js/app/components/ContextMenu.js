@@ -5,7 +5,7 @@ import React, { PureComponent } from 'react'
 import { arrayOf, func, number, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors } from '../../_config'
+import { colors } from '../config'
 
 import Icon from '../components/Icon'
 //-----------------------------------------------------------------------------

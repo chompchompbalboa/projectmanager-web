@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Cell;
-use App\Models\Column;
+use App\Models\TableCell;
+use App\Models\TableColumn;
 
-class ColumnController extends Controller
+class TableColumnController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -38,7 +38,7 @@ class ColumnController extends Controller
     public function store(Request $request)
     {
       $newColumnInput = $request->input('newColumn');
-      $newColumn = new Column;
+      $newColumn = new TableColumn;
       $newColumn->table_id = $newColumnInput['tableId'];
       $newColumn->name = $newColumnInput['name'];
       $newColumn->position = $newColumnInput['position'];
@@ -48,7 +48,7 @@ class ColumnController extends Controller
         // Update the column positions for the table
         $columnPositions = $request->input('columnPositions');
         foreach ($columnPositions as $columnPosition) {
-          $nextColumn = Column::find($columnPosition['id']);
+          $nextColumn = TableColumn::find($columnPosition['id']);
           if ($nextColumn) {
             $nextColumn->position = $columnPosition['position'];
             $nextColumn->save();
@@ -58,10 +58,10 @@ class ColumnController extends Controller
         $rowIds = $request->input('rowIds');
         $newCellIds = [];
         foreach($rowIds as $rowId) {
-          $newCell = new Cell;
+          $newCell = new TableCell;
           $newCell->table_id = $newColumnInput['tableId'];
-          $newCell->column_id = $newColumn->id;
-          $newCell->row_id = $rowId;
+          $newCell->table_column_id = $newColumn->id;
+          $newCell->table_row_id = $rowId;
           $newCell->string = null;
           $newCell->number = null;
           $newCell->boolean = null;
@@ -92,7 +92,7 @@ class ColumnController extends Controller
      * @param  \App\Column  $column
      * @return \Illuminate\Http\Response
      */
-    public function show(Column $column)
+    public function show(TableColumn $column)
     {
         //
     }
@@ -103,7 +103,7 @@ class ColumnController extends Controller
      * @param  \App\Column  $column
      * @return \Illuminate\Http\Response
      */
-    public function edit(Column $column)
+    public function edit(TableColumn $column)
     {
         //
     }
@@ -115,7 +115,7 @@ class ColumnController extends Controller
      * @param  \App\Column  $column
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Column $column)
+    public function update(Request $request, TableColumn $column)
     {
       $column->width = $request->input('column')['width'];
       $column->name = $request->input('column')['name'];
@@ -137,10 +137,10 @@ class ColumnController extends Controller
      * @param  \App\Column  $column
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Column $column)
+    public function destroy(TableColumn $column)
     {
       // Delete all of the cells
-      $deletedRows = Cell::where('column_id', $column->id)->delete();
-      return Column::destroy($column->id);
+      $deletedRows = TableCell::where('table_column_id', $column->id)->delete();
+      return TableColumn::destroy($column->id);
     }
 }

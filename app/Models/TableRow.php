@@ -31,6 +31,6 @@ class TableRow extends Model
    * Get all the cells that belong to this row
    */
   public function cells() {
-    return $this->hasMany('App\Models\Cell');
+    return $this->hasMany('App\Models\TableCell');
   }
 }

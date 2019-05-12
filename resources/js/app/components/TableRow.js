@@ -6,7 +6,7 @@ import { array, bool, func, number, shape } from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 
-import { colors } from '../../_config'
+import { colors } from '../config'
 
 import TableCell from './TableCell'
 

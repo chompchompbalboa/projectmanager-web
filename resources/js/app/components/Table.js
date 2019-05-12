@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { query } from '../../_api'
-import { colors, layout } from '../../_config'
+import { colors } from '../config'
 
 import { 
   createColumn as createColumnAction,
@@ -16,6 +16,7 @@ import {
   deleteColumn as deleteColumnAction,
   deleteRow as deleteRowAction,
   setTable as setTableAction,
+  setTableId as setTableIdAction,
   sortRows as sortRowsAction,
   toggleColumnIsRenaming as toggleColumnIsRenamingAction,
   updateCell as updateCellAction,
@@ -25,7 +26,7 @@ import {
 } from '../redux/table/tableActions'
 
 import Loading from '../components/Loading'
-import TableAction from './TableAction'
+import TableActions from './TableActions'
 import TableContextMenu from './TableContextMenu'
 import TableHeader from './TableHeader'
 import TableRow from './TableRow'
@@ -48,6 +49,7 @@ const mapDispatchToProps = dispatch => ({
   deleteColumn: columnId => dispatch(deleteColumnAction(columnId)),
   deleteRow: rowId => dispatch(deleteRowAction(rowId)),
   setTable: nextTable => dispatch(setTableAction(nextTable)),
+  setTableId: nextTableId => dispatch(setTableIdAction(nextTableId)),
   sortRows: (nextSortColumn, nextSortOrder) => dispatch(sortRowsAction(nextSortColumn, nextSortOrder)),
   toggleColumnIsRenaming: columnId => dispatch(toggleColumnIsRenamingAction(columnId)),
   updateCell: (rowId, cellId, type, value) => dispatch(updateCellAction(rowId, cellId, type, value)),
@@ -69,19 +71,9 @@ class Table extends PureComponent {
     isContextMenuOpen: false,
     isGettingTable: false
   }
-
-  actions = [
-    { icon: "ACTION_CREATE_ROW", onClick: this.props.createRow }
-  ]
   
   componentDidMount = () => {
-    const {
-      columns,
-      rows
-    } = this.props
-    if(rows === null || columns === null) {
-      this.getTable()
-    }
+    this.getTable()
   }
 
   componentDidUpdate = () => {
@@ -104,13 +96,18 @@ class Table extends PureComponent {
     const { 
       createTable,
       id,
-      setTable
+      moduleTypeId,
+      setTable,
+      setTableId,
     } = this.props
     const {
       isGettingTable
     } = this.state
     if(!isGettingTable) {
-      if (id < 0) {
+      if(id === null || id !== moduleTypeId) {
+        setTableId(moduleTypeId)
+      }
+      else if (id < 0) {
         createTable(id)
       }
       else {
@@ -159,11 +156,13 @@ class Table extends PureComponent {
       contextMenuColumnOrRow,
       contextMenuTop,
       contextMenuLeft,
-      isContextMenuOpen
+      isContextMenuOpen,
+      isGettingTable
     } = this.state
-    if (visibleRows !== null && columns !== null) {
+    if (!isGettingTable && visibleRows !== null && columns !== null) {
       return (
         <Container>
+          <TableActions/>
           <TableData>
             <TableBody>
               <TableHeader
@@ -188,15 +187,6 @@ class Table extends PureComponent {
               )})}
             </TableBody>
           </TableData>
-          <TableActions>
-            {this.actions.map(action => {
-              return (
-                <TableAction
-                  key={action.icon}
-                  icon={action.icon}
-                  onClick={() => action.onClick()}/>
-            )})}
-          </TableActions>
           {isContextMenuOpen && 
             <TableContextMenu
               id={contextMenuId}
@@ -223,7 +213,6 @@ class Table extends PureComponent {
 //-----------------------------------------------------------------------------
 Table.propTypes = {
   id: number,
-  actions: array,
   columns: arrayOf(shape({
     defaultSortOrder: oneOf(['ASC', 'DESC'])
   })),
@@ -232,8 +221,10 @@ Table.propTypes = {
   createTable: func,
   deleteColumn: func,
   deleteRow: func,
+  moduleTypeId: number,
   rows: array,
   setTable: func,
+  setTableId: func,
   sortColumn: object,
   sortOrder: oneOf(['ASC', 'DESC']),
   sortRows: func,
@@ -251,34 +242,22 @@ Table.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.div`
   width: 100%;
-	display: flex;
+  display: flex;
+  flex-direction: column;
 `
 
 const TableData = styled.table`
   table-layout: fixed;
   width: 100%;
   height: 100%;
-  margin-right: calc(${ layout.PADDING } / 2);
-	background-color: ${colors.BACKGROUND_SECONDARY};
-	color: ${colors.TEXT_DARK};
+	background-color: ${ colors.TABLE_BACKGROUND };
+	color: ${ colors.TEXT_BLACK };
   border-spacing: 0;
-	box-shadow: 1px 1px 4px ${colors.BOX_SHADOW};
 `
 
 const TableBody = styled.tbody`
   width: 100%;
   height: 100%;
-`
-
-const TableActions = styled.div`
-  position: sticky;
-  top: calc(${ layout.PADDING } / 2);
-  height: 100%;
-  padding: 0 calc(${ layout.PADDING } / 2);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
 `
 
 export default connect(

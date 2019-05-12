@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Models\Formula;
+use App\Models\TableBreakdownFormula;
 
-class FormulaController extends Controller
+class TableBreakdownFormulaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,10 +37,10 @@ class FormulaController extends Controller
     public function store(Request $request)
     {
       $newFormulaInput = $request->input('newFormula');
-      $newFormula = new Formula;
+      $newFormula = new TableBreakdownFormula;
       $newFormula->type = $newFormulaInput['type'];
-      $newFormula->breakdown_id = $request->input('breakdownId');
-      $newFormula->column_id = $newFormulaInput['columnId'];
+      $newFormula->table_breakdown_id = $request->input('breakdownId');
+      $newFormula->table_column_id = $newFormulaInput['columnId'];
       $newFormula->boolean = $newFormulaInput['boolean'];
       $newFormula->datetime = $newFormulaInput['datetime'];
       $newFormula->number = $newFormulaInput['number'];
@@ -82,10 +82,10 @@ class FormulaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Formula $formula)
+    public function update(Request $request, TableBreakdownFormula $formula)
     {
       $nextFormula = $request->input('formula');
-      $formula->column_id = $nextFormula['columnId'];
+      $formula->table_column_id = $nextFormula['columnId'];
       $formula->type = $nextFormula['type'];
       $formula->boolean = $nextFormula['boolean'];
       $formula->datetime = $nextFormula['datetime'];
@@ -101,8 +101,8 @@ class FormulaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Formula $formula)
+    public function destroy(TableBreakdownFormula $formula)
     {
-      return Formula::destroy($formula->id);
+      return TableBreakdownFormula::destroy($formula->id);
     }
 }

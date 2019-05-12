@@ -4,7 +4,7 @@
 const initialState = {
   collectionId: initialData.activeCollectionId,
   containerId: initialData.activeContainerId,
-  content: 'SETTINGS',
+  content: 'CONTAINER',
   settingsContent: 'STRUCTURE',
   viewId: initialData.activeViewId,
   settingsStructureCollectionId: null,

@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import { selectModuleIds, selectModules } from '../redux/module/moduleSelectors'
 
 import AppContentView from './AppContentView'
+import Loading from './Loading'
 import Module from './Module'
 
 //-----------------------------------------------------------------------------
@@ -25,13 +26,21 @@ const AppContainerView = ({
   moduleIds,
   modules
 }) => {
+
+  if(moduleIds !== null) {
+    return (
+      <AppContentView>
+        {moduleIds.map(moduleId => (
+          <Module
+            key={moduleId}
+            module={modules[moduleId]}/>
+        ))}
+      </AppContentView>
+    )
+  }
   return (
     <AppContentView>
-      {moduleIds !== null && moduleIds.map(moduleId => (
-        <Module
-          key={moduleId}
-          module={modules[moduleId]}/>
-      ))}
+      <Loading />
     </AppContentView>
   )
 }

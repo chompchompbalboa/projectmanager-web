@@ -2,70 +2,70 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
+import { func } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { colors, layout } from '../../_config'
+import { colors } from '../config'
 
-import Icon from '../components/Icon'
+import {
+  createRow as createRowAction
+} from '../redux/table/tableActions'
+
+import TableAction from './TableAction'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapDispatchToProps = dispatch => ({
+  createRow: () => dispatch(createRowAction())
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableActions = () => {
+const TableActions = ({
+  createRow
+}) => {
+
+  const actions = [
+    { description: "Add Row", icon: "ACTION_CREATE_ROW", onClick: createRow }
+  ]
+
   return (
     <Container>
-      <ActionContainer>
-        <Icon 
-          icon="ACTION_ADD"
-          size="1.25em"/>
-      </ActionContainer>
-      <ActionContainer>
-        <Icon 
-          icon="ACTION_ADD"
-          size="1.25em"/>
-      </ActionContainer>
-      <ActionContainer>
-        <Icon 
-          icon="ACTION_ADD"
-          size="1.25em"/>
-      </ActionContainer>
-      <ActionContainer>
-        <Icon 
-          icon="ACTION_ADD"
-          size="1.25em"/>
-      </ActionContainer>
-      <ActionContainer>
-        <Icon 
-          icon="ACTION_ADD"
-          size="1.25em"/>
-      </ActionContainer>
+      {actions.map(action => {
+        return (
+          <TableAction
+            key={action.icon}
+            description={action.description}
+            icon={action.icon}
+            onClick={() => action.onClick()}/>
+      )})}
     </Container>
   )
+}
+
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
+TableActions.propTypes = {
+  createRow: func
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  position: fixed;
-  top: calc(${ layout.HEADER_HEIGHT} + (${ layout.PADDING } / 2));
-  padding: 0 calc(${ layout.PADDING } / 2);
+  width: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  background-color: ${ colors.TABLE_ACTIONS_BACKGROUND };
+  border-bottom: 1px dashed ${ colors.TABLE_ACTIONS_BORDER };
 `
 
-const ActionContainer = styled.div`
-  cursor: pointer;
-  background-color: ${ colors.PRIMARY };
-  color: white;
-  padding: 0.25vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  border: 2px solid ${ colors.PRIMARY };
-  border-radius: 5px;
-`
-
-export default TableActions
+export default connect(
+  null,
+  mapDispatchToProps
+)(TableActions)

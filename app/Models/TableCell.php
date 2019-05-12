@@ -19,9 +19,9 @@ class TableCell extends Model
     return $this->attributes['table_id'];
   }
   public function getColumnIdAttribute() {
-    return $this->attributes['column_id'];
+    return $this->attributes['table_column_id'];
   }
   public function getRowIdAttribute() {
-    return $this->attributes['row_id'];
+    return $this->attributes['table_row_id'];
   }
 }

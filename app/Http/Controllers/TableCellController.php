@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TableCell;
+use App\Models\TableColumn;
 use Illuminate\Http\Request;
 
-use App\Models\Breakdown;
-use App\Models\Formula;
-
-class BreakdownController extends Controller
+class TableCellController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,25 +36,16 @@ class BreakdownController extends Controller
      */
     public function store(Request $request)
     {
-      $newBreakdownInput = $request->input('newBreakdown');
-      $newBreakdown = new Breakdown;
-      $newBreakdown->name = $newBreakdownInput['name'];
-      $newBreakdown->table_id =$request->input('tableId');
-      if($newBreakdown->save()) {
-        return [
-          'breakdownId' => $newBreakdownInput['id'],
-          'nextBreakdownId' => $newBreakdown->id
-        ];
-      }
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Cell  $cell
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(TableCell $cell)
     {
         //
     }
@@ -63,10 +53,10 @@ class BreakdownController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Cell  $cell
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(TableCell $cell)
     {
         //
     }
@@ -75,26 +65,27 @@ class BreakdownController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Cell  $cell
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Breakdown $breakdown)
+    public function update(Request $request, TableCell $cell)
     {
-      $nextBreakdown = $request->input('breakdown');
-      $breakdown->name = $nextBreakdown['name'];
-      $breakdown->save();
-      return $breakdown;
+      $value = $request->input('value');
+      $column = TableColumn::find($cell->columnId);
+      $type = strtolower($column->type);
+      $cell->$type = $value;
+      $cell->save();
+      return $cell;
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Cell  $cell
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Breakdown $breakdown)
+    public function destroy(Cell $cell)
     {
-      $deletedFormulas = Formula::where('breakdown_id', $breakdown->id)->delete();
-      return Breakdown::destroy($breakdown->id);
+        //
     }
 }

@@ -15,9 +15,7 @@ const Loading = ({ height, width }) => {
     <Container
       height={height}
       width={width}>
-      <Dot />
-      <Dot />
-      <Dot />
+      Loading...
     </Container>
   )
 }

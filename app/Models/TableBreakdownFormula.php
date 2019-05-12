@@ -16,16 +16,16 @@ class TableBreakdownFormula extends Model
    */
   protected $appends = [ 'breakdownId', 'columnId' ];
   public function getColumnIdAttribute() {
-    return $this->attributes['column_id'];
+    return $this->attributes['table_column_id'];
   }
   public function getBreakdownIdAttribute() {
-    return $this->attributes['breakdown_id'];
+    return $this->attributes['table_breakdown_id'];
   }
   
   /**
    * Get the project this table belongs to
    */
   public function breakdown() {
-    return $this->belongsTo('App\Models\Breakdown');
+    return $this->belongsTo('App\Models\TableBreakdown');
   }
 }

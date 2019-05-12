@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cell;
-use App\Models\Row;
+use App\Models\TableCell;
+use App\Models\TableRow;
 use Illuminate\Http\Request;
 
-class RowController extends Controller
+class TableRowController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,16 +37,16 @@ class RowController extends Controller
     public function store(Request $request)
     {
       $newRowInput = $request->input('newRow');
-      $newRow = new Row;
+      $newRow = new TableRow;
       $newRow->table_id = $newRowInput['tableId'];
       if($newRow->save()) {
         $newCellInputs = $newRowInput['cells'];
         $newCellIds = [];
         foreach($newCellInputs as $newCellInput) {
-          $newCell = new Cell;
+          $newCell = new TableCell;
           $newCell->table_id = $newCellInput['tableId'];
-          $newCell->column_id = $newCellInput['columnId'];
-          $newCell->row_id = $newRow->id;
+          $newCell->table_column_id = $newCellInput['columnId'];
+          $newCell->table_row_id = $newRow->id;
           $newCell->string = $newCellInput['string'];
           $newCell->number = $newCellInput['number'];
           $newCell->boolean = $newCellInput['boolean'];
@@ -72,7 +72,7 @@ class RowController extends Controller
      * @param  \App\Row  $row
      * @return \Illuminate\Http\Response
      */
-    public function show(Row $row)
+    public function show(TableRow $row)
     {
         //
     }
@@ -83,7 +83,7 @@ class RowController extends Controller
      * @param  \App\Row  $row
      * @return \Illuminate\Http\Response
      */
-    public function edit(Row $row)
+    public function edit(TableRow $row)
     {
         //
     }
@@ -95,7 +95,7 @@ class RowController extends Controller
      * @param  \App\Row  $row
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Row $row)
+    public function update(Request $request, TableRow $row)
     {
         //
     }
@@ -106,10 +106,10 @@ class RowController extends Controller
      * @param  \App\Row  $row
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Row $row)
+    public function destroy(TableRow $row)
     {
       // Delete all of the cells
-      $deletedCells = Cell::where('row_id', $row->id)->delete();
-      return Row::destroy($row->id);
+      $deletedCells = TableCell::where('table_row_id', $row->id)->delete();
+      return TableRow::destroy($row->id);
     }
 }

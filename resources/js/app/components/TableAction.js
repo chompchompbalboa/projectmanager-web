@@ -72,7 +72,6 @@ const Container = styled.div`
 const Description = styled.div`
   display: ${ props => props.isDescriptionVisible ? 'block' : 'none' };
   position: absolute;
-  z-index: 10000;
   padding: 0.5vw;
   left: 0;
   top: 100%;

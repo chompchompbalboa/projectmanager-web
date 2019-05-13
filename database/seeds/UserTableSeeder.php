@@ -79,7 +79,7 @@ class UserTableSeeder extends Seeder
                     });
 
                     // Rows
-
+                    /*
                     $rows = factory(App\Models\TableRow::class, 50)->create();
                     $rows->each(function($row) use($columns, $table) {
                       $row->table_id = $table->id;
@@ -95,6 +95,7 @@ class UserTableSeeder extends Seeder
                         $cell->save();
                       });
                     });
+                    */
 
                     // Breakdowns
 

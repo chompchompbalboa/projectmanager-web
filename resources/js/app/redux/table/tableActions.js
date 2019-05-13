@@ -2,6 +2,21 @@
 // Imports
 //-----------------------------------------------------------------------------
 import { mutation } from '../../../_api'
+
+//-----------------------------------------------------------------------------
+// Create Table Row
+//-----------------------------------------------------------------------------
+export const createTableRow = () => {
+  return dispatch => {
+    dispatch(createTableRowReducer())
+    //mutation.createTableRow()
+  }
+}
+
+const createTableRowReducer = () => ({
+  type: 'CREATE_TABLE_ROW'
+})
+
 //-----------------------------------------------------------------------------
 // Set Table
 //-----------------------------------------------------------------------------
@@ -16,7 +31,6 @@ export const setTable = table => ({
 export const updateTableColumn = (columnId, updates) => {
   return dispatch => {
     dispatch(updateTableColumnReducer(columnId, updates))
-    console.log(updates)
     mutation.updateTableColumn(columnId, updates)
   }
 }

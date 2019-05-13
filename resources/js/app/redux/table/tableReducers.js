@@ -16,10 +16,37 @@ const initialState = {
 }
 
 //-----------------------------------------------------------------------------
+// Defaults
+//-----------------------------------------------------------------------------
+const tempId = () => _.random(-100000, -999999)
+
+const defaultCell = (tableId, columnId, rowId) => ({
+  id: tempId(),
+  tableId: tableId,
+  columnId: columnId,
+  rowId: rowId,
+  value: null
+})
+
+
+//-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
 const viewReducers = (state = initialState, action) => {
   switch(action.type) {
+
+    case 'CREATE_TABLE_ROW': {
+      const {
+        columnIds,
+        id
+      } = state
+      const newRowId = tempId()
+      console.log(columnIds)
+      const newRow = columnIds.map(columnId => defaultCell(id, columnId, newRowId))
+      console.log(newRowId)
+      console.log(newRow)
+      return state
+    }
 
     case 'SET_TABLE': {
       const {

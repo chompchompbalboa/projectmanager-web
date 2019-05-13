@@ -1,23 +1,51 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React from 'react'
+import React, { Component } from 'react'
 import { shape, string } from 'prop-types'
 import styled from 'styled-components'
 
 import { colors, layout } from '../config'
 
+import TableCellBoolean from './TableCellBoolean'
+import TableCellDatetime from './TableCellDatetime'
+import TableCellNumber from './TableCellNumber'
+import TableCellString from './TableCellString'
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCell = ({
-  cell
-}) => {
-  return (
-    <Container>
-      {cell.string}
-    </Container>
-  )
+class TableCell extends Component {
+  
+  state = {
+    value: this.props.cell.value
+  }
+
+  tableCellTypes = {
+    BOOLEAN: TableCellBoolean,
+    DATETIME: TableCellDatetime,
+    NUMBER: TableCellNumber,
+    STRING: TableCellString,
+  }
+
+  render() {
+    const {
+      cell: {
+        type
+      }
+    } = this.props
+    const {
+      value
+    } = this.state
+    
+    const TableCellType = this.tableCellTypes[type]
+    console.log(TableCellType)
+    return (
+      <TableCellType
+        onChange={nextValue => this.setState({ value: nextValue })}
+        value={value}/>
+    )
+  }
 }
 
 //-----------------------------------------------------------------------------
@@ -25,7 +53,8 @@ const TableCell = ({
 //-----------------------------------------------------------------------------
 TableCell.propTypes = {
   cell: shape({
-    string: string
+    type: string,
+    value: string
   })
 }
 //-----------------------------------------------------------------------------

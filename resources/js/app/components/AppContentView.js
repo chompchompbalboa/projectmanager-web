@@ -7,6 +7,8 @@ import styled from 'styled-components'
 
 import { colors, layout } from '../config'
 
+import HiddenScrollbarContainer from './HiddenScrollbarContainer'
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -32,7 +34,7 @@ AppContentView.propTypes = {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div`
+const Container = styled(HiddenScrollbarContainer)`
   position: fixed;
   top: ${ layout.CONTAINER_HEADER_HEIGHT };
   left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
@@ -40,7 +42,6 @@ const Container = styled.div`
   height calc(100vh - ${ layout.CONTAINER_HEADER_HEIGHT });
   background-color: ${ colors.CONTAINER_MODULES_BACKGROUND };
   border-top-left-radius: 5px;
-  overflow: scroll;
 `
 
 export default AppContentView

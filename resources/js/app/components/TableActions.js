@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import { colors } from '../config'
 
 import {
-  createRow as createRowAction
+  createTableRow as createTableRowAction
 } from '../redux/table/tableActions'
 
 import TableAction from './TableAction'
@@ -18,18 +18,18 @@ import TableAction from './TableAction'
 // Redux
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
-  createRow: () => dispatch(createRowAction())
+  createTableRow: () => dispatch(createTableRowAction())
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const TableActions = ({
-  createRow
+  createTableRow
 }) => {
 
   const actions = [
-    { description: "Add Row", icon: "ACTION_CREATE_ROW", onClick: createRow }
+    { description: "Add Row", icon: "ACTION_CREATE_ROW", onClick: createTableRow }
   ]
 
   return (
@@ -50,14 +50,14 @@ const TableActions = ({
 // Props
 //-----------------------------------------------------------------------------
 TableActions.propTypes = {
-  createRow: func
+  createTableRow: func
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  z-index: 10;
+  z-index: 500;
   width: 100%;
   position: sticky;
   top: 0;

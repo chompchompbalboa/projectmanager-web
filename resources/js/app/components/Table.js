@@ -85,6 +85,7 @@ const Container = styled.div`
 
 const TableContainer = styled.div`
   width: 100%;
+  z-index: 5;
 `
 
 const Table = styled.table`

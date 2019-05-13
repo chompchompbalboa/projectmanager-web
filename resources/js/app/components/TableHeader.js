@@ -41,7 +41,7 @@ const TableHeader = ({
               columnId={columnId}
               name={column.name}
               width={column.width}
-              zIndex={10000 - index}/>
+              zIndex={100 - index}/>
           )
         })}
       </TableRow>
@@ -60,7 +60,6 @@ TableHeader.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.thead`
-  z-index: 5;
   position: relative;
   height: ${ layout.TABLE_HEADER_HEIGHT };
 `

@@ -74,7 +74,7 @@ class OrganizationTableSeeder extends Seeder
                   });
     
                   // Rows
-      
+                  /*
                   $rows = factory(App\Models\TableRow::class, 50)->create();
                   $rows->each(function($row) use($columns, $table) {
                     $row->table_id = $table->id;
@@ -90,7 +90,8 @@ class OrganizationTableSeeder extends Seeder
                       $cell->save();
                     });
                   });
-    
+                  */
+                  
                   // Breakdowns
                   
                   $breakdowns = factory(App\Models\TableBreakdown::class, rand(1, 3))->create();

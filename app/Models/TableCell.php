@@ -9,7 +9,7 @@ class TableCell extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'tableId', 'columnId', 'rowId', 'string', 'number', 'boolean', 'datetime'];
+  protected $visible = ['id', 'tableId', 'columnId', 'rowId', 'value'];
 
   /**
    * Rename table columns from snake case to camel case

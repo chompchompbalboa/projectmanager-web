@@ -18,10 +18,7 @@ class CreateTableCell extends Migration
             $table->unsignedInteger('table_id');
             $table->unsignedInteger('table_column_id');
             $table->unsignedInteger('table_row_id');
-            $table->string('string')->nullable();
-            $table->float('number')->nullable();
-            $table->boolean('boolean')->nullable();
-            $table->dateTime('datetime')->nullable();
+            $table->string('value')->nullable();
             $table->timestamps();
 
             $table->foreign('table_id')->references('id')->on('tables');

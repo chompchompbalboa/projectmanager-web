@@ -42,7 +42,7 @@ export default class ResizeContainer extends Component {
       startPageX
     } = this.state
     window.removeEventListener('mousemove', this.handleMouseMove)
-    window.removeEventListener('mouseup', this.handleResizeMouseUp)
+    window.removeEventListener('mouseup', this.handleMouseUp)
     onResize(currentPageX - startPageX)
     this.setState({
       currentPageX: null,

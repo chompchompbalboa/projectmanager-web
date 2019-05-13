@@ -4,12 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Table;
+use App\Http\Controllers\TableController;
+
 class Module extends Model
 {
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'type', 'typeId', 'name'];
+  protected $visible = ['id', 'name', 'type', 'typeId', 'payload'];
 
   /**
    * Define which attributes will be mass assignable
@@ -19,13 +22,24 @@ class Module extends Model
   /**
    * Custom attributes
    */
-  protected $appends = ['typeId'];
+  protected $appends = ['payload', 'typeId'];
 
   /**
    * Rename table columns from snake case to camel case
    */
   public function getTypeIdAttribute() {
     return $this->attributes['type_id'];
+  }
+
+  /**
+   * Get the module's payload
+   */
+  public function getPayloadAttribute() {
+    switch($this->attributes['type']) {
+      case 'TABLE':
+        return TableController::show(Table::find($this->attributes['type_id']));
+      break;
+    }
   }
   
   /**

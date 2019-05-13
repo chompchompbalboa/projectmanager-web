@@ -21,7 +21,7 @@ const Module = ({
     const ModuleType = modules[module.type]
     return (
       <ModuleType
-        moduleTypeId={module.typeId}/>
+        {...{ [module.type.toLowerCase()]: module.payload }}/> // Assign the correct prop name to the payload while passing it through
     )
   }
   return null

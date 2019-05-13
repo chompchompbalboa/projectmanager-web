@@ -214,11 +214,8 @@ export const updateTableCell = async (id, value) => {
   })
 }
 
-export const updateTableColumn = async (id, column) => {  
-  return axios.patch('/app/tables/columns/' + id, {
-    id: id,
-    column: column
-  }).then(response => {
+export const updateTableColumn = async (id, updates) => {  
+  return axios.patch('/app/tables/columns/' + id, updates).then(response => {
     return response.data
   })
 }

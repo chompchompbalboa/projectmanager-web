@@ -12,6 +12,11 @@ class TableColumn extends Model
   protected $visible = ['id', 'tableId', 'name', 'position', 'width', 'type'];
 
   /**
+   * Define which attributes will be mass assignable
+   */
+  protected $fillable = ['name', 'position', 'width', 'type'];
+
+  /**
    * Rename table columns from snake case to camel case
    */
   protected $appends = [ 'tableId' ];

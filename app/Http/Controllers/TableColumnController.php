@@ -117,18 +117,8 @@ class TableColumnController extends Controller
      */
     public function update(Request $request, TableColumn $column)
     {
-      $column->width = $request->input('column')['width'];
-      $column->name = $request->input('column')['name'];
-      $column->position = $request->input('column')['position'];
-      $column->type = $request->input('column')['type'];
-      if ($column->save()) {
-        return $column;
-      }
-      else {
-        return [
-          "success" => false
-        ];
-      }
+      $column->update($request->all());
+      return response()->json($column, 200);
     }
 
     /**

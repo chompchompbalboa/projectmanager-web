@@ -2,56 +2,57 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, object, shape } from 'prop-types'
+import { array, object } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import {
-  selectTableCells
+  selectTableRowIds,
+  selectTableRows
 } from '../redux/table/tableSelectors'
 
-import TableCell from './TableCell'
+import TableRow from './TableRow'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  cells: selectTableCells(state)
+  rowIds: selectTableRowIds(state),
+  rows: selectTableRows(state)
 })
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableRow = ({
-  cells,
-  row
+const TableRows = ({
+  rowIds,
+  rows
 }) => {
   return (
     <Container>
-      {row.cells && row.cells.map(cellId => {
-        const cell = cells[cellId]
+      {rowIds && rowIds.map(rowId => {
+        const row = rows[rowId]
         return (
-          <TableCell 
-            key={cellId}
-            cell={cell}/>
+          <TableRow
+            key={rowId}
+            row={row}/> 
         )
       })}
     </Container>
   )
 }
+
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-TableRow.propTypes = {
-  cells: object,
-  row: shape({
-    cells: array
-  })
+TableRows.propTypes = {
+  rowIds: array,
+  rows: object
 }
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.tr``
+const Container = styled.tbody``
 
 export default connect(
   mapStateToProps
-)(TableRow)
+)(TableRows)

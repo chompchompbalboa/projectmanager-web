@@ -67,7 +67,7 @@ class TableController extends Controller
      * @param  \App\Table  $table
      * @return \Illuminate\Http\Response
      */
-    public function show(Table $table)
+    public static function show(Table $table)
     {
       $columns = TableColumn::where('table_id', $table->id)->get();
       $rows = TableRow::where('table_id', $table->id)->get();

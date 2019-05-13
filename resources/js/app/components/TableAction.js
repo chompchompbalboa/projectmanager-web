@@ -5,7 +5,7 @@ import React, { Component } from 'react'
 import { func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import { colors } from '../config'
+import { colors, layout } from '../config'
 
 import Icon from '../components/Icon'
 //-----------------------------------------------------------------------------
@@ -33,7 +33,7 @@ class TableAction extends Component {
         onMouseLeave={() => this.setState({ isDescriptionVisible: false })}>
         <Icon 
           icon={icon}
-          size="1.25em"/>
+          size={"calc(" + layout.TABLE_ACTIONS_HEIGHT + "/ 2)"}/>
         <Description
           isDescriptionVisible={isDescriptionVisible}>
           {description}
@@ -58,9 +58,10 @@ TableAction.propTypes = {
 const Container = styled.div`
   position: relative;
   cursor: pointer;
+  height: ${ layout.TABLE_ACTIONS_HEIGHT };
+  width: ${ layout.TABLE_ACTIONS_HEIGHT };
   background-color: ${ colors.TABLE_ACTION_BACKGROUND };
   color: ${ colors.TEXT_BLACK };
-  padding: 0.5vw;
   display: flex;
   flex-direction: column;
   justify-content: center;

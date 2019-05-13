@@ -33,7 +33,7 @@ $factory->define(App\Models\TableColumn::class, function (Faker $faker) {
     return [
       'table_id' => 1,
       'position' => 1,
-      'width' => 0.2,
+      'width' => 250,
       'name' => $faker->streetSuffix,
       'type' => $type['type'],
     ];

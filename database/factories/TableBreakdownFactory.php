@@ -15,7 +15,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\TableBreakdown::class, function (Faker $faker) {
     return [
-      'table_id' => 1,
+      'table_id' => null,
       'name' => $faker->text($faker->numberBetween(5, 15)),
     ];
 });

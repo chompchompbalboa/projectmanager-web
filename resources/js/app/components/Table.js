@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, func, number, shape } from 'prop-types'
+import { array, func, number, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
@@ -68,7 +68,7 @@ class TableComponent extends Component {
 TableComponent.propTypes = {
   setTable: func,
   table: shape({
-    id: number,
+    id: string,
     columns: array,
     rows: array
   }),

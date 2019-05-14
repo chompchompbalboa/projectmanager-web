@@ -51,10 +51,11 @@ const TableHeaderCell = ({
 // Props
 //-----------------------------------------------------------------------------
 TableHeaderCell.propTypes = {
-  columnId: number,
+  columnId: string,
   name: string,
   updateTableColumn: func,
-  width: number
+  width: number,
+  zIndex: number
 }
 
 //-----------------------------------------------------------------------------

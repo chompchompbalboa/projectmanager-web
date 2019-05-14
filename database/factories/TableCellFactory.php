@@ -15,9 +15,9 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\TableCell::class, function (Faker $faker) {
     return [
-      'table_id' => 1,
-      'table_column_id' => 1,
-      'table_row_id' => 1,
+      'table_id' => null,
+      'table_column_id' => null,
+      'table_row_id' => null,
       'value' => $faker->text($faker->numberBetween(10, 100)),
       //'number' => $faker->numberBetween(1, 100),
       //'boolean' => $faker->randomElement([0, 1]),

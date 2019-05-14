@@ -14,8 +14,8 @@ class CreateTableBreakdown extends Migration
     public function up()
     {
         Schema::create('table_breakdowns', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('table_id');
+            $table->uuid('id')->primary();
+            $table->uuid('table_id')->nullable();;
             $table->string('name')->nullable();
             $table->timestamps();
           

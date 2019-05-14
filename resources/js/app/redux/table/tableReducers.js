@@ -16,20 +16,6 @@ const initialState = {
 }
 
 //-----------------------------------------------------------------------------
-// Defaults
-//-----------------------------------------------------------------------------
-const tempId = () => _.random(-100000, -999999)
-
-const defaultCell = (tableId, columnId, rowId) => ({
-  id: tempId(),
-  tableId: tableId,
-  columnId: columnId,
-  rowId: rowId,
-  value: null
-})
-
-
-//-----------------------------------------------------------------------------
 // Reducers
 //-----------------------------------------------------------------------------
 const viewReducers = (state = initialState, action) => {
@@ -37,15 +23,18 @@ const viewReducers = (state = initialState, action) => {
 
     case 'CREATE_TABLE_ROW': {
       const {
-        columnIds,
-        id
-      } = state
-      const newRowId = tempId()
-      console.log(columnIds)
-      const newRow = columnIds.map(columnId => defaultCell(id, columnId, newRowId))
-      console.log(newRowId)
-      console.log(newRow)
-      return state
+        newCells,
+        newRow
+      } = action
+      //console.log(state)
+      const nextState = {
+        ...state,
+        cells: { ...state.cells, ...newCells },
+        rows: { ...state.rows, [newRow.id]: newRow },
+        rowIds: [ ...state.rowIds, newRow.id ]
+      }
+      //console.log(nextState)
+      return nextState
     }
 
     case 'SET_TABLE': {
@@ -56,11 +45,11 @@ const viewReducers = (state = initialState, action) => {
       return {
         ...state,
         id: table.id,
-        cells: normalizedTable.entities.cells,
-        columns: normalizedTable.entities.columns,
-        columnIds: normalizedTable.entities.table[table.id].columns,
-        rows: normalizedTable.entities.rows,
-        rowIds: normalizedTable.entities.table[table.id].rows
+        cells: normalizedTable.entities.cells || {},
+        columns: normalizedTable.entities.columns || {},
+        columnIds: normalizedTable.entities.table[table.id].columns || [],
+        rows: normalizedTable.entities.rows || {},
+        rowIds: normalizedTable.entities.table[table.id].rows || [] 
       }
     }
 

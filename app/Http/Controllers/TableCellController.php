@@ -36,7 +36,7 @@ class TableCellController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      return TableCell::create($request->all());
     }
 
     /**

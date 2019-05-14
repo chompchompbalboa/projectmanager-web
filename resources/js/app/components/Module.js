@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { number, shape, string } from 'prop-types'
+import { shape, string } from 'prop-types'
 
 import Table from './Table'
 
@@ -33,7 +33,7 @@ const Module = ({
 Module.propTypes = {
   module: shape({
     type: string,
-    typeId: number
+    typeId: string
   })
 }
 

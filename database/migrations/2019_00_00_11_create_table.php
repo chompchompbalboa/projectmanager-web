@@ -14,7 +14,7 @@ class CreateTable extends Migration
     public function up()
     {
         Schema::create('tables', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->unsignedInteger('organization_id')->nullable();
             $table->unsignedInteger('container_id')->nullable();
             $table->unsignedInteger('collection_id')->nullable();

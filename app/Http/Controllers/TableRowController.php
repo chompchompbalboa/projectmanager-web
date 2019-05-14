@@ -25,7 +25,7 @@ class TableRowController extends Controller
      */
     public function create()
     {
-        //
+      //
     }
 
     /**
@@ -36,34 +36,11 @@ class TableRowController extends Controller
      */
     public function store(Request $request)
     {
-      $newRowInput = $request->input('newRow');
-      $newRow = new TableRow;
-      $newRow->table_id = $newRowInput['tableId'];
-      if($newRow->save()) {
-        $newCellInputs = $newRowInput['cells'];
-        $newCellIds = [];
-        foreach($newCellInputs as $newCellInput) {
-          $newCell = new TableCell;
-          $newCell->table_id = $newCellInput['tableId'];
-          $newCell->table_column_id = $newCellInput['columnId'];
-          $newCell->table_row_id = $newRow->id;
-          $newCell->string = $newCellInput['string'];
-          $newCell->number = $newCellInput['number'];
-          $newCell->boolean = $newCellInput['boolean'];
-          $newCell->datetime = $newCellInput['datetime'];
-          if($newCell->save()) {
-            array_push($newCellIds, [
-              'cellId' => $newCellInput['id'],
-              'nextCellId' => $newCell->id,
-            ]);
-          }
-        }
-        return [
-          'rowId' => $newRowInput['id'],
-          'nextRowId' => $newRow->id,
-          'nextCellIds' => $newCellIds,
-        ];
+      $tableRow = TableRow::create($request->input('newRow'));
+      foreach($request->input('newCells') as $newCell) {
+        TableCell::create($newCell);
       }
+      return response()->json($tableRow, 200);
     }
 
     /**

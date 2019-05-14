@@ -140,9 +140,10 @@ export const createTableColumn = async (newColumn, rowIds, columnPositions) => {
   })
 }
 
-export const createTableRow = async (newRow) => {  
+export const createTableRow = async (newRow, newCells) => {  
   return axios.post('/app/tables/rows', {
-    newRow: newRow
+    newRow: newRow,
+    newCells: newCells
   }).then(response => {
     return response.data
   })

@@ -15,6 +15,6 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\TableRow::class, function (Faker $faker) {
     return [
-      'table_id' => 1
+      'table_id' => null
     ];
 });

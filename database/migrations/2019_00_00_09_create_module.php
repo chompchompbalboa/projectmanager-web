@@ -17,7 +17,7 @@ class CreateModule extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('type');
-            $table->unsignedInteger('type_id')->nullable();
+            $table->uuid('type_id')->nullable();
             $table->timestamps();
         });
     }

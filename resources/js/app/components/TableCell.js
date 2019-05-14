@@ -2,16 +2,25 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { shape, string } from 'prop-types'
+import { connect } from 'react-redux'
+import { object, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
 import { colors, layout } from '../config'
+
+import { selectTableColumns } from '../redux/table/tableSelectors'
 
 import TableCellBoolean from './TableCellBoolean'
 import TableCellDatetime from './TableCellDatetime'
 import TableCellNumber from './TableCellNumber'
 import TableCellString from './TableCellString'
 
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapStateToProps = state => ({
+  columns: selectTableColumns(state)
+})
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
@@ -30,20 +39,20 @@ class TableCell extends Component {
 
   render() {
     const {
-      cell: {
-        type
-      }
+      cell,
+      columns
     } = this.props
     const {
       value
     } = this.state
     
-    const TableCellType = this.tableCellTypes[type]
-    console.log(TableCellType)
+    const TableCellType = this.tableCellTypes[columns[cell.columnId].type]
     return (
-      <TableCellType
-        onChange={nextValue => this.setState({ value: nextValue })}
-        value={value}/>
+      <Container>
+        <TableCellType
+          onChange={nextValue => this.setState({ value: nextValue })}
+          value={value}/>
+      </Container>
     )
   }
 }
@@ -55,7 +64,8 @@ TableCell.propTypes = {
   cell: shape({
     type: string,
     value: string
-  })
+  }),
+  columns: object
 }
 //-----------------------------------------------------------------------------
 // Styled Components
@@ -66,4 +76,6 @@ const Container = styled.td`
   border-right: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
 `
 
-export default TableCell
+export default connect(
+  mapStateToProps
+)(TableCell)

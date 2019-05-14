@@ -14,16 +14,16 @@ class CreateTableCell extends Migration
     public function up()
     {
         Schema::create('table_cells', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('table_id');
-            $table->unsignedInteger('table_column_id');
-            $table->unsignedInteger('table_row_id');
-            $table->string('value')->nullable();
-            $table->timestamps();
+          $table->uuid('id')->primary();
+          $table->uuid('table_id')->nullable();;
+          $table->uuid('table_column_id')->nullable();;
+          $table->uuid('table_row_id')->nullable();;
+          $table->string('value')->nullable();
+          $table->timestamps();
 
-            $table->foreign('table_id')->references('id')->on('tables');
-            $table->foreign('table_column_id')->references('id')->on('table_columns');
-            $table->foreign('table_row_id')->references('id')->on('table_rows');
+          $table->foreign('table_id')->references('id')->on('tables');
+          $table->foreign('table_column_id')->references('id')->on('table_columns');
+          $table->foreign('table_row_id')->references('id')->on('table_rows');
         });
     }
 

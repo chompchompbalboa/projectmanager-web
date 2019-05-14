@@ -14,9 +14,9 @@ class CreateTableBreakdownFormula extends Migration
     public function up()
     {
         Schema::create('table_breakdown_formulas', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('table_breakdown_id');
-            $table->unsignedInteger('table_column_id');
+            $table->uuid('id')->primary();
+            $table->uuid('table_breakdown_id')->nullable();;
+            $table->uuid('table_column_id')->nullable();;
             $table->string('type');
             $table->string('string')->nullable();
             $table->float('number')->nullable();

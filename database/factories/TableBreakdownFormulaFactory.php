@@ -15,8 +15,8 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\TableBreakdownFormula::class, function (Faker $faker) {
     return [
-      'table_breakdown_id' => 1,
-      'table_column_id' => 1,
+      'table_breakdown_id' => null,
+      'table_column_id' => null,
       'type' => $faker->randomElement(["EQUALS", "GREATER_THAN", "LESS_THAN"]),
       'string' => null,
       'number' => null,

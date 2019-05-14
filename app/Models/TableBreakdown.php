@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TableBreakdown extends Model
 {  
+  use Traits\UsesUuid;
+
   /**
    * Define which attributes will be visible
    */

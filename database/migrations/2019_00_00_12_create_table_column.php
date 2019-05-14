@@ -14,8 +14,8 @@ class CreateTableColumn extends Migration
     public function up()
     {
         Schema::create('table_columns', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('table_id');
+            $table->uuid('id')->primary();
+            $table->uuid('table_id')->nullable();
             $table->string('name')->nullable();
             $table->string('type');
             $table->unsignedInteger('position');

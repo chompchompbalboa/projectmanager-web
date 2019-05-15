@@ -57,7 +57,7 @@ TableActions.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  z-index: 500;
+  z-index: 1000;
   width: 100%;
   position: sticky;
   top: 0;

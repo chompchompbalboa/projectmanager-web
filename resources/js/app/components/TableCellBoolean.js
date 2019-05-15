@@ -2,18 +2,29 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { bool, func, number, oneOfType } from 'prop-types'
+import { func, string } from 'prop-types'
 import styled from 'styled-components'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellBoolean = ({ updateValue, value }) => {
+const TableCellBoolean = ({
+  onBlur,
+  updateValue, 
+  value 
+}) => {
+  
+  const handleChange = nextValue => {
+    updateValue(String(nextValue))
+    window.setTimeout(() => onBlur(), 25)
+  }
+
   return (
     <StyledInput 
        type="checkbox"
-       checked={value === null ? false : value}
-       onChange={(e) => updateValue(e.target.checked)}/>
+       onBlur={onBlur}
+       checked={![null, 'false'].includes(value)}
+       onChange={(e) => handleChange(e.target.checked)}/>
   )
 }
 
@@ -21,8 +32,9 @@ const TableCellBoolean = ({ updateValue, value }) => {
 // Props
 //-----------------------------------------------------------------------------
 TableCellBoolean.propTypes = {
+  onBlur: func,
   updateValue: func,
-  value: oneOfType([bool, number])
+  value: string
 }
 
 //-----------------------------------------------------------------------------

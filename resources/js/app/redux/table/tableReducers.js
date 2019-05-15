@@ -26,14 +26,12 @@ const viewReducers = (state = initialState, action) => {
         newCells,
         newRow
       } = action
-      //console.log(state)
       const nextState = {
         ...state,
         cells: { ...state.cells, ...newCells },
         rows: { ...state.rows, [newRow.id]: newRow },
         rowIds: [ ...state.rowIds, newRow.id ]
       }
-      //console.log(nextState)
       return nextState
     }
 
@@ -50,6 +48,20 @@ const viewReducers = (state = initialState, action) => {
         columnIds: normalizedTable.entities.table[table.id].columns || [],
         rows: normalizedTable.entities.rows || {},
         rowIds: normalizedTable.entities.table[table.id].rows || [] 
+      }
+    }
+
+    case 'UPDATE_TABLE_CELL':  {
+      const {
+        cellId,
+        updates
+      } = action
+      return {
+        ...state, cells: {
+          ...state.cells, [cellId]: {
+            ...state.cells[cellId], ...updates
+          }
+        }
       }
     }
 

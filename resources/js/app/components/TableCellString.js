@@ -10,9 +10,14 @@ import AutosizeTextArea from 'react-autosize-textarea'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellString = ({ updateValue, value }) => {
+const TableCellString = ({ 
+  onBlur,
+  updateValue, 
+  value 
+}) => {
   return (
     <StyledTextarea
+      onBlur={onBlur}
       onChange={(e) => updateValue(e.target.value)}
       value={value === null ? "" : value}/>
   )
@@ -22,6 +27,7 @@ const TableCellString = ({ updateValue, value }) => {
 // Styled Components
 //-----------------------------------------------------------------------------
 TableCellString.propTypes = {
+  onBlur: func,
   updateValue: func,
   value: string
 }

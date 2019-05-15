@@ -14,6 +14,7 @@ import {
 } from '../redux/table/tableSelectors'
 
 import TableHeaderCell from './TableHeaderCell'
+import TableRowHeader from './TableRowHeader'
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -33,6 +34,7 @@ const TableHeader = ({
   return (
     <Container>
       <TableRow>
+        <TableRowHeader />
         {columnIds && columnIds.map((columnId, index) => {
           const column = columns[columnId]
           return (

@@ -8,10 +8,15 @@ import styled from 'styled-components'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellNumber = ({ updateValue, value }) => {
+const TableCellNumber = ({ 
+  onBlur,
+  updateValue, 
+  value 
+}) => {
   return (
       <StyledInput
         type="number"
+        onBlur={onBlur}
         onChange={(e) => updateValue(e.target.value)}
         value={value === null ? "" : value}/>
   )
@@ -21,6 +26,7 @@ const TableCellNumber = ({ updateValue, value }) => {
 // Props
 //-----------------------------------------------------------------------------
 TableCellNumber.propTypes = {
+  onBlur: func,
   updateValue: func,
   value: oneOfType([string, number])
 }

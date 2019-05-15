@@ -70,12 +70,8 @@ class TableCellController extends Controller
      */
     public function update(Request $request, TableCell $cell)
     {
-      $value = $request->input('value');
-      $column = TableColumn::find($cell->columnId);
-      $type = strtolower($column->type);
-      $cell->$type = $value;
-      $cell->save();
-      return $cell;
+      $cell->update($request->all());
+      return response()->json($cell, 200);
     }
 
     /**

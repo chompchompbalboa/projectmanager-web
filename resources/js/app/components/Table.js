@@ -89,7 +89,7 @@ const TableContainer = styled.div`
 `
 
 const Table = styled.table`
-  width: ${ props => props.tableWidth + 'px'};
+  width: calc(${ props => props.tableWidth + 'px'} + 3vw);
   background-color: ${ colors.TABLE_BACKGROUND };
   color: ${ colors.TEXT_BLACK };
   border-spacing: 0;

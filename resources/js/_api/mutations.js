@@ -206,11 +206,8 @@ export const updateTableBreakdownFormula = async (id, formula) => {
   })
 }
 
-export const updateTableCell = async (id, value) => {  
-  return axios.patch('/app/tables/cells/' + id, {
-    id: id,
-    value: value
-  }).then(response => {
+export const updateTableCell = async (id, updates) => {  
+  return axios.patch('/app/tables/cells/' + id, updates).then(response => {
     return response.data
   })
 }

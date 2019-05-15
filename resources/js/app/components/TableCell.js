@@ -8,6 +8,9 @@ import styled from 'styled-components'
 
 import { colors, layout } from '../config'
 
+import { 
+  updateTableCell as updateTableCellAction
+} from '../redux/table/tableActions'
 import { selectTableColumns } from '../redux/table/tableSelectors'
 
 import TableCellBoolean from './TableCellBoolean'
@@ -20,6 +23,10 @@ import TableCellString from './TableCellString'
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
   columns: selectTableColumns(state)
+})
+
+const mapDispatchToProps = dispatch => ({
+  updateTableCell: (cellId, updates) => dispatch(updateTableCellAction(cellId, updates))
 })
 //-----------------------------------------------------------------------------
 // Component
@@ -37,6 +44,19 @@ class TableCell extends Component {
     STRING: TableCellString,
   }
 
+  handleBlur = () => {
+    const {
+      value
+    } = this.state
+    const {
+      cell,
+      updateTableCell,
+    } = this.props
+    if(value && this.props.cell.value !== value) {
+      updateTableCell(cell.id, { value: value })
+    }
+  }
+
   render() {
     const {
       cell,
@@ -50,7 +70,8 @@ class TableCell extends Component {
     return (
       <Container>
         <TableCellType
-          onChange={nextValue => this.setState({ value: nextValue })}
+          onBlur={() => this.handleBlur()}
+          updateValue={nextValue => this.setState({ value: nextValue })}
           value={value}/>
       </Container>
     )
@@ -77,5 +98,6 @@ const Container = styled.td`
 `
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(TableCell)

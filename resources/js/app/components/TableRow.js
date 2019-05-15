@@ -7,31 +7,36 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import {
-  selectTableCells
+  selectTableCells,
+  selectTableColumnIds
 } from '../redux/table/tableSelectors'
 
 import TableCell from './TableCell'
+import TableRowHeader from './TableRowHeader'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  cells: selectTableCells(state)
+  cells: selectTableCells(state),
+  columnIds: selectTableColumnIds(state)
 })
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const TableRow = ({
   cells,
+  columnIds,
   row
 }) => {
   return (
     <Container>
-      {row.cells && row.cells.map(cellId => {
-        const cell = cells[cellId]
+      <TableRowHeader />
+      {row.cells && columnIds && columnIds.map(columnId => {
+        const cell = cells[row.cells.find(cellId => cells[cellId].columnId === columnId)]
         return (
           <TableCell 
-            key={cellId}
+            key={cell.id}
             cell={cell}/>
         )
       })}

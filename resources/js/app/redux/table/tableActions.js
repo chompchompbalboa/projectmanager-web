@@ -58,6 +58,22 @@ export const setTable = table => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Table Cell
+//-----------------------------------------------------------------------------
+export const updateTableCell = (cellId, updates) => {
+  return dispatch => {
+    dispatch(updateTableCellReducer(cellId, updates))
+    mutation.updateTableCell(cellId, updates)
+  }
+}
+
+const updateTableCellReducer = (cellId, updates) => ({
+  type: 'UPDATE_TABLE_CELL',
+  cellId: cellId,
+  updates: updates
+})
+
+//-----------------------------------------------------------------------------
 // Update Table Column
 //-----------------------------------------------------------------------------
 export const updateTableColumn = (columnId, updates) => {

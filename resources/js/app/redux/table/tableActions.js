@@ -50,6 +50,21 @@ const createTableRowReducer = (newRow, newCells) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Delete Table Row
+//-----------------------------------------------------------------------------
+export const deleteTableRow = rowId => {
+  return dispatch => {
+    dispatch(deleteTableRowReducer(rowId))
+    mutation.deleteTableRow(rowId)
+  }
+}
+
+const deleteTableRowReducer = rowId => ({
+  type: 'DELETE_TABLE_ROW',
+  rowId: rowId
+})
+
+//-----------------------------------------------------------------------------
 // Set Table
 //-----------------------------------------------------------------------------
 export const setTable = table => ({

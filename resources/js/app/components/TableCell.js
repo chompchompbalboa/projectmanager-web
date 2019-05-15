@@ -3,7 +3,7 @@
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { object, shape, string } from 'prop-types'
+import { func, object, shape, string } from 'prop-types'
 import styled from 'styled-components'
 
 import { colors, layout } from '../config'
@@ -44,7 +44,7 @@ class TableCell extends Component {
     STRING: TableCellString,
   }
 
-  handleBlur = () => {
+  updateTableCell = () => {
     const {
       value
     } = this.state
@@ -70,7 +70,7 @@ class TableCell extends Component {
     return (
       <Container>
         <TableCellType
-          onBlur={() => this.handleBlur()}
+          updateTableCell={this.updateTableCell}
           updateValue={nextValue => this.setState({ value: nextValue })}
           value={value}/>
       </Container>
@@ -86,7 +86,8 @@ TableCell.propTypes = {
     type: string,
     value: string
   }),
-  columns: object
+  columns: object,
+  updateTableCell: func
 }
 //-----------------------------------------------------------------------------
 // Styled Components

@@ -98,7 +98,7 @@ class TableCell extends PureComponent {
     return (
       <Container>
         <TableCellType
-          updateValue={this.updateValue}
+          updateValue={() => this.updateValue()}
           value={values[type]}/>
       </Container>
     )
@@ -127,8 +127,8 @@ TableCell.propTypes = {
 const Container = styled.td`
   height: 100%;
   padding: ${ layout.TABLE_CELL_PADDING };
-  border-bottom: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
-  border-right: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
+  border-bottom: 1px dashed ${ colors.TABLE_CELL_BORDER };
+  border-right: 1px dashed ${ colors.TABLE_CELL_BORDER };
   font-weight: ${props => props.fontWeight};
 `
 

@@ -9,20 +9,19 @@ import styled from 'styled-components'
 // Component
 //-----------------------------------------------------------------------------
 const TableCellBoolean = ({
-  onBlur,
+  updateTableCell,
   updateValue, 
   value 
 }) => {
   
   const handleChange = nextValue => {
     updateValue(String(nextValue))
-    window.setTimeout(() => onBlur(), 25)
+    window.setTimeout(() => updateTableCell(), 25)
   }
 
   return (
     <StyledInput 
        type="checkbox"
-       onBlur={onBlur}
        checked={![null, 'false'].includes(value)}
        onChange={(e) => handleChange(e.target.checked)}/>
   )
@@ -32,7 +31,7 @@ const TableCellBoolean = ({
 // Props
 //-----------------------------------------------------------------------------
 TableCellBoolean.propTypes = {
-  onBlur: func,
+  updateTableCell: func,
   updateValue: func,
   value: string
 }

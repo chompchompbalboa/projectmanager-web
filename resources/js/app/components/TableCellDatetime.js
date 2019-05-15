@@ -14,17 +14,22 @@ import { date as dateConfig } from '../config'
 // Component
 //-----------------------------------------------------------------------------
 const TableCellDatetime = ({ 
-  onBlur,
+  updateTableCell,
   updateValue, 
   value 
 }) => {
+
+  const handleChange = date => {
+    updateValue(moment(date).format(dateConfig.format))
+    window.setTimeout(() => updateTableCell(), 25)
+  }
+
   return (
     <DatePicker
       autoComplete="new-password"
       customInput={<StyledInput/>}
       selected={value !== null ? moment(value).toDate() : null}
-      onBlur={onBlur}
-      onChange={date => updateValue(moment(date).format(dateConfig.format))}/>
+      onChange={date => handleChange(date)}/>
   )
 }
 
@@ -32,7 +37,7 @@ const TableCellDatetime = ({
 // Props
 //-----------------------------------------------------------------------------
 TableCellDatetime.propTypes = {
-  onBlur: func,
+  updateTableCell: func,
   value: string,
   updateValue: func
 }

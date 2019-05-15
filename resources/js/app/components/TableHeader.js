@@ -34,7 +34,8 @@ const TableHeader = ({
   return (
     <Container>
       <TableRow>
-        <TableRowHeader />
+        <TableRowHeader
+          isTableHeader={true}/>
         {columnIds && columnIds.map((columnId, index) => {
           const column = columns[columnId]
           return (

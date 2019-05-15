@@ -85,8 +85,7 @@ class TableRowController extends Controller
      */
     public function destroy(TableRow $row)
     {
-      // Delete all of the cells
-      $deletedCells = TableCell::where('table_row_id', $row->id)->delete();
-      return TableRow::destroy($row->id);
+      $row->delete();
+      return response()->json(null, 204);
     }
 }

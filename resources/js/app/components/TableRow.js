@@ -31,7 +31,8 @@ const TableRow = ({
 }) => {
   return (
     <Container>
-      <TableRowHeader />
+      <TableRowHeader
+        rowId={row.id}/>
       {row.cells && columnIds && columnIds.map(columnId => {
         const cell = cells[row.cells.find(cellId => cells[cellId].columnId === columnId)]
         return (
@@ -48,6 +49,7 @@ const TableRow = ({
 //-----------------------------------------------------------------------------
 TableRow.propTypes = {
   cells: object,
+  columnIds: array,
   row: shape({
     cells: array
   })

@@ -35,6 +35,19 @@ const viewReducers = (state = initialState, action) => {
       return nextState
     }
 
+    case 'DELETE_TABLE_ROW': {
+      const {
+        rowId
+      } = action
+      const { [rowId]: {}, ...nextRows } = state.rows
+      const nextState = {
+        ...state,
+        rows: nextRows,
+        rowIds: state.rowIds.filter(row => row !== rowId)
+      }
+      return nextState
+    }
+
     case 'SET_TABLE': {
       const {
         table

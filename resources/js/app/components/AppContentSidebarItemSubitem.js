@@ -22,7 +22,7 @@ const mapDispatchToProps = dispatch => ({
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerSidebarCollectionView = ({
+const AppContentSidebarItemSubitem = ({
   children,
   isActiveSubitem,
   onClick,
@@ -41,7 +41,7 @@ const AppContainerSidebarCollectionView = ({
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-AppContainerSidebarCollectionView.propTypes = {
+AppContentSidebarItemSubitem.propTypes = {
   isActiveSubitem: bool,
   onClick: func
 }
@@ -49,17 +49,15 @@ AppContainerSidebarCollectionView.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  padding: 0.25vh 0.5vw;
 `
 
 const Subitem = styled.div`
   cursor: pointer;
   width: 100%;
   font-size: 0.85rem;
-  padding: 0.25vw 0.5vw;
+  padding: 0.375vw 0.5vw 0.375vw 1.5vw;
   color: ${ colors.TEXT_WHITE };
   background-color: ${ props => props.isActiveSubitem ? colors.CONTAINER_SIDEBAR_VIEWS_ACTIVE : colors.CONTAINER_SIDEBAR_VIEWS_INACTIVE };
-  border-radius: 5px;
   &:hover {
     background-color: ${ colors.CONTAINER_SIDEBAR_VIEWS_ACTIVE };
   }
@@ -68,4 +66,4 @@ const Subitem = styled.div`
 export default connect(
   null,
   mapDispatchToProps
-)(AppContainerSidebarCollectionView)
+)(AppContentSidebarItemSubitem)

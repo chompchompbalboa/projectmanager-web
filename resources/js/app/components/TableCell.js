@@ -33,7 +33,13 @@ const mapDispatchToProps = dispatch => ({
 //-----------------------------------------------------------------------------
 class TableCell extends Component {
   
+  constructor(props) {
+    super(props)
+    this.tableCellContainer = React.createRef()
+  }
+  
   state = {
+    isActive: false,
     value: this.props.cell.value
   }
 
@@ -44,6 +50,22 @@ class TableCell extends Component {
     STRING: TableCellString,
   }
 
+	checkForClickOutside = e => {
+    if(!this.tableCellContainer.contains(e.target)) {
+		  document.removeEventListener('mousedown', this.checkForClickOutside, false)
+      this.setState({ 
+        isActive: false 
+      })
+    }
+	}
+
+  handleClick = () => {
+    this.setState({
+      isActive: true
+    })
+		document.addEventListener('mousedown', this.checkForClickOutside, false)
+  }
+
   updateTableCell = () => {
     const {
       value
@@ -52,7 +74,7 @@ class TableCell extends Component {
       cell,
       updateTableCell,
     } = this.props
-    if(value && this.props.cell.value !== value) {
+    if(this.props.cell.value !== value) {
       updateTableCell(cell.id, { value: value })
     }
   }
@@ -63,13 +85,18 @@ class TableCell extends Component {
       columns
     } = this.props
     const {
+      isActive,
       value
     } = this.state
     
     const TableCellType = this.tableCellTypes[columns[cell.columnId].type]
     return (
-      <Container>
+      <Container
+        ref={c => (this.tableCellContainer = c)}
+        isActive={isActive}
+        onDoubleClick={() => this.handleClick()}>
         <TableCellType
+          isActive={isActive}
           updateTableCell={this.updateTableCell}
           updateValue={nextValue => this.setState({ value: nextValue })}
           value={value}/>
@@ -94,8 +121,8 @@ TableCell.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled.td`
   padding: ${ layout.TABLE_CELL_PADDING };
-  border-bottom: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
-  border-right: 1px dashed ${ colors.SETTINGS_STRUCTURE_COLUMN_BORDER };
+  border: ${ props => props.isActive ? 'solid ' + colors.TABLE_CELL_ACTIVE_BORDER : 'dashed ' + colors.TABLE_CELL_BORDER };
+  border-width: ${ props => props.isActive ? '1px' : '1px'};
 `
 
 export default connect(

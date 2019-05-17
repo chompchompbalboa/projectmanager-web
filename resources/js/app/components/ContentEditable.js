@@ -25,8 +25,8 @@ const ContentEditable = ({
     <SaneContentEditable
       caretPosition={caretPosition}
       className={className}
-      content={id > 0 ? (value !== null ? value : "") : '. . .'}
-      editable={id > 0 ? editable : false}
+      content={value !== null ? value : ""}
+      editable={editable}
       focus={focus}
       onBlur={onBlur}
       onChange={onChange}

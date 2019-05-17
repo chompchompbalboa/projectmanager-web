@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
-import React from 'react'
+import React, { Component } from 'react'
 import { func, string } from 'prop-types'
 import styled from 'styled-components'
 
@@ -10,17 +10,36 @@ import AutosizeTextArea from 'react-autosize-textarea'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const TableCellString = ({ 
-  updateTableCell,
-  updateValue, 
-  value 
-}) => {
-  return (
-    <StyledTextarea
-      onBlur={() => updateTableCell()}
-      onChange={(e) => updateValue(e.target.value)}
-      value={value === null ? "" : value}/>
-  )
+class TableCellString extends Component {
+  
+  constructor(props) {
+    super(props)
+    this.textarea = React.createRef();
+  }
+  
+  componentDidUpdate = () => {
+    const {
+      isActive
+    } = this.props
+    isActive && this.textarea.current.focus()
+  }
+  
+  render() {
+    const { 
+      isActive,
+      updateTableCell,
+      updateValue, 
+      value 
+    } = this.props
+    return (
+      <StyledTextarea
+        ref={this.textarea}
+        disabled={!isActive}
+        onBlur={() => updateTableCell()}
+        onChange={(e) => updateValue(e.target.value)}
+        value={value === null ? "" : value}/>
+    )
+  }
 }
 
 //-----------------------------------------------------------------------------

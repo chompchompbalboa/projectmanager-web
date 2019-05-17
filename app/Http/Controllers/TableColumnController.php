@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Table;
 use App\Models\TableCell;
 use App\Models\TableColumn;
+use App\Models\TableRow;
 
 class TableColumnController extends Controller
 {
@@ -37,53 +39,11 @@ class TableColumnController extends Controller
      */
     public function store(Request $request)
     {
-      $newColumnInput = $request->input('newColumn');
-      $newColumn = new TableColumn;
-      $newColumn->table_id = $newColumnInput['tableId'];
-      $newColumn->name = $newColumnInput['name'];
-      $newColumn->position = $newColumnInput['position'];
-      $newColumn->type = $newColumnInput['type'];
-      $newColumn->width = $newColumnInput['width'];
-      if ($newColumn->save()) {
-        // Update the column positions for the table
-        $columnPositions = $request->input('columnPositions');
-        foreach ($columnPositions as $columnPosition) {
-          $nextColumn = TableColumn::find($columnPosition['id']);
-          if ($nextColumn) {
-            $nextColumn->position = $columnPosition['position'];
-            $nextColumn->save();
-          }
-        }
-        // Get the new cell ids
-        $rowIds = $request->input('rowIds');
-        $newCellIds = [];
-        foreach($rowIds as $rowId) {
-          $newCell = new TableCell;
-          $newCell->table_id = $newColumnInput['tableId'];
-          $newCell->table_column_id = $newColumn->id;
-          $newCell->table_row_id = $rowId;
-          $newCell->string = null;
-          $newCell->number = null;
-          $newCell->boolean = null;
-          $newCell->datetime = null;
-          if($newCell->save()) {
-            array_push($newCellIds, [
-              'rowId' =>  $rowId,
-              'nextCellId' => $newCell->id,
-            ]);
-          }
-        }
-        return [
-          'columnId' => $newColumnInput['id'],
-          'nextColumnId' => $newColumn->id,
-          'nextCellIds' => $newCellIds
-        ];
+      $tableColumn = TableColumn::create($request->input('newColumn'));
+      foreach($request->input('newCells') as $newCell) {
+        TableCell::create($newCell);
       }
-      else {
-        return [
-          "success" => false
-        ];
-      }
+      return response()->json($tableColumn, 200);
     }
 
     /**
@@ -130,7 +90,12 @@ class TableColumnController extends Controller
     public function destroy(TableColumn $column)
     {
       // Delete all of the cells
-      $deletedRows = TableCell::where('table_column_id', $column->id)->delete();
+      TableCell::where('table_column_id', $column->id)->delete();
+      // If deleting the table's only column, delete any rows as well
+      $columnCount = Table::where('id', $column->tableId)->first()->columns()->count();
+      if($columnCount === 1) {
+        TableRow::where('table_id', $column->tableId)->delete();
+      }
       return TableColumn::destroy($column->id);
     }
 }

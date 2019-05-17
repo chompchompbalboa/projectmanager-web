@@ -65,14 +65,14 @@ class OrganizationTableSeeder extends Seeder
                   $module->save();
     
                   // Columns
-                  
+                  /*
                   $columns = factory(App\Models\TableColumn::class, 5)->create();
                   $columns->each(function($column, $key) use ($table) {
                     $column->table_id = $table->id;
                     $column->position = $key;
                     $column->save();
                   });
-    
+                  */
                   // Rows
                   /*
                   $rows = factory(App\Models\TableRow::class, 50)->create();
@@ -93,7 +93,7 @@ class OrganizationTableSeeder extends Seeder
                   */
                   
                   // Breakdowns
-                  
+                  /*
                   $breakdowns = factory(App\Models\TableBreakdown::class, rand(1, 3))->create();
                   $breakdowns->each(function($breakdown) use($columns, $table) {
                     $breakdown->table_id = $table->id;
@@ -108,6 +108,7 @@ class OrganizationTableSeeder extends Seeder
                       $formula->save();
                     });
                   });
+                  */
                 });
               });
             });

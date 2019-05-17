@@ -16,7 +16,7 @@ class TableColumn extends Model
   /**
    * Define which attributes will be mass assignable
    */
-  protected $fillable = ['name', 'position', 'width', 'type'];
+  protected $fillable = ['id', 'tableId', 'name', 'position', 'width', 'type'];
 
   /**
    * Rename table columns from snake case to camel case
@@ -25,6 +25,9 @@ class TableColumn extends Model
 
   public function getTableIdAttribute() {
     return $this->attributes['table_id'];
+  }
+  public function setTableIdAttribute($value) {
+    $this->attributes['table_id'] = $value;
   }
   
   /**

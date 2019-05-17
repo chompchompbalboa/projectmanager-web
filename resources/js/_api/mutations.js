@@ -130,11 +130,10 @@ export const createTableBreakdownFormula = async (breakdownId, newFormula) => {
   })
 }
 
-export const createTableColumn = async (newColumn, rowIds, columnPositions) => {  
+export const createTableColumn = async (newColumn, newCells) => {  
   return axios.post('/app/tables/columns', {
     newColumn: newColumn,
-    rowIds: rowIds,
-    columnPositions: columnPositions
+    newCells: newCells
   }).then(response => {
     return response.data
   })

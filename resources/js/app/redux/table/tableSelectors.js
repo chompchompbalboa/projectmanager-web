@@ -11,12 +11,25 @@ export const selectTableCells = state => state.table.cells ? state.table.cells :
 //-----------------------------------------------------------------------------
 // Select Table Column Ids
 //-----------------------------------------------------------------------------
-export const selectTableColumnIds = state => state.table.columnIds ? state.table.columnIds : null
+export const selectTableColumnIds = state => {
+  if(state.table.columnIds && state.table.columns) {
+    let orderedColumnIds = []
+    state.table.columnIds.forEach(columnId => {
+      const column = state.table.columns[columnId]
+      orderedColumnIds[column.position] = columnId
+    })
+    return orderedColumnIds
+  }
+  return null
+}
 
 //-----------------------------------------------------------------------------
 // Select Table Columns
 //-----------------------------------------------------------------------------
-export const selectTableColumns = state => state.table.columns ? state.table.columns : null
+export const selectTableColumns = state => {
+  const tableColumns = state.table.columns ? state.table.columns : null
+  return tableColumns
+}
 
 //-----------------------------------------------------------------------------
 // Select Table Row Ids
@@ -33,5 +46,5 @@ export const selectTableRows = state => state.table.rows ? state.table.rows : nu
 //-----------------------------------------------------------------------------
 export const selectTableWidth = createSelector(
   selectTableColumns,
-  columns => columns ? Object.keys(columns).map(columnId => columns[columnId].width).reduce((tableWidth, columnWidth) => tableWidth + columnWidth) : null
+  columns => columns && Object.keys(columns).length !== 0 ? Object.keys(columns).map(columnId => columns[columnId].width).reduce((tableWidth, columnWidth) => tableWidth + columnWidth) : null
 )

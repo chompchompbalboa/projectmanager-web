@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import {
+  selectTableColumnIds,
   selectTableRowIds,
   selectTableRows
 } from '../redux/table/tableSelectors'
@@ -17,6 +18,7 @@ import TableRow from './TableRow'
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
+  columnIds: selectTableColumnIds(state),
   rowIds: selectTableRowIds(state),
   rows: selectTableRows(state)
 })
@@ -24,12 +26,13 @@ const mapStateToProps = state => ({
 // Component
 //-----------------------------------------------------------------------------
 const TableRows = ({
+  columnIds,
   rowIds,
   rows
 }) => {
   return (
     <Container>
-      {rowIds && rowIds.map(rowId => {
+      {columnIds && columnIds.length !== 0 && rowIds && rowIds.map(rowId => {
         const row = rows[rowId]
         return (
           <TableRow
@@ -45,6 +48,7 @@ const TableRows = ({
 // Props
 //-----------------------------------------------------------------------------
 TableRows.propTypes = {
+  columnIds: array,
   rowIds: array,
   rows: object
 }

@@ -15,6 +15,8 @@ use App\Observers\ModuleObserver;
 use App\Models\View;
 use App\Observers\ViewObserver;
 
+use App\Models\TableColumn;
+use App\Observers\TableColumnObserver;
 use App\Models\TableRow;
 use App\Observers\TableRowObserver;
 
@@ -50,6 +52,7 @@ class AppServiceProvider extends ServiceProvider
       View::observe(ViewObserver::class);
       Module::observe(ModuleObserver::class);
 
+      TableColumn::observe(TableColumnObserver::class);
       TableRow::observe(TableRowObserver::class);
     }
 }

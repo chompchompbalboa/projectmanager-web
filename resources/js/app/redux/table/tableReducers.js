@@ -21,6 +21,22 @@ const initialState = {
 const viewReducers = (state = initialState, action) => {
   switch(action.type) {
 
+    case 'CREATE_TABLE_COLUMN': {
+      const {
+        newColumn,
+        newCells,
+        nextRows
+      } = action
+      const nextState = {
+        ...state,
+        cells: { ...state.cells, ...newCells },
+        columnIds: [ ...state.columnIds, newColumn.id ],
+        columns: { ...state.columns, [newColumn.id]: newColumn },
+        rows: nextRows
+      }
+      return nextState
+    }
+
     case 'CREATE_TABLE_ROW': {
       const {
         newCells,
@@ -31,6 +47,22 @@ const viewReducers = (state = initialState, action) => {
         cells: { ...state.cells, ...newCells },
         rows: { ...state.rows, [newRow.id]: newRow },
         rowIds: [ ...state.rowIds, newRow.id ]
+      }
+      return nextState
+    }
+
+    case 'DELETE_TABLE_COLUMN': {
+      const {
+        columnId
+      } = action
+      const { [columnId]: {}, ...nextColumns } = state.columns
+      const nextColumnIds = state.columnIds.filter(column => column !== columnId)
+      const nextState = {
+        ...state,
+        columns: nextColumns,
+        columnIds: nextColumnIds,
+        rowIds: nextColumnIds.length !== 0 ? state.rowIds : [],
+        rows: nextColumnIds.length !== 0 ? state.rows : {}
       }
       return nextState
     }

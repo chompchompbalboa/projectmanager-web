@@ -79,15 +79,18 @@ class Dropdown extends Component {
 	render() {
 		const { 
       children,
+      dropdownLeft,
+      dropdownTop,
       isDropdownVisible,
       isRightAligned,
       width
     } = this.props
-
 		return (
       <Container
         ref={c => (this.dropdownContainer = c)}
         containerMarginLeft={isRightAligned ? '-' + this.dropdownContainer.offsetWidth + 'px' : '0'}
+        dropdownLeft={dropdownLeft}
+        dropdownTop={dropdownTop}
         isDropdownVisible={isDropdownVisible}
         containerWidth={width}>
         { children }
@@ -101,7 +104,9 @@ class Dropdown extends Component {
 //-----------------------------------------------------------------------------
 Dropdown.propTypes = {
   closeDropdown: func,
-	chooseOption: func,
+  chooseOption: func,
+  dropdownLeft: string,
+  dropdownTop: string,
   isDropdownVisible: bool,
   isRightAligned: bool,
   options: array,
@@ -119,7 +124,9 @@ Dropdown.defaultProps = {
 const Container = styled.div`
   z-index: 100000;
 	display: ${ props => props.isDropdownVisible ? 'block' : 'none' };
-  position: absolute;
+  position: ${ props => props.dropdownLeft ? 'fixed' : 'absolute' };
+  top: ${ props => props.dropdownTop ? props.dropdownTop : '0' };
+  left: ${ props => props.dropdownLeft ? props.dropdownLeft : '0' };
   margin-left: ${ props => props.containerMarginLeft };
   background-color: ${ colors.DROPDOWN_BACKGROUND };
   color: white;

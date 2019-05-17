@@ -2,12 +2,15 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, object } from 'prop-types'
+import { array, func, object } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors, layout } from '../config'
 
+import {
+  createTableColumn as createTableColumnAction
+} from '../redux/table/tableActions'
 import {
   selectTableColumnIds,
   selectTableColumns
@@ -25,12 +28,17 @@ const mapStateToProps = state => ({
   columns: selectTableColumns(state)
 })
 
+const mapDispatchToProps = dispatch => ({
+  createTableColumn: () => dispatch(createTableColumnAction())
+})
+
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const TableHeader = ({
   columnIds,
-  columns
+  columns,
+  createTableColumn
 }) => {
   return (
     <Container>
@@ -43,12 +51,14 @@ const TableHeader = ({
             <TableHeaderCell
               key={columnId}
               columnId={columnId}
+              isLastColumn={index === (columnIds.length - 1)}
               name={column.name}
               width={column.width}
               zIndex={100 - index}/>
           )
         })}
-        <AddTableContainer>
+        <AddTableContainer
+          onClick={() => createTableColumn()}>
           <AddTable>
             <Icon
               icon="ADD"
@@ -65,7 +75,8 @@ const TableHeader = ({
 //-----------------------------------------------------------------------------
 TableHeader.propTypes = {
   columnIds: array,
-  columns: object
+  columns: object,
+  createTableColumn: func
 }
 //-----------------------------------------------------------------------------
 // Styled Components
@@ -103,5 +114,6 @@ const AddTable = styled.div`
 `
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(TableHeader)

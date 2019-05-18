@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { func, string } from 'prop-types'
+import { bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
 import AutosizeTextArea from 'react-autosize-textarea'
@@ -31,11 +31,15 @@ class TableCellString extends Component {
       updateValue, 
       value 
     } = this.props
+    const cursor = isActive ? 'text' : 'default'
     return (
       <StyledTextarea
         ref={this.textarea}
-        disabled={!isActive}
-        onBlur={() => updateTableCell()}
+        style={{
+          cursor: cursor
+        }}
+        readOnly={!isActive}
+        onBlur={updateTableCell}
         onChange={(e) => updateValue(e.target.value)}
         value={value === null ? "" : value}/>
     )
@@ -46,6 +50,7 @@ class TableCellString extends Component {
 // Styled Components
 //-----------------------------------------------------------------------------
 TableCellString.propTypes = {
+  isActive: bool,
   updateTableCell: func,
   updateValue: func,
   value: string

@@ -52,7 +52,7 @@ class TableCell extends Component {
 
 	checkForClickOutside = e => {
     if(!this.tableCellContainer.contains(e.target)) {
-		  document.removeEventListener('mousedown', this.checkForClickOutside, false)
+      document.removeEventListener('mousedown', this.checkForClickOutside, false)
       this.setState({ 
         isActive: false 
       })

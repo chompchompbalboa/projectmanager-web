@@ -17,46 +17,26 @@ Route::prefix('app')->group(function () {
 
   Route::get('/', function () {
 
-    $user = Auth::loginUsingId(1, true);
+    $user = Auth::loginUsingId('75e3c4f9-b261-3343-a320-8ee9fb0c931e', true);
     $organization = $user->organization()->first();
-    $active = $user->active()->first();
 
-    $userContainers = $user->containers()->get();
-    $organizationContainers = $organization->containers()->get();
-
-    $containers = $userContainers->merge($organizationContainers);
-    $activeContainerId = $active->containerId !== null ? $active->containerId : (isset($containers[0]) ? $containers[0]->id : null);
-
-    $collections = isset($activeContainerId) ? Container::find($activeContainerId)->collections()->get() : [];
-    $activeCollectionId = $active->collectionId !== null ? $active->collectionId : (isset($collections[0]) ? $collections[0]->id : null);
-    
-    $views = isset($activeCollectionId) ? Collection::find($activeCollectionId)->views()->get() : [];
-    $activeViewId = $active->viewId !== null ? $active->viewId : (isset($views[0]) ? $views[0]->id : null);
-    
-    $modules = isset($activeViewId) ? View::find($activeViewId)->modules()->get() : [];
+    $userFolders = $user->folders()->get();
+    $organizationFolders = $organization->folders()->get();
+    $folders = $userFolders->merge($organizationFolders);
     
     return view('app')->with([
       'user' => $user,
       'organization' => $organization,
-      'activeCollectionId' => $activeCollectionId,
-      'collections' => $collections,
-      'activeContainerId' => $activeContainerId,
-      'containers' => $containers,
-      'modules' => $modules,
-      'activeViewId' => $activeViewId,
-      'views' => $views,
+      'folders' => $folders
     ]);
   });
 
   Route::resources([
-    // Structure
-    'collections' => 'CollectionController',
-    'containers' => 'ContainerController',
+    // Folders
+    'folders' => 'FolderController',
     'modules' => 'ModuleController',
-    'structure' => 'StructureController',
-    'tables' => 'TableController',
-    'views' => 'ViewController',
     // Table
+    'tables' => 'TableController',
     'tables/breakdowns' => 'TableBreakdownController',
     'tables/cells' => 'TableCellController',
     'tables/columns' => 'TableColumnController',

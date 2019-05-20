@@ -15,10 +15,11 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\User::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'id' => '75e3c4f9-b261-3343-a320-8ee9fb0c931e',
+        'organization_id' => '36faa7b2-79d3-11e9-8f9e-2a86e4085a59',
+        'name' => 'Rocky Eastman',
         'email' => 'rockye@dillonworks.com',
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'remember_token' => str_random(10),
-        'organization_id' => 1
+        'remember_token' => str_random(10)
     ];
 });

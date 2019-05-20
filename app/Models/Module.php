@@ -9,10 +9,11 @@ use App\Http\Controllers\TableController;
 
 class Module extends Model
 {
+  public $incrementing = false;
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name', 'type', 'typeId', 'payload'];
+  protected $visible = ['id', 'name', 'type', 'typeId'];
 
   /**
    * Define which attributes will be mass assignable
@@ -22,7 +23,7 @@ class Module extends Model
   /**
    * Custom attributes
    */
-  protected $appends = ['payload', 'typeId'];
+  protected $appends = ['typeId'];
 
   /**
    * Rename table columns from snake case to camel case
@@ -30,22 +31,14 @@ class Module extends Model
   public function getTypeIdAttribute() {
     return $this->attributes['type_id'];
   }
-
-  /**
-   * Get the module's payload
-   */
-  public function getPayloadAttribute() {
-    switch($this->attributes['type']) {
-      case 'TABLE':
-        return TableController::show(Table::find($this->attributes['type_id']));
-      break;
-    }
+  public function setTypeIdAttribute($value) {
+    $this->attributes['type_id'] = $value;
   }
   
   /**
-   * Get all the views this module belongs to
+   * Get all the folder this module belongs to
    */
-  public function views() {
-    return $this->belongsToMany('App\Models\View');
+  public function folder() {
+    return $this->belongsTo('App\Models\Folder');
   }
 }

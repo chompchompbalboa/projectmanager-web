@@ -2,55 +2,54 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { oneOf } from 'prop-types'
+import { array, object } from 'prop-types'
 import { connect } from 'react-redux'
-import styled from 'styled-components'
 
-import { selectActiveContent } from './redux/active/activeSelectors'
+import { selectFolderIds, selectFolders, selectModules } from '../redux/folder/folderSelectors'
 
-import AppFolders from './components/AppFolders'
+import AppContentSidebar from './AppContentSidebar'
+import AppFoldersSidebarFolder from './AppFoldersSidebarFolder'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  activeContent: selectActiveContent(state)
+  folderIds: selectFolderIds(state),
+  folders: selectFolders(state),
+  modules: selectModules(state)
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const App = ({
-  activeContent
+const AppFoldersSidebar = ({ 
+  folderIds,
+  folders,
+  modules
 }) => {
-
-  const contentComponents = {
-    FOLDERS: AppFolders
-  }
-
-  const AppActiveContent = contentComponents[activeContent]
-  
   return (
-    <Container>
-      <AppActiveContent/>
-    </Container>
+    <AppContentSidebar>
+      {folderIds !== null && folderIds.map(folderId => (
+        <AppFoldersSidebarFolder
+          key={folderId}
+          folder={folders[folderId]}
+          folders={folders}
+          level={1}
+          modules={modules}/>
+      ))}
+    </AppContentSidebar>
   )
 }
 
 //-----------------------------------------------------------------------------
-// Redux
+// Props
 //-----------------------------------------------------------------------------
-App.propTypes = {
-  activeContent: oneOf([
-    'FOLDERS'
-  ])
+AppFoldersSidebar.propTypes = {
+  folderIds: array,
+  folders: object,
+  modules: object
 }
-
-//-----------------------------------------------------------------------------
-// Styled Components
-//-----------------------------------------------------------------------------
-const Container = styled.div``
 
 export default connect(
   mapStateToProps
-)(App)
+)(AppFoldersSidebar)

@@ -84,7 +84,9 @@ const viewReducers = (state = initialState, action) => {
       const {
         table
       } = action
+      console.log(table)
       const normalizedTable = tableNormalizer(table)
+      console.log(normalizedTable)
       return {
         ...state,
         id: table.id,

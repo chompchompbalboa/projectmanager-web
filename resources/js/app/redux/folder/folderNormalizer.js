@@ -1,25 +1,21 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
+import { schema, normalize } from 'normalizr';
 
 //-----------------------------------------------------------------------------
-// Update Active Content
+// Schema
 //-----------------------------------------------------------------------------
-export const updateActiveContent = nextActiveContent => {
-  return dispatch => {
-    dispatch(updateActiveContentReducer(nextActiveContent))
-  }
-}
-
-const updateActiveContentReducer = nextActiveContent => ({
-  type: 'UPDATE_ACTIVE_CONTENT',
-  nextActiveContent: nextActiveContent
+const module = new schema.Entity('module');
+const folder = new schema.Entity('folder')
+folder.define({
+  folders: [folder],
+  modules: [module]
 })
+const foldersList = [folder];
 
 //-----------------------------------------------------------------------------
-// Update Active Module Id
+// Normalizer
 //-----------------------------------------------------------------------------
-export const updateActiveModuleId = nextActiveModuleId => ({
-  type: 'UPDATE_ACTIVE_MODULE_ID',
-  nextActiveModuleId: nextActiveModuleId
-})
+const folderNormalizer = folders => normalize(folders, foldersList);
+export default folderNormalizer;

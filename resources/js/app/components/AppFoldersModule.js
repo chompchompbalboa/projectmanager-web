@@ -2,45 +2,34 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { array, object } from 'prop-types'
+import { string } from 'prop-types'
 import { connect } from 'react-redux'
 
-import { selectModuleIds, selectModules } from '../redux/module/moduleSelectors'
+import { selectActiveModuleId } from '../redux/active/activeSelectors'
 
 import AppContentView from './AppContentView'
-import Loading from './Loading'
 import Module from './Module'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  moduleIds: selectModuleIds(state),
-  modules: selectModules(state)
+  activeModuleId: selectActiveModuleId(state)
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainerView = ({
-  moduleIds,
-  modules
+const AppFoldersModule = ({
+  activeModuleId
 }) => {
-
-  if(moduleIds !== null) {
-    return (
-      <AppContentView>
-        {moduleIds.map(moduleId => (
-          <Module
-            key={moduleId}
-            module={modules[moduleId]}/>
-        ))}
-      </AppContentView>
-    )
-  }
   return (
     <AppContentView>
-      <Loading />
+      {activeModuleId !== null &&
+        <Module
+          key={activeModuleId}
+          moduleId={activeModuleId}/>
+      }
     </AppContentView>
   )
 }
@@ -48,11 +37,10 @@ const AppContainerView = ({
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-AppContainerView.propTypes = {
-  moduleIds: array,
-  modules: object
+AppFoldersModule.propTypes = {
+  activeModuleId: string
 }
 
 export default connect(
   mapStateToProps
-)(AppContainerView)
+)(AppFoldersModule)

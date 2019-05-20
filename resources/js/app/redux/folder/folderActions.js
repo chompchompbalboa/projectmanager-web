@@ -1,9 +1,15 @@
 //-----------------------------------------------------------------------------
-// Select Active Content
+// Update Views
 //-----------------------------------------------------------------------------
-export const selectActiveContent = state => state.active.content
+export const updateViews = nextViews => ({
+  type: 'UPDATE_VIEWS',
+  nextViews: nextViews
+})
 
 //-----------------------------------------------------------------------------
-// Select Active Module Id
+// Update View Ids
 //-----------------------------------------------------------------------------
-export const selectActiveModuleId = state => state.active.moduleId
+export const updateViewIds = nextViewIds => ({
+  type: 'UPDATE_VIEW_IDS',
+  nextViewIds: nextViewIds
+})

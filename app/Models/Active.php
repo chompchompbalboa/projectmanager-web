@@ -6,29 +6,42 @@ use Illuminate\Database\Eloquent\Model;
 
 class Active extends Model
 {  
+  public $incrementing = false;
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'containerId', 'projectId', 'tableId', 'breakdownId'];
+  protected $appends = ['openFolders', 'moduleId'];
+  protected $visible = ['id', 'openFolders', 'moduleId'];
 
   /**
-   * Build custom attributes
+   * Define which attributes will be mass assignable
    */
-  protected $appends = ['containerId', 'projectId', 'tableId', 'breakdownId'];
-
+  protected $fillable = ['openFolders', 'moduleId'];
+  
   /**
-   * Rename table columns from snake case to camel case
+   * Get the user this active belongs to
    */
-  public function getContainerIdAttribute() {
-    return $this->attributes['container_id'];
+  public function user() {
+    return $this->belongsTo('App\Models\User');
   }
-  public function getProjectIdAttribute() {
-    return $this->attributes['project_id'];
+  
+  /**
+   * Get the open folders
+   */
+  public function getOpenFoldersAttribute() {
+    return $this->attributes['open_folders'];
   }
-  public function getTableIdAttribute() {
-    return $this->attributes['table_id'];
+  public function setOpenFoldersAttribute($value) {
+    $this->attributes['open_folders'] = $value;
   }
-  public function getBreakdownIdAttribute() {
-    return $this->attributes['breakdown_id'];
+  
+  /**
+   * Get the active module id
+   */
+  public function getModuleIdAttribute() {
+    return $this->attributes['module_id'];
+  }
+  public function setModuleIdAttribute($value) {
+    $this->attributes['module_id'] = $value;
   }
 }

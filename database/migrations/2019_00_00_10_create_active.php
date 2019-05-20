@@ -14,17 +14,14 @@ class CreateActive extends Migration
     public function up()
     {
         Schema::create('actives', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id');
-            $table->unsignedInteger('container_id')->nullable();
-            $table->unsignedInteger('collection_id')->nullable();
-            $table->unsignedInteger('view_id')->nullable();
+            $table->uuid('id');
+            $table->json('open_folders')->nullable();
+            $table->uuid('module_id')->nullable();
+            $table->uuid('user_id');
             $table->timestamps();
-          
+
+            $table->foreign('module_id')->references('id')->on('modules');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('container_id')->references('id')->on('containers');
-            $table->foreign('collection_id')->references('id')->on('collections');
-            $table->foreign('view_id')->references('id')->on('views');
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableRow extends Migration
+class CreateModule extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,15 @@ class CreateTableRow extends Migration
      */
     public function up()
     {
-        Schema::create('table_rows', function (Blueprint $table) {
+        Schema::create('modules', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('table_id')->nullable();;
+            $table->uuid('folder_id')->nullable();
+            $table->string('name')->nullable();
+            $table->string('type');
+            $table->uuid('type_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('table_id')->references('id')->on('tables');
+            $table->foreign('folder_id')->references('id')->on('folders');
         });
     }
 
@@ -29,6 +32,6 @@ class CreateTableRow extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('table_rows');
+        Schema::dropIfExists('modules');
     }
 }

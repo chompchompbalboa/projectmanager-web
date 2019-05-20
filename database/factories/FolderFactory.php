@@ -13,9 +13,11 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Models\Organization::class, function (Faker $faker) {
+$factory->define(App\Models\Folder::class, function (Faker $faker) {
     return [
-        'id' => '36faa7b2-79d3-11e9-8f9e-2a86e4085a59',
+        'id' => $faker->uuid,
+        'organization_id' => null,
+        'folder_id' => null,
         'name' => $faker->company
     ];
 });

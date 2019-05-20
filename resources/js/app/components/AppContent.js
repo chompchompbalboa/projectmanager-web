@@ -4,7 +4,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { colors, layout } from '../config'
+import { colors } from '../config'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -21,12 +21,9 @@ const AppContent = ({ children }) => {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  position: fixed;
-  top: 0;
-  left: ${ layout.SIDEBAR_WIDTH };
-  width: calc(100vw - ${ layout.SIDEBAR_WIDTH });
+  width: 100vw;
   min-height: 100vh;
-  background-color: ${ colors.CONTAINER_BACKGROUND };
+  background-color: ${ colors.BACKGROUND };
 `
 
 export default AppContent

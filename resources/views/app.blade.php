@@ -14,13 +14,7 @@
       let initialData = {
         user: @json($user),
         organization: @json($organization),
-        activeCollectionId: @json($activeCollectionId),
-        collections: @json($collections),
-        activeContainerId: @json($activeContainerId),
-        containers: @json($containers),
-        modules: @json($modules),
-        activeViewId: @json($activeViewId),
-        views: @json($views),
+        folders: @json($folders)
       }
     </script>
     <script src="{{ mix('js/app.js') }}"></script>

@@ -10,9 +10,14 @@ import Tagline from './Tagline'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const Logo = ({ fontSize, showTagline }) => {
+const Logo = ({ 
+  alignItems, 
+  fontSize, 
+  showTagline 
+}) => {
   return (
-    <Container>
+    <Container
+      alignItems={alignItems}>
       <Name>
         <Build
           fontSize={fontSize}>
@@ -37,11 +42,13 @@ const Logo = ({ fontSize, showTagline }) => {
 // Styled Components
 //-----------------------------------------------------------------------------
 Logo.propTypes = {
+  alignItems: string,
   fontSize: string,
   showTagline: bool
 }
 
 Logo.defaultProps = {
+  alignItems: 'center',
   fontSize: '3em',
   showTagline: false
 }
@@ -52,7 +59,7 @@ Logo.defaultProps = {
 const Container = styled.h1`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: ${ props => props.alignItems };
 `
 
 const Name = styled.div`

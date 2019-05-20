@@ -14,11 +14,11 @@ class CreateUser extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->uuid('id')->primary();
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password');
-            $table->unsignedInteger('organization_id')->nullable();
+            $table->uuid('organization_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
 

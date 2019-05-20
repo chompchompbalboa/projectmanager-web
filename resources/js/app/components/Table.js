@@ -34,15 +34,6 @@ const mapDispatchToProps = dispatch => ({
 // Component
 //-----------------------------------------------------------------------------
 class TableComponent extends Component {
-
-  componentDidMount = () => {
-    const {
-      setTable,
-      table
-    } = this.props
-    setTable(table)
-  }
-  
   render() {
     const {
       tableWidth

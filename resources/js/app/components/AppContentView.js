@@ -36,11 +36,11 @@ AppContentView.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled(HiddenScrollbarContainer)`
   position: fixed;
-  top: ${ layout.CONTAINER_HEADER_HEIGHT };
-  left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  width: calc(100vw - ${ layout.SIDEBAR_WIDTH } - ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  height calc(100vh - ${ layout.CONTAINER_HEADER_HEIGHT });
-  background-color: ${ colors.CONTAINER_MODULES_BACKGROUND };
+  top: ${ layout.HEADER_HEIGHT };
+  left: ${ layout.SIDEBAR_WIDTH };
+  width: calc(100vw - ${ layout.SIDEBAR_WIDTH });
+  height calc(100vh - ${ layout.HEADER_HEIGHT });
+  background-color: ${ colors.MODULE_BACKGROUND };
   border-top-left-radius: 5px;
 `
 

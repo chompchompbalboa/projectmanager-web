@@ -1,25 +1,26 @@
 //-----------------------------------------------------------------------------
 // Imports
 //-----------------------------------------------------------------------------
+import folderNormalizer from './folderNormalizer'
 
 //-----------------------------------------------------------------------------
-// Update Active Content
+// Initial
 //-----------------------------------------------------------------------------
-export const updateActiveContent = nextActiveContent => {
-  return dispatch => {
-    dispatch(updateActiveContentReducer(nextActiveContent))
+const normalizedFolders = folderNormalizer(initialData.folders)
+const initialState = {
+  folders: normalizedFolders.entities.folder,
+  folderIds: normalizedFolders.result,
+  modules: normalizedFolders.entities.module,
+}
+
+//-----------------------------------------------------------------------------
+// Reducers
+//-----------------------------------------------------------------------------
+const folderReducers = (state = initialState, action) => {
+  switch(action.type) {
+    default:
+      return state
   }
 }
 
-const updateActiveContentReducer = nextActiveContent => ({
-  type: 'UPDATE_ACTIVE_CONTENT',
-  nextActiveContent: nextActiveContent
-})
-
-//-----------------------------------------------------------------------------
-// Update Active Module Id
-//-----------------------------------------------------------------------------
-export const updateActiveModuleId = nextActiveModuleId => ({
-  type: 'UPDATE_ACTIVE_MODULE_ID',
-  nextActiveModuleId: nextActiveModuleId
-})
+export default folderReducers

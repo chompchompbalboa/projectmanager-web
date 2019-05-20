@@ -8,14 +8,19 @@ import styled from 'styled-components'
 import { colors, layout } from '../config'
 
 import HiddenScrollbarContainer from './HiddenScrollbarContainer'
+import Logo from '../../_components/Logo'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContentSidebar = ({ children, header }) => {
+const AppContentSidebar = ({ children }) => {
   return (
     <Container>
-      <Header>{header}</Header>
+      <Header>
+        <Logo
+          alignItems="flex-start"
+          fontSize="2rem"/>
+      </Header>
       <Items>
         {children}
       </Items>
@@ -36,17 +41,23 @@ AppContentSidebar.propTypes = {
 const Container = styled(HiddenScrollbarContainer)`
   position: fixed;
   top: 0;
-  left: ${ layout.SIDEBAR_WIDTH };
-  width: ${ layout.CONTAINER_SIDEBAR_WIDTH };
+  left: 0;
+  width: ${ layout.SIDEBAR_WIDTH };
   height: 100vh;
-  background-color: ${ colors.CONTAINER_SIDEBAR_BACKGROUND };
-  border-left: 0.5px dashed ${ colors.CONTAINER_SIDEBAR_BORDER };
+  background-color: ${ colors.SIDEBAR_BACKGROUND };
+  color: ${ colors.TEXT_WHITE };
+  overflow-x: hidden;
+  overflow-y: scroll;
+  text-overflow: ellipsis;
 `
 
-const Header = styled.h3`
-  margin: 1vw 0 3vh calc(1vw + 3px);
-  color: ${ colors.TEXT_WHITE };
-  font-size: 18px;
+const Header = styled.div`
+  width: 100%;
+  position: sticky;
+  top: 0;
+  left: 0;
+  margin: 1rem;
+  background-color: ${ colors.SIDEBAR_BACKGROUND };
 `
 
 const Items = styled.div`

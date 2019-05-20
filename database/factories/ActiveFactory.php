@@ -1,4 +1,7 @@
 <?php
+
+use Faker\Generator as Faker;
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -10,11 +13,11 @@
 |
 */
 
-$factory->define(App\Models\Active::class, function () {
+$factory->define(App\Models\Active::class, function (Faker $faker) {
     return [
-      'user_id' => 1,
-      'container_id' => null,
-      'collection_id' => null,
-      'view_id' =>  null
+      'id' => $faker->uuid,
+      'user_id' => '75e3c4f9-b261-3343-a320-8ee9fb0c931e',
+      'module_id' => null,
+      'open_folders' => null
     ];
 });

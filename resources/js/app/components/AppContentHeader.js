@@ -6,14 +6,13 @@ import styled from 'styled-components'
 
 import { colors, layout } from '../config'
 
-import AppContentHeaderBreadcrumbs from './AppContentHeaderBreadcrumbs'
+//import AppContentHeaderBreadcrumbs from './AppContentHeaderBreadcrumbs'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const AppContentHeader = () => {
   return (
     <Container>
-      <AppContentHeaderBreadcrumbs />
     </Container>
   )
 }
@@ -24,10 +23,9 @@ const AppContentHeader = () => {
 const Container = styled.div`
   position: fixed;
   top: 0;
-  left: calc(${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  width: calc(100vw - ${ layout.SIDEBAR_WIDTH } + ${ layout.CONTAINER_SIDEBAR_WIDTH });
-  height: ${ layout.CONTAINER_HEADER_HEIGHT };
-  background-color: ${ colors.CONTAINER_HEADER_BACKGROUND };
+  left: ${ layout.SIDEBAR_WIDTH };
+  width: calc(100vw - ${ layout.SIDEBAR_WIDTH });
+  height: ${ layout.HEADER_HEIGHT };
   display: flex;
   align-items: center;
   color: ${ colors.TEXT_WHITE };

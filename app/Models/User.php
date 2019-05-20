@@ -8,23 +8,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+
+    public $incrementing = false;
   
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
-  
-    /**
-     * The attributes that should be hidden for arrays.
-     * @var array
-     */
-    protected $hidden = [
-      'created_at', 'password', 'remember_token', 'updated_at'
-    ];
+    protected $appends = ['active'];
+    protected $fillable = ['name', 'email', 'password'];
+    protected $visible = ['name', 'email', 'active'];
   
     /**
      * Get the active state for this user
@@ -32,12 +21,15 @@ class User extends Authenticatable
     public function active() {
       return $this->hasOne('App\Models\Active');
     }
+    public function getActiveAttribute() {
+      return $this->active()->first();
+    }
   
     /**
-     * Get the containers for this user
+     * Get the folders for this user
      */
-    public function containers() {
-      return $this->hasMany('App\Models\Container');
+    public function folders() {
+      return $this->hasMany('App\Models\Folder');
     }
   
     /**

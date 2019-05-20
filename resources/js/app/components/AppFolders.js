@@ -4,21 +4,21 @@
 import React from 'react'
 
 import AppContentHeader from './AppContentHeader'
-import AppContainerSidebar from './AppContainerSidebar'
-import AppContainerView from './AppContainerView'
+import AppFoldersModule from './AppFoldersModule'
+import AppFoldersSidebar from './AppFoldersSidebar'
 import AppContent from './AppContent'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppContainer = () => {
+const AppFolders = () => {
   return (
     <AppContent>
-      <AppContainerSidebar />
+      <AppFoldersSidebar />
       <AppContentHeader />
-      <AppContainerView />
+      <AppFoldersModule />
     </AppContent>
   )
 }
 
-export default AppContainer
+export default AppFolders

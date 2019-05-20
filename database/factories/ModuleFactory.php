@@ -15,8 +15,10 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Module::class, function (Faker $faker) {
     return [
+        'id' => $faker->uuid,
         'type' => 'TABLE',
         'type_id' => null,
+        'folder_id' => null,
         'name' => 'Table'
     ];
 });

@@ -47,7 +47,8 @@ const AppFolderSidebarFolderDropdowns = ({
           dropdownTop={dropdownTop}
           isDropdownVisible={isFolderDeleteDropdownVisible}
           onDelete={deleteFolder}
-          textToMatch={folderName}/>}
+          textToMatch={folderName}
+          type="folder"/>}
       {isFolderCreateModuleDropdownVisible && 
         <CreateModuleDropdown
           closeDropdown={closeDropdowns}
@@ -61,6 +62,7 @@ const AppFolderSidebarFolderDropdowns = ({
 
 AppFolderSidebarFolderDropdowns.propTypes = {
   closeDropdowns: func,
+  deleteFolder: func,
   dropdownLeft: string,
   dropdownTop: string,
   folderName: string,

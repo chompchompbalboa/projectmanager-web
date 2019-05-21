@@ -4,97 +4,16 @@
 import axios from './axios'
 
 //-----------------------------------------------------------------------------
-// Structure
+// Folders
 //-----------------------------------------------------------------------------
-export const createContainer = async (userId, newContainerId, newContainer) => {  
-  return axios.post('/app/containers', { ...newContainer, user_id: userId }).then(response => {
-    return {
-      containerId: newContainerId,
-      nextContainerId: response.data.id
-    }
-  })
-}
-
-export const createCollection = async (containerId, newCollectionId, newCollection) => {  
-  return axios.post('/app/collections', { 
-    collection: newCollection,
-    containerId: containerId
-  }).then(response => {
-    return {
-      collectionId: newCollectionId,
-      nextCollectionId: response.data.id
-    }
-  })
-}
-
-export const createModule = async (viewId, newModuleId, newModule) => {  
-  return axios.post('/app/modules', { 
-    module: newModule,
-    viewId: viewId
-  }).then(response => {
-    return {
-      moduleId: newModuleId,
-      nextModuleId: response.data.id
-    }
-  })
-}
-
-export const createView = async (collectionId, newViewId, newView) => {  
-  return axios.post('/app/views', { 
-    view: newView,
-    collectionId: collectionId
-  }).then(response => {
-    return {
-      viewId: newViewId,
-      nextViewId: response.data.id
-    }
-  })
-}
-
-export const deleteCollection = async collectionId => {  
-  return axios.delete('/app/collections/' + collectionId).then(response => {
+export const deleteFolder = async (folderId) => {  
+  return axios.delete('/app/folders/' + folderId).then(response => {
     return response.data
   })
 }
 
-export const deleteContainer = async containerId => {  
-  return axios.delete('/app/containers/' + containerId).then(response => {
-    return response.data
-  })
-}
-
-export const deleteModule = async moduleId => {  
-  return axios.delete('/app/modules/' + moduleId).then(response => {
-    return response.data
-  })
-}
-
-export const deleteView = async viewId => {  
-  return axios.delete('/app/views/' + viewId).then(response => {
-    return response.data
-  })
-}
-
-export const updateCollection = async (id, updates) => {
-  return axios.patch('/app/collections/' + id, updates).then(response => {
-    return response.data
-  })
-}
-
-export const updateContainer = async (id, updates) => {
-  return axios.patch('/app/containers/' + id, updates).then(response => {
-    return response.data
-  })
-}
-
-export const updateModule = async (id, updates) => {
-  return axios.patch('/app/modules/' + id, updates).then(response => {
-    return response.data
-  })
-}
-
-export const updateView = async (id, updates) => {
-  return axios.patch('/app/views/' + id, updates).then(response => {
+export const updateFolder = async (id, updates) => {
+  return axios.patch('/app/folders/' + id, updates).then(response => {
     return response.data
   })
 }

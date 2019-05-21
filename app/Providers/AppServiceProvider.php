@@ -6,14 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-use App\Models\Collection;
-use App\Observers\CollectionObserver;
-use App\Models\Container;
-use App\Observers\ContainerObserver;
-use App\Models\Module;
-use App\Observers\ModuleObserver;
-use App\Models\View;
-use App\Observers\ViewObserver;
+use App\Models\Folder;
+use App\Observers\FolderObserver;
 
 use App\Models\TableColumn;
 use App\Observers\TableColumnObserver;
@@ -47,10 +41,7 @@ class AppServiceProvider extends ServiceProvider
           );
       });
       
-      Collection::observe(CollectionObserver::class);
-      Container::observe(ContainerObserver::class);
-      View::observe(ViewObserver::class);
-      Module::observe(ModuleObserver::class);
+      Folder::observe(FolderObserver::class);
 
       TableColumn::observe(TableColumnObserver::class);
       TableRow::observe(TableRowObserver::class);

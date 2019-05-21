@@ -132,7 +132,7 @@ const Container = styled.div`
   color: ${ colors.TEXT_BLACK };
   font-size: 1rem;
   font-weight: 600;
-  border-top-left-radius: 5px;
+  box-shadow: 2px 2px 20px black;
 	overflow-y: scroll;
 	scrollbar-width: none;
 	-ms-overflow-style: none;

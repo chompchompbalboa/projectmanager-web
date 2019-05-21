@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { bool, func, number, string } from 'prop-types'
+import { bool, func, string } from 'prop-types'
 
 import SaneContentEditable from 'react-sane-contenteditable'
 
@@ -15,7 +15,6 @@ const ContentEditable = ({
   value,
   editable,
   focus,
-  id,
   onBlur,
   onChange,
   onClick,
@@ -43,7 +42,6 @@ ContentEditable.propTypes = {
   className: string,
   editable: bool,
   focus: bool,
-  id: number,
   onBlur: func,
   onChange: func,
   onClick: func,

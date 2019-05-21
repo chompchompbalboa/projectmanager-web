@@ -2,27 +2,50 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, number, object, shape, string } from 'prop-types'
+import { array, func, number, object, shape, string } from 'prop-types'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors } from '../config'
 
+import { 
+  deleteFolder as deleteFolderAction,
+  updateFolder as updateFolderAction 
+} from '../redux/folder/folderActions'
+
 import AppFoldersSidebarFolderDropdowns from './AppFoldersSidebarFolderDropdowns'
 import AppFoldersSidebarModule from './AppFoldersSidebarModule'
+import ContentEditable from './ContentEditable'
 import Icon from './Icon'
+
+//-----------------------------------------------------------------------------
+// Redux
+//-----------------------------------------------------------------------------
+const mapDispatchToProps = dispatch => ({
+  deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
+  updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
+})
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-export default class AppFoldersSidebarFolder extends Component {
+class AppFoldersSidebarFolder extends Component {
 
-  state = {
+  initialState = {
     dropdownLeft: null,
     dropdownTop: null,
+    folderName: this.props.folder.name,
     isFolderCreateModuleDropdownVisible: false,
     isFolderDropdownVisible: false,
     isFolderDeleteDropdownVisible: false,
-    isFolderItemsVisible: false
+    isFolderItemsVisible: false,
+    isFolderRenaming: false
+  }
+
+  state = this.initialState
+
+  closeDropdowns = () => {
+    this.setState(this.initialState)
   }
 
   handleFolderInfoContextMenu = e => {
@@ -34,20 +57,39 @@ export default class AppFoldersSidebarFolder extends Component {
     })
   }
 
+  handleFolderNameBlur = () => {
+    const {
+      folder,
+      updateFolder
+    } = this.props
+    const {
+      folderName
+    } = this.state
+    updateFolder(folder.id, { name: folderName })
+    this.setState({
+      isFolderRenaming: false
+    })
+  }
+
   render() {
     const {
+      deleteFolder,
       folder,
       folders,
       level,
-      modules
+      modules,
+      parentFolderId,
+      updateFolder
     } = this.props
     const {
       dropdownLeft,
       dropdownTop,
+      folderName,
       isFolderCreateModuleDropdownVisible,
       isFolderDeleteDropdownVisible,
       isFolderDropdownVisible,
-      isFolderItemsVisible
+      isFolderItemsVisible,
+      isFolderRenaming
     } = this.state
     return (
       <Container>
@@ -58,29 +100,39 @@ export default class AppFoldersSidebarFolder extends Component {
           <Icon
             icon={isFolderItemsVisible ? "FOLDER_OPEN" : "FOLDER_CLOSED"}
             size="1rem"/>
-          <FolderName>
-            {folder.name}
-          </FolderName>
+          <FolderName
+            focus={isFolderRenaming}
+            editable={isFolderRenaming}
+            id={folder.id}
+            isFolderRenaming={isFolderRenaming}
+            onBlur={() => this.handleFolderNameBlur()}
+            onChange={(e, value) => this.setState({ folderName: value })}
+            value={folderName}/>
         </FolderInfo>
         <AppFoldersSidebarFolderDropdowns 
-          closeFolderDropdown={() => this.setState({ isFolderDropdownVisible: false })}
-          closeFolderDeleteDropdown={() => this.setState({ isFolderDeleteDropdownVisible: false })}
-          closeFolderCreateModuleDropdown={() => this.setState({ isFolderCreateModuleDropdownVisible: false })}
+          closeDropdowns={this.closeDropdowns}
+          deleteFolder={() => deleteFolder(parentFolderId, folder.id)}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
+          folderName={folder.name}
           isFolderDropdownVisible={isFolderDropdownVisible}
           isFolderDeleteDropdownVisible={isFolderDeleteDropdownVisible}
-          isFolderCreateModuleDropdownVisible={isFolderCreateModuleDropdownVisible}/>
+          isFolderCreateModuleDropdownVisible={isFolderCreateModuleDropdownVisible}
+          openFolderDeleteDropdown={() => this.setState({ isFolderDropdownVisible: false, isFolderDeleteDropdownVisible: true })}
+          toggleFolderIsRenaming={() => this.setState({ isFolderDropdownVisible: false, isFolderRenaming: !isFolderRenaming })}/>
         <FolderItems
           isFolderItemsVisible={isFolderItemsVisible}>
           <FolderSubfolders>
             {folder.folders && folder.folders.map(subFolderId => (
               <AppFoldersSidebarFolder
                 key={subFolderId}
+                deleteFolder={deleteFolder}
                 folder={folders[subFolderId]}
                 folders={folders}
                 level={level + 1}
-                modules={modules}/>
+                modules={modules}
+                parentFolderId={folder.id}
+                updateFolder={updateFolder}/>
             ))}
           </FolderSubfolders>
           <FolderModules>
@@ -101,6 +153,7 @@ export default class AppFoldersSidebarFolder extends Component {
 // Props
 //-----------------------------------------------------------------------------
 AppFoldersSidebarFolder.propTypes = {
+  deleteFolder: func,
   folder: shape({
     name: string,
     folders: array,
@@ -108,7 +161,9 @@ AppFoldersSidebarFolder.propTypes = {
   }),
   folders: object,
   level: number,
-  modules: object
+  modules: object,
+  parentFolderId: string,
+  updateFolder: func
 }
 
 //-----------------------------------------------------------------------------
@@ -131,7 +186,7 @@ const FolderInfo = styled.div`
   }
 `
 
-const FolderName = styled.div`
+const FolderName = styled(ContentEditable)`
   width: 100%;
   overflow-x: hidden;
   white-space: nowrap;
@@ -145,3 +200,8 @@ const FolderItems = styled.div`
 const FolderSubfolders = styled.div``
 
 const FolderModules = styled.div``
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(AppFoldersSidebarFolder)

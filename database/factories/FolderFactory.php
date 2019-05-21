@@ -18,6 +18,6 @@ $factory->define(App\Models\Folder::class, function (Faker $faker) {
         'id' => $faker->uuid,
         'organization_id' => null,
         'folder_id' => null,
-        'name' => $faker->company
+        'name' => $faker->firstName
     ];
 });

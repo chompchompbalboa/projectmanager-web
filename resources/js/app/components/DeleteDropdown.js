@@ -100,7 +100,6 @@ const StyledInput = styled.input`
   outline: none;
   background-color: transparent;
   font-size: 0.9rem;
-  color: white;
   letter-spacing: 0.25px;
   text-align: center;
 `
@@ -111,7 +110,8 @@ const DeleteButton = styled.div`
   padding: 0.3rem;
   text-align: center;
   border-radius: 5px;
-  background-color: rgba(255, 0, 0, 0.65);
+  background-color: ${ props => props.isTextMatched ? 'rgb(220, 0, 0)' : 'rgb(150, 150, 150)'};;
+  color: white;
   opacity: ${ props => props.isTextMatched ? '0.85' : '0.375'};
   &:hover {
     opacity: ${ props => props.isTextMatched ? '1' : '0.375'};

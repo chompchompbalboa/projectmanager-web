@@ -69,7 +69,8 @@ class FolderController extends Controller
      */
     public function update(Request $request, Folder $folder)
     {
-        //
+      $folder->update($request->all());
+      return response()->json($folder, 200);
     }
 
     /**
@@ -80,6 +81,7 @@ class FolderController extends Controller
      */
     public function destroy(Folder $folder)
     {
-        //
+      $folder->delete();
+      return response()->json(null, 204);
     }
 }

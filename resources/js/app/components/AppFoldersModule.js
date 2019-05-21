@@ -25,11 +25,9 @@ const AppFoldersModule = ({
 }) => {
   return (
     <AppContentView>
-      {activeModuleId !== null &&
-        <Module
-          key={activeModuleId}
-          moduleId={activeModuleId}/>
-      }
+      <Module
+        key={activeModuleId}
+        moduleId={activeModuleId}/>
     </AppContentView>
   )
 }

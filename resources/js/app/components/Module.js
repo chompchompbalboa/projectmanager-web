@@ -4,6 +4,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { func, object, string } from 'prop-types'
+import styled from 'styled-components'
 
 import {
   getTable
@@ -32,7 +33,7 @@ const mapDispatchToProps = dispatch => ({
 class Module extends Component {
 
   state = {
-    isLoading: true
+    isLoading: false
   }
   
   modules = {
@@ -55,14 +56,21 @@ class Module extends Component {
   }
 
   getAndSetModule = (moduleId) => {
-    const {
-      modules
-    } = this.props
-    const module = modules[moduleId]
-    this.modules[module.type].get(module.typeId).then(moduleWithPayload => {
-      this.modules[module.type].set(moduleWithPayload)
-      this.setState({ isLoading: false })
-    })
+    if(moduleId !== null) {
+
+      this.setState({
+        isLoading: true
+      })
+
+      const {
+        modules
+      } = this.props
+      const module = modules[moduleId]
+      this.modules[module.type].get(module.typeId).then(moduleWithPayload => {
+        this.modules[module.type].set(moduleWithPayload)
+        this.setState({ isLoading: false })
+      })
+    }
   }
 
   render() {
@@ -74,16 +82,23 @@ class Module extends Component {
       isLoading
     } = this.state
 
-    const module = modules[moduleId]
+    const module = modules[moduleId] || null
 
-    if (!isLoading && typeof this.modules[module.type] !== 'undefined') {
+    if (!isLoading && module && typeof this.modules[module.type] !== 'undefined') {
       const ModuleType = this.modules[module.type].component
       return (
         <ModuleType
           {...{ [module.type.toLowerCase()]: module.payload }}/> // Assign the correct prop name to the payload while passing it through
       )
     }
-    return <Loading />
+    if(isLoading) {
+      return <Loading />
+    }
+    return (
+      <Container>
+        Select a module to get started
+      </Container>
+    )
   }
 }
 
@@ -95,6 +110,17 @@ Module.propTypes = {
   modules: object,
   setTable: func
 }
+
+//-----------------------------------------------------------------------------
+// Styled Components
+//-----------------------------------------------------------------------------
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 
 export default connect(
   mapStateToProps,

@@ -73,7 +73,7 @@ AppFoldersSidebarModule.propTypes = {
 const Container = styled.div`
   width: 100%;
   padding: 0.25rem 0;
-  padding-left: ${ props => (props.level / 2) + 'rem' };
+  padding-left: ${ props => 0.75 + (props.level / 2) + 'rem' };
   cursor: pointer;
   display: flex;
   align-items: center;

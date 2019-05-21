@@ -122,15 +122,16 @@ Dropdown.defaultProps = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled.div`
-  z-index: 100000;
+  z-index: 10000;
 	display: ${ props => props.isDropdownVisible ? 'block' : 'none' };
   position: ${ props => props.dropdownLeft ? 'fixed' : 'absolute' };
   top: ${ props => props.dropdownTop ? props.dropdownTop : '0' };
   left: ${ props => props.dropdownLeft ? props.dropdownLeft : '0' };
   margin-left: ${ props => props.containerMarginLeft };
   background-color: ${ colors.DROPDOWN_BACKGROUND };
-  color: white;
-  font-size: 0.9rem;
+  color: ${ colors.TEXT_BLACK };
+  font-size: 1rem;
+  font-weight: 600;
   border-top-left-radius: 5px;
 	overflow-y: scroll;
 	scrollbar-width: none;

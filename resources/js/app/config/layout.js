@@ -1,5 +1,5 @@
 export default {
-  SIDEBAR_WIDTH: '18vw',
+  SIDEBAR_WIDTH: '15vw',
   HEADER_HEIGHT: '5vh',
 
   CONTAINER_SIDEBAR_WIDTH: '14vw',

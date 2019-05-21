@@ -36,6 +36,7 @@ AppContentView.propTypes = {
 //-----------------------------------------------------------------------------
 const Container = styled(HiddenScrollbarContainer)`
   position: fixed;
+  z-index: 1;
   top: ${ layout.HEADER_HEIGHT };
   left: ${ layout.SIDEBAR_WIDTH };
   width: calc(100vw - ${ layout.SIDEBAR_WIDTH });

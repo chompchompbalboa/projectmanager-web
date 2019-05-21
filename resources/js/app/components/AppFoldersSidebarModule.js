@@ -44,7 +44,7 @@ class AppFoldersSidebarModule extends Component {
         onClick={() => updateActiveModuleId(module.id)}>
         <Icon
           icon={"MODULE_" + module.type}
-          size="1rem"/>
+          size="0.9rem"/>
         <ModuleName>
           {module.name}
         </ModuleName>

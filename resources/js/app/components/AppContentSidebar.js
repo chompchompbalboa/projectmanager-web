@@ -39,6 +39,7 @@ AppContentSidebar.propTypes = {
 // Styled Components
 //-----------------------------------------------------------------------------
 const Container = styled(HiddenScrollbarContainer)`
+  z-index: 2;
   position: fixed;
   top: 0;
   left: 0;
@@ -61,6 +62,7 @@ const Header = styled.div`
 `
 
 const Items = styled.div`
+  position: relative;
   width: 100%;
 `
 

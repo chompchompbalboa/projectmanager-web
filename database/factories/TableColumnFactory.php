@@ -35,6 +35,6 @@ $factory->define(App\Models\TableColumn::class, function (Faker $faker) {
       'position' => 1,
       'width' => 250,
       'name' => $faker->streetSuffix,
-      'type' => $type['type'],
+      'type' => 'STRING',
     ];
 });

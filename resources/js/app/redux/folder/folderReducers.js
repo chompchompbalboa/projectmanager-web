@@ -20,6 +20,36 @@ const initialState = {
 const folderReducers = (state = initialState, action) => {
   switch(action.type) {
 
+    case 'CREATE_FOLDER': {
+      const {
+        newFolder
+      } = action
+      let nextState = {
+        ...state, folders: {
+          ...state.folders, 
+          [newFolder.id]: newFolder
+        }
+      }
+      if(newFolder.folderId) {
+        nextState = {
+          ...nextState, folders: {
+            ...nextState.folders, [newFolder.folderId]: {
+              ...state.folders[newFolder.folderId], folders: [
+                newFolder.id, ...state.folders[newFolder.folderId].folders
+              ]
+            }
+          }
+        }
+        return nextState
+      }
+      else {
+        return {
+          ...nextState,
+          folderIds: [...nextState.folderIds, newFolder.id]
+        }
+      }
+    }
+
     case 'DELETE_FOLDER': {
       const {
         folderId,

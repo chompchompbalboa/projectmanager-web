@@ -15,6 +15,7 @@ import DropdownItem from './DropdownItem'
 //-----------------------------------------------------------------------------
 const AppFolderSidebarFolderDropdowns = ({
   closeDropdowns,
+  createFolder,
   deleteFolder,
   dropdownLeft,
   dropdownTop,
@@ -36,6 +37,9 @@ const AppFolderSidebarFolderDropdowns = ({
           <DropdownItem
             onClick={toggleFolderIsRenaming}
             text="Rename"/>
+          <DropdownItem
+            onClick={createFolder}
+            text="New Folder"/>
           <DropdownItem
             onClick={openFolderDeleteDropdown}
             text="Delete"/>
@@ -62,6 +66,7 @@ const AppFolderSidebarFolderDropdowns = ({
 
 AppFolderSidebarFolderDropdowns.propTypes = {
   closeDropdowns: func,
+  createFolder: func,
   deleteFolder: func,
   dropdownLeft: string,
   dropdownTop: string,

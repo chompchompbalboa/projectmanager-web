@@ -10,19 +10,22 @@ class Folder extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $appends = ['folders', 'modules'];
+  protected $appends = ['folderId', 'folders', 'modules', 'userId'];
   protected $visible = ['id', 'name', 'folders', 'modules'];
 
   /**
    * Define which attributes will be mass assignable
    */
-  protected $fillable = ['id', 'name'];
+  protected $fillable = ['id', 'name', 'folderId', 'userId'];
 
   /**
    * Get the folder this folder belongs to
    */
   public function folder() {
     return $this->belongsTo('App\Models\Folder', 'folder_id');
+  }
+  public function setFolderIdAttribute($value) {
+    $this->attributes['folder_id'] = $value;
   }
   
   /**
@@ -57,5 +60,8 @@ class Folder extends Model
    */
   public function user() {
     return $this->belongsTo('App\Models\User');
+  }
+  public function setUserIdAttribute($value) {
+    $this->attributes['user_id'] = $value;
   }
 }

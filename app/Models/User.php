@@ -13,7 +13,7 @@ class User extends Authenticatable
   
     protected $appends = ['active'];
     protected $fillable = ['name', 'email', 'password'];
-    protected $visible = ['name', 'email', 'active'];
+    protected $visible = ['id', 'name', 'email', 'active'];
   
     /**
      * Get the active state for this user

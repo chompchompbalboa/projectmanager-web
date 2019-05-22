@@ -6,6 +6,12 @@ import axios from './axios'
 //-----------------------------------------------------------------------------
 // Folders
 //-----------------------------------------------------------------------------
+export const createFolder = async newFolder => {  
+  return axios.post('/app/folders', newFolder).then(response => {
+    return response.data
+  })
+}
+
 export const deleteFolder = async (folderId) => {  
   return axios.delete('/app/folders/' + folderId).then(response => {
     return response.data
@@ -21,30 +27,8 @@ export const updateFolder = async (id, updates) => {
 //-----------------------------------------------------------------------------
 // Table
 //-----------------------------------------------------------------------------
-export const createTable = async (organizationId, projectId, tableId) => {  
-  return axios.post('/app/tables', {
-    organizationId: organizationId,
-    projectId: projectId,
-    tableId: tableId
-  }).then(response => {
-    return response.data
-  })
-}
-
-export const createTableBreakdown = async (tableId, newBreakdown) => {  
-  return axios.post('/app/tables/breakdowns', {
-    newBreakdown: newBreakdown,
-    tableId: tableId
-  }).then(response => {
-    return response.data
-  })
-}
-
-export const createTableBreakdownFormula = async (breakdownId, newFormula) => {  
-  return axios.post('/app/tables/breakdowns/formulas', {
-    breakdownId: breakdownId,
-    newFormula: newFormula
-  }).then(response => {
+export const createTable = async (newTable) => {  
+  return axios.post('/app/tables', newTable).then(response => {
     return response.data
   })
 }

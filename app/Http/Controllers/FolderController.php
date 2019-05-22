@@ -35,7 +35,7 @@ class FolderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      return Folder::create($request->all());
     }
 
     /**

@@ -57,13 +57,16 @@ const Header = styled.div`
   position: sticky;
   top: 0;
   left: 0;
-  margin: 1rem;
+  padding: 1rem;
   background-color: ${ colors.SIDEBAR_BACKGROUND };
 `
 
 const Items = styled.div`
   position: relative;
   width: 100%;
+  min-height: 25%;
+  display: flex;
+  flex-direction: column;
 `
 
 export default AppContentSidebar

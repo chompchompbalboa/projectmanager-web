@@ -2,13 +2,14 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { array, func, number, object, shape, string } from 'prop-types'
+import { array, bool, func, number, object, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors } from '../config'
 
 import { 
+  createFolder as createFolderAction,
   deleteFolder as deleteFolderAction,
   updateFolder as updateFolderAction 
 } from '../redux/folder/folderActions'
@@ -22,6 +23,7 @@ import Icon from './Icon'
 // Redux
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
+  createFolder: (parentFolderId) => dispatch(createFolderAction(parentFolderId)),
   deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
   updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
 })
@@ -39,13 +41,24 @@ class AppFoldersSidebarFolder extends Component {
     isFolderDropdownVisible: false,
     isFolderDeleteDropdownVisible: false,
     isFolderItemsVisible: false,
-    isFolderRenaming: false
+    isFolderRenaming: this.props.folder.isFolderRenaming || false
   }
 
   state = this.initialState
 
   closeDropdowns = () => {
     this.setState(this.initialState)
+  }
+
+  createFolder = parentFolderId => {
+    const {
+      createFolder
+    } = this.props
+    createFolder(parentFolderId)
+    this.setState({
+      isFolderDropdownVisible: false,
+      isFolderItemsVisible: true
+    })
   }
 
   handleFolderInfoContextMenu = e => {
@@ -73,6 +86,7 @@ class AppFoldersSidebarFolder extends Component {
 
   render() {
     const {
+      createFolder,
       deleteFolder,
       folder,
       folders,
@@ -111,6 +125,7 @@ class AppFoldersSidebarFolder extends Component {
         </FolderInfo>
         <AppFoldersSidebarFolderDropdowns 
           closeDropdowns={this.closeDropdowns}
+          createFolder={() => this.createFolder(folder.id)}
           deleteFolder={() => deleteFolder(parentFolderId, folder.id)}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
@@ -126,6 +141,7 @@ class AppFoldersSidebarFolder extends Component {
             {folder.folders && folder.folders.map(subFolderId => (
               <AppFoldersSidebarFolder
                 key={subFolderId}
+                createFolder={createFolder}
                 deleteFolder={deleteFolder}
                 folder={folders[subFolderId]}
                 folders={folders}
@@ -153,6 +169,7 @@ class AppFoldersSidebarFolder extends Component {
 // Props
 //-----------------------------------------------------------------------------
 AppFoldersSidebarFolder.propTypes = {
+  createFolder: func,
   deleteFolder: func,
   folder: shape({
     name: string,
@@ -160,6 +177,7 @@ AppFoldersSidebarFolder.propTypes = {
     modules: array
   }),
   folders: object,
+  isFolderRenaming: bool,
   level: number,
   modules: object,
   parentFolderId: string,
@@ -189,8 +207,7 @@ const FolderInfo = styled.div`
 const FolderName = styled(ContentEditable)`
   width: 100%;
   overflow-x: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  user-select: none;
 `
 
 const FolderItems = styled.div`

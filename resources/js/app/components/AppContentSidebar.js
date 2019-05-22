@@ -19,7 +19,7 @@ const AppContentSidebar = ({ children }) => {
       <Header>
         <Logo
           alignItems="flex-start"
-          fontSize="2rem"/>
+          fontSize="1.5rem"/>
       </Header>
       <Items>
         {children}

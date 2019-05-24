@@ -15,7 +15,6 @@ class CreateTable extends Migration
     {
         Schema::create('tables', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name')->nullable();
             $table->timestamps();
         });
     }

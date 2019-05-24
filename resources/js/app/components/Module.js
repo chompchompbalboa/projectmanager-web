@@ -7,13 +7,16 @@ import { func, object, string } from 'prop-types'
 import styled from 'styled-components'
 
 import {
+  getNote,
   getTable
 } from '../../_api/queries'
 
 import { selectModules } from '../redux/folder/folderSelectors'
+import { setNote as setNoteAction } from '../redux/note/noteActions'
 import { setTable as setTableAction } from '../redux/table/tableActions'
 
 import Loading from './Loading'
+import Note from './Note'
 import Table from './Table'
 
 //-----------------------------------------------------------------------------
@@ -24,6 +27,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  setNote: nextNote => dispatch(setNoteAction(nextNote)),
   setTable: nextTable => dispatch(setTableAction(nextTable))
 })
 
@@ -37,6 +41,11 @@ class Module extends Component {
   }
   
   modules = {
+    NOTE: {
+      component: Note,
+      get: getNote,
+      set: this.props.setNote
+    },
     TABLE: {
       component: Table,
       get: getTable,

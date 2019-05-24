@@ -11,7 +11,7 @@ class Table extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name', 'rows', 'columns'];
+  protected $visible = ['id', 'rows', 'columns'];
   protected $appends = ['rows', 'columns'];
   protected $fillable = ['id'];
   

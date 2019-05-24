@@ -15,7 +15,6 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Table::class, function (Faker $faker) {
     return [
-        'id' => $faker->uuid,
-        'name' => $faker->jobTitle
+        'id' => $faker->uuid
     ];
 });

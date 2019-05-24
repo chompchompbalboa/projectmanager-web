@@ -35,6 +35,8 @@ Route::prefix('app')->group(function () {
     // Folders
     'folders' => 'FolderController',
     'modules' => 'ModuleController',
+    // Notes
+    'notes' => 'NoteController',
     // Table
     'tables' => 'TableController',
     'tables/breakdowns' => 'TableBreakdownController',

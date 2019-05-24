@@ -19,7 +19,8 @@ const CreateModuleDropdown = ({
 }) => {
 
   const modules = [
-    { name: 'Table', type: 'TABLE' }
+    { name: 'Table', type: 'TABLE' },
+    { name: 'Note', type: 'NOTE' }
   ]
   return (
     <Dropdown

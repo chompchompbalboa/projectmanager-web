@@ -16,6 +16,7 @@ import DropdownItem from './DropdownItem'
 const AppFolderSidebarFolderDropdowns = ({
   closeDropdowns,
   createFolder,
+  createModule,
   deleteFolder,
   dropdownLeft,
   dropdownTop,
@@ -23,6 +24,7 @@ const AppFolderSidebarFolderDropdowns = ({
   isFolderDropdownVisible,
   isFolderDeleteDropdownVisible,
   isFolderCreateModuleDropdownVisible,
+  openFolderCreateModuleDropdown,
   openFolderDeleteDropdown,
   toggleFolderIsRenaming
 }) => {
@@ -35,11 +37,14 @@ const AppFolderSidebarFolderDropdowns = ({
           dropdownTop={dropdownTop}
           isDropdownVisible={isFolderDropdownVisible}>
           <DropdownItem
-            onClick={toggleFolderIsRenaming}
-            text="Rename"/>
+            onClick={openFolderCreateModuleDropdown}
+            text="New Module"/>
           <DropdownItem
             onClick={createFolder}
             text="New Folder"/>
+          <DropdownItem
+            onClick={toggleFolderIsRenaming}
+            text="Rename"/>
           <DropdownItem
             onClick={openFolderDeleteDropdown}
             text="Delete"/>
@@ -56,10 +61,10 @@ const AppFolderSidebarFolderDropdowns = ({
       {isFolderCreateModuleDropdownVisible && 
         <CreateModuleDropdown
           closeDropdown={closeDropdowns}
+          createModule={createModule}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
-          isDropdownVisible={isFolderCreateModuleDropdownVisible}
-          createDropdown={() => console.log('createModule')}/>}
+          isDropdownVisible={isFolderCreateModuleDropdownVisible}/>}
     </Container>
   )
 }
@@ -67,6 +72,7 @@ const AppFolderSidebarFolderDropdowns = ({
 AppFolderSidebarFolderDropdowns.propTypes = {
   closeDropdowns: func,
   createFolder: func,
+  createModule: func,
   deleteFolder: func,
   dropdownLeft: string,
   dropdownTop: string,

@@ -49,6 +49,24 @@ const folderReducers = (state = initialState, action) => {
         }
       }
     }
+      
+    case 'CREATE_MODULE': {
+      const {
+        folderId,
+        newModule
+      } = action
+      return {
+        ...state,
+        modules: { ...state.modules, [newModule.id]: newModule },
+        folders: {
+          ...state.folders, [folderId]: {
+            ...state.folders[folderId], modules: [
+              ...state.folders[folderId].modules, newModule.id
+            ]
+          }
+        }
+      }
+    }
 
     case 'DELETE_FOLDER': {
       const {

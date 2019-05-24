@@ -40,25 +40,7 @@ class TableController extends Controller
      */
     public function store(Request $request)
     {
-      $newTable = new Table;
-      $newTable->organization_id = $request->input('organizationId');
-      $newTable->collection_id = $request->input('collectionId');
-      if($newTable->save()) {
-        // Add the first column to the table. If you make changes to the defaults
-        // here, you also need to update the column defaults on the front end.
-        $firstColumn = new TableColumn;
-        $firstColumn->table_id = $newTable->id;
-        $firstColumn->position = 1;
-        $firstColumn->width = 1;
-        $firstColumn->type = 'STRING';
-        if($firstColumn->save()) {
-          return [
-            'tableId' => $request->input('tableId'),
-            'nextTableId' => $newTable->id,
-            'firstColumnId' => $firstColumn->id
-          ];
-        }
-      }
+      return Table::create($request->all());
     }
 
     /**
@@ -98,18 +80,9 @@ class TableController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Table $table)
-    {      
-      $table->name = $request->input('table')['name'];
-      if ($table->save()) {
-        return [
-          "success" => true
-        ];
-      }
-      else {
-        return [
-          "success" => false
-        ];
-      }
+    {
+      $table->update($request->all());
+      return response()->json($table, 200);
     }
 
     /**

@@ -5,6 +5,8 @@ import { v4 as createUuid } from 'uuid'
 
 import { mutation } from '../../../_api'
 
+import { updateActiveModuleId } from '../active/activeActions'
+
 //-----------------------------------------------------------------------------
 // Defaults
 //-----------------------------------------------------------------------------
@@ -17,6 +19,16 @@ const defaultFolder = (parentFolderId, userId) => ({
   isFolderRenaming: true,
   userId: parentFolderId ? null : userId
 })
+
+const defaultModule = (folderId, type) => ({
+  id: createUuid(),
+  name: 'New Module',
+  folderId: folderId,
+  type: type,
+  typeId: createUuid(),
+  isModuleRenaming: true,
+})
+
 //-----------------------------------------------------------------------------
 // Create Folder
 //-----------------------------------------------------------------------------
@@ -31,6 +43,25 @@ export const createFolder = (parentFolderId) => {
 const createFolderReducer = (newFolder) => ({
   type: 'CREATE_FOLDER',
   newFolder: newFolder
+})
+
+//-----------------------------------------------------------------------------
+// Create Folder
+//-----------------------------------------------------------------------------
+export const createModule = (folderId, type) => {
+  return (dispatch, getState) => {
+    const newModule = defaultModule(folderId, type)
+    dispatch(createModuleReducer(folderId, newModule))
+    mutation.createTable({ id: newModule.typeId, folderId: folderId }).then(newTable => {
+      dispatch(updateActiveModuleId(newModule.id))
+    })
+  }
+}
+
+const createModuleReducer = (folderId, newModule) => ({
+  type: 'CREATE_MODULE',
+  folderId: folderId,
+  newModule: newModule
 })
 
 //-----------------------------------------------------------------------------

@@ -21,6 +21,13 @@ const initialState = {
 const viewReducers = (state = initialState, action) => {
   switch(action.type) {
 
+    case 'CREATE_TABLE': {
+      const {
+        newTable
+      } = action
+      return newTable
+    }
+
     case 'CREATE_TABLE_COLUMN': {
       const {
         newColumn,

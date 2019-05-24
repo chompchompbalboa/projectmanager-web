@@ -10,6 +10,7 @@ import { colors } from '../config'
 
 import { 
   createFolder as createFolderAction,
+  createModule as createModuleAction,
   deleteFolder as deleteFolderAction,
   updateFolder as updateFolderAction 
 } from '../redux/folder/folderActions'
@@ -24,6 +25,7 @@ import Icon from './Icon'
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
   createFolder: (parentFolderId) => dispatch(createFolderAction(parentFolderId)),
+  createModule: (folderId, type) => dispatch(createModuleAction(folderId, type)),
   deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
   updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
 })
@@ -61,6 +63,18 @@ class AppFoldersSidebarFolder extends Component {
     })
   }
 
+  createModule = (folderId, type) => {
+    const {
+      createModule
+    } = this.props
+    createModule(folderId, type)
+    this.setState({
+      isFolderCreateModuleDropdownVisible: false,
+      isFolderItemsVisible: true
+    })
+  }
+
+
   handleFolderInfoContextMenu = e => {
     e.preventDefault()
     this.setState({
@@ -87,6 +101,7 @@ class AppFoldersSidebarFolder extends Component {
   render() {
     const {
       createFolder,
+      createModule,
       deleteFolder,
       folder,
       folders,
@@ -126,6 +141,7 @@ class AppFoldersSidebarFolder extends Component {
         <AppFoldersSidebarFolderDropdowns 
           closeDropdowns={this.closeDropdowns}
           createFolder={() => this.createFolder(folder.id)}
+          createModule={type => this.createModule(folder.id, type)}
           deleteFolder={() => deleteFolder(parentFolderId, folder.id)}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
@@ -134,6 +150,7 @@ class AppFoldersSidebarFolder extends Component {
           isFolderDeleteDropdownVisible={isFolderDeleteDropdownVisible}
           isFolderCreateModuleDropdownVisible={isFolderCreateModuleDropdownVisible}
           openFolderDeleteDropdown={() => this.setState({ isFolderDropdownVisible: false, isFolderDeleteDropdownVisible: true })}
+          openFolderCreateModuleDropdown={() => this.setState({ isFolderDropdownVisible: false, isFolderCreateModuleDropdownVisible: true })}
           toggleFolderIsRenaming={() => this.setState({ isFolderDropdownVisible: false, isFolderRenaming: !isFolderRenaming })}/>
         <FolderItems
           isFolderItemsVisible={isFolderItemsVisible}>
@@ -142,6 +159,7 @@ class AppFoldersSidebarFolder extends Component {
               <AppFoldersSidebarFolder
                 key={subFolderId}
                 createFolder={createFolder}
+                createModule={createModule}
                 deleteFolder={deleteFolder}
                 folder={folders[subFolderId]}
                 folders={folders}
@@ -170,6 +188,7 @@ class AppFoldersSidebarFolder extends Component {
 //-----------------------------------------------------------------------------
 AppFoldersSidebarFolder.propTypes = {
   createFolder: func,
+  createModule: func,
   deleteFolder: func,
   folder: shape({
     name: string,

@@ -4,7 +4,7 @@
 import axios from './axios'
 
 //-----------------------------------------------------------------------------
-// Folders
+// Folder
 //-----------------------------------------------------------------------------
 export const createFolder = async newFolder => {  
   return axios.post('/app/folders', newFolder).then(response => {
@@ -20,6 +20,27 @@ export const deleteFolder = async (folderId) => {
 
 export const updateFolder = async (id, updates) => {
   return axios.patch('/app/folders/' + id, updates).then(response => {
+    return response.data
+  })
+}
+
+//-----------------------------------------------------------------------------
+// Module
+//-----------------------------------------------------------------------------
+export const createModule = async (newModule) => {  
+  return axios.post('/app/modules', newModule).then(response => {
+    return response.data
+  })
+}
+
+export const updateModule = async (id, updates) => {
+  return axios.patch('/app/modules/' + id, updates).then(response => {
+    return response.data
+  })
+}
+
+export const deleteModule = async (moduleId) => {  
+  return axios.delete('/app/modules/' + moduleId).then(response => {
     return response.data
   })
 }

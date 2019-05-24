@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Module;
-use App\Models\View;
+use App\Models\Table;
 
 class ModuleController extends Controller
 {
@@ -37,9 +37,12 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-      $module = Module::create($request->input('module'));
-      $view = View::find($request->input('viewId'));
-      $view->modules()->attach($module->id);
+      $module = Module::create($request->all());
+      switch($module->type) {
+        case 'TABLE': 
+          Table::create(['id' => $module->typeId]);
+        break;
+      }
       return response()->json($module, 200);
     }
 
@@ -51,7 +54,6 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
-        //
     }
 
     /**

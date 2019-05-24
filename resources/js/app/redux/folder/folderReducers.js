@@ -87,6 +87,25 @@ const folderReducers = (state = initialState, action) => {
       return nextState
     }
 
+    case 'DELETE_MODULE': {
+      const {
+        moduleId
+      } = action
+      const module = clone(state.modules[moduleId])
+      console.log(module)
+      const { [moduleId]: {}, ...nextModules } = state.modules
+      return {
+        ...state,
+        modules: nextModules,
+        folders: {
+          ...state.folders, [module.folderId]: {
+            ...state.folders[module.folderId], 
+            modules: state.folders[module.folderId].modules.filter(module => module !== moduleId)
+          }
+        }
+      }
+    }
+
     case 'UPDATE_FOLDER': {
       const {
         folderId,
@@ -100,6 +119,21 @@ const folderReducers = (state = initialState, action) => {
         }
       }
     }
+
+    case 'UPDATE_MODULE': {
+      const {
+        moduleId,
+        updates
+      } = action
+      return { 
+        ...state, modules: {
+          ...state.modules, [moduleId]: {
+            ...state.modules[moduleId], ...updates
+          }
+        }
+      }
+    }
+      
     default:
       return state
   }

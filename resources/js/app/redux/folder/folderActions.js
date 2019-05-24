@@ -46,13 +46,13 @@ const createFolderReducer = (newFolder) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Create Folder
+// Create Module
 //-----------------------------------------------------------------------------
 export const createModule = (folderId, type) => {
   return (dispatch, getState) => {
     const newModule = defaultModule(folderId, type)
     dispatch(createModuleReducer(folderId, newModule))
-    mutation.createTable({ id: newModule.typeId, folderId: folderId }).then(newTable => {
+    mutation.createModule(newModule).then(newModule => {
       dispatch(updateActiveModuleId(newModule.id))
     })
   }
@@ -81,6 +81,22 @@ const updateFolderReducer = (folderId, updates) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Module
+//-----------------------------------------------------------------------------
+export const updateModule = (moduleId, updates) => {
+  return dispatch => {
+    dispatch(updateModuleReducer(moduleId, { ...updates, isModuleRenaming: false }))
+    mutation.updateModule(moduleId, updates)
+  }
+}
+
+const updateModuleReducer = (moduleId, updates) => ({
+  type: 'UPDATE_MODULE',
+  moduleId: moduleId,
+  updates: updates
+})
+
+//-----------------------------------------------------------------------------
 // Delete Folder
 //-----------------------------------------------------------------------------
 export const deleteFolder = (parentFolderId, folderId) => {
@@ -94,4 +110,19 @@ const deleteFolderReducer = (parentFolderId, folderId) => ({
   type: 'DELETE_FOLDER',
   parentFolderId: parentFolderId,
   folderId: folderId
+})
+
+//-----------------------------------------------------------------------------
+// Delete Module
+//-----------------------------------------------------------------------------
+export const deleteModule = (moduleId) => {
+  return dispatch => {
+    dispatch(deleteModuleReducer(moduleId))
+    mutation.deleteModule(moduleId)
+  }
+}
+
+const deleteModuleReducer = (moduleId) => ({
+  type: 'DELETE_MODULE',
+  moduleId: moduleId
 })

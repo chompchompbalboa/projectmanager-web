@@ -4,26 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Table;
-use App\Http\Controllers\TableController;
-
 class Module extends Model
 {
   public $incrementing = false;
   /**
    * Define which attributes will be visible
    */
-  protected $visible = ['id', 'name', 'type', 'typeId'];
+  protected $visible = ['id', 'name', 'folderId', 'type', 'typeId'];
 
   /**
    * Define which attributes will be mass assignable
    */
-  protected $fillable = ['type', 'type_id', 'name'];
+  protected $fillable = ['id', 'name', 'folderId', 'type', 'typeId'];
 
   /**
    * Custom attributes
    */
-  protected $appends = ['typeId'];
+  protected $appends = ['folderId', 'typeId'];
 
   /**
    * Rename table columns from snake case to camel case
@@ -40,5 +37,11 @@ class Module extends Model
    */
   public function folder() {
     return $this->belongsTo('App\Models\Folder');
+  }
+  public function getFolderIdAttribute() {
+    return $this->attributes['folder_id'];
+  }
+  public function setFolderIdAttribute($value) {
+    $this->attributes['folder_id'] = $value;
   }
 }

@@ -1,0 +1,14 @@
+.quill {
+  height: 92% !important;
+}
+
+.ql-toolbar {
+  z-index: 5;
+  position: sticky;
+  top: 0;
+  background-color: white;
+}
+
+.ql-container {
+  border: none !important;
+}

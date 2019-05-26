@@ -92,7 +92,6 @@ const folderReducers = (state = initialState, action) => {
         moduleId
       } = action
       const module = clone(state.modules[moduleId])
-      console.log(module)
       const { [moduleId]: {}, ...nextModules } = state.modules
       return {
         ...state,

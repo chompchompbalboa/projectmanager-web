@@ -132,6 +132,7 @@ class AppFoldersSidebarModule extends Component {
 //-----------------------------------------------------------------------------
 AppFoldersSidebarModule.propTypes = {
   activeModuleId: string,
+  deleteModule: func,
   level: number,
   module: shape({
     id: string,
@@ -139,7 +140,8 @@ AppFoldersSidebarModule.propTypes = {
     type: string,
     isModuleRenaming: bool
   }),
-  updateActiveModuleId: func
+  updateActiveModuleId: func,
+  updateModule: func
 }
 
 //-----------------------------------------------------------------------------

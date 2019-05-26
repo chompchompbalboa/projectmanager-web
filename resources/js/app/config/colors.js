@@ -2,8 +2,7 @@ export default {
 
   BACKGROUND: 'rgb(28, 27, 39)',
 
-
-  MODULE_BACKGROUND: 'rgb(240, 240, 240)',
+  MODULE_BACKGROUND: 'rgb(250, 250, 250)',
 
   DROPDOWN_BACKGROUND: 'white',
   DROPDOWN_ITEM_BORDER: 'transparent',

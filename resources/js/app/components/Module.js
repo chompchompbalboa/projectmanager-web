@@ -96,8 +96,7 @@ class Module extends Component {
     if (!isLoading && module && typeof this.modules[module.type] !== 'undefined') {
       const ModuleType = this.modules[module.type].component
       return (
-        <ModuleType
-          {...{ [module.type.toLowerCase()]: module.payload }}/> // Assign the correct prop name to the payload while passing it through
+        <ModuleType />
       )
     }
     if(isLoading) {
@@ -117,6 +116,7 @@ class Module extends Component {
 Module.propTypes = {
   moduleId: string,
   modules: object,
+  setNote: func,
   setTable: func
 }
 

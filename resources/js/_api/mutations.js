@@ -46,6 +46,15 @@ export const deleteModule = async (moduleId) => {
 }
 
 //-----------------------------------------------------------------------------
+// Note
+//-----------------------------------------------------------------------------
+export const updateNote = async (id, updates) => {
+  return axios.patch('/app/notes/' + id, updates).then(response => {
+    return response.data
+  })
+}
+
+//-----------------------------------------------------------------------------
 // Table
 //-----------------------------------------------------------------------------
 export const createTable = async (newTable) => {  

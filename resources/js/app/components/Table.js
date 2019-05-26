@@ -9,9 +9,6 @@ import styled from 'styled-components'
 import { colors } from '../config'
 
 import {
-  setTable as setTableAction 
-} from '../redux/table/tableActions'
-import {
   selectTableWidth
 } from '../redux/table/tableSelectors'
 
@@ -24,10 +21,6 @@ import TableRows from './TableRows'
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
   tableWidth: selectTableWidth(state)
-})
-
-const mapDispatchToProps = dispatch => ({
-  setTable: table => dispatch(setTableAction(table))
 })
 
 //-----------------------------------------------------------------------------
@@ -87,6 +80,5 @@ const Table = styled.table`
 `
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(TableComponent)

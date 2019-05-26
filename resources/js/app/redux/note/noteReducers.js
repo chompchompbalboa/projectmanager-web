@@ -22,6 +22,13 @@ const viewReducers = (state = initialState, action) => {
       } = action
       return note
     }
+      
+    case 'UPDATE_NOTE': {
+      const {
+        updates
+      } = action
+      return {...state, ...updates}
+    }
 
     default:
       return state

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Module;
+use App\Models\Note;
 use App\Models\Table;
 
 class ModuleController extends Controller
@@ -39,6 +40,8 @@ class ModuleController extends Controller
     {
       $module = Module::create($request->all());
       switch($module->type) {
+        case 'NOTE': 
+          Note::create(['id' => $module->typeId]);
         case 'TABLE': 
           Table::create(['id' => $module->typeId]);
         break;

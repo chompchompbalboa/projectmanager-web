@@ -38,7 +38,7 @@ const AppFolderSidebarFolderDropdowns = ({
           isDropdownVisible={isFolderDropdownVisible}>
           <DropdownItem
             onClick={openFolderCreateModuleDropdown}
-            text="New Module"/>
+            text="New File"/>
           <DropdownItem
             onClick={createFolder}
             text="New Folder"/>
@@ -69,6 +69,9 @@ const AppFolderSidebarFolderDropdowns = ({
   )
 }
 
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
 AppFolderSidebarFolderDropdowns.propTypes = {
   closeDropdowns: func,
   createFolder: func,
@@ -80,6 +83,7 @@ AppFolderSidebarFolderDropdowns.propTypes = {
   isFolderDropdownVisible: bool,
   isFolderDeleteDropdownVisible: bool,
   isFolderCreateModuleDropdownVisible: bool,
+  openFolderCreateModuleDropdown: func,
   openFolderDeleteDropdown: func,
   toggleFolderIsRenaming: func,
 }

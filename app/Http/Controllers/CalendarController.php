@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Calendar;
 use Illuminate\Http\Request;
 
-use App\Models\Calendar;
-use App\Models\Module;
-use App\Models\Note;
-use App\Models\Table;
-
-class ModuleController extends Controller
+class CalendarController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,36 +35,27 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-      $module = Module::create($request->all());
-      switch($module->type) {
-        case 'CALENDAR': 
-          Calendar::create(['id' => $module->typeId]);
-        case 'NOTE': 
-          Note::create(['id' => $module->typeId]);
-        case 'TABLE': 
-          Table::create(['id' => $module->typeId]);
-        break;
-      }
-      return response()->json($module, 200);
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Module  $module
+     * @param  \App\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function show(Module $module)
+    public function show(Calendar $calendar)
     {
+      return response()->json($calendar, 200);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Module  $module
+     * @param  \App\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function edit(Module $module)
+    public function edit(Calendar $calendar)
     {
         //
     }
@@ -77,24 +64,22 @@ class ModuleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Module  $module
+     * @param  \App\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Module $module)
+    public function update(Request $request, Calendar $calendar)
     {
-      $module->update($request->all());
-      return response()->json($module, 200);
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Module  $module
+     * @param  \App\Calendar  $calendar
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Module $module)
+    public function destroy(Calendar $calendar)
     {
-      $module->delete();
-      return response()->json(null, 204);
+        //
     }
 }

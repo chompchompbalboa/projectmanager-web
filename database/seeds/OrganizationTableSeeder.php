@@ -44,7 +44,7 @@ class OrganizationTableSeeder extends Seeder
               $module->folder_id = $subFolder->id;
               $module->save();
               
-              $moduleTypes = ['NOTE', 'TABLE'];
+              $moduleTypes = ['CALENDAR', 'NOTE', 'TABLE'];
               $moduleType = $moduleTypes[array_rand($moduleTypes, 1)];
   
               switch($moduleType) {
@@ -96,6 +96,18 @@ class OrganizationTableSeeder extends Seeder
                     $module->name = 'Note';
                     $module->type = 'NOTE';
                     $module->type_id = $note->id;
+                    $module->save();
+                  });
+                break;
+                  
+                case 'CALENDAR':   
+                  print('  Calendar'.PHP_EOL);            
+                  // Calendars
+                  $calendars = factory(App\Models\Calendar::class, 1)->create();
+                  $calendars->each(function($calendar) use ($module) {
+                    $module->name = 'Calendar';
+                    $module->type = 'CALENDAR';
+                    $module->type_id = $calendar->id;
                     $module->save();
                   });
                 break;

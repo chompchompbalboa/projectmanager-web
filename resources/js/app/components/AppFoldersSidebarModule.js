@@ -159,9 +159,13 @@ const ModuleInfo = styled.div`
   justify-content: flex-start;
   align-items: center;
   font-size: 1rem;
+  color: ${ props => props.isActiveModule ? colors.TEXT_BLACK : 'inherit' };
   background-color: ${ props => props.isActiveModule ? colors.SIDEBAR_BACKGROUND_ACTIVE : 'transparent' };
+  border-left: 5px solid ${ props => props.isActiveModule ? colors.SIDEBAR_BORDER_ACTIVE : 'transparent' };
   &:hover {
+    color: ${ colors.TEXT_BLACK };
     background-color: ${ colors.SIDEBAR_BACKGROUND_ACTIVE };
+    border-left: 5px solid ${ colors.SIDEBAR_BORDER_ACTIVE };
   }
 `
 

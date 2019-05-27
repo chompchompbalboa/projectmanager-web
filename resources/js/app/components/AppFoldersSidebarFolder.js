@@ -212,14 +212,17 @@ const Container = styled.div`
 
 const FolderInfo = styled.div`
   padding: 0.25rem;
-  padding-left: ${ props => (props.level / 2) + 'rem' };
+  padding-left: ${ props => (props.level / 3) + 'rem' };
   cursor: pointer;
   display: flex;
   justify-content: flex-start;
   align-items: center;
   font-size: 1rem;
+  border-left: 5px solid transparent;
   &:hover {
+    color: ${ colors.TEXT_BLACK };
     background-color: ${ colors.SIDEBAR_BACKGROUND_ACTIVE };
+    border-left: 5px solid ${ colors.SIDEBAR_BORDER_ACTIVE };
   }
 `
 

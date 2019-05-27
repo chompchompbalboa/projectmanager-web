@@ -7,14 +7,17 @@ import { func, object, string } from 'prop-types'
 import styled from 'styled-components'
 
 import {
+  getCalendar,
   getNote,
   getTable
 } from '../../_api/queries'
 
 import { selectModules } from '../redux/folder/folderSelectors'
+import { setCalendar as setCalendarAction } from '../redux/calendar/calendarActions'
 import { setNote as setNoteAction } from '../redux/note/noteActions'
 import { setTable as setTableAction } from '../redux/table/tableActions'
 
+import Calendar from './Calendar'
 import Loading from './Loading'
 import Note from './Note'
 import Table from './Table'
@@ -27,6 +30,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  setCalendar: nextCalendar => dispatch(setCalendarAction(nextCalendar)),
   setNote: nextNote => dispatch(setNoteAction(nextNote)),
   setTable: nextTable => dispatch(setTableAction(nextTable))
 })
@@ -41,6 +45,11 @@ class Module extends Component {
   }
   
   modules = {
+    CALENDAR: {
+      component: Calendar,
+      get: getCalendar,
+      set: this.props.setCalendar
+    },
     NOTE: {
       component: Note,
       get: getNote,
@@ -104,7 +113,7 @@ class Module extends Component {
     }
     return (
       <Container>
-        Select a module to get started
+        Select a file to get started
       </Container>
     )
   }
@@ -116,6 +125,7 @@ class Module extends Component {
 Module.propTypes = {
   moduleId: string,
   modules: object,
+  setCalendar: func,
   setNote: func,
   setTable: func
 }

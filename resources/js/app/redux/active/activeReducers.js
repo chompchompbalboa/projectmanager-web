@@ -2,9 +2,8 @@
 // Initial State
 //-----------------------------------------------------------------------------
 const initialState = {
-  id: initialData.user.active.id,
   content: 'FOLDERS',
-  openFolders: initialData.user.active.openFolders,
+  folderPath: null,
   moduleId: initialData.user.active.moduleId,
 }
 
@@ -17,6 +16,11 @@ const activeReducers = (state = initialState, action) => {
     case 'UPDATE_ACTIVE_CONTENT': {
       const { nextActiveContent } = action
       return { ...state, content: nextActiveContent }
+    }
+
+    case 'UPDATE_ACTIVE_FOLDER_PATH': {
+      const { nextActiveFolderPath } = action
+      return { ...state, folderPath: nextActiveFolderPath }
     }
 
     case 'UPDATE_ACTIVE_MODULE_ID': {

@@ -8,6 +8,9 @@ import styled from 'styled-components'
 
 import { colors } from '../config'
 
+import {
+  updateActiveFolderPath as updateActiveFolderPathAction
+} from '../redux/active/activeActions'
 import { 
   createFolder as createFolderAction,
   createModule as createModuleAction,
@@ -24,9 +27,10 @@ import Icon from './Icon'
 // Redux
 //-----------------------------------------------------------------------------
 const mapDispatchToProps = dispatch => ({
-  createFolder: (parentFolderId) => dispatch(createFolderAction(parentFolderId)),
+  createFolder: parentFolderId => dispatch(createFolderAction(parentFolderId)),
   createModule: (folderId, type) => dispatch(createModuleAction(folderId, type)),
   deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
+  updateActiveFolderPath: nextActiveFolderPath => dispatch(updateActiveFolderPathAction(nextActiveFolderPath)),
   updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
 })
 
@@ -74,6 +78,20 @@ class AppFoldersSidebarFolder extends Component {
     })
   }
 
+  handleFolderInfoClick = () => {
+    const {
+      folderPath,
+      updateActiveFolderPath
+    } = this.props
+    const {
+      isFolderItemsVisible
+    } = this.state
+    this.setState({ 
+      isFolderItemsVisible: !isFolderItemsVisible 
+    })
+    updateActiveFolderPath(folderPath)
+  }
+
 
   handleFolderInfoContextMenu = e => {
     e.preventDefault()
@@ -104,10 +122,12 @@ class AppFoldersSidebarFolder extends Component {
       createModule,
       deleteFolder,
       folder,
+      folderPath,
       folders,
       level,
       modules,
       parentFolderId,
+      updateActiveFolderPath,
       updateFolder
     } = this.props
     const {
@@ -124,7 +144,7 @@ class AppFoldersSidebarFolder extends Component {
       <Container>
         <FolderInfo
           level={level}
-          onClick={() => this.setState({ isFolderItemsVisible: !isFolderItemsVisible })}
+          onClick={() => this.handleFolderInfoClick()}
           onContextMenu={e => this.handleFolderInfoContextMenu(e)}>
           <Icon
             icon={isFolderItemsVisible ? "FOLDER_OPEN" : "FOLDER_CLOSED"}
@@ -162,10 +182,12 @@ class AppFoldersSidebarFolder extends Component {
                 createModule={createModule}
                 deleteFolder={deleteFolder}
                 folder={folders[subFolderId]}
+                folderPath={[...folderPath, subFolderId]}
                 folders={folders}
                 level={level + 1}
                 modules={modules}
                 parentFolderId={folder.id}
+                updateActiveFolderPath={updateActiveFolderPath}
                 updateFolder={updateFolder}/>
             ))}
           </FolderSubfolders>
@@ -173,6 +195,7 @@ class AppFoldersSidebarFolder extends Component {
             {folder.modules && folder.modules.map(moduleId => (
               <AppFoldersSidebarModule 
                 key={moduleId}
+                folderPath={[...folderPath, moduleId]}
                 level={level + 1}
                 module={modules[moduleId]}/>
             ))}
@@ -195,11 +218,13 @@ AppFoldersSidebarFolder.propTypes = {
     folders: array,
     modules: array
   }),
+  folderPath: array,
   folders: object,
   isFolderRenaming: bool,
   level: number,
   modules: object,
   parentFolderId: string,
+  updateActiveFolderPath: func,
   updateFolder: func
 }
 

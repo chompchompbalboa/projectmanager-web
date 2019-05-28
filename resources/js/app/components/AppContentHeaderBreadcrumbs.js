@@ -2,19 +2,12 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { func, number, oneOf, shape, string } from 'prop-types'
+import { array, object } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-
-import { 
-  updateActiveSettingsStructure as updateActiveSettingsStructureAction 
-} from '../redux/active/activeActions'
-
-import { selectActiveContent } from '../redux/active/activeSelectors'
-import { selectActiveCollection } from '../redux/collection/collectionSelectors'
-import { selectActiveContainer } from '../redux/container/containerSelectors'
-import { selectActiveView } from '../redux/view/viewSelectors'
+import { selectActiveFolderPath } from '../redux/active/activeSelectors'
+import { selectFolders, selectModules } from '../redux/folder/folderSelectors'
 
 import { colors } from '../config'
 
@@ -22,55 +15,34 @@ import { colors } from '../config'
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  activeCollection: selectActiveCollection(state),
-  activeContainer: selectActiveContainer(state),
-  activeContent: selectActiveContent(state),
-  activeView: selectActiveView(state)
-})
-
-const mapDispatchToProps = dispatch => ({
-  updateActiveSettingsStructure: (containerId, collectionId, viewId) => dispatch(updateActiveSettingsStructureAction(containerId, collectionId, viewId))
+  activeFolderPath: selectActiveFolderPath(state),
+  folders: selectFolders(state),
+  modules: selectModules(state)
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const AppContentHeaderBreadcrumbs = ({
-  activeCollection,
-  activeContainer,
-  activeContent,
-  activeView,
-  updateActiveSettingsStructure
+  activeFolderPath,
+  folders,
+  modules
 }) => {
-
-  const breadcrumbsMap = {
-    CONTAINER: [
-      activeContainer ? activeContainer.name : null,
-      activeCollection ? activeCollection.name : null,
-      activeCollection && activeView ? activeView.name : null
-    ].filter(breadcrumb => breadcrumb !== null),
-    SETTINGS: [
-      'Settings',
-      'Structure'
-    ]
-  }
-
-  const breadcrumbs = breadcrumbsMap[activeContent]
-
   return (
     <Container>
-      {breadcrumbs.map((breadcrumb, index) => (
-        <React.Fragment
-           key={index}>
-          <Breadcrumb
-            onClick={() => updateActiveSettingsStructure(activeContainer.id, index > 0 ? activeCollection.id : null, index > 1 ? activeView.id : null)}>
-            {breadcrumb}
-          </Breadcrumb>
-          {index < (breadcrumbs.length - 1) &&
-            <Separator>&gt;</Separator>
-          }
-        </React.Fragment>
-      ))}
+      {activeFolderPath && activeFolderPath.map((activeId, index) => {
+        const breadcrumb = folders[activeId] ? folders[activeId] : modules[activeId]
+        return (
+          <React.Fragment
+            key={activeId}>
+            <Breadcrumb>
+              {breadcrumb.name}
+            </Breadcrumb>
+            {index < (activeFolderPath.length - 1) &&
+              <Separator>&gt;</Separator>
+            }
+          </React.Fragment>
+      )})}
     </Container>
   )
 }
@@ -79,20 +51,9 @@ const AppContentHeaderBreadcrumbs = ({
 // Props
 //-----------------------------------------------------------------------------
 AppContentHeaderBreadcrumbs.propTypes = {
-  activeCollection: shape({
-    name: string
-  }),
-  activeContainer: shape({
-    name: string
-  }),
-  activeContent: oneOf([
-    'CONTAINER',
-    'SETTINGS'
-  ]),
-  activeView: shape({
-    name: string
-  }),
-  updateActiveSettingsStructure: func
+  activeFolderPath: array,
+  folders: object,
+  modules: object
 }
 
 //-----------------------------------------------------------------------------
@@ -104,7 +65,7 @@ const Container = styled.div`
 `
 
 const Breadcrumb = styled.div`
-  cursor: pointer;
+  cursor: default;
   margin-top: 1px;
   border-bottom: 1px solid transparent;
   &:hover {
@@ -117,6 +78,5 @@ const Separator = styled.div`
 `
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  mapStateToProps
 )(AppContentHeaderBreadcrumbs)

@@ -17,6 +17,14 @@ const updateActiveContentReducer = nextActiveContent => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Active Folder Path
+//-----------------------------------------------------------------------------
+export const updateActiveFolderPath = nextActiveFolderPath => ({
+  type: 'UPDATE_ACTIVE_FOLDER_PATH',
+  nextActiveFolderPath: nextActiveFolderPath
+})
+
+//-----------------------------------------------------------------------------
 // Update Active Module Id
 //-----------------------------------------------------------------------------
 export const updateActiveModuleId = nextActiveModuleId => ({

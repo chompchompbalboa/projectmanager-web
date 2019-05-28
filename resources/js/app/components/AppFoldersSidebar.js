@@ -76,6 +76,7 @@ class AppFoldersSidebar extends Component {
             <AppFoldersSidebarFolder
               key={folderId}
               folder={folders[folderId]}
+              folderPath={[folderId]}
               folders={folders}
               level={1}
               modules={modules}/>

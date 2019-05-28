@@ -6,13 +6,14 @@ import styled from 'styled-components'
 
 import { colors, layout } from '../config'
 
-//import AppContentHeaderBreadcrumbs from './AppContentHeaderBreadcrumbs'
+import AppContentHeaderBreadcrumbs from './AppContentHeaderBreadcrumbs'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
 const AppContentHeader = () => {
   return (
     <Container>
+      <AppContentHeaderBreadcrumbs />
     </Container>
   )
 }

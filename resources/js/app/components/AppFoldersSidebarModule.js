@@ -2,13 +2,14 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React, { Component } from 'react'
-import { bool, func, number, shape, string } from 'prop-types'
+import { array, bool, func, number, shape, string } from 'prop-types'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { colors } from '../config'
 
 import {
+  updateActiveFolderPath as updateActiveFolderPathAction,
   updateActiveModuleId as updateActiveModuleIdAction
 } from '../redux/active/activeActions'
 import {
@@ -30,6 +31,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   deleteModule: (moduleId) => dispatch(deleteModuleAction(moduleId)),
+  updateActiveFolderPath: nextActiveFolderPath => dispatch(updateActiveFolderPathAction(nextActiveFolderPath)),
   updateActiveModuleId: nextActiveModuleId => dispatch(updateActiveModuleIdAction(nextActiveModuleId)),
   updateModule: (moduleId, updates) => dispatch(updateModuleAction(moduleId, updates))
 })
@@ -67,6 +69,16 @@ class AppFoldersSidebarModule extends Component {
     this.setState({ isModuleRenaming: false })
   }
 
+  handleModuleInfoClick = () => {
+    const {
+      folderPath,
+      module,
+      updateActiveFolderPath,
+      updateActiveModuleId
+    } = this.props
+    updateActiveFolderPath(folderPath)
+    updateActiveModuleId(module.id)
+  }
 
   handleModuleInfoContextMenu = e => {
     e.preventDefault()
@@ -82,8 +94,7 @@ class AppFoldersSidebarModule extends Component {
       activeModuleId,
       deleteModule,
       level,
-      module,
-      updateActiveModuleId
+      module
     } = this.props
     const {
       dropdownLeft,
@@ -98,7 +109,7 @@ class AppFoldersSidebarModule extends Component {
         <ModuleInfo
           level={level}
           isActiveModule={activeModuleId === module.id}
-          onClick={() => updateActiveModuleId(module.id)}
+          onClick={() => this.handleModuleInfoClick()}
           onContextMenu={e => this.handleModuleInfoContextMenu(e)}>
           <Icon
             icon={"MODULE_" + module.type}
@@ -133,6 +144,7 @@ class AppFoldersSidebarModule extends Component {
 AppFoldersSidebarModule.propTypes = {
   activeModuleId: string,
   deleteModule: func,
+  folderPath: array,
   level: number,
   module: shape({
     id: string,
@@ -140,6 +152,7 @@ AppFoldersSidebarModule.propTypes = {
     type: string,
     isModuleRenaming: bool
   }),
+  updateActiveFolderPath: func,
   updateActiveModuleId: func,
   updateModule: func
 }

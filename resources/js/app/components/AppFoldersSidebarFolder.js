@@ -8,9 +8,6 @@ import styled from 'styled-components'
 
 import { colors } from '../config'
 
-import {
-  updateActiveFolderPath as updateActiveFolderPathAction
-} from '../redux/active/activeActions'
 import { 
   createFolder as createFolderAction,
   createModule as createModuleAction,
@@ -30,7 +27,6 @@ const mapDispatchToProps = dispatch => ({
   createFolder: parentFolderId => dispatch(createFolderAction(parentFolderId)),
   createModule: (folderId, type) => dispatch(createModuleAction(folderId, type)),
   deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
-  updateActiveFolderPath: nextActiveFolderPath => dispatch(updateActiveFolderPathAction(nextActiveFolderPath)),
   updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
 })
 
@@ -80,16 +76,11 @@ class AppFoldersSidebarFolder extends Component {
 
   handleFolderInfoClick = () => {
     const {
-      folderPath,
-      updateActiveFolderPath
-    } = this.props
-    const {
       isFolderItemsVisible
     } = this.state
     this.setState({ 
       isFolderItemsVisible: !isFolderItemsVisible 
     })
-    updateActiveFolderPath(folderPath)
   }
 
 
@@ -127,7 +118,6 @@ class AppFoldersSidebarFolder extends Component {
       level,
       modules,
       parentFolderId,
-      updateActiveFolderPath,
       updateFolder
     } = this.props
     const {
@@ -187,7 +177,6 @@ class AppFoldersSidebarFolder extends Component {
                 level={level + 1}
                 modules={modules}
                 parentFolderId={folder.id}
-                updateActiveFolderPath={updateActiveFolderPath}
                 updateFolder={updateFolder}/>
             ))}
           </FolderSubfolders>

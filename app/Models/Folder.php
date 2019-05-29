@@ -35,7 +35,7 @@ class Folder extends Model
     return $this->hasMany('App\Models\Folder', 'folder_id');
   }
   public function getFoldersAttribute() {
-    return $this->folders()->get();
+    return $this->folders()->orderBy('name')->get();
   }
   
   /**
@@ -45,7 +45,7 @@ class Folder extends Model
     return $this->hasMany('App\Models\Module');
   }
   public function getModulesAttribute() {
-    return $this->modules()->get();
+    return $this->modules()->orderBy('name')->get();
   }
   
   /**

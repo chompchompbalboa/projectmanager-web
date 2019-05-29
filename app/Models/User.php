@@ -29,7 +29,7 @@ class User extends Authenticatable
      * Get the folders for this user
      */
     public function folders() {
-      return $this->hasMany('App\Models\Folder');
+      return $this->hasMany('App\Models\Folder')->orderBy('name');
     }
   
     /**

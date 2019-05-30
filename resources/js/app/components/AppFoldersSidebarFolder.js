@@ -12,8 +12,9 @@ import {
   copyFolder as copyFolderAction,
   createFolder as createFolderAction,
   createModule as createModuleAction,
+  cutFolder as cutFolderAction,
   deleteFolder as deleteFolderAction,
-  pasteFolder as pasteFolderAction,
+  pasteIntoFolder as pasteIntoFolderAction,
   updateFolder as updateFolderAction 
 } from '../redux/folder/folderActions'
 
@@ -29,8 +30,9 @@ const mapDispatchToProps = dispatch => ({
   copyFolder: folder => dispatch(copyFolderAction(folder)),
   createFolder: parentFolderId => dispatch(createFolderAction(parentFolderId)),
   createModule: (folderId, type) => dispatch(createModuleAction(folderId, type)),
+  cutFolder: folder => dispatch(cutFolderAction(folder)),
   deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
-  pasteFolder: nextParentFolderId => dispatch(pasteFolderAction(nextParentFolderId)),
+  pasteIntoFolder: pasteFolderId => dispatch(pasteIntoFolderAction(pasteFolderId)),
   updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
 })
 
@@ -56,11 +58,11 @@ class AppFoldersSidebarFolder extends Component {
     this.setState(this.initialState)
   }
   
-  copyFolder = folder => {
+  copyFolder = folderId => {
     const {
       copyFolder
     } = this.props
-    copyFolder(folder)
+    copyFolder(folderId)
     this.setState({
       isFolderDropdownVisible: false
     })
@@ -121,11 +123,11 @@ class AppFoldersSidebarFolder extends Component {
     })
   }
   
-  pasteFolder = nextParentFolderId => {
+  pasteIntoFolder = pasteFolderId => {
     const {
-      pasteFolder
+      pasteIntoFolder
     } = this.props
-    pasteFolder(nextParentFolderId)
+    pasteIntoFolder(pasteFolderId)
     this.setState({
       isFolderDropdownVisible: false
     })
@@ -133,7 +135,6 @@ class AppFoldersSidebarFolder extends Component {
 
   render() {
     const {
-      copyFolder,
       createFolder,
       createModule,
       deleteFolder,
@@ -175,7 +176,7 @@ class AppFoldersSidebarFolder extends Component {
         </FolderInfo>
         <AppFoldersSidebarFolderDropdowns 
           closeDropdowns={this.closeDropdowns}
-          copyFolder={() => this.copyFolder(folder)}
+          copyFolder={() => this.copyFolder(folder.id)}
           createFolder={() => this.createFolder(folder.id)}
           createModule={type => this.createModule(folder.id, type)}
           deleteFolder={() => deleteFolder(parentFolderId, folder.id)}
@@ -187,7 +188,7 @@ class AppFoldersSidebarFolder extends Component {
           isFolderCreateModuleDropdownVisible={isFolderCreateModuleDropdownVisible}
           openFolderDeleteDropdown={() => this.setState({ isFolderDropdownVisible: false, isFolderDeleteDropdownVisible: true })}
           openFolderCreateModuleDropdown={() => this.setState({ isFolderDropdownVisible: false, isFolderCreateModuleDropdownVisible: true })}
-          pasteFolder={() => this.pasteFolder(folder.id)}
+          pasteIntoFolder={() => this.pasteIntoFolder(folder.id)}
           toggleFolderIsRenaming={() => this.setState({ isFolderDropdownVisible: false, isFolderRenaming: !isFolderRenaming })}/>
         <FolderItems
           isFolderItemsVisible={isFolderItemsVisible}>
@@ -228,6 +229,7 @@ class AppFoldersSidebarFolder extends Component {
 // Props
 //-----------------------------------------------------------------------------
 AppFoldersSidebarFolder.propTypes = {
+  copyFolder: func,
   createFolder: func,
   createModule: func,
   deleteFolder: func,
@@ -242,6 +244,7 @@ AppFoldersSidebarFolder.propTypes = {
   level: number,
   modules: object,
   parentFolderId: string,
+  pasteIntoFolder: func,
   updateActiveFolderPath: func,
   updateFolder: func
 }

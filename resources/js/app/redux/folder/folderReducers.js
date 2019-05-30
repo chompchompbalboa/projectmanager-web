@@ -9,7 +9,8 @@ import clone from '../../../_utils/clone'
 //-----------------------------------------------------------------------------
 const normalizedFolders = folderNormalizer(initialData.folders)
 const initialState = {
-  clipboard: null,
+  clipboardCutOrCopy: null,
+  clipboardId: null,
   clipboardType: null,
   folders: normalizedFolders.entities.folder,
   folderIds: normalizedFolders.result,
@@ -21,17 +22,6 @@ const initialState = {
 //-----------------------------------------------------------------------------
 const folderReducers = (state = initialState, action) => {
   switch(action.type) {
-      
-    case 'COPY_FOLDER': {
-      const {
-        folder
-      } = action
-      return {
-        ...state,
-        clipboard: folder,
-        clipboardType: 'FOLDER'
-      }
-    }
 
     case 'CREATE_FOLDER': {
       const {
@@ -118,21 +108,19 @@ const folderReducers = (state = initialState, action) => {
       }
     }
       
-    case 'PASTE_FOLDER': {
+    case 'UPDATE_CLIPBOARD': {
       const {
-        nextParentFolderId
+        nextClipboardCutOrCopy,
+        nextClipboardId,
+        nextClipboardType
       } = action
-      const {
-        clipboard,
-        clipboardType
-      } = state
-      if (clipboardType === 'FOLDER') {
-        console.log(nextParentFolderId)
-        return {
-          ...state
-        }
+      console.log(action)
+      return {
+        ...state,
+        clipboardCutOrCopy: nextClipboardCutOrCopy,
+        clipboardId: nextClipboardId,
+        clipboardType: nextClipboardType,
       }
-      return state
     }
 
     case 'UPDATE_FOLDER': {

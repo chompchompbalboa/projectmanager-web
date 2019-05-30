@@ -32,16 +32,20 @@ const defaultModule = (folderId, type) => ({
 //-----------------------------------------------------------------------------
 // Copy Folder
 //-----------------------------------------------------------------------------
-export const copyFolder = folder => {
+export const copyFolder = folderId => {
   return dispatch => {
-    dispatch(copyFolderReducer(folder))
+    dispatch(updateClipboard('COPY', 'FOLDER', folderId))
   }
 }
 
-const copyFolderReducer = folder => ({
-  type: 'COPY_FOLDER',
-  folder: folder
-})
+//-----------------------------------------------------------------------------
+// Copy Module
+//-----------------------------------------------------------------------------
+export const copyModule = moduleId => {
+  return dispatch => {
+    dispatch(updateClipboard('COPY', 'FOLDER', moduleId))
+  }
+}
 
 //-----------------------------------------------------------------------------
 // Create Folder
@@ -63,7 +67,7 @@ const createFolderReducer = (newFolder) => ({
 // Create Module
 //-----------------------------------------------------------------------------
 export const createModule = (folderId, type) => {
-  return (dispatch, getState) => {
+  return dispatch => {
     const newModule = defaultModule(folderId, type)
     dispatch(createModuleReducer(folderId, newModule))
     mutation.createModule(newModule).then(newModule => {
@@ -79,17 +83,80 @@ const createModuleReducer = (folderId, newModule) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Paste Folder
+// Cut Folder
 //-----------------------------------------------------------------------------
-export const pasteFolder = nextParentFolderId => {
+export const cutFolder = folderId => {
   return dispatch => {
-    dispatch(pasteFolderReducer(nextParentFolderId))
+    dispatch(updateClipboard('CUT', 'FOLDER', folderId))
   }
 }
 
-const pasteFolderReducer = nextParentFolderId => ({
-  type: 'PASTE_FOLDER',
-  nextParentFolderId: nextParentFolderId
+//-----------------------------------------------------------------------------
+// Cut Module
+//-----------------------------------------------------------------------------
+export const cutModule = moduleId => {
+  return dispatch => {
+    dispatch(updateClipboard('CUT', 'MODULE', moduleId))
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Delete Folder
+//-----------------------------------------------------------------------------
+export const deleteFolder = (parentFolderId, folderId) => {
+  return dispatch => {
+    dispatch(deleteFolderReducer(parentFolderId, folderId))
+    mutation.deleteFolder(folderId)
+  }
+}
+
+const deleteFolderReducer = (parentFolderId, folderId) => ({
+  type: 'DELETE_FOLDER',
+  parentFolderId: parentFolderId,
+  folderId: folderId
+})
+
+//-----------------------------------------------------------------------------
+// Delete Module
+//-----------------------------------------------------------------------------
+export const deleteModule = (moduleId) => {
+  return dispatch => {
+    dispatch(deleteModuleReducer(moduleId))
+    mutation.deleteModule(moduleId)
+  }
+}
+
+const deleteModuleReducer = (moduleId) => ({
+  type: 'DELETE_MODULE',
+  moduleId: moduleId
+})
+
+//-----------------------------------------------------------------------------
+// Paste Folder
+//-----------------------------------------------------------------------------
+export const pasteIntoFolder = pasteFolderId => {
+  return (dispatch, getState) => {
+    const {
+      folder: {
+        clipboardCutOrCopy,
+        clipboardId,
+        clipboardType
+      },
+      folders,
+      modules
+    } = getState()
+    
+  }
+}
+
+//-----------------------------------------------------------------------------
+// Update Clipboard
+//-----------------------------------------------------------------------------
+export const updateClipboard = (cutOrCopy, type, id) => ({
+  type: 'UPDATE_CLIPBOARD',
+  nextClipboardCutOrCopy: cutOrCopy,
+  nextClipboardId: id,
+  nextClipboardType: type,
 })
 
 //-----------------------------------------------------------------------------
@@ -122,35 +189,4 @@ const updateModuleReducer = (moduleId, updates) => ({
   type: 'UPDATE_MODULE',
   moduleId: moduleId,
   updates: updates
-})
-
-//-----------------------------------------------------------------------------
-// Delete Folder
-//-----------------------------------------------------------------------------
-export const deleteFolder = (parentFolderId, folderId) => {
-  return dispatch => {
-    dispatch(deleteFolderReducer(parentFolderId, folderId))
-    mutation.deleteFolder(folderId)
-  }
-}
-
-const deleteFolderReducer = (parentFolderId, folderId) => ({
-  type: 'DELETE_FOLDER',
-  parentFolderId: parentFolderId,
-  folderId: folderId
-})
-
-//-----------------------------------------------------------------------------
-// Delete Module
-//-----------------------------------------------------------------------------
-export const deleteModule = (moduleId) => {
-  return dispatch => {
-    dispatch(deleteModuleReducer(moduleId))
-    mutation.deleteModule(moduleId)
-  }
-}
-
-const deleteModuleReducer = (moduleId) => ({
-  type: 'DELETE_MODULE',
-  moduleId: moduleId
 })

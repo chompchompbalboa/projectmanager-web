@@ -11,7 +11,7 @@ class Folder extends Model
    * Define which attributes will be visible
    */
   protected $appends = ['folderId', 'folders', 'modules', 'userId'];
-  protected $visible = ['id', 'name', 'folders', 'modules'];
+  protected $visible = ['id', 'name', 'folderId', 'folders', 'modules'];
 
   /**
    * Define which attributes will be mass assignable
@@ -24,6 +24,10 @@ class Folder extends Model
   public function folder() {
     return $this->belongsTo('App\Models\Folder', 'folder_id');
   }
+  public function getFolderIdAttribute() {
+    return $this->attributes['folder_id'];
+  }
+  
   public function setFolderIdAttribute($value) {
     $this->attributes['folder_id'] = $value;
   }

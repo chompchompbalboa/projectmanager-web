@@ -15,6 +15,7 @@ import DropdownItem from './DropdownItem'
 //-----------------------------------------------------------------------------
 const AppFolderSidebarFolderDropdowns = ({
   closeDropdowns,
+  copyFolder,
   createFolder,
   createModule,
   deleteFolder,
@@ -26,6 +27,7 @@ const AppFolderSidebarFolderDropdowns = ({
   isFolderCreateModuleDropdownVisible,
   openFolderCreateModuleDropdown,
   openFolderDeleteDropdown,
+  pasteFolder,
   toggleFolderIsRenaming
 }) => {
   return (
@@ -42,6 +44,12 @@ const AppFolderSidebarFolderDropdowns = ({
           <DropdownItem
             onClick={createFolder}
             text="New Folder"/>
+          <DropdownItem
+            onClick={copyFolder}
+            text="Copy"/>
+          <DropdownItem
+            onClick={pasteFolder}
+            text="Paste"/>
           <DropdownItem
             onClick={toggleFolderIsRenaming}
             text="Rename"/>

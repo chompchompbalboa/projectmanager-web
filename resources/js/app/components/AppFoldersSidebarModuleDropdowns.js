@@ -33,6 +33,9 @@ const AppFolderSidebarModuleDropdowns = ({
           dropdownTop={dropdownTop}
           isDropdownVisible={isDropdownVisible}>
           <DropdownItem
+            onClick={() => console.log('copyModule')}
+            text="Copy"/>
+          <DropdownItem
             onClick={toggleModuleIsRenaming}
             text="Rename"/>
           <DropdownItem

@@ -30,6 +30,20 @@ const defaultModule = (folderId, type) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Copy Folder
+//-----------------------------------------------------------------------------
+export const copyFolder = folder => {
+  return dispatch => {
+    dispatch(copyFolderReducer(folder))
+  }
+}
+
+const copyFolderReducer = folder => ({
+  type: 'COPY_FOLDER',
+  folder: folder
+})
+
+//-----------------------------------------------------------------------------
 // Create Folder
 //-----------------------------------------------------------------------------
 export const createFolder = (parentFolderId) => {
@@ -62,6 +76,20 @@ const createModuleReducer = (folderId, newModule) => ({
   type: 'CREATE_MODULE',
   folderId: folderId,
   newModule: newModule
+})
+
+//-----------------------------------------------------------------------------
+// Paste Folder
+//-----------------------------------------------------------------------------
+export const pasteFolder = nextParentFolderId => {
+  return dispatch => {
+    dispatch(pasteFolderReducer(nextParentFolderId))
+  }
+}
+
+const pasteFolderReducer = nextParentFolderId => ({
+  type: 'PASTE_FOLDER',
+  nextParentFolderId: nextParentFolderId
 })
 
 //-----------------------------------------------------------------------------

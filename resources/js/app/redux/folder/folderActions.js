@@ -161,15 +161,16 @@ export const pasteIntoFolder = pasteFolderId => {
       if(pasteObject.folderId) {
         const cutFromFolder = clone(folders[pasteObject.folderId])
         const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteObject.id)
-        const nextCutFromFolderModules = cutFromFolder.modules.filter(moduleId => moduleId !== pasteObject.id)
         clipboardType === 'FOLDER' && dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
+        const nextCutFromFolderModules = cutFromFolder.modules.filter(moduleId => moduleId !== pasteObject.id)
         clipboardType === 'MODULE' && dispatch(updateFolder(cutFromFolder.id, { modules: nextCutFromFolderModules }, true))
       } else {
+        // If it's a root folder, remove it from folderIds
         dispatch(updateFolderIds(folderIds.filter(folderId => folderId !== pasteObject.id)))
       }
       
       if(clipboardType === 'FOLDER') {
-        dispatch(updateFolder(clipboardId, { folderId: pasteFolderId }))
+        dispatch(updateFolder(clipboardId, { folderId: pasteFolderId, organizationId: null, userId: null }))
         dispatch(updateFolder(pasteFolderId, { folders: [...pasteFolder.folders, clipboardId] }, true))
       }
     }

@@ -112,11 +112,11 @@ class UserTableSeeder extends Seeder
             });
           });
         });
-        
         // Active
         $actives = factory(App\Models\Active::class, 1)->create();
         $actives->each(function($active) use($user) {
         });
       });
+
     }
 }

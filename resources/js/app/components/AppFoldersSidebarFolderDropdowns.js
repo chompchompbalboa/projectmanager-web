@@ -18,6 +18,7 @@ const AppFolderSidebarFolderDropdowns = ({
   copyFolder,
   createFolder,
   createModule,
+  cutFolder,
   deleteFolder,
   dropdownLeft,
   dropdownTop,
@@ -27,7 +28,7 @@ const AppFolderSidebarFolderDropdowns = ({
   isFolderCreateModuleDropdownVisible,
   openFolderCreateModuleDropdown,
   openFolderDeleteDropdown,
-  pasteFolder,
+  pasteIntoFolder,
   toggleFolderIsRenaming
 }) => {
   return (
@@ -48,7 +49,10 @@ const AppFolderSidebarFolderDropdowns = ({
             onClick={copyFolder}
             text="Copy"/>
           <DropdownItem
-            onClick={pasteFolder}
+            onClick={cutFolder}
+            text="Cut"/>
+          <DropdownItem
+            onClick={pasteIntoFolder}
             text="Paste"/>
           <DropdownItem
             onClick={toggleFolderIsRenaming}

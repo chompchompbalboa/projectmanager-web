@@ -67,6 +67,16 @@ class AppFoldersSidebarFolder extends Component {
       isFolderDropdownVisible: false
     })
   }
+  
+  cutFolder = folderId => {
+    const {
+      cutFolder
+    } = this.props
+    cutFolder(folderId)
+    this.setState({
+      isFolderDropdownVisible: false
+    })
+  }
 
   createFolder = parentFolderId => {
     const {
@@ -159,6 +169,7 @@ class AppFoldersSidebarFolder extends Component {
     return (
       <Container>
         <FolderInfo
+          isDropdownVisible={isFolderCreateModuleDropdownVisible || isFolderDeleteDropdownVisible || isFolderDropdownVisible}
           level={level}
           onClick={() => this.handleFolderInfoClick()}
           onContextMenu={e => this.handleFolderInfoContextMenu(e)}>
@@ -179,6 +190,7 @@ class AppFoldersSidebarFolder extends Component {
           copyFolder={() => this.copyFolder(folder.id)}
           createFolder={() => this.createFolder(folder.id)}
           createModule={type => this.createModule(folder.id, type)}
+          cutFolder={() => this.cutFolder(folder.id)}
           deleteFolder={() => deleteFolder(parentFolderId, folder.id)}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
@@ -197,6 +209,7 @@ class AppFoldersSidebarFolder extends Component {
               <AppFoldersSidebarFolder
                 key={subFolderId}
                 copyFolder={this.copyFolder}
+                cutFolder={this.cutFolder}
                 createFolder={createFolder}
                 createModule={createModule}
                 deleteFolder={deleteFolder}
@@ -206,7 +219,7 @@ class AppFoldersSidebarFolder extends Component {
                 level={level + 1}
                 modules={modules}
                 parentFolderId={folder.id}
-                pasteFolder={this.pasteFolder}
+                pasteIntoFolder={this.pasteIntoFolder}
                 updateFolder={updateFolder}/>
             ))}
           </FolderSubfolders>
@@ -264,7 +277,9 @@ const FolderInfo = styled.div`
   justify-content: flex-start;
   align-items: center;
   font-size: 1rem;
-  border-left: 5px solid transparent;
+  color: ${ props => props.isDropdownVisible ? colors.TEXT_BLACK : 'inherit' };
+  background-color: ${ props => props.isDropdownVisible ? colors.SIDEBAR_BACKGROUND_ACTIVE : 'transparent' };
+  border-left: 5px solid ${ props => props.isDropdownVisible ? colors.SIDEBAR_BORDER_ACTIVE : 'transparent' };
   &:hover {
     color: ${ colors.TEXT_BLACK };
     background-color: ${ colors.SIDEBAR_BACKGROUND_ACTIVE };

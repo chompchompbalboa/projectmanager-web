@@ -4,6 +4,7 @@
 import { v4 as createUuid } from 'uuid'
 
 import { mutation } from '../../../_api'
+import clone from '../../../_utils/clone'
 
 import { updateActiveModuleId } from '../active/activeActions'
 
@@ -43,7 +44,7 @@ export const copyFolder = folderId => {
 //-----------------------------------------------------------------------------
 export const copyModule = moduleId => {
   return dispatch => {
-    dispatch(updateClipboard('COPY', 'FOLDER', moduleId))
+    dispatch(updateClipboard('COPY', 'MODULE', moduleId))
   }
 }
 
@@ -140,12 +141,39 @@ export const pasteIntoFolder = pasteFolderId => {
       folder: {
         clipboardCutOrCopy,
         clipboardId,
-        clipboardType
-      },
-      folders,
-      modules
+        clipboardType,
+        folderIds,
+        folders,
+        modules
+      }
     } = getState()
     
+    // Get the object being pasted
+    const pasteObject = clone(clipboardType === 'FOLDER' ? folders[clipboardId] : modules[clipboardId])
+    // Get the folder being pasted into
+    const pasteFolder = clone(folders[pasteFolderId])
+    
+    if (clipboardCutOrCopy === 'COPY') {
+      console.log(clipboardCutOrCopy, clipboardType, clipboardId)
+    }
+    else if (clipboardCutOrCopy === 'CUT') {
+      // Remove the object from the parent folder
+      if(pasteObject.folderId) {
+        const cutFromFolder = clone(folders[pasteObject.folderId])
+        const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteObject.id)
+        const nextCutFromFolderModules = cutFromFolder.modules.filter(moduleId => moduleId !== pasteObject.id)
+        clipboardType === 'FOLDER' && dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
+        clipboardType === 'MODULE' && dispatch(updateFolder(cutFromFolder.id, { modules: nextCutFromFolderModules }, true))
+      } else {
+        dispatch(updateFolderIds(folderIds.filter(folderId => folderId !== pasteObject.id)))
+      }
+      
+      if(clipboardType === 'FOLDER') {
+        dispatch(updateFolder(clipboardId, { folderId: pasteFolderId }))
+        dispatch(updateFolder(pasteFolderId, { folders: [...pasteFolder.folders, clipboardId] }, true))
+      }
+    }
+    dispatch(updateClipboard(null, null, null))
   }
 }
 
@@ -162,10 +190,10 @@ export const updateClipboard = (cutOrCopy, type, id) => ({
 //-----------------------------------------------------------------------------
 // Update Folder
 //-----------------------------------------------------------------------------
-export const updateFolder = (folderId, updates) => {
+export const updateFolder = (folderId, updates, skipServerUpdate) => {
   return dispatch => {
     dispatch(updateFolderReducer(folderId, { ...updates, isFolderRenaming: false }))
-    mutation.updateFolder(folderId, updates)
+    !skipServerUpdate && mutation.updateFolder(folderId, updates)
   }
 }
 
@@ -173,6 +201,14 @@ const updateFolderReducer = (folderId, updates) => ({
   type: 'UPDATE_FOLDER',
   folderId: folderId,
   updates: updates
+})
+
+//-----------------------------------------------------------------------------
+// Update Folder Ids
+//-----------------------------------------------------------------------------
+const updateFolderIds = (nextFolderIds) => ({
+  type: 'UPDATE_FOLDER_IDS',
+  nextFolderIds: nextFolderIds
 })
 
 //-----------------------------------------------------------------------------

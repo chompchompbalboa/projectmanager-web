@@ -114,7 +114,6 @@ const folderReducers = (state = initialState, action) => {
         nextClipboardId,
         nextClipboardType
       } = action
-      console.log(action)
       return {
         ...state,
         clipboardCutOrCopy: nextClipboardCutOrCopy,
@@ -134,6 +133,16 @@ const folderReducers = (state = initialState, action) => {
             ...state.folders[folderId], ...updates
           }
         }
+      }
+    }
+
+    case 'UPDATE_FOLDER_IDS': {
+      const {
+        nextFolderIds
+      } = action
+      return {
+        ...state,
+        folderIds: nextFolderIds
       }
     }
 

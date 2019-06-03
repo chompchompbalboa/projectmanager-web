@@ -4,7 +4,7 @@
 import React from 'react'
 
 import AppContentHeader from './AppContentHeader'
-import AppFoldersModule from './AppFoldersModule'
+import AppFoldersFile from './AppFoldersFile'
 import AppFoldersSidebar from './AppFoldersSidebar'
 import AppContent from './AppContent'
 
@@ -16,7 +16,7 @@ const AppFolders = () => {
     <AppContent>
       <AppFoldersSidebar />
       <AppContentHeader />
-      <AppFoldersModule />
+      <AppFoldersFile />
     </AppContent>
   )
 }

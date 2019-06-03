@@ -23,7 +23,7 @@ Route::prefix('app')->group(function () {
     $userFolders = $user->folders()->get();
     $organizationFolders = $organization->folders()->get();
     $folders = $userFolders->merge($organizationFolders)->sortBy('name')->values()->all();
-    
+
     return view('app')->with([
       'user' => $user,
       'organization' => $organization,
@@ -34,7 +34,7 @@ Route::prefix('app')->group(function () {
   Route::resources([
     // Folders
     'folders' => 'FolderController',
-    'modules' => 'ModuleController',
+    'files' => 'FileController',
     // Calendars
     'calendars' => 'CalendarController',
     // Notes

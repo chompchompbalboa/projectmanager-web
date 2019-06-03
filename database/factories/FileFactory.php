@@ -13,10 +13,10 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Models\Module::class, function (Faker $faker) {
+$factory->define(App\Models\File::class, function (Faker $faker) {
     return [
         'id' => $faker->uuid,
-        'type' => 'MODULE',
+        'type' => 'FILE',
         'type_id' => null,
         'folder_id' => null,
         'name' => 'Module'

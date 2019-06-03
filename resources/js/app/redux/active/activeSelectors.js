@@ -9,6 +9,6 @@ export const selectActiveContent = state => state.active.content
 export const selectActiveFolderPath = state => state.active.folderPath
 
 //-----------------------------------------------------------------------------
-// Select Active Module Id
+// Select Active File Id
 //-----------------------------------------------------------------------------
-export const selectActiveModuleId = state => state.active.moduleId
+export const selectActiveFileId = state => state.active.fileId

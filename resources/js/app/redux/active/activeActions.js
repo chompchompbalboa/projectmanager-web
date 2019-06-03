@@ -25,9 +25,9 @@ export const updateActiveFolderPath = nextActiveFolderPath => ({
 })
 
 //-----------------------------------------------------------------------------
-// Update Active Module Id
+// Update Active File Id
 //-----------------------------------------------------------------------------
-export const updateActiveModuleId = nextActiveModuleId => ({
-  type: 'UPDATE_ACTIVE_MODULE_ID',
-  nextActiveModuleId: nextActiveModuleId
+export const updateActiveFileId = nextActiveFileId => ({
+  type: 'UPDATE_ACTIVE_FILE_ID',
+  nextActiveFileId: nextActiveFileId
 })

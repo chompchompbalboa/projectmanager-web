@@ -10,13 +10,13 @@ class Active extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $appends = ['openFolders', 'moduleId'];
-  protected $visible = ['id', 'openFolders', 'moduleId'];
+  protected $appends = ['openFolders', 'fileId'];
+  protected $visible = ['id', 'openFolders', 'fileId'];
 
   /**
    * Define which attributes will be mass assignable
    */
-  protected $fillable = ['openFolders', 'moduleId'];
+  protected $fillable = ['openFolders', 'fileId'];
   
   /**
    * Get the user this active belongs to
@@ -36,12 +36,12 @@ class Active extends Model
   }
   
   /**
-   * Get the active module id
+   * Get the active file id
    */
-  public function getModuleIdAttribute() {
-    return $this->attributes['module_id'];
+  public function getFileIdAttribute() {
+    return $this->attributes['file_id'];
   }
-  public function setModuleIdAttribute($value) {
-    $this->attributes['module_id'] = $value;
+  public function setFileIdAttribute($value) {
+    $this->attributes['file_id'] = $value;
   }
 }

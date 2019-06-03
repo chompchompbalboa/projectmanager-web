@@ -6,11 +6,11 @@ import { schema, normalize } from 'normalizr';
 //-----------------------------------------------------------------------------
 // Schema
 //-----------------------------------------------------------------------------
-const module = new schema.Entity('module');
+const file = new schema.Entity('file');
 const folder = new schema.Entity('folder')
 folder.define({
   folders: [folder],
-  modules: [module]
+  files: [file]
 })
 const foldersList = [folder];
 

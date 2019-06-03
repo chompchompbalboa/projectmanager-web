@@ -25,22 +25,22 @@ export const updateFolder = async (id, updates) => {
 }
 
 //-----------------------------------------------------------------------------
-// Module
+// File
 //-----------------------------------------------------------------------------
-export const createModule = async (newModule) => {  
-  return axios.post('/app/modules', newModule).then(response => {
+export const createFile = async (newFile) => {  
+  return axios.post('/app/files', newFile).then(response => {
     return response.data
   })
 }
 
-export const updateModule = async (id, updates) => {
-  return axios.patch('/app/modules/' + id, updates).then(response => {
+export const updateFile = async (id, updates) => {
+  return axios.patch('/app/files/' + id, updates).then(response => {
     return response.data
   })
 }
 
-export const deleteModule = async (moduleId) => {  
-  return axios.delete('/app/modules/' + moduleId).then(response => {
+export const deleteFile = async (fileId) => {  
+  return axios.delete('/app/files/' + fileId).then(response => {
     return response.data
   })
 }

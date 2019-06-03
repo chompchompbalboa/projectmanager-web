@@ -14,7 +14,7 @@ const initialState = {
   clipboardType: null,
   folders: normalizedFolders.entities.folder,
   folderIds: normalizedFolders.result,
-  modules: normalizedFolders.entities.module,
+  files: normalizedFolders.entities.file,
 }
 
 //-----------------------------------------------------------------------------
@@ -53,18 +53,18 @@ const folderReducers = (state = initialState, action) => {
       }
     }
       
-    case 'CREATE_MODULE': {
+    case 'CREATE_FILE': {
       const {
         folderId,
-        newModule
+        newFile
       } = action
       return {
         ...state,
-        modules: { ...state.modules, [newModule.id]: newModule },
+        files: { ...state.files, [newFile.id]: newFile },
         folders: {
           ...state.folders, [folderId]: {
-            ...state.folders[folderId], modules: [
-              ...state.folders[folderId].modules, newModule.id
+            ...state.folders[folderId], files: [
+              ...state.folders[folderId].files, newFile.id
             ]
           }
         }
@@ -90,19 +90,19 @@ const folderReducers = (state = initialState, action) => {
       return nextState
     }
 
-    case 'DELETE_MODULE': {
+    case 'DELETE_FILE': {
       const {
-        moduleId
+        fileId
       } = action
-      const module = clone(state.modules[moduleId])
-      const { [moduleId]: {}, ...nextModules } = state.modules
+      const file = clone(state.files[fileId])
+      const { [fileId]: {}, ...nextFiles } = state.files
       return {
         ...state,
-        modules: nextModules,
+        files: nextFiles,
         folders: {
-          ...state.folders, [module.folderId]: {
-            ...state.folders[module.folderId], 
-            modules: state.folders[module.folderId].modules.filter(module => module !== moduleId)
+          ...state.folders, [file.folderId]: {
+            ...state.folders[file.folderId], 
+            files: state.folders[file.folderId].files.filter(file => file !== fileId)
           }
         }
       }
@@ -146,15 +146,15 @@ const folderReducers = (state = initialState, action) => {
       }
     }
 
-    case 'UPDATE_MODULE': {
+    case 'UPDATE_FILE': {
       const {
-        moduleId,
+        fileId,
         updates
       } = action
       return { 
-        ...state, modules: {
-          ...state.modules, [moduleId]: {
-            ...state.modules[moduleId], ...updates
+        ...state, files: {
+          ...state.files, [fileId]: {
+            ...state.files[fileId], ...updates
           }
         }
       }

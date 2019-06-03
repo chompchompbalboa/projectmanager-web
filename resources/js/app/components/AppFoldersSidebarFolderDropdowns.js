@@ -5,7 +5,7 @@ import React from 'react'
 import { bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import CreateModuleDropdown from './CreateModuleDropdown'
+import CreateFileDropdown from './CreateFileDropdown'
 import DeleteDropdown from './DeleteDropdown'
 import Dropdown from './Dropdown'
 import DropdownItem from './DropdownItem'
@@ -17,7 +17,7 @@ const AppFolderSidebarFolderDropdowns = ({
   closeDropdowns,
   copyFolder,
   createFolder,
-  createModule,
+  createFile,
   cutFolder,
   deleteFolder,
   dropdownLeft,
@@ -25,8 +25,8 @@ const AppFolderSidebarFolderDropdowns = ({
   folderName,
   isFolderDropdownVisible,
   isFolderDeleteDropdownVisible,
-  isFolderCreateModuleDropdownVisible,
-  openFolderCreateModuleDropdown,
+  isFolderCreateFileDropdownVisible,
+  openFolderCreateFileDropdown,
   openFolderDeleteDropdown,
   pasteIntoFolder,
   toggleFolderIsRenaming
@@ -40,7 +40,7 @@ const AppFolderSidebarFolderDropdowns = ({
           dropdownTop={dropdownTop}
           isDropdownVisible={isFolderDropdownVisible}>
           <DropdownItem
-            onClick={openFolderCreateModuleDropdown}
+            onClick={openFolderCreateFileDropdown}
             text="New File"/>
           <DropdownItem
             onClick={createFolder}
@@ -70,13 +70,13 @@ const AppFolderSidebarFolderDropdowns = ({
           onDelete={deleteFolder}
           textToMatch={folderName}
           type="folder"/>}
-      {isFolderCreateModuleDropdownVisible && 
-        <CreateModuleDropdown
+      {isFolderCreateFileDropdownVisible && 
+        <CreateFileDropdown
           closeDropdown={closeDropdowns}
-          createModule={createModule}
+          createFile={createFile}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
-          isDropdownVisible={isFolderCreateModuleDropdownVisible}/>}
+          isDropdownVisible={isFolderCreateFileDropdownVisible}/>}
     </Container>
   )
 }
@@ -87,15 +87,15 @@ const AppFolderSidebarFolderDropdowns = ({
 AppFolderSidebarFolderDropdowns.propTypes = {
   closeDropdowns: func,
   createFolder: func,
-  createModule: func,
+  createFile: func,
   deleteFolder: func,
   dropdownLeft: string,
   dropdownTop: string,
   folderName: string,
   isFolderDropdownVisible: bool,
   isFolderDeleteDropdownVisible: bool,
-  isFolderCreateModuleDropdownVisible: bool,
-  openFolderCreateModuleDropdown: func,
+  isFolderCreateFileDropdownVisible: bool,
+  openFolderCreateFileDropdown: func,
   openFolderDeleteDropdown: func,
   toggleFolderIsRenaming: func,
 }

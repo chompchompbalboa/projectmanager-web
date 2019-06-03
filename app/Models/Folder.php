@@ -10,8 +10,8 @@ class Folder extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $appends = ['folderId', 'folders', 'modules', 'userId', 'organizationId'];
-  protected $visible = ['id', 'name', 'folderId', 'folders', 'modules', 'organizationId'];
+  protected $appends = ['folderId', 'folders', 'files', 'userId', 'organizationId'];
+  protected $visible = ['id', 'name', 'folderId', 'folders', 'files', 'organizationId'];
 
   /**
    * Define which attributes will be mass assignable
@@ -43,13 +43,13 @@ class Folder extends Model
   }
   
   /**
-   * Get all the modules that belong to this folder
+   * Get all the files that belong to this folder
    */
-  public function modules() {
-    return $this->hasMany('App\Models\Module');
+  public function files() {
+    return $this->hasMany('App\Models\File');
   }
-  public function getModulesAttribute() {
-    return $this->modules()->orderBy('name')->get();
+  public function getFilesAttribute() {
+    return $this->files()->orderBy('name')->get();
   }
   
   /**

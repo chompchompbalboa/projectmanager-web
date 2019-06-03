@@ -4,7 +4,7 @@
 const initialState = {
   content: 'FOLDERS',
   folderPath: null,
-  moduleId: initialData.user.active.moduleId,
+  fileId: initialData.user.active.fileId,
 }
 
 //-----------------------------------------------------------------------------
@@ -23,9 +23,9 @@ const activeReducers = (state = initialState, action) => {
       return { ...state, folderPath: nextActiveFolderPath }
     }
 
-    case 'UPDATE_ACTIVE_MODULE_ID': {
-      const { nextActiveModuleId } = action
-      return { ...state, moduleId: nextActiveModuleId }
+    case 'UPDATE_ACTIVE_FILE_ID': {
+      const { nextActiveFileId } = action
+      return { ...state, fileId: nextActiveFileId }
     }
 
     default:

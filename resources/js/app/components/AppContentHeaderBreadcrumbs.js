@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 
 import { selectActiveFolderPath } from '../redux/active/activeSelectors'
-import { selectFolders, selectModules } from '../redux/folder/folderSelectors'
+import { selectFolders, selectFiles } from '../redux/folder/folderSelectors'
 
 import { colors } from '../config'
 
@@ -17,7 +17,7 @@ import { colors } from '../config'
 const mapStateToProps = state => ({
   activeFolderPath: selectActiveFolderPath(state),
   folders: selectFolders(state),
-  modules: selectModules(state)
+  files: selectFiles(state)
 })
 
 //-----------------------------------------------------------------------------
@@ -26,12 +26,12 @@ const mapStateToProps = state => ({
 const AppContentHeaderBreadcrumbs = ({
   activeFolderPath,
   folders,
-  modules
+  files
 }) => {
   return (
     <Container>
       {activeFolderPath && activeFolderPath.map((activeId, index) => {
-        const breadcrumb = folders[activeId] ? folders[activeId] : modules[activeId]
+        const breadcrumb = folders[activeId] ? folders[activeId] : files[activeId]
         return (
           <React.Fragment
             key={activeId}>
@@ -53,7 +53,7 @@ const AppContentHeaderBreadcrumbs = ({
 AppContentHeaderBreadcrumbs.propTypes = {
   activeFolderPath: array,
   folders: object,
-  modules: object
+  files: object
 }
 
 //-----------------------------------------------------------------------------

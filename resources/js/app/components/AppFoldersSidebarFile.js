@@ -10,15 +10,15 @@ import { colors } from '../config'
 
 import {
   updateActiveFolderPath as updateActiveFolderPathAction,
-  updateActiveModuleId as updateActiveModuleIdAction
+  updateActiveFileId as updateActiveFileIdAction
 } from '../redux/active/activeActions'
 import {
-  deleteModule as deleteModuleAction,
-  updateModule as updateModuleAction
+  deleteFile as deleteFileAction,
+  updateFile as updateFileAction
 } from '../redux/folder/folderActions'
-import { selectActiveModuleId } from '../redux/active/activeSelectors'
+import { selectActiveFileId } from '../redux/active/activeSelectors'
 
-import AppFoldersSidebarModuleDropdowns from './AppFoldersSidebarModuleDropdowns'
+import AppFoldersSidebarFileDropdowns from './AppFoldersSidebarFileDropdowns'
 import ContentEditable from './ContentEditable'
 import Icon from './Icon'
 
@@ -26,28 +26,28 @@ import Icon from './Icon'
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  activeModuleId: selectActiveModuleId(state)
+  activeFileId: selectActiveFileId(state)
 })
 
 const mapDispatchToProps = dispatch => ({
-  deleteModule: (moduleId) => dispatch(deleteModuleAction(moduleId)),
+  deleteFile: (fileId) => dispatch(deleteFileAction(fileId)),
   updateActiveFolderPath: nextActiveFolderPath => dispatch(updateActiveFolderPathAction(nextActiveFolderPath)),
-  updateActiveModuleId: nextActiveModuleId => dispatch(updateActiveModuleIdAction(nextActiveModuleId)),
-  updateModule: (moduleId, updates) => dispatch(updateModuleAction(moduleId, updates))
+  updateActiveFileId: nextActiveFileId => dispatch(updateActiveFileIdAction(nextActiveFileId)),
+  updateFile: (fileId, updates) => dispatch(updateFileAction(fileId, updates))
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class AppFoldersSidebarModule extends Component {
+class AppFoldersSidebarFile extends Component {
   
   state = {
     dropdownLeft: null,
     dropdownTop: null,
     isDeleteDropdownVisible: false,
     isDropdownVisible: false,
-    isModuleRenaming: this.props.module.isModuleRenaming || false,
-    moduleName: this.props.module.name
+    isFileRenaming: this.props.file.isFileRenaming || false,
+    fileName: this.props.file.name
   }
 
   closeDropdowns = () => {
@@ -57,30 +57,30 @@ class AppFoldersSidebarModule extends Component {
     })
   }
 
-  handleModuleNameBlur = () => {
+  handleFileNameBlur = () => {
     const {
-      module,
-      updateModule
+      file,
+      updateFile
     } = this.props
     const {
-      moduleName
+      fileName
     } = this.state
-    updateModule(module.id, { name: moduleName })
-    this.setState({ isModuleRenaming: false })
+    updateFile(file.id, { name: fileName })
+    this.setState({ isFileRenaming: false })
   }
 
-  handleModuleInfoClick = () => {
+  handleFileInfoClick = () => {
     const {
       folderPath,
-      module,
+      file,
       updateActiveFolderPath,
-      updateActiveModuleId
+      updateActiveFileId
     } = this.props
     updateActiveFolderPath(folderPath)
-    updateActiveModuleId(module.id)
+    updateActiveFileId(file.id)
   }
 
-  handleModuleInfoContextMenu = e => {
+  handleFileInfoContextMenu = e => {
     e.preventDefault()
     this.setState({
       dropdownLeft: e.pageX + 'px',
@@ -91,48 +91,48 @@ class AppFoldersSidebarModule extends Component {
 
   render() {
     const {
-      activeModuleId,
-      deleteModule,
+      activeFileId,
+      deleteFile,
       level,
-      module
+      file
     } = this.props
     const {
       dropdownLeft,
       dropdownTop,
       isDeleteDropdownVisible,
       isDropdownVisible,
-      isModuleRenaming,
-      moduleName
+      isFileRenaming,
+      fileName
     } = this.state
     return (
       <Container>
-        <ModuleInfo
+        <FileInfo
           level={level}
-          isActiveModule={activeModuleId === module.id}
-          onClick={() => this.handleModuleInfoClick()}
-          onContextMenu={e => this.handleModuleInfoContextMenu(e)}>
+          isActiveFile={activeFileId === file.id}
+          onClick={() => this.handleFileInfoClick()}
+          onContextMenu={e => this.handleFileInfoContextMenu(e)}>
           <Icon
-            icon={"MODULE_" + module.type}
+            icon={"FILE_" + file.type}
             size="0.9rem"/>
-          <ModuleName
-              focus={isModuleRenaming}
-              editable={isModuleRenaming}
-              id={module.id}
-              isModuleRenaming={isModuleRenaming}
-              onBlur={() => this.handleModuleNameBlur()}
-              onChange={(e, value) => this.setState({ moduleName: value })}
-              value={moduleName}/>
-        </ModuleInfo>
-        <AppFoldersSidebarModuleDropdowns 
+          <FileName
+              focus={isFileRenaming}
+              editable={isFileRenaming}
+              id={file.id}
+              isFileRenaming={isFileRenaming}
+              onBlur={() => this.handleFileNameBlur()}
+              onChange={(e, value) => this.setState({ fileName: value })}
+              value={fileName}/>
+        </FileInfo>
+        <AppFoldersSidebarFileDropdowns 
           closeDropdowns={this.closeDropdowns}
-          deleteModule={() => deleteModule(module.id)}
+          deleteFile={() => deleteFile(file.id)}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
-          moduleName={module.name}
+          fileName={file.name}
           isDeleteDropdownVisible={isDeleteDropdownVisible}
           isDropdownVisible={isDropdownVisible}
           openDeleteDropdown={() => this.setState({ isDropdownVisible: false, isDeleteDropdownVisible: true })}
-          toggleModuleIsRenaming={() => this.setState({ isDropdownVisible: false, isModuleRenaming: !isModuleRenaming })}/>
+          toggleFileIsRenaming={() => this.setState({ isDropdownVisible: false, isFileRenaming: !isFileRenaming })}/>
       </Container>
     )
   }
@@ -141,20 +141,20 @@ class AppFoldersSidebarModule extends Component {
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-AppFoldersSidebarModule.propTypes = {
-  activeModuleId: string,
-  deleteModule: func,
+AppFoldersSidebarFile.propTypes = {
+  activeFileId: string,
+  deleteFile: func,
   folderPath: array,
   level: number,
-  module: shape({
+  file: shape({
     id: string,
     name: string,
     type: string,
-    isModuleRenaming: bool
+    isFileRenaming: bool
   }),
   updateActiveFolderPath: func,
-  updateActiveModuleId: func,
-  updateModule: func
+  updateActiveFileId: func,
+  updateFile: func
 }
 
 //-----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ const Container = styled.div`
   position: relative;
 `
 
-const ModuleInfo = styled.div`
+const FileInfo = styled.div`
   padding: 0.25rem;
   padding-left: ${ props => (props.level / 2) + 'rem' };
   cursor: pointer;
@@ -172,9 +172,9 @@ const ModuleInfo = styled.div`
   justify-content: flex-start;
   align-items: center;
   font-size: 1rem;
-  color: ${ props => props.isActiveModule ? colors.TEXT_BLACK : 'inherit' };
-  background-color: ${ props => props.isActiveModule ? colors.SIDEBAR_BACKGROUND_ACTIVE : 'transparent' };
-  border-left: 5px solid ${ props => props.isActiveModule ? colors.SIDEBAR_BORDER_ACTIVE : 'transparent' };
+  color: ${ props => props.isActiveFile ? colors.TEXT_BLACK : 'inherit' };
+  background-color: ${ props => props.isActiveFile ? colors.SIDEBAR_BACKGROUND_ACTIVE : 'transparent' };
+  border-left: 5px solid ${ props => props.isActiveFile ? colors.SIDEBAR_BORDER_ACTIVE : 'transparent' };
   &:hover {
     color: ${ colors.TEXT_BLACK };
     background-color: ${ colors.SIDEBAR_BACKGROUND_ACTIVE };
@@ -182,11 +182,11 @@ const ModuleInfo = styled.div`
   }
 `
 
-const ModuleName = styled(ContentEditable)`
+const FileName = styled(ContentEditable)`
   margin-left: 0.25rem;
 `
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AppFoldersSidebarModule)
+)(AppFoldersSidebarFile)

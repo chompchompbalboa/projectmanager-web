@@ -6,7 +6,7 @@ import { v4 as createUuid } from 'uuid'
 import { mutation } from '../../../_api'
 import clone from '../../../_utils/clone'
 
-import { updateActiveModuleId } from '../active/activeActions'
+import { updateActiveFileId } from '../active/activeActions'
 
 //-----------------------------------------------------------------------------
 // Defaults
@@ -16,18 +16,18 @@ const defaultFolder = (parentFolderId, userId) => ({
   name: 'New folder',
   folderId: parentFolderId || null,
   folders: [],
-  modules: [],
+  files: [],
   isFolderRenaming: true,
   userId: parentFolderId ? null : userId
 })
 
-const defaultModule = (folderId, type) => ({
+const defaultFile = (folderId, type) => ({
   id: createUuid(),
-  name: 'New Module',
+  name: 'New File',
   folderId: folderId,
   type: type,
   typeId: createUuid(),
-  isModuleRenaming: true,
+  isFileRenaming: true,
 })
 
 //-----------------------------------------------------------------------------
@@ -40,11 +40,11 @@ export const copyFolder = folderId => {
 }
 
 //-----------------------------------------------------------------------------
-// Copy Module
+// Copy File
 //-----------------------------------------------------------------------------
-export const copyModule = moduleId => {
+export const copyFile = fileId => {
   return dispatch => {
-    dispatch(updateClipboard('COPY', 'MODULE', moduleId))
+    dispatch(updateClipboard('COPY', 'FILE', fileId))
   }
 }
 
@@ -65,22 +65,22 @@ const createFolderReducer = (newFolder) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Create Module
+// Create File
 //-----------------------------------------------------------------------------
-export const createModule = (folderId, type) => {
+export const createFile = (folderId, type) => {
   return dispatch => {
-    const newModule = defaultModule(folderId, type)
-    dispatch(createModuleReducer(folderId, newModule))
-    mutation.createModule(newModule).then(newModule => {
-      dispatch(updateActiveModuleId(newModule.id))
+    const newFile = defaultFile(folderId, type)
+    dispatch(createFileReducer(folderId, newFile))
+    mutation.createFile(newFile).then(newFile => {
+      dispatch(updateActiveFileId(newFile.id))
     })
   }
 }
 
-const createModuleReducer = (folderId, newModule) => ({
-  type: 'CREATE_MODULE',
+const createFileReducer = (folderId, newFile) => ({
+  type: 'CREATE_FILE',
   folderId: folderId,
-  newModule: newModule
+  newFile: newFile
 })
 
 //-----------------------------------------------------------------------------
@@ -93,11 +93,11 @@ export const cutFolder = folderId => {
 }
 
 //-----------------------------------------------------------------------------
-// Cut Module
+// Cut File
 //-----------------------------------------------------------------------------
-export const cutModule = moduleId => {
+export const cutFile = fileId => {
   return dispatch => {
-    dispatch(updateClipboard('CUT', 'MODULE', moduleId))
+    dispatch(updateClipboard('CUT', 'FILE', fileId))
   }
 }
 
@@ -118,18 +118,18 @@ const deleteFolderReducer = (parentFolderId, folderId) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Delete Module
+// Delete File
 //-----------------------------------------------------------------------------
-export const deleteModule = (moduleId) => {
+export const deleteFile = (fileId) => {
   return dispatch => {
-    dispatch(deleteModuleReducer(moduleId))
-    mutation.deleteModule(moduleId)
+    dispatch(deleteFileReducer(fileId))
+    mutation.deleteFile(fileId)
   }
 }
 
-const deleteModuleReducer = (moduleId) => ({
-  type: 'DELETE_MODULE',
-  moduleId: moduleId
+const deleteFileReducer = (fileId) => ({
+  type: 'DELETE_FILE',
+  fileId: fileId
 })
 
 //-----------------------------------------------------------------------------
@@ -144,12 +144,12 @@ export const pasteIntoFolder = pasteFolderId => {
         clipboardType,
         folderIds,
         folders,
-        modules
+        files
       }
     } = getState()
     
     // Get the object being pasted
-    const pasteObject = clone(clipboardType === 'FOLDER' ? folders[clipboardId] : modules[clipboardId])
+    const pasteObject = clone(clipboardType === 'FOLDER' ? folders[clipboardId] : files[clipboardId])
     // Get the folder being pasted into
     const pasteFolder = clone(folders[pasteFolderId])
     
@@ -162,8 +162,8 @@ export const pasteIntoFolder = pasteFolderId => {
         const cutFromFolder = clone(folders[pasteObject.folderId])
         const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteObject.id)
         clipboardType === 'FOLDER' && dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
-        const nextCutFromFolderModules = cutFromFolder.modules.filter(moduleId => moduleId !== pasteObject.id)
-        clipboardType === 'MODULE' && dispatch(updateFolder(cutFromFolder.id, { modules: nextCutFromFolderModules }, true))
+        const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== pasteObject.id)
+        clipboardType === 'FILE' && dispatch(updateFolder(cutFromFolder.id, { files: nextCutFromFolderFiles }, true))
       } else {
         // If it's a root folder, remove it from folderIds
         dispatch(updateFolderIds(folderIds.filter(folderId => folderId !== pasteObject.id)))
@@ -213,17 +213,17 @@ const updateFolderIds = (nextFolderIds) => ({
 })
 
 //-----------------------------------------------------------------------------
-// Update Module
+// Update File
 //-----------------------------------------------------------------------------
-export const updateModule = (moduleId, updates) => {
+export const updateFile = (fileId, updates) => {
   return dispatch => {
-    dispatch(updateModuleReducer(moduleId, { ...updates, isModuleRenaming: false }))
-    mutation.updateModule(moduleId, updates)
+    dispatch(updateFileReducer(fileId, { ...updates, isFileRenaming: false }))
+    mutation.updateFile(fileId, updates)
   }
 }
 
-const updateModuleReducer = (moduleId, updates) => ({
-  type: 'UPDATE_MODULE',
-  moduleId: moduleId,
+const updateFileReducer = (fileId, updates) => ({
+  type: 'UPDATE_FILE',
+  fileId: fileId,
   updates: updates
 })

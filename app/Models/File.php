@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Module extends Model
+class File extends Model
 {
   public $incrementing = false;
   /**
@@ -33,7 +33,7 @@ class Module extends Model
   }
   
   /**
-   * Get all the folder this module belongs to
+   * Get all the folder this file belongs to
    */
   public function folder() {
     return $this->belongsTo('App\Models\Folder');

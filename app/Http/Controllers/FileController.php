@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Calendar;
-use App\Models\Module;
+use App\Models\File;
 use App\Models\Note;
 use App\Models\Table;
 
-class ModuleController extends Controller
+class FileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -39,36 +39,36 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
-      $module = Module::create($request->all());
-      switch($module->type) {
+      $file = File::create($request->all());
+      switch($file->type) {
         case 'CALENDAR': 
-          Calendar::create(['id' => $module->typeId]);
+          Calendar::create(['id' => $file->typeId]);
         case 'NOTE': 
-          Note::create(['id' => $module->typeId]);
+          Note::create(['id' => $file->typeId]);
         case 'TABLE': 
-          Table::create(['id' => $module->typeId]);
+          Table::create(['id' => $file->typeId]);
         break;
       }
-      return response()->json($module, 200);
+      return response()->json($file, 200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Module  $module
+     * @param  \App\File  $file
      * @return \Illuminate\Http\Response
      */
-    public function show(Module $module)
+    public function show(File $file)
     {
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Module  $module
+     * @param  \App\File  $file
      * @return \Illuminate\Http\Response
      */
-    public function edit(Module $module)
+    public function edit(File $file)
     {
         //
     }
@@ -77,24 +77,24 @@ class ModuleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Module  $module
+     * @param  \App\File  $file
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Module $module)
+    public function update(Request $request, File $file)
     {
-      $module->update($request->all());
-      return response()->json($module, 200);
+      $file->update($request->all());
+      return response()->json($file, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Module  $module
+     * @param  \App\File  $file
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Module $module)
+    public function destroy(File $file)
     {
-      $module->delete();
+      $file->delete();
       return response()->json(null, 204);
     }
 }

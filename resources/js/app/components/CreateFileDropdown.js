@@ -11,14 +11,14 @@ import Icon from './Icon'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const CreateModuleDropdown = ({
+const CreateFileDropdown = ({
   closeDropdown,
-  createModule,
+  createFile,
   isDropdownVisible,
   ...props
 }) => {
 
-  const modules = [
+  const files = [
     { name: 'Table', type: 'TABLE' },
     { name: 'Note', type: 'NOTE' },
     { name: 'Calendar', type: 'CALENDAR' }
@@ -28,21 +28,22 @@ const CreateModuleDropdown = ({
       closeDropdown={closeDropdown}
       isDropdownVisible={isDropdownVisible}
       {...props}>
-      <ModulesContainer>
-        {modules.map(module => (
+      <FilesContainer>
+        {files.map(file => (
           <DropdownItem
-            key={module.type}
-            onClick={() => createModule(module.type)}>
-            <ModuleContainer>
+            key={file.type}
+            onClick={() => createFile(file.type)}>
+            <FileContainer>
               <Icon
-                icon={'MODULE_' + module.type}/>
-              <ModuleName>
-                {module.name}
-              </ModuleName>
-            </ModuleContainer>
+                icon={'FILE_' + file.type}
+                size="0.9rem"/>
+              <FileName>
+                {file.name}
+              </FileName>
+            </FileContainer>
           </DropdownItem>
         ))}
-      </ModulesContainer>
+      </FilesContainer>
     </Dropdown>
   )
 }
@@ -50,26 +51,26 @@ const CreateModuleDropdown = ({
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-CreateModuleDropdown.propTypes = {
+CreateFileDropdown.propTypes = {
   closeDropdown: func,
-  createModule: func,
+  createFile: func,
   isDropdownVisible: bool
 }
 
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const ModulesContainer = styled.div`
+const FilesContainer = styled.div`
   max-height: 50vh;
 `
 
-const ModuleContainer = styled.div`
+const FileContainer = styled.div`
   display: flex;
   align-items: center;
 `
 
-const ModuleName = styled.div`
+const FileName = styled.div`
   margin-left: 0.75vw;
 `
 
-export default CreateModuleDropdown
+export default CreateFileDropdown

@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import {
   createFolder as createFolderAction
 } from '../redux/folder/folderActions'
-import { selectFolderIds, selectFolders, selectModules } from '../redux/folder/folderSelectors'
+import { selectFolderIds, selectFolders, selectFiles } from '../redux/folder/folderSelectors'
 
 import AppContentSidebar from './AppContentSidebar'
 import AppFoldersSidebarFolder from './AppFoldersSidebarFolder'
@@ -22,7 +22,7 @@ import DropdownItem from './DropdownItem'
 const mapStateToProps = state => ({
   folderIds: selectFolderIds(state),
   folders: selectFolders(state),
-  modules: selectModules(state)
+  files: selectFiles(state)
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -63,7 +63,7 @@ class AppFoldersSidebar extends Component {
     const { 
       folderIds,
       folders,
-      modules
+      files
     } = this.props
     const {
       dropdownLeft,
@@ -79,7 +79,7 @@ class AppFoldersSidebar extends Component {
               folderPath={[folderId]}
               folders={folders}
               level={1}
-              modules={modules}/>
+              files={files}/>
           ))}
           {isDropdownVisible && 
             <Dropdown
@@ -111,7 +111,7 @@ AppFoldersSidebar.propTypes = {
   createFolder: func,
   folderIds: array,
   folders: object,
-  modules: object
+  files: object
 }
 
 export default connect(

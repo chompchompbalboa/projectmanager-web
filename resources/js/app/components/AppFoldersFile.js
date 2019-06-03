@@ -5,29 +5,29 @@ import React from 'react'
 import { string } from 'prop-types'
 import { connect } from 'react-redux'
 
-import { selectActiveModuleId } from '../redux/active/activeSelectors'
+import { selectActiveFileId } from '../redux/active/activeSelectors'
 
 import AppContentView from './AppContentView'
-import Module from './Module'
+import File from './File'
 
 //-----------------------------------------------------------------------------
 // Redux
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  activeModuleId: selectActiveModuleId(state)
+  activeFileId: selectActiveFileId(state)
 })
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppFoldersModule = ({
-  activeModuleId
+const AppFoldersFile = ({
+  activeFileId
 }) => {
   return (
     <AppContentView>
-      <Module
-        key={activeModuleId}
-        moduleId={activeModuleId}/>
+      <File
+        key={activeFileId}
+        fileId={activeFileId}/>
     </AppContentView>
   )
 }
@@ -35,10 +35,10 @@ const AppFoldersModule = ({
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-AppFoldersModule.propTypes = {
-  activeModuleId: string
+AppFoldersFile.propTypes = {
+  activeFileId: string
 }
 
 export default connect(
   mapStateToProps
-)(AppFoldersModule)
+)(AppFoldersFile)

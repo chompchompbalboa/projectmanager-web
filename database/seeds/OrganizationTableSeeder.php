@@ -21,8 +21,8 @@ class OrganizationTableSeeder extends Seeder
 
         // Folders
         $folderMap = [
-          ['folders' => 3, 'modules' => 3],
-          ['folders' => 2, 'modules' => 1],
+          ['folders' => 3, 'files' => 3],
+          ['folders' => 2, 'files' => 1],
         ];
         $folders = factory(App\Models\Folder::class, count($folderMap))->create();
         $folders->each(function($folder, $folderKey) use($folderMap, $organization) {
@@ -37,27 +37,27 @@ class OrganizationTableSeeder extends Seeder
             $subFolder->save();
             print('  Subfolder: '.$subFolder->id.PHP_EOL);
 
-            // Modules
+            // Files
   
-            $modules = factory(App\Models\Module::class, $folderMap[$folderKey]['modules'])->create();
-            $modules->each(function($module) use($subFolder) {
-              $module->folder_id = $subFolder->id;
-              $module->save();
+            $files = factory(App\Models\File::class, $folderMap[$folderKey]['files'])->create();
+            $files->each(function($file) use($subFolder) {
+              $file->folder_id = $subFolder->id;
+              $file->save();
               
-              $moduleTypes = ['CALENDAR', 'NOTE', 'TABLE'];
-              $moduleType = $moduleTypes[array_rand($moduleTypes, 1)];
+              $fileTypes = ['CALENDAR', 'NOTE', 'TABLE'];
+              $fileType = $fileTypes[array_rand($fileTypes, 1)];
   
-              switch($moduleType) {
+              switch($fileType) {
                 case 'TABLE': 
                   print('  Table'.PHP_EOL);
                   // Tables
                   $tables = factory(App\Models\Table::class, 1)->create();
-                  $tables->each(function($table) use ($module) {
+                  $tables->each(function($table) use ($file) {
 
-                    $module->name = 'Table';
-                    $module->type = 'TABLE';
-                    $module->type_id = $table->id;
-                    $module->save();
+                    $file->name = 'Table';
+                    $file->type = 'TABLE';
+                    $file->type_id = $table->id;
+                    $file->save();
 
                     // Columns
 
@@ -92,11 +92,11 @@ class OrganizationTableSeeder extends Seeder
                   print('  Note'.PHP_EOL);            
                   // Notes
                   $notes = factory(App\Models\Note::class, 1)->create();
-                  $notes->each(function($note) use ($module) {
-                    $module->name = 'Note';
-                    $module->type = 'NOTE';
-                    $module->type_id = $note->id;
-                    $module->save();
+                  $notes->each(function($note) use ($file) {
+                    $file->name = 'Note';
+                    $file->type = 'NOTE';
+                    $file->type_id = $note->id;
+                    $file->save();
                   });
                 break;
                   
@@ -104,11 +104,11 @@ class OrganizationTableSeeder extends Seeder
                   print('  Calendar'.PHP_EOL);            
                   // Calendars
                   $calendars = factory(App\Models\Calendar::class, 1)->create();
-                  $calendars->each(function($calendar) use ($module) {
-                    $module->name = 'Calendar';
-                    $module->type = 'CALENDAR';
-                    $module->type_id = $calendar->id;
-                    $module->save();
+                  $calendars->each(function($calendar) use ($file) {
+                    $file->name = 'Calendar';
+                    $file->type = 'CALENDAR';
+                    $file->type_id = $calendar->id;
+                    $file->save();
                   });
                 break;
               }

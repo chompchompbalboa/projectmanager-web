@@ -12,7 +12,7 @@ import {
   getTable
 } from '../../_api/queries'
 
-import { selectModules } from '../redux/folder/folderSelectors'
+import { selectFiles } from '../redux/folder/folderSelectors'
 import { setCalendar as setCalendarAction } from '../redux/calendar/calendarActions'
 import { setNote as setNoteAction } from '../redux/note/noteActions'
 import { setTable as setTableAction } from '../redux/table/tableActions'
@@ -26,7 +26,7 @@ import Table from './Table'
 // Component
 //-----------------------------------------------------------------------------
 const mapStateToProps = state => ({
-  modules: selectModules(state)
+  files: selectFiles(state)
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -38,13 +38,13 @@ const mapDispatchToProps = dispatch => ({
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-class Module extends Component {
+class File extends Component {
 
   state = {
     isLoading: false
   }
   
-  modules = {
+  files = {
     CALENDAR: {
       component: Calendar,
       get: getCalendar,
@@ -63,29 +63,29 @@ class Module extends Component {
   }
 
   componentDidMount = () => {
-    this.getAndSetModule(this.props.moduleId)
+    this.getAndSetFile(this.props.fileId)
   }
 
   componentDidUpdate = (prevProps) => {
-    if(prevProps.moduleId !== this.props.moduleId) {
+    if(prevProps.fileId !== this.props.fileId) {
       this.setState({ loading: true })
-      this.getAndSetModule(this.props.moduleId)
+      this.getAndSetFile(this.props.fileId)
     }
   }
 
-  getAndSetModule = (moduleId) => {
-    if(moduleId !== null) {
+  getAndSetFile = (fileId) => {
+    if(fileId !== null) {
 
       this.setState({
         isLoading: true
       })
 
       const {
-        modules
+        files
       } = this.props
-      const module = modules[moduleId]
-      this.modules[module.type].get(module.typeId).then(moduleWithPayload => {
-        this.modules[module.type].set(moduleWithPayload)
+      const file = files[fileId]
+      this.files[file.type].get(file.typeId).then(fileWithPayload => {
+        this.files[file.type].set(fileWithPayload)
         this.setState({ isLoading: false })
       })
     }
@@ -93,19 +93,19 @@ class Module extends Component {
 
   render() {
     const {
-      moduleId,
-      modules
+      fileId,
+      files
     } = this.props
     const {
       isLoading
     } = this.state
 
-    const module = modules[moduleId] || null
+    const file = files[fileId] || null
 
-    if (!isLoading && module && typeof this.modules[module.type] !== 'undefined') {
-      const ModuleType = this.modules[module.type].component
+    if (!isLoading && file && typeof this.files[file.type] !== 'undefined') {
+      const FileType = this.files[file.type].component
       return (
-        <ModuleType />
+        <FileType />
       )
     }
     if(isLoading) {
@@ -122,9 +122,9 @@ class Module extends Component {
 //-----------------------------------------------------------------------------
 // Props
 //-----------------------------------------------------------------------------
-Module.propTypes = {
-  moduleId: string,
-  modules: object,
+File.propTypes = {
+  fileId: string,
+  files: object,
   setCalendar: func,
   setNote: func,
   setTable: func
@@ -144,4 +144,4 @@ const Container = styled.div`
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Module)
+)(File)

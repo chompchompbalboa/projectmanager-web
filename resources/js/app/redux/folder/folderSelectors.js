@@ -9,6 +9,6 @@ export const selectFolders = state => state.folder.folders
 export const selectFolderIds = state => state.folder.folderIds
 
 //-----------------------------------------------------------------------------
-// Select Modules
+// Select Files
 //-----------------------------------------------------------------------------
-export const selectModules = state => state.folder.modules
+export const selectFiles = state => state.folder.files

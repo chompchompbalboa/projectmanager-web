@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateModule extends Migration
+class CreateFile extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateModule extends Migration
      */
     public function up()
     {
-        Schema::create('modules', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('folder_id')->nullable();
             $table->string('name')->nullable();
@@ -32,6 +32,6 @@ class CreateModule extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('modules');
+        Schema::dropIfExists('files');
     }
 }

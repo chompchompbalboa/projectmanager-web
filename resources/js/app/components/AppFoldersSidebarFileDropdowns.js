@@ -5,7 +5,7 @@ import React from 'react'
 import { bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import CreateModuleDropdown from './CreateModuleDropdown'
+import CreateFileDropdown from './CreateFileDropdown'
 import DeleteDropdown from './DeleteDropdown'
 import Dropdown from './Dropdown'
 import DropdownItem from './DropdownItem'
@@ -13,16 +13,16 @@ import DropdownItem from './DropdownItem'
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const AppFolderSidebarModuleDropdowns = ({
+const AppFolderSidebarFileDropdowns = ({
   closeDropdowns,
-  deleteModule,
+  deleteFile,
   dropdownLeft,
   dropdownTop,
-  moduleName,
+  fileName,
   isDeleteDropdownVisible,
   isDropdownVisible,
   openDeleteDropdown,
-  toggleModuleIsRenaming
+  toggleFileIsRenaming
 }) => {
   return (
     <Container>
@@ -33,10 +33,10 @@ const AppFolderSidebarModuleDropdowns = ({
           dropdownTop={dropdownTop}
           isDropdownVisible={isDropdownVisible}>
           <DropdownItem
-            onClick={() => console.log('copyModule')}
+            onClick={() => console.log('copyFile')}
             text="Copy"/>
           <DropdownItem
-            onClick={toggleModuleIsRenaming}
+            onClick={toggleFileIsRenaming}
             text="Rename"/>
           <DropdownItem
             onClick={openDeleteDropdown}
@@ -48,23 +48,23 @@ const AppFolderSidebarModuleDropdowns = ({
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
           isDropdownVisible={isDeleteDropdownVisible}
-          onDelete={deleteModule}
-          textToMatch={moduleName}
-          type="module"/>}
+          onDelete={deleteFile}
+          textToMatch={fileName}
+          type="file"/>}
     </Container>
   )
 }
 
-AppFolderSidebarModuleDropdowns.propTypes = {
+AppFolderSidebarFileDropdowns.propTypes = {
   closeDropdowns: func,
-  deleteModule: func,
+  deleteFile: func,
   dropdownLeft: string,
   dropdownTop: string,
-  moduleName: string,
+  fileName: string,
   isDeleteDropdownVisible: bool,
   isDropdownVisible: bool,
   openDeleteDropdown: func,
-  toggleModuleIsRenaming: func,
+  toggleFileIsRenaming: func,
 }
 
 //-----------------------------------------------------------------------------
@@ -73,4 +73,4 @@ AppFolderSidebarModuleDropdowns.propTypes = {
 const Container = styled.div`
   position: relative;`
 
-export default AppFolderSidebarModuleDropdowns
+export default AppFolderSidebarFileDropdowns

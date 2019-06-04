@@ -28,8 +28,8 @@ class User extends Authenticatable
     /**
      * Get the folders for this user
      */
-    public function folders() {
-      return $this->hasMany('App\Models\Folder')->orderBy('name');
+    public function folder() {
+      return $this->belongsTo('App\Models\Folder');
     }
   
     /**

@@ -16,7 +16,7 @@ class Organization extends Model
     return $this->hasMany('App\Models\User');
   }
   
-  public function folders() {
-    return $this->hasMany('App\Models\Folder')->orderBy('name');
+  public function folder() {
+    return $this->belongsTo('App\Models\Folder');
   }
 }

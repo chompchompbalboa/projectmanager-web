@@ -16,7 +16,6 @@ use Faker\Generator as Faker;
 $factory->define(App\Models\Folder::class, function (Faker $faker) {
     return [
         'id' => $faker->uuid,
-        'organization_id' => null,
         'folder_id' => null,
         'name' => $faker->firstName
     ];

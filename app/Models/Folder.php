@@ -10,13 +10,13 @@ class Folder extends Model
   /**
    * Define which attributes will be visible
    */
-  protected $appends = ['folderId', 'folders', 'files', 'userId', 'organizationId'];
-  protected $visible = ['id', 'name', 'folderId', 'folders', 'files', 'organizationId'];
+  protected $appends = ['folderId', 'folders', 'files'];
+  protected $visible = ['id', 'name', 'folderId', 'folders', 'files'];
 
   /**
    * Define which attributes will be mass assignable
    */
-  protected $fillable = ['id', 'name', 'folderId', 'userId', 'organizationId'];
+  protected $fillable = ['id', 'name', 'folderId'];
 
   /**
    * Get the folder this folder belongs to
@@ -50,28 +50,5 @@ class Folder extends Model
   }
   public function getFilesAttribute() {
     return $this->files()->orderBy('name')->get();
-  }
-  
-  /**
-   * Get the organization this folder belongs to
-   */
-  public function organization() {
-    return $this->belongsTo('App\Models\Organization');
-  }
-  public function getOrganizationIdAttribute() {
-    return $this->attributes['organization_id'];
-  }
-  public function setOrganizationIdAttribute($value) {
-    $this->attributes['organization_id'] = $value;
-  }
-  
-  /**
-   * Get the user this folder belongs to
-   */
-  public function user() {
-    return $this->belongsTo('App\Models\User');
-  }
-  public function setUserIdAttribute($value) {
-    $this->attributes['user_id'] = $value;
   }
 }

@@ -19,6 +19,7 @@ $factory->define(App\Models\User::class, function (Faker $faker) {
         'organization_id' => '36faa7b2-79d3-11e9-8f9e-2a86e4085a59',
         'name' => 'Rocky Eastman',
         'email' => 'rockye@dillonworks.com',
+        'folder_id' => null,
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
         'remember_token' => str_random(10)
     ];

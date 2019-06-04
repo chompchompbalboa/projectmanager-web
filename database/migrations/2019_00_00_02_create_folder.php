@@ -16,16 +16,12 @@ class CreateFolder extends Migration
         Schema::create('folders', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('folder_id')->nullable();
-            $table->uuid('organization_id')->nullable();
-            $table->uuid('user_id')->nullable();
             $table->string('name');
             $table->timestamps();
         });
 
         Schema::table('folders', function (Blueprint $table) {
           $table->foreign('folder_id')->references('id')->on('folders')->onDelete('cascade');
-          $table->foreign('organization_id')->references('id')->on('organizations');
-          $table->foreign('user_id')->references('id')->on('users');
       });
     }
 

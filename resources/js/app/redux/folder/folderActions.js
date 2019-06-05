@@ -152,10 +152,12 @@ export const pasteIntoFolder = pasteFolderId => {
     const pasteObject = clone(clipboardType === 'FOLDER' ? folders[clipboardId] : files[clipboardId])
     // Get the folder being pasted into
     const pasteFolder = clone(folders[pasteFolderId])
-    
+
+    // Cut
     if (clipboardCutOrCopy === 'COPY') {
       console.log(clipboardCutOrCopy, clipboardType, clipboardId)
     }
+    // Copy
     else if (clipboardCutOrCopy === 'CUT') {
       // Remove the object from the parent folder
       if(pasteObject.folderId) {
@@ -170,7 +172,7 @@ export const pasteIntoFolder = pasteFolderId => {
       }
       
       if(clipboardType === 'FOLDER') {
-        dispatch(updateFolder(clipboardId, { folderId: pasteFolderId, organizationId: null, userId: null }))
+        dispatch(updateFolder(clipboardId, { folderId: pasteFolderId }))
         dispatch(updateFolder(pasteFolderId, { folders: [...pasteFolder.folders, clipboardId] }, true))
       }
     }

@@ -30,7 +30,7 @@ const mapDispatchToProps = dispatch => ({
   copyFolder: folder => dispatch(copyFolderAction(folder)),
   createFolder: parentFolderId => dispatch(createFolderAction(parentFolderId)),
   createFile: (folderId, type) => dispatch(createFileAction(folderId, type)),
-  cutFolder: folder => dispatch(cutFolderAction(folder)),
+  cutFolder: folderId => dispatch(cutFolderAction(folderId)),
   deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
   pasteIntoFolder: pasteFolderId => dispatch(pasteIntoFolderAction(pasteFolderId)),
   updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
@@ -202,6 +202,7 @@ class AppFoldersSidebarFolder extends Component {
           isFolderDropdownVisible={isFolderDropdownVisible}
           isFolderDeleteDropdownVisible={isFolderDeleteDropdownVisible}
           isFolderCreateFileDropdownVisible={isFolderCreateFileDropdownVisible}
+          level={level}
           openFolderDeleteDropdown={() => this.setState({ isFolderDropdownVisible: false, isFolderDeleteDropdownVisible: true })}
           openFolderCreateFileDropdown={() => this.setState({ isFolderDropdownVisible: false, isFolderCreateFileDropdownVisible: true })}
           pasteIntoFolder={() => this.pasteIntoFolder(folder.id)}

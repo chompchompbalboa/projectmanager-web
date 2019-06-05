@@ -2,7 +2,7 @@
 // Imports
 //-----------------------------------------------------------------------------
 import React from 'react'
-import { bool, func, string } from 'prop-types'
+import { bool, func, number, string } from 'prop-types'
 import styled from 'styled-components'
 
 import CreateFileDropdown from './CreateFileDropdown'
@@ -26,6 +26,7 @@ const AppFolderSidebarFolderDropdowns = ({
   isFolderDropdownVisible,
   isFolderDeleteDropdownVisible,
   isFolderCreateFileDropdownVisible,
+  level,
   openFolderCreateFileDropdown,
   openFolderDeleteDropdown,
   pasteIntoFolder,
@@ -45,12 +46,16 @@ const AppFolderSidebarFolderDropdowns = ({
           <DropdownItem
             onClick={createFolder}
             text="New Folder"/>
+          {level > 1 && // Don't let the user cut or copy the root folders
+          <>
           <DropdownItem
             onClick={copyFolder}
             text="Copy"/>
           <DropdownItem
             onClick={cutFolder}
             text="Cut"/>
+          </>
+          }
           <DropdownItem
             onClick={pasteIntoFolder}
             text="Paste"/>
@@ -95,6 +100,7 @@ AppFolderSidebarFolderDropdowns.propTypes = {
   isFolderDropdownVisible: bool,
   isFolderDeleteDropdownVisible: bool,
   isFolderCreateFileDropdownVisible: bool,
+  level: number,
   openFolderCreateFileDropdown: func,
   openFolderDeleteDropdown: func,
   toggleFolderIsRenaming: func,

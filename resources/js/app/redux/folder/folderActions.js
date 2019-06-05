@@ -159,21 +159,20 @@ export const pasteIntoFolder = pasteFolderId => {
     }
     // Copy
     else if (clipboardCutOrCopy === 'CUT') {
-      // Remove the object from the parent folder
-      if(pasteObject.folderId) {
-        const cutFromFolder = clone(folders[pasteObject.folderId])
-        const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteObject.id)
-        clipboardType === 'FOLDER' && dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
-        const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== pasteObject.id)
-        clipboardType === 'FILE' && dispatch(updateFolder(cutFromFolder.id, { files: nextCutFromFolderFiles }, true))
-      } else {
-        // If it's a root folder, remove it from folderIds
-        dispatch(updateFolderIds(folderIds.filter(folderId => folderId !== pasteObject.id)))
-      }
+      const cutFromFolder = clone(folders[pasteObject.folderId])
       
       if(clipboardType === 'FOLDER') {
+        const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteObject.id)
+        dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
         dispatch(updateFolder(clipboardId, { folderId: pasteFolderId }))
         dispatch(updateFolder(pasteFolderId, { folders: [...pasteFolder.folders, clipboardId] }, true))
+      }
+      
+      if(clipboardType === 'FILE') {
+        const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== pasteObject.id)
+        dispatch(updateFolder(cutFromFolder.id, { files: nextCutFromFolderFiles }, true))
+        dispatch(updateFile(pasteObject.id, { folderId: pasteFolderId }))
+        dispatch(updateFolder(pasteFolderId, { files: [...pasteFolder.files, clipboardId] }, true))
       }
     }
     dispatch(updateClipboard(null, null, null))

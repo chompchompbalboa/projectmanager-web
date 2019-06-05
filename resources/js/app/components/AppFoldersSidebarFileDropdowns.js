@@ -15,6 +15,8 @@ import DropdownItem from './DropdownItem'
 //-----------------------------------------------------------------------------
 const AppFolderSidebarFileDropdowns = ({
   closeDropdowns,
+  copyFile,
+  cutFile,
   deleteFile,
   dropdownLeft,
   dropdownTop,
@@ -33,8 +35,11 @@ const AppFolderSidebarFileDropdowns = ({
           dropdownTop={dropdownTop}
           isDropdownVisible={isDropdownVisible}>
           <DropdownItem
-            onClick={() => console.log('copyFile')}
+            onClick={copyFile}
             text="Copy"/>
+          <DropdownItem
+            onClick={cutFile}
+            text="Cut"/>
           <DropdownItem
             onClick={toggleFileIsRenaming}
             text="Rename"/>
@@ -55,8 +60,13 @@ const AppFolderSidebarFileDropdowns = ({
   )
 }
 
+//-----------------------------------------------------------------------------
+// Props
+//-----------------------------------------------------------------------------
 AppFolderSidebarFileDropdowns.propTypes = {
   closeDropdowns: func,
+  copyFile: func,
+  cutFile: func,
   deleteFile: func,
   dropdownLeft: string,
   dropdownTop: string,

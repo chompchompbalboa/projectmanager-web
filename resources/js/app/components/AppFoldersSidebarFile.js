@@ -13,6 +13,8 @@ import {
   updateActiveFileId as updateActiveFileIdAction
 } from '../redux/active/activeActions'
 import {
+  copyFile as copyFileAction,
+  cutFile as cutFileAction,
   deleteFile as deleteFileAction,
   updateFile as updateFileAction
 } from '../redux/folder/folderActions'
@@ -30,6 +32,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  copyFile: (fileId) => dispatch(copyFileAction(fileId)),
+  cutFile: (fileId) => dispatch(cutFileAction(fileId)),
   deleteFile: (fileId) => dispatch(deleteFileAction(fileId)),
   updateActiveFolderPath: nextActiveFolderPath => dispatch(updateActiveFolderPathAction(nextActiveFolderPath)),
   updateActiveFileId: nextActiveFileId => dispatch(updateActiveFileIdAction(nextActiveFileId)),
@@ -55,6 +59,22 @@ class AppFoldersSidebarFile extends Component {
       isDeleteDropdownVisible: false,
       isDropdownVisible: false
     })
+  }
+  
+  copyFile = fileId => {
+    const {
+      copyFile
+    } = this.props
+    copyFile(fileId)
+    this.closeDropdowns()
+  }
+  
+  cutFile = fileId => {
+    const {
+      cutFile
+    } = this.props
+    cutFile(fileId)
+    this.closeDropdowns()
   }
 
   handleFileNameBlur = () => {
@@ -125,6 +145,8 @@ class AppFoldersSidebarFile extends Component {
         </FileInfo>
         <AppFoldersSidebarFileDropdowns 
           closeDropdowns={this.closeDropdowns}
+          copyFile={() => this.copyFile(file.id)}
+          cutFile={() => this.cutFile(file.id)}
           deleteFile={() => deleteFile(file.id)}
           dropdownLeft={dropdownLeft}
           dropdownTop={dropdownTop}
@@ -143,6 +165,7 @@ class AppFoldersSidebarFile extends Component {
 //-----------------------------------------------------------------------------
 AppFoldersSidebarFile.propTypes = {
   activeFileId: string,
+  cutFile: func,
   deleteFile: func,
   folderPath: array,
   level: number,

@@ -13,9 +13,8 @@ import {
   updateActiveFileId as updateActiveFileIdAction
 } from '../redux/active/activeActions'
 import {
-  copyFile as copyFileAction,
-  cutFile as cutFileAction,
   deleteFile as deleteFileAction,
+  updateClipboard as updateClipboardAction,
   updateFile as updateFileAction
 } from '../redux/folder/folderActions'
 import { selectActiveFileId } from '../redux/active/activeSelectors'
@@ -32,11 +31,10 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  copyFile: (fileId) => dispatch(copyFileAction(fileId)),
-  cutFile: (fileId) => dispatch(cutFileAction(fileId)),
   deleteFile: (fileId) => dispatch(deleteFileAction(fileId)),
   updateActiveFolderPath: nextActiveFolderPath => dispatch(updateActiveFolderPathAction(nextActiveFolderPath)),
   updateActiveFileId: nextActiveFileId => dispatch(updateActiveFileIdAction(nextActiveFileId)),
+  updateClipboard: (cutOrCopy, itemType, itemId) => dispatch(updateClipboardAction(cutOrCopy, itemType, itemId)),
   updateFile: (fileId, updates) => dispatch(updateFileAction(fileId, updates))
 })
 
@@ -63,18 +61,18 @@ class AppFoldersSidebarFile extends Component {
   
   copyFile = fileId => {
     const {
-      copyFile
+      updateClipboard
     } = this.props
-    copyFile(fileId)
     this.closeDropdowns()
+    updateClipboard('COPY', 'FILE', fileId)
   }
   
   cutFile = fileId => {
     const {
-      cutFile
+      updateClipboard
     } = this.props
-    cutFile(fileId)
     this.closeDropdowns()
+    updateClipboard('CUT', 'FILE', fileId)
   }
 
   handleFileNameBlur = () => {
@@ -165,7 +163,6 @@ class AppFoldersSidebarFile extends Component {
 //-----------------------------------------------------------------------------
 AppFoldersSidebarFile.propTypes = {
   activeFileId: string,
-  cutFile: func,
   deleteFile: func,
   folderPath: array,
   level: number,
@@ -177,6 +174,7 @@ AppFoldersSidebarFile.propTypes = {
   }),
   updateActiveFolderPath: func,
   updateActiveFileId: func,
+  updateClipboard: func,
   updateFile: func
 }
 

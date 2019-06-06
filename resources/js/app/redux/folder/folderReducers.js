@@ -11,7 +11,7 @@ const normalizedFolders = folderNormalizer(initialData.folders)
 const initialState = {
   clipboardCutOrCopy: null,
   clipboardId: null,
-  clipboardType: null,
+  clipboardItemType: null,
   folders: normalizedFolders.entities.folder,
   folderIds: normalizedFolders.result,
   files: normalizedFolders.entities.file,
@@ -112,13 +112,14 @@ const folderReducers = (state = initialState, action) => {
       const {
         nextClipboardCutOrCopy,
         nextClipboardId,
-        nextClipboardType
+        nextClipboardItemType
       } = action
+      console.log(action)
       return {
         ...state,
         clipboardCutOrCopy: nextClipboardCutOrCopy,
         clipboardId: nextClipboardId,
-        clipboardType: nextClipboardType,
+        clipboardItemType: nextClipboardItemType,
       }
     }
 

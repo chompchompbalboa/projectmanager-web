@@ -5,7 +5,6 @@ import React from 'react'
 import { bool, func, string } from 'prop-types'
 import styled from 'styled-components'
 
-import CreateFileDropdown from './CreateFileDropdown'
 import DeleteDropdown from './DeleteDropdown'
 import Dropdown from './Dropdown'
 import DropdownItem from './DropdownItem'

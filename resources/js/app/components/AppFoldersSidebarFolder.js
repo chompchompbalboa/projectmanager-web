@@ -15,6 +15,7 @@ import {
   cutFolder as cutFolderAction,
   deleteFolder as deleteFolderAction,
   pasteIntoFolder as pasteIntoFolderAction,
+  updateClipboard as updateClipboardAction,
   updateFolder as updateFolderAction 
 } from '../redux/folder/folderActions'
 
@@ -33,6 +34,7 @@ const mapDispatchToProps = dispatch => ({
   cutFolder: folderId => dispatch(cutFolderAction(folderId)),
   deleteFolder: (parentFolderId, folderId) => dispatch(deleteFolderAction(parentFolderId, folderId)),
   pasteIntoFolder: pasteFolderId => dispatch(pasteIntoFolderAction(pasteFolderId)),
+  updateClipboard: (cutOrCopy, itemType, itemId) => dispatch(updateClipboardAction(cutOrCopy, itemType, itemId)),
   updateFolder: (id, updates) => dispatch(updateFolderAction(id, updates))
 })
 
@@ -64,22 +66,18 @@ class AppFoldersSidebarFolder extends Component {
   
   copyFolder = folderId => {
     const {
-      copyFolder
+      updateClipboard
     } = this.props
-    copyFolder(folderId)
-    this.setState({
-      isFolderDropdownVisible: false
-    })
+    this.closeDropdowns()
+    updateClipboard('COPY', 'FOLDER', folderId)
   }
   
   cutFolder = folderId => {
     const {
-      cutFolder
+      updateClipboard
     } = this.props
-    cutFolder(folderId)
-    this.setState({
-      isFolderDropdownVisible: false
-    })
+    this.closeDropdowns()
+    updateClipboard('CUT', 'FOLDER', folderId)
   }
 
   createFolder = parentFolderId => {
@@ -158,6 +156,7 @@ class AppFoldersSidebarFolder extends Component {
       level,
       files,
       parentFolderId,
+      updateClipboard,
       updateFolder
     } = this.props
     const {
@@ -225,6 +224,7 @@ class AppFoldersSidebarFolder extends Component {
                 files={files}
                 parentFolderId={folder.id}
                 pasteIntoFolder={this.pasteIntoFolder}
+                updateClipboard={updateClipboard}
                 updateFolder={updateFolder}/>
             ))}
           </FolderSubfolders>
@@ -264,6 +264,7 @@ AppFoldersSidebarFolder.propTypes = {
   parentFolderId: string,
   pasteIntoFolder: func,
   updateActiveFolderPath: func,
+  updateClipboard: func,
   updateFolder: func
 }
 

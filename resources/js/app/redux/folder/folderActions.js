@@ -141,37 +141,56 @@ export const pasteIntoFolder = pasteFolderId => {
       folder: {
         clipboardCutOrCopy,
         clipboardId,
-        clipboardType,
-        folderIds,
+        clipboardItemType,
         folders,
         files
       }
     } = getState()
     
-    // Get the object being pasted
-    const pasteObject = clone(clipboardType === 'FOLDER' ? folders[clipboardId] : files[clipboardId])
+    // Get the item (a folder or a file) being pasted
+    const pasteItem = clone(clipboardItemType === 'FOLDER' ? folders[clipboardId] : files[clipboardId])
     // Get the folder being pasted into
     const pasteFolder = clone(folders[pasteFolderId])
 
-    // Cut
-    if (clipboardCutOrCopy === 'COPY') {
-      console.log(clipboardCutOrCopy, clipboardType, clipboardId)
-    }
     // Copy
-    else if (clipboardCutOrCopy === 'CUT') {
-      const cutFromFolder = clone(folders[pasteObject.folderId])
+    if (clipboardCutOrCopy === 'COPY') {
+      if (clipboardItemType === 'FOLDER') {
+        console.log('copyFolder')
+      } 
       
-      if(clipboardType === 'FOLDER') {
-        const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteObject.id)
+      if (clipboardItemType === 'FILE') {
+        console.log(pasteItem)
+        const newItem = { ...clone(pasteItem), id: createUuid(), typeId: createUuid() }
+        console.log(newItem)
+        //dispatch(createFile(pasteFolder.id, pasteItem.type))
+      }
+    }
+    // Cut
+    else if (clipboardCutOrCopy === 'CUT') {
+      // Get the folder the item is being removed from
+      const cutFromFolder = clone(folders[pasteItem.folderId])
+      
+      if(clipboardItemType === 'FOLDER') {
+        // Remove from current folder
+        const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteItem.id)
         dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
+        // Update the relationship on the folder being pasted
         dispatch(updateFolder(clipboardId, { folderId: pasteFolderId }))
+        // Update the relationship on the folder being pasted into, skipping
+        // the server update, which is handled by the update on the folder
+        // being pasted
         dispatch(updateFolder(pasteFolderId, { folders: [...pasteFolder.folders, clipboardId] }, true))
       }
       
-      if(clipboardType === 'FILE') {
-        const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== pasteObject.id)
+      if(clipboardItemType === 'FILE') {
+        // Remove from current folder
+        const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== pasteItem.id)
         dispatch(updateFolder(cutFromFolder.id, { files: nextCutFromFolderFiles }, true))
-        dispatch(updateFile(pasteObject.id, { folderId: pasteFolderId }))
+        // Update the relationship on the file being pasted
+        dispatch(updateFile(pasteItem.id, { folderId: pasteFolderId }))
+        // Update the relationship on the folder being pasted into, skipping
+        // the server update, which is handled by the update on the folder
+        // being pasted
         dispatch(updateFolder(pasteFolderId, { files: [...pasteFolder.files, clipboardId] }, true))
       }
     }
@@ -182,11 +201,11 @@ export const pasteIntoFolder = pasteFolderId => {
 //-----------------------------------------------------------------------------
 // Update Clipboard
 //-----------------------------------------------------------------------------
-export const updateClipboard = (cutOrCopy, type, id) => ({
+export const updateClipboard = (cutOrCopy, itemType, itemId) => ({
   type: 'UPDATE_CLIPBOARD',
   nextClipboardCutOrCopy: cutOrCopy,
-  nextClipboardId: id,
-  nextClipboardType: type,
+  nextClipboardId: itemId,
+  nextClipboardItemType: itemType,
 })
 
 //-----------------------------------------------------------------------------
@@ -203,14 +222,6 @@ const updateFolderReducer = (folderId, updates) => ({
   type: 'UPDATE_FOLDER',
   folderId: folderId,
   updates: updates
-})
-
-//-----------------------------------------------------------------------------
-// Update Folder Ids
-//-----------------------------------------------------------------------------
-const updateFolderIds = (nextFolderIds) => ({
-  type: 'UPDATE_FOLDER_IDS',
-  nextFolderIds: nextFolderIds
 })
 
 //-----------------------------------------------------------------------------

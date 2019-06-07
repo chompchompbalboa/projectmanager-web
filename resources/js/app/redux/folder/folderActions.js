@@ -95,9 +95,26 @@ export const cutFolder = folderId => {
 //-----------------------------------------------------------------------------
 // Cut File
 //-----------------------------------------------------------------------------
-export const cutFile = fileId => {
-  return dispatch => {
-    dispatch(updateClipboard('CUT', 'FILE', fileId))
+export const cutFile = (fileId, cutFromFolderId, pasteIntoFolderId) => {
+  return (dispatch, getState) => {
+    const {
+      folder: {
+        files,
+        folders
+      }
+    } = getState()
+    const file = files[fileId]
+    const cutFromFolder = folders[cutFromFolderId]
+    const pasteIntoFolder = folders[pasteIntoFolderId]
+    // Remove from current folder
+    const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== file.id)
+    dispatch(updateFolder(cutFromFolder.id, { files: nextCutFromFolderFiles }, true))
+    // Update the relationship on the file being pasted
+    dispatch(updateFile(file.id, { folderId: pasteIntoFolder.id }))
+    // Update the relationship on the folder being pasted into, skipping
+    // the server update, which is handled by the update on the folder
+    // being pasted
+    dispatch(updateFolder(pasteIntoFolder.id, { files: [...pasteIntoFolder.files, file.id] }, true))
   }
 }
 
@@ -135,7 +152,7 @@ const deleteFileReducer = (fileId) => ({
 //-----------------------------------------------------------------------------
 // Paste Folder
 //-----------------------------------------------------------------------------
-export const pasteIntoFolder = pasteFolderId => {
+export const pasteIntoFolder = pasteIntoFolderId => {
   return (dispatch, getState) => {
     const {
       folder: {
@@ -150,7 +167,7 @@ export const pasteIntoFolder = pasteFolderId => {
     // Get the item (a folder or a file) being pasted
     const pasteItem = clone(clipboardItemType === 'FOLDER' ? folders[clipboardId] : files[clipboardId])
     // Get the folder being pasted into
-    const pasteFolder = clone(folders[pasteFolderId])
+    const pasteFolder = clone(folders[pasteIntoFolderId])
 
     // Copy
     if (clipboardCutOrCopy === 'COPY') {
@@ -175,23 +192,15 @@ export const pasteIntoFolder = pasteFolderId => {
         const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== pasteItem.id)
         dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
         // Update the relationship on the folder being pasted
-        dispatch(updateFolder(clipboardId, { folderId: pasteFolderId }))
+        dispatch(updateFolder(clipboardId, { folderId: pasteIntoFolderId }))
         // Update the relationship on the folder being pasted into, skipping
         // the server update, which is handled by the update on the folder
         // being pasted
-        dispatch(updateFolder(pasteFolderId, { folders: [...pasteFolder.folders, clipboardId] }, true))
+        dispatch(updateFolder(pasteIntoFolderId, { folders: [...pasteFolder.folders, clipboardId] }, true))
       }
       
       if(clipboardItemType === 'FILE') {
-        // Remove from current folder
-        const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== pasteItem.id)
-        dispatch(updateFolder(cutFromFolder.id, { files: nextCutFromFolderFiles }, true))
-        // Update the relationship on the file being pasted
-        dispatch(updateFile(pasteItem.id, { folderId: pasteFolderId }))
-        // Update the relationship on the folder being pasted into, skipping
-        // the server update, which is handled by the update on the folder
-        // being pasted
-        dispatch(updateFolder(pasteFolderId, { files: [...pasteFolder.files, clipboardId] }, true))
+        dispatch(cutFile(clipboardId, cutFromFolder.id, pasteIntoFolderId))
       }
     }
     dispatch(updateClipboard(null, null, null))

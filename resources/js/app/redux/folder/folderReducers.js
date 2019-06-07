@@ -114,7 +114,6 @@ const folderReducers = (state = initialState, action) => {
         nextClipboardId,
         nextClipboardItemType
       } = action
-      console.log(action)
       return {
         ...state,
         clipboardCutOrCopy: nextClipboardCutOrCopy,

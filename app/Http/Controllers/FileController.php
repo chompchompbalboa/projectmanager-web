@@ -22,13 +22,24 @@ class FileController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Copy an existing file
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function copyFile(Request $request)
     {
-        //
+      $typeFileToCopy = $request->input('typeFileToCopyId');
+      $pasteIntoFolderId = $request->input('pasteIntoFolderId');
+
+      $newFile = File::create($request->input('newFile'));
+      $newFile->folderId = $pasteIntoFolderId;
+      $newFile->save();
+
+      $modelName = 'App\Models\\'.ucfirst(strtolower($newFile->type));
+      $typeFileToCopy = $modelName::find($typeFileToCopy);
+      $newTypeFile = $typeFileToCopy->replicate();
+      $newTypeFile->id = $newFile->typeId;
+      $newTypeFile->save();
     }
 
     /**

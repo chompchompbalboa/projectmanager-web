@@ -27,6 +27,15 @@ export const updateFolder = async (id, updates) => {
 //-----------------------------------------------------------------------------
 // File
 //-----------------------------------------------------------------------------
+export const copyFile = async (pasteIntoFolderId, typeFileToCopyId, newFile) => {  
+  return axios.post('/app/files/copy', {
+    pasteIntoFolderId: pasteIntoFolderId,
+    typeFileToCopyId: typeFileToCopyId,
+    newFile: newFile
+  }).then(response => {
+    return response.data
+  })
+}
 export const createFile = async (newFile) => {  
   return axios.post('/app/files', newFile).then(response => {
     return response.data

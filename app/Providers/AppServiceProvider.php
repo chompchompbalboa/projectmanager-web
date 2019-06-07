@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Folder;
 use App\Observers\FolderObserver;
 
+use App\Models\Table;
+use App\Observers\TableObserver;
 use App\Models\TableColumn;
 use App\Observers\TableColumnObserver;
 use App\Models\TableRow;
@@ -43,6 +45,7 @@ class AppServiceProvider extends ServiceProvider
       
       Folder::observe(FolderObserver::class);
 
+      Table::observe(TableObserver::class);
       TableColumn::observe(TableColumnObserver::class);
       TableRow::observe(TableRowObserver::class);
     }

@@ -31,6 +31,8 @@ Route::prefix('app')->group(function () {
     ]);
   });
 
+  Route::post('/files/copy', 'FileController@copyFile');
+
   Route::resources([
     // Folders
     'folders' => 'FolderController',

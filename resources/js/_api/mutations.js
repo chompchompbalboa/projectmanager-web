@@ -27,10 +27,12 @@ export const updateFolder = async (id, updates) => {
 //-----------------------------------------------------------------------------
 // File
 //-----------------------------------------------------------------------------
-export const copyFile = async (pasteIntoFolderId, typeFileToCopyId, newFile) => {  
-  return axios.post('/app/files/copy', {
-    pasteIntoFolderId: pasteIntoFolderId,
-    typeFileToCopyId: typeFileToCopyId,
+export const copyFile = async (fileType, pasteFolderId, fileToCopyId, newFile) => {
+
+  const url = '/app/' + fileType.toLowerCase() + 's/copy'
+  return axios.post(url, {
+    pasteFolderId: pasteFolderId,
+    fileToCopyId: fileToCopyId,
     newFile: newFile
   }).then(response => {
     return response.data

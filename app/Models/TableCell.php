@@ -19,7 +19,7 @@ class TableCell extends Model
    * Get the row this cell belongs to
    */
   public function row() {
-    return $this->belongsTo('App\Models\TableRow');
+    return $this->belongsTo('App\Models\TableRow', 'table_row_id');
   }
 
   

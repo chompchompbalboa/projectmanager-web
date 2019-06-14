@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+
+use App\Models\File;
 use App\Models\TableCell;
 use App\Models\TableColumn;
 use App\Models\TableRow;
@@ -23,13 +25,22 @@ class TableController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Copy the resource.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function copy(Request $request)
     {
-        //
+      $tableToCopyId = $request->input('fileToCopyId');
+      $pasteFolderId = $request->input('pasteFolderId');
+
+      $newFile = File::create($request->input('newFile'));
+      $newFile->folderId = $pasteFolderId;
+      $newFile->save();
+
+      $tableToCopy = Table::find($tableToCopyId);
+      dd($tableToCopy);
     }
 
     /**

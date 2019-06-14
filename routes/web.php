@@ -15,6 +15,7 @@ use App\Models\View;
 //-----------------------------------------------------------------------------
 Route::prefix('app')->group(function () {
 
+  // Initial load
   Route::get('/', function () {
 
     $user = Auth::loginUsingId('75e3c4f9-b261-3343-a320-8ee9fb0c931e', true);
@@ -31,8 +32,10 @@ Route::prefix('app')->group(function () {
     ]);
   });
 
-  Route::post('/files/copy', 'FileController@copyFile');
+  // Copy
+  Route::post('/tables/copy', 'TableController@copy');
 
+  // Resource Controllers
   Route::resources([
     // Folders
     'folders' => 'FolderController',

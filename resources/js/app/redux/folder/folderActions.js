@@ -42,7 +42,7 @@ export const copyFolder = folderId => {
 //-----------------------------------------------------------------------------
 // Copy File
 //-----------------------------------------------------------------------------
-export const copyFile = (fileToCopyId, pasteIntoFolderId) => {
+export const copyFile = (fileToCopyId, pasteFolderId) => {
   return (dispatch, getState) => {
     const {
       folder: {
@@ -51,11 +51,11 @@ export const copyFile = (fileToCopyId, pasteIntoFolderId) => {
       }
     } = getState()
     const fileToCopy = files[fileToCopyId]
-    const pasteIntoFolder = folders[pasteIntoFolderId]
+    const pasteFolder = folders[pasteFolderId]
     const newFile = { ...clone(fileToCopy), id: createUuid(), typeId: createUuid() }
-    dispatch(createFileReducer(pasteIntoFolder.id, newFile))
-    dispatch(updateFolder(pasteIntoFolder.id, { files: [ ...pasteIntoFolder.files, newFile.id]}, true))
-    mutation.copyFile(pasteIntoFolder.id, fileToCopy.typeId, newFile)
+    dispatch(createFileReducer(pasteFolder.id, newFile))
+    dispatch(updateFolder(pasteFolder.id, { files: [ ...pasteFolder.files, newFile.id]}, true))
+    mutation.copyFile(fileToCopy.type, pasteFolder.id, fileToCopy.typeId, newFile)
   }
 }
 
@@ -97,7 +97,7 @@ const createFileReducer = (folderId, newFile) => ({
 //-----------------------------------------------------------------------------
 // Cut Folder
 //-----------------------------------------------------------------------------
-export const cutFolder = (folderId, cutFromFolderId, pasteIntoFolderId) => {
+export const cutFolder = (folderId, cutFromFolderId, pasteFolderId) => {
   return (dispatch, getState) => {
     const {
       folder: {
@@ -106,23 +106,23 @@ export const cutFolder = (folderId, cutFromFolderId, pasteIntoFolderId) => {
     } = getState()
     const folder = folders[folderId]
     const cutFromFolder = folders[cutFromFolderId]
-    const pasteIntoFolder = folders[pasteIntoFolderId]
+    const pasteFolder = folders[pasteFolderId]
     // Remove from current folder
     const nextCutFromFolderFolders = cutFromFolder.folders.filter(folderId => folderId !== folder.id)
     dispatch(updateFolder(cutFromFolder.id, { folders: nextCutFromFolderFolders }, true))
     // Update the relationship on the folder being pasted
-    dispatch(updateFolder(folderId, { folderId: pasteIntoFolder.id }))
+    dispatch(updateFolder(folderId, { folderId: pasteFolder.id }))
     // Update the relationship on the folder being pasted into, skipping
     // the server update, which is handled by the update on the folder
     // being pasted
-    dispatch(updateFolder(pasteIntoFolderId, { folders: [...pasteIntoFolder.folders, folder.id] }, true))
+    dispatch(updateFolder(pasteFolderId, { folders: [...pasteFolder.folders, folder.id] }, true))
   }
 }
 
 //-----------------------------------------------------------------------------
 // Cut File
 //-----------------------------------------------------------------------------
-export const cutFile = (fileId, cutFromFolderId, pasteIntoFolderId) => {
+export const cutFile = (fileId, cutFromFolderId, pasteFolderId) => {
   return (dispatch, getState) => {
     const {
       folder: {
@@ -132,16 +132,16 @@ export const cutFile = (fileId, cutFromFolderId, pasteIntoFolderId) => {
     } = getState()
     const file = files[fileId]
     const cutFromFolder = folders[cutFromFolderId]
-    const pasteIntoFolder = folders[pasteIntoFolderId]
+    const pasteFolder = folders[pasteFolderId]
     // Remove from current folder
     const nextCutFromFolderFiles = cutFromFolder.files.filter(fileId => fileId !== file.id)
     dispatch(updateFolder(cutFromFolder.id, { files: nextCutFromFolderFiles }, true))
     // Update the relationship on the file being pasted
-    dispatch(updateFile(file.id, { folderId: pasteIntoFolder.id }))
+    dispatch(updateFile(file.id, { folderId: pasteFolder.id }))
     // Update the relationship on the folder being pasted into, skipping
     // the server update, which is handled by the update on the folder
     // being pasted
-    dispatch(updateFolder(pasteIntoFolder.id, { files: [...pasteIntoFolder.files, file.id] }, true))
+    dispatch(updateFolder(pasteFolder.id, { files: [...pasteFolder.files, file.id] }, true))
   }
 }
 
@@ -179,7 +179,7 @@ const deleteFileReducer = (fileId) => ({
 //-----------------------------------------------------------------------------
 // Paste Folder
 //-----------------------------------------------------------------------------
-export const pasteIntoFolder = pasteIntoFolderId => {
+export const pasteIntoFolder = pasteFolderId => {
   return (dispatch, getState) => {
     const {
       folder: {
@@ -193,8 +193,6 @@ export const pasteIntoFolder = pasteIntoFolderId => {
     
     // Get the item (a folder or a file) being pasted
     const pasteItem = clone(clipboardItemType === 'FOLDER' ? folders[clipboardId] : files[clipboardId])
-    // Get the folder being pasted into
-    const pasteFolder = clone(folders[pasteIntoFolderId])
 
     // Copy
     if (clipboardCutOrCopy === 'COPY') {
@@ -203,17 +201,17 @@ export const pasteIntoFolder = pasteIntoFolderId => {
       } 
       
       if (clipboardItemType === 'FILE') {
-        dispatch(copyFile(clipboardId, pasteIntoFolderId))
+        dispatch(copyFile(clipboardId, pasteFolderId))
       }
     }
     // Cut
     else if (clipboardCutOrCopy === 'CUT') {
       const cutFromFolder = clone(folders[pasteItem.folderId])
       if(clipboardItemType === 'FOLDER') {
-        dispatch(cutFolder(clipboardId, cutFromFolder.id, pasteIntoFolderId))
+        dispatch(cutFolder(clipboardId, cutFromFolder.id, pasteFolderId))
       }
       if(clipboardItemType === 'FILE') {
-        dispatch(cutFile(clipboardId, cutFromFolder.id, pasteIntoFolderId))
+        dispatch(cutFile(clipboardId, cutFromFolder.id, pasteFolderId))
       }
       dispatch(updateClipboard(null, null, null))
     }

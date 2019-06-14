@@ -6,6 +6,16 @@ import axios from './axios'
 //-----------------------------------------------------------------------------
 // Folder
 //-----------------------------------------------------------------------------
+export const copyFolder = async (folderToCopyId, newFolderId, pasteFolderId) => {  
+  return axios.post('/app/folders/copy', {
+    folderToCopyId: folderToCopyId,
+    newFolderId: newFolderId,
+    pasteFolderId: pasteFolderId
+  }).then(response => {
+    return response.data
+  })
+}
+
 export const createFolder = async newFolder => {  
   return axios.post('/app/folders', newFolder).then(response => {
     return response.data
@@ -28,7 +38,6 @@ export const updateFolder = async (id, updates) => {
 // File
 //-----------------------------------------------------------------------------
 export const copyFile = async (fileType, pasteFolderId, fileToCopyId, newFile) => {
-
   const url = '/app/' + fileType.toLowerCase() + 's/copy'
   return axios.post(url, {
     pasteFolderId: pasteFolderId,
@@ -38,6 +47,7 @@ export const copyFile = async (fileType, pasteFolderId, fileToCopyId, newFile) =
     return response.data
   })
 }
+
 export const createFile = async (newFile) => {  
   return axios.post('/app/files', newFile).then(response => {
     return response.data

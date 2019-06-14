@@ -109,7 +109,6 @@ const folderReducers = (state = initialState, action) => {
     }
       
     case 'UPDATE_CLIPBOARD': {
-      console.log(action)
       const {
         nextClipboardCutOrCopy,
         nextClipboardId,

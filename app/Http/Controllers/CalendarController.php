@@ -2,29 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Calendar;
 use Illuminate\Http\Request;
+
+use App\Models\Calendar;
+use App\Models\File;
 
 class CalendarController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Copy the resource
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public static function copy($calendarToCopyId, $folderId, $newFileParameters)
     {
-        //
-    }
+      $newFile = File::create($newFileParameters);
+      $newFile->folderId = $folderId;
+      $newFile->save();
 
+      $calendarToCopy = Calendar::find($calendarToCopyId);
+      $newCalendar = $calendarToCopy->replicate();
+      $newCalendar->id = $newFile->typeId;
+      $newCalendar->save();
+    }
     /**
-     * Show the form for creating a new resource.
+     * Copy the resource from a request
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function copyFromRequest(Request $request)
     {
-        //
+      $calendarToCopyId = $request->input('fileToCopyId');
+      $pasteFolderId = $request->input('pasteFolderId');
+      $newFileParameters = $request->input('newFile');
+      $this->copy($calendarToCopyId, $pasteFolderId, $newFileParameters);
     }
 
     /**

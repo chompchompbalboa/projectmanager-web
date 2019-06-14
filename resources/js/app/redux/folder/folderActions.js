@@ -11,14 +11,13 @@ import { updateActiveFileId } from '../active/activeActions'
 //-----------------------------------------------------------------------------
 // Defaults
 //-----------------------------------------------------------------------------
-const defaultFolder = (parentFolderId, userId) => ({
+const defaultFolder = (parentFolderId) => ({
   id: createUuid(),
   name: 'New folder',
-  folderId: parentFolderId || null,
+  folderId: parentFolderId,
   folders: [],
   files: [],
-  isFolderRenaming: true,
-  userId: parentFolderId ? null : userId
+  isFolderRenaming: true
 })
 
 const defaultFile = (folderId, type) => ({
@@ -33,9 +32,18 @@ const defaultFile = (folderId, type) => ({
 //-----------------------------------------------------------------------------
 // Copy Folder
 //-----------------------------------------------------------------------------
-export const copyFolder = folderId => {
-  return dispatch => {
-    dispatch(updateClipboard('COPY', 'FOLDER', folderId))
+export const copyFolder = (folderToCopyId, pasteFolderId) => {
+  return (dispatch, getState) => {
+    const {
+      folder: {
+        files,
+        folders
+      }
+    } = getState()
+    const folderToCopy = folders[folderToCopyId]
+    const newFolder = { ...clone(folderToCopy), id: createUuid(), folderId: pasteFolderId, isFolderBeingCopied: true }
+    dispatch(createFolderReducer(newFolder))
+    mutation.copyFolder(folderToCopyId, newFolder.id, newFolder.folderId)
   }
 }
 
@@ -64,7 +72,7 @@ export const copyFile = (fileToCopyId, pasteFolderId) => {
 //-----------------------------------------------------------------------------
 export const createFolder = (parentFolderId) => {
   return (dispatch, getState) => {
-    const newFolder = defaultFolder(parentFolderId, getState().user.id)
+    const newFolder = defaultFolder(parentFolderId)
     dispatch(createFolderReducer(newFolder))
     mutation.createFolder(newFolder)
   }
@@ -197,7 +205,7 @@ export const pasteIntoFolder = pasteFolderId => {
     // Copy
     if (clipboardCutOrCopy === 'COPY') {
       if (clipboardItemType === 'FOLDER') {
-        console.log('copyFolder')
+        dispatch(copyFolder(clipboardId, pasteFolderId))
       } 
       
       if (clipboardItemType === 'FILE') {
@@ -233,7 +241,7 @@ export const updateClipboard = (cutOrCopy, itemType, itemId) => ({
 //-----------------------------------------------------------------------------
 export const updateFolder = (folderId, updates, skipServerUpdate) => {
   return dispatch => {
-    dispatch(updateFolderReducer(folderId, { ...updates, isFolderRenaming: false }))
+    dispatch(updateFolderReducer(folderId, { ...updates, isFolderRenaming: false, isFolderBeingCopied: false }))
     !skipServerUpdate && mutation.updateFolder(folderId, updates)
   }
 }

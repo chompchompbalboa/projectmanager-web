@@ -33,7 +33,10 @@ Route::prefix('app')->group(function () {
   });
 
   // Copy
-  Route::post('/tables/copy', 'TableController@copy');
+  Route::post('/calendars/copy', 'CalendarController@copyFromRequest');
+  Route::post('/folders/copy', 'FolderController@copyFromRequest');
+  Route::post('/notes/copy', 'NoteController@copyFromRequest');
+  Route::post('/tables/copy', 'TableController@copyFromRequest');
 
   // Resource Controllers
   Route::resources([

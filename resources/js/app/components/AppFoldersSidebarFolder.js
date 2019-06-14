@@ -47,6 +47,7 @@ class AppFoldersSidebarFolder extends Component {
     dropdownLeft: null,
     dropdownTop: null,
     folderName: this.props.folder.name,
+    isFolderBeingCopied: this.props.folder.isFolderBeingCopied || false,
     isFolderCreateFileDropdownVisible: false,
     isFolderDropdownVisible: false,
     isFolderDeleteDropdownVisible: false,
@@ -163,6 +164,7 @@ class AppFoldersSidebarFolder extends Component {
       dropdownLeft,
       dropdownTop,
       folderName,
+      isFolderBeingCopied,
       isFolderCreateFileDropdownVisible,
       isFolderDeleteDropdownVisible,
       isFolderDropdownVisible,
@@ -174,8 +176,8 @@ class AppFoldersSidebarFolder extends Component {
         <FolderInfo
           isDropdownVisible={isFolderCreateFileDropdownVisible || isFolderDeleteDropdownVisible || isFolderDropdownVisible}
           level={level}
-          onClick={() => this.handleFolderInfoClick()}
-          onContextMenu={e => this.handleFolderInfoContextMenu(e)}>
+          onClick={!isFolderBeingCopied ? () => this.handleFolderInfoClick() : null}
+          onContextMenu={!isFolderBeingCopied ? e => this.handleFolderInfoContextMenu(e) : null}>
           <Icon
             icon={isFolderItemsVisible ? "FOLDER_OPEN" : "FOLDER_CLOSED"}
             size="1rem"/>
@@ -183,10 +185,9 @@ class AppFoldersSidebarFolder extends Component {
             focus={isFolderRenaming}
             editable={isFolderRenaming}
             id={folder.id}
-            isFolderRenaming={isFolderRenaming}
             onBlur={() => this.handleFolderNameBlur()}
             onChange={(e, value) => this.setState({ folderName: value })}
-            value={folderName}/>
+            value={isFolderBeingCopied ? 'Copying...' : folderName}/>
         </FolderInfo>
         <AppFoldersSidebarFolderDropdowns 
           closeDropdowns={this.closeDropdowns}

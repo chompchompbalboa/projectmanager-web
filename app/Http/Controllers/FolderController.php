@@ -2,8 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Folder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+use App\Http\Controllers\CalendarController;
+use App\Http\Controllers\NoteController;
+use App\Http\Controllers\TableController;
+
+use App\Models\Folder;
 
 class FolderController extends Controller
 {
@@ -18,13 +24,45 @@ class FolderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Copy the folder and its children
      *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function copyFromRequest(Request $request)
     {
-        //
+      $rootFolderToCopyId = $request->input('folderToCopyId');
+      $rootNewFolderId = $request->input('newFolderId');
+      $rootNewFolderFolderId = $request->input('pasteFolderId');
+      
+      $copyFolder = function($folderToCopyId, $newFolderId, $newFolderFolderId) use(&$copyFolder) {
+        $folderToCopy = Folder::find($folderToCopyId);
+        $newFolder = $folderToCopy->replicate();
+        $newFolder->id = $newFolderId;
+        $newFolder->folderId = $newFolderFolderId;
+        $newFolder->save();
+        
+        foreach($folderToCopy->files as $file) {
+          $controllerMap = [
+            'CALENDAR' => 'App\Http\Controllers\CalendarController',
+            'NOTE' => 'App\Http\Controllers\NoteController',
+            'TABLE' => 'App\Http\Controllers\TableController'
+          ];
+          $controller = $controllerMap[$file->type];
+          $controller::copy($file->typeId, $newFolder->id, [
+            'id' => Str::uuid()->toString(),
+            'name' => $file->name,
+            'type' => $file->type,
+            'typeId' => Str::uuid()->toString()
+          ]);
+        }
+        
+        foreach($folderToCopy->folders as $folder) {
+          $copyFolder($folder->id, Str::uuid()->toString(), $newFolder->id);
+        }
+      };
+      
+      $copyFolder($rootFolderToCopyId, $rootNewFolderId, $rootNewFolderFolderId);
     }
 
     /**

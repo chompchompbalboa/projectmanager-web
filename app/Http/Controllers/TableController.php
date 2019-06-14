@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
-
 use App\Models\File;
 use App\Models\TableCell;
 use App\Models\TableColumn;
@@ -15,32 +14,52 @@ use App\Models\Table;
 class TableController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Copy the resource
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public static function copy($tableToCopyId, $folderId, $newFileParameters)
     {
-        //
+      $newFile = File::create($newFileParameters);
+      $newFile->folderId = $folderId;
+      $newFile->save();
+
+      $tableToCopy = Table::find($tableToCopyId);
+      $newTable = $tableToCopy->replicate();
+      $newTable->id = $newFile->typeId;
+      $newTable->save();
+      $columnIdsMap = [];
+      foreach($tableToCopy->columns as $column) {
+        $newColumn = $column->replicate();
+        $newColumn->tableId = $newTable->id;
+        $newColumn->save();
+        $columnIdsMap[$column->id] = $newColumn->id;
+      }
+      foreach($tableToCopy->rows as $row) {
+        $newRow = $row->replicate();
+        $newRow->tableId = $newTable->id;
+        $newRow->save();
+        foreach($row->cells as $cell) {
+          $newCell = $cell->replicate();
+          $newCell->rowId = $newRow->id;
+          $newCell->columnId = $columnIdsMap[$cell->columnId];
+          $newCell->save();
+        }
+      }
     }
 
     /**
-     * Copy the resource.
+     * Copy the resource.from a request
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function copy(Request $request)
+    public function copyFromRequest(Request $request)
     {
       $tableToCopyId = $request->input('fileToCopyId');
       $pasteFolderId = $request->input('pasteFolderId');
-
-      $newFile = File::create($request->input('newFile'));
-      $newFile->folderId = $pasteFolderId;
-      $newFile->save();
-
-      $tableToCopy = Table::find($tableToCopyId);
-      dd($tableToCopy);
+      $newFileParameters = $request->input('newFile');
+      $this->copy($tableToCopyId, $pasteFolderId, $newFileParameters);
     }
 
     /**

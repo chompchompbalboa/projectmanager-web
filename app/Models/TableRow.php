@@ -31,13 +31,6 @@ class TableRow extends Model
   }
   
   /**
-   * Get the table this row belongs to
-   */
-  public function table() {
-    return $this->belongsTo('App\Models\Table');
-  }
-  
-  /**
    * Get all the cells that belong to this row
    */
   public function cells() {

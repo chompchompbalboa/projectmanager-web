@@ -17,4 +17,15 @@ class TableRowObserver
     {
       $tableRow->cells()->delete();
     }
+
+    /**
+     * Handle the table "replicating" event.
+     *
+     * @param  \App\Table  $table
+     * @return void
+     */
+    public function replicating(Table $table)
+    {
+      // Replicate cells
+    }
 }

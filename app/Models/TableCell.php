@@ -12,17 +12,17 @@ class TableCell extends Model
    * Define which attributes will be visible
    */
   protected $visible = ['id', 'tableId', 'columnId', 'rowId', 'value'];
-
-  /**
-   * Define which attributes will be mass assignable
-   */
   protected $fillable = ['id', 'tableId', 'columnId', 'rowId', 'value'];
-
-  /**
-   * Rename table columns from snake case to camel case
-   */
   protected $appends = [ 'tableId', 'columnId', 'rowId' ];
+  
+  /**
+   * Get the row this cell belongs to
+   */
+  public function row() {
+    return $this->belongsTo('App\Models\TableRow');
+  }
 
+  
   public function getTableIdAttribute() {
     return $this->attributes['table_id'];
   }

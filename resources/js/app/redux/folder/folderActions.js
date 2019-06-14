@@ -210,7 +210,7 @@ export const pasteIntoFolder = pasteIntoFolderId => {
     else if (clipboardCutOrCopy === 'CUT') {
       const cutFromFolder = clone(folders[pasteItem.folderId])
       if(clipboardItemType === 'FOLDER') {
-        dispatch(cutFile(clipboardId, cutFromFolder.id, pasteIntoFolderId))
+        dispatch(cutFolder(clipboardId, cutFromFolder.id, pasteIntoFolderId))
       }
       if(clipboardItemType === 'FILE') {
         dispatch(cutFile(clipboardId, cutFromFolder.id, pasteIntoFolderId))

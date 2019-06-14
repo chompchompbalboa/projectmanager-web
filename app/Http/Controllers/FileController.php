@@ -39,7 +39,21 @@ class FileController extends Controller
       $typeFileToCopy = $modelName::find($typeFileToCopy);
       $newTypeFile = $typeFileToCopy->replicate();
       $newTypeFile->id = $newFile->typeId;
-      $newTypeFile->save();
+      $newTypeFile->push();
+      
+      $replicateWithRelationships = function($model) use(&$replicateWithRelationships) {
+        foreach($model->getRelations() as $relation => $items) {
+          foreach($items as $item){
+            unset($item->id);
+            $model->{$relation}()->create($item->toArray());
+            foreach($item->getRelations() as $subRelation => $subItems) {
+              $replicateWithRelationships($item->{$subRelation}());
+            }
+          }
+        }
+      };
+      
+      $replicateWithRelationships($newTypeFile);
     }
 
     /**

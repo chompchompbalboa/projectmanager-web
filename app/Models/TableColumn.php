@@ -12,15 +12,7 @@ class TableColumn extends Model
    * Define which attributes will be visible
    */
   protected $visible = ['id', 'tableId', 'name', 'position', 'width', 'type'];
-
-  /**
-   * Define which attributes will be mass assignable
-   */
   protected $fillable = ['id', 'tableId', 'name', 'position', 'width', 'type'];
-
-  /**
-   * Rename table columns from snake case to camel case
-   */
   protected $appends = [ 'tableId' ];
 
   public function getTableIdAttribute() {
@@ -35,13 +27,6 @@ class TableColumn extends Model
    */
   public function table() {
     return $this->belongsTo('App\Models\Table');
-  }
-  
-  /**
-   * Get all the cells that belong to this row
-   */
-  public function cells() {
-    return $this->hasMany('App\Models\TableCell');
   }
   
 }

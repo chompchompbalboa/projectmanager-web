@@ -136,6 +136,14 @@ const folderReducers = (state = initialState, action) => {
       }
     }
 
+    case 'UPDATE_FOLDERS': {
+      const {
+        nextFolders
+      } = action
+      console.log(nextFolders)
+      return { ...state, folders: nextFolders }
+    }
+
     case 'UPDATE_FOLDER_IDS': {
       const {
         nextFolderIds
@@ -158,6 +166,13 @@ const folderReducers = (state = initialState, action) => {
           }
         }
       }
+    }
+
+    case 'UPDATE_FILES': {
+      const {
+        nextFiles
+      } = action
+      return { ...state, files: nextFiles }
     }
       
     default:

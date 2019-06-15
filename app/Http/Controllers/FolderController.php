@@ -34,6 +34,8 @@ class FolderController extends Controller
       $rootFolderToCopyId = $request->input('folderToCopyId');
       $rootNewFolderId = $request->input('newFolderId');
       $rootNewFolderFolderId = $request->input('pasteFolderId');
+      $newFolders = [];
+      $newFiles = [];
       
       $copyFolder = function($folderToCopyId, $newFolderId, $newFolderFolderId) use(&$copyFolder) {
         $folderToCopy = Folder::find($folderToCopyId);
@@ -63,6 +65,7 @@ class FolderController extends Controller
       };
       
       $copyFolder($rootFolderToCopyId, $rootNewFolderId, $rootNewFolderFolderId);
+      return Folder::find($rootNewFolderId);
     }
 
     /**

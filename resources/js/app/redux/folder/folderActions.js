@@ -6,6 +6,7 @@ import { v4 as createUuid } from 'uuid'
 import { mutation } from '../../../_api'
 import clone from '../../../_utils/clone'
 
+import folderNormalizer from './folderNormalizer'
 import { updateActiveFileId } from '../active/activeActions'
 
 //-----------------------------------------------------------------------------
@@ -43,7 +44,12 @@ export const copyFolder = (folderToCopyId, pasteFolderId) => {
     const folderToCopy = folders[folderToCopyId]
     const newFolder = { ...clone(folderToCopy), id: createUuid(), folderId: pasteFolderId, isFolderBeingCopied: true }
     dispatch(createFolderReducer(newFolder))
-    mutation.copyFolder(folderToCopyId, newFolder.id, newFolder.folderId)
+    mutation.copyFolder(folderToCopyId, newFolder.id, newFolder.folderId).then(newFolders => {
+      const normalizedFolders = folderNormalizer([ newFolders ])
+      dispatch(updateFiles({ ...files, ...normalizedFolders.entities.file }))
+      dispatch(updateFolders({ ...folders, ...normalizedFolders.entities.folder }))
+      dispatch(updateFolder(pasteFolderId, { folders: [ ...folders[pasteFolderId].folders, newFolder.id ]}))
+    })
   }
 }
 
@@ -71,7 +77,7 @@ export const copyFile = (fileToCopyId, pasteFolderId) => {
 // Create Folder
 //-----------------------------------------------------------------------------
 export const createFolder = (parentFolderId) => {
-  return (dispatch, getState) => {
+  return dispatch => {
     const newFolder = defaultFolder(parentFolderId)
     dispatch(createFolderReducer(newFolder))
     mutation.createFolder(newFolder)
@@ -253,6 +259,14 @@ const updateFolderReducer = (folderId, updates) => ({
 })
 
 //-----------------------------------------------------------------------------
+// Update Folders
+//-----------------------------------------------------------------------------
+export const updateFolders = nextFolders => ({
+  type: 'UPDATE_FOLDERS',
+  nextFolders: nextFolders
+})
+
+//-----------------------------------------------------------------------------
 // Update File
 //-----------------------------------------------------------------------------
 export const updateFile = (fileId, updates) => {
@@ -266,4 +280,12 @@ const updateFileReducer = (fileId, updates) => ({
   type: 'UPDATE_FILE',
   fileId: fileId,
   updates: updates
+})
+
+//-----------------------------------------------------------------------------
+// Update Files
+//-----------------------------------------------------------------------------
+export const updateFiles = nextFiles => ({
+  type: 'UPDATE_FILES',
+  nextFiles: nextFiles
 })

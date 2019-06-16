@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { colors, layout } from '../config'
 
 import HiddenScrollbarContainer from './HiddenScrollbarContainer'
-import Logo from '../../_components/Logo'
+import Logo from 'components/Logo'
 
 //-----------------------------------------------------------------------------
 // Component

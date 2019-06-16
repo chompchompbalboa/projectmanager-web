@@ -13,8 +13,19 @@ let mix = require('laravel-mix');
 
 mix.disableNotifications();
 
-mix.react('resources/js/app.js', 'public/js')
+mix.webpackConfig({
+  resolve: {
+    alias: {
+      api: path.resolve(__dirname, 'resources/js/api'),
+      components: path.resolve(__dirname, 'resources/js/components'),
+      utils: path.resolve(__dirname, 'resources/js/utils'),
+    }
+  }
+})
+
+mix.react('resources/js/bundles/app.js', 'public/js')
+  .sourceMaps();
+mix.react('resources/js/bundles/site.js', 'public/js')
   .sourceMaps();
 
-mix.react('resources/js/site.js', 'public/js')
-  .sourceMaps();
+

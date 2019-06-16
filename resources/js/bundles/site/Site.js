@@ -6,10 +6,10 @@ import styled from 'styled-components'
 
 import { colors } from './config'
 
-import Button from '../_components/Button'
-import Logo from '../_components/Logo'
-import Spacer from '../_components/Spacer'
-import Tagline from '../_components/Tagline'
+import Button from 'components/Button'
+import Logo from 'components/Logo'
+import Spacer from 'components/Spacer'
+import Tagline from 'components/Tagline'
 
 //-----------------------------------------------------------------------------
 // Component

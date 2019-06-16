@@ -3,8 +3,8 @@
 //-----------------------------------------------------------------------------
 import { v4 as createUuid } from 'uuid'
 
-import { mutation } from '../../../_api'
-import clone from '../../../_utils/clone'
+import { mutation } from 'api'
+import clone from 'utils/clone'
 
 import folderNormalizer from './folderNormalizer'
 import { updateActiveFileId } from '../active/activeActions'

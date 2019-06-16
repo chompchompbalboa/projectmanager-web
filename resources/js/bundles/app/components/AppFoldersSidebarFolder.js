@@ -180,7 +180,7 @@ class AppFoldersSidebarFolder extends Component {
           onContextMenu={!isFolderBeingCopied ? e => this.handleFolderInfoContextMenu(e) : null}>
           <Icon
             icon={isFolderItemsVisible ? "FOLDER_OPEN" : "FOLDER_CLOSED"}
-            size="1rem"/>
+            size="1.5rem"/>
           <FolderName
             focus={isFolderRenaming}
             editable={isFolderRenaming}
@@ -278,7 +278,7 @@ const Container = styled.div`
 
 const FolderInfo = styled.div`
   padding: 0.25rem;
-  padding-left: ${ props => (props.level / 3) + 'rem' };
+  padding-left: ${ props => (props.level / 2) + 'rem' };
   cursor: pointer;
   display: flex;
   justify-content: flex-start;

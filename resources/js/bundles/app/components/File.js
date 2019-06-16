@@ -10,7 +10,7 @@ import {
   getCalendar,
   getNote,
   getTable
-} from '../../_api/queries'
+} from 'api/queries'
 
 import { selectFiles } from '../redux/folder/folderSelectors'
 import { setCalendar as setCalendarAction } from '../redux/calendar/calendarActions'

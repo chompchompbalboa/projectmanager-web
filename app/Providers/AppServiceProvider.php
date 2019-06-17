@@ -9,12 +9,12 @@ use Illuminate\Support\Facades\Log;
 use App\Models\Folder;
 use App\Observers\FolderObserver;
 
-use App\Models\Table;
-use App\Observers\TableObserver;
-use App\Models\TableColumn;
-use App\Observers\TableColumnObserver;
-use App\Models\TableRow;
-use App\Observers\TableRowObserver;
+use App\Models\Sheet;
+use App\Observers\SheetObserver;
+use App\Models\SheetColumn;
+use App\Observers\SheetColumnObserver;
+use App\Models\SheetRow;
+use App\Observers\SheetRowObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -45,8 +45,8 @@ class AppServiceProvider extends ServiceProvider
       
       Folder::observe(FolderObserver::class);
 
-      Table::observe(TableObserver::class);
-      TableColumn::observe(TableColumnObserver::class);
-      TableRow::observe(TableRowObserver::class);
+      Sheet::observe(SheetObserver::class);
+      SheetColumn::observe(SheetColumnObserver::class);
+      SheetRow::observe(SheetRowObserver::class);
     }
 }

@@ -8,7 +8,7 @@ import calendarReducers from './calendar/calendarReducers'
 import folderReducers from './folder/folderReducers'
 import noteReducers from './note/noteReducers'
 import organizationReducers from './organization/organizationReducers'
-import tableReducers from './table/tableReducers'
+import sheetReducers from './sheet/sheetReducers'
 import userReducers from './user/userReducers'
 
 //-----------------------------------------------------------------------------
@@ -20,6 +20,6 @@ export default combineReducers({
   folder: folderReducers,
   note: noteReducers,
   organization: organizationReducers,
-  table: tableReducers,
+  sheet: sheetReducers,
   user: userReducers,
 })

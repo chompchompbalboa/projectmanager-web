@@ -36,7 +36,7 @@ Route::prefix('app')->group(function () {
   Route::post('/calendars/copy', 'CalendarController@copyFromRequest');
   Route::post('/folders/copy', 'FolderController@copyFromRequest');
   Route::post('/notes/copy', 'NoteController@copyFromRequest');
-  Route::post('/tables/copy', 'TableController@copyFromRequest');
+  Route::post('/sheets/copy', 'SheetController@copyFromRequest');
 
   // Resource Controllers
   Route::resources([
@@ -47,13 +47,13 @@ Route::prefix('app')->group(function () {
     'calendars' => 'CalendarController',
     // Notes
     'notes' => 'NoteController',
-    // Table
-    'tables' => 'TableController',
-    'tables/breakdowns' => 'TableBreakdownController',
-    'tables/cells' => 'TableCellController',
-    'tables/columns' => 'TableColumnController',
-    'tables/breakdowns/formulas' => 'TableBreakdownFormulaController',
-    'tables/rows' => 'TableRowController'
+    // Sheet
+    'sheets' => 'SheetController',
+    'sheets/breakdowns' => 'SheetBreakdownController',
+    'sheets/cells' => 'SheetCellController',
+    'sheets/columns' => 'SheetColumnController',
+    'sheets/breakdowns/formulas' => 'SheetBreakdownFormulaController',
+    'sheets/rows' => 'SheetRowController'
   ]);
 });
 

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Calendar;
 use App\Models\File;
 use App\Models\Note;
-use App\Models\Table;
+use App\Models\Sheet;
 
 class FileController extends Controller
 {
@@ -19,27 +19,6 @@ class FileController extends Controller
     public function index()
     {
         //
-    }
-
-    /**
-     * Copy an existing file
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function copyFile(Request $request)
-    {
-      $typeFileToCopy = $request->input('typeFileToCopyId');
-      $pasteIntoFolderId = $request->input('pasteIntoFolderId');
-
-      $newFile = File::create($request->input('newFile'));
-      $newFile->folderId = $pasteIntoFolderId;
-      $newFile->save();
-
-      $modelName = 'App\Models\\'.ucfirst(strtolower($newFile->type));
-      $typeFileToCopy = $modelName::find($typeFileToCopy);
-      $newTypeFile = $typeFileToCopy->replicate();
-      $newTypeFile->id = $newFile->typeId;
-      $newTypeFile->save();
     }
 
     /**
@@ -56,8 +35,8 @@ class FileController extends Controller
           Calendar::create(['id' => $file->typeId]);
         case 'NOTE': 
           Note::create(['id' => $file->typeId]);
-        case 'TABLE': 
-          Table::create(['id' => $file->typeId]);
+        case 'SHEET': 
+          Sheet::create(['id' => $file->typeId]);
         break;
       }
       return response()->json($file, 200);

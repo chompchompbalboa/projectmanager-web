@@ -3,39 +3,24 @@
 //-----------------------------------------------------------------------------
 import React from 'react'
 import { oneOf } from 'prop-types'
-import { connect } from 'react-redux'
 import styled from 'styled-components'
 
-import { selectActiveContent } from './redux/active/activeSelectors'
+import { colors } from './config'
 
-import AppFolders from './components/AppFolders'
-
-//-----------------------------------------------------------------------------
-// Redux
-//-----------------------------------------------------------------------------
-const mapStateToProps = state => ({
-  activeContent: selectActiveContent(state)
-})
+import AppFile from './components/AppFile'
+import AppHeader from './components/AppHeader'
+import AppSidebar from './components/AppSidebar'
 
 //-----------------------------------------------------------------------------
 // Component
 //-----------------------------------------------------------------------------
-const App = ({
-  activeContent
-}) => {
-
-  const contentComponents = {
-    FOLDERS: AppFolders
-  }
-
-  const AppActiveContent = contentComponents[activeContent]
-  
-  return (
-    <Container>
-      <AppActiveContent/>
-    </Container>
-  )
-}
+const App = () => (
+  <Container>
+    <AppSidebar />
+    <AppHeader />
+    <AppFile />
+  </Container>
+)
 
 //-----------------------------------------------------------------------------
 // Redux
@@ -49,8 +34,10 @@ App.propTypes = {
 //-----------------------------------------------------------------------------
 // Styled Components
 //-----------------------------------------------------------------------------
-const Container = styled.div``
+const Container = styled.div`
+  width: 100vw;
+  min-height: 100vh;
+  background-color: ${ colors.BACKGROUND };
+`
 
-export default connect(
-  mapStateToProps
-)(App)
+export default App

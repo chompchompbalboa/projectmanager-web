@@ -50,44 +50,44 @@ class UserTableSeeder extends Seeder
                 $file->folder_id = $subFolder->id;
                 $file->save();
                 
-                $fileTypes = ['CALENDAR', 'NOTE', 'TABLE'];
+                $fileTypes = ['CALENDAR', 'NOTE', 'SHEET'];
                 $fileType = $fileTypes[array_rand($fileTypes, 1)];
     
                 switch($fileType) {
-                  case 'TABLE': 
-                    print('  Table'.PHP_EOL);
-                    // Tables
-                    $tables = factory(App\Models\Table::class, 1)->create();
-                    $tables->each(function($table) use ($file) {
+                  case 'SHEET': 
+                    print('  Sheet'.PHP_EOL);
+                    // Sheets
+                    $sheets = factory(App\Models\Sheet::class, 1)->create();
+                    $sheets->each(function($sheet) use ($file) {
   
-                      $file->name = 'Table';
-                      $file->type = 'TABLE';
-                      $file->type_id = $table->id;
+                      $file->name = 'Sheet';
+                      $file->type = 'SHEET';
+                      $file->type_id = $sheet->id;
                       $file->save();
   
                       // Columns
   
-                      $columns = factory(App\Models\TableColumn::class, 3)->create();
-                      $columns->each(function($column, $key) use ($table) {
-                        $column->table_id = $table->id;
+                      $columns = factory(App\Models\SheetColumn::class, 3)->create();
+                      $columns->each(function($column, $key) use ($sheet) {
+                        $column->sheet_id = $sheet->id;
                         $column->position = $key;
                         $column->save();
                       });
   
                       // Rows
   
-                      $rows = factory(App\Models\TableRow::class, 10)->create();
-                      $rows->each(function($row) use($columns, $table) {
-                        $row->table_id = $table->id;
+                      $rows = factory(App\Models\SheetRow::class, 10)->create();
+                      $rows->each(function($row) use($columns, $sheet) {
+                        $row->sheet_id = $sheet->id;
                         $row->save();
   
                         // Cells
   
-                        $columns->each(function($column) use($row, $table) {
-                          $cell = factory(App\Models\TableCell::class)->create();
-                          $cell->table_id = $table->id;
-                          $cell->table_row_id = $row->id;
-                          $cell->table_column_id = $column->id;
+                        $columns->each(function($column) use($row, $sheet) {
+                          $cell = factory(App\Models\SheetCell::class)->create();
+                          $cell->sheet_id = $sheet->id;
+                          $cell->sheet_row_id = $row->id;
+                          $cell->sheet_column_id = $column->id;
                           $cell->save();
                         });
                       });

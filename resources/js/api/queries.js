@@ -18,8 +18,8 @@ export const getNote = async noteId => {
   })
 }
 
-export const getTable = async tableId => {
-  return axios.get('/app/tables/' + tableId).then(response => {
+export const getSheet = async sheetId => {
+  return axios.get('/app/sheets/' + sheetId).then(response => {
     return response.data
   })
 }

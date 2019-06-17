@@ -76,16 +76,16 @@ export const updateNote = async (id, updates) => {
 }
 
 //-----------------------------------------------------------------------------
-// Table
+// Sheet
 //-----------------------------------------------------------------------------
-export const createTable = async (newTable) => {  
-  return axios.post('/app/tables', newTable).then(response => {
+export const createSheet = async (newSheet) => {  
+  return axios.post('/app/sheets', newSheet).then(response => {
     return response.data
   })
 }
 
-export const createTableColumn = async (newColumn, newCells) => {  
-  return axios.post('/app/tables/columns', {
+export const createSheetColumn = async (newColumn, newCells) => {  
+  return axios.post('/app/sheets/columns', {
     newColumn: newColumn,
     newCells: newCells
   }).then(response => {
@@ -93,8 +93,8 @@ export const createTableColumn = async (newColumn, newCells) => {
   })
 }
 
-export const createTableRow = async (newRow, newCells) => {  
-  return axios.post('/app/tables/rows', {
+export const createSheetRow = async (newRow, newCells) => {  
+  return axios.post('/app/sheets/rows', {
     newRow: newRow,
     newCells: newCells
   }).then(response => {
@@ -102,47 +102,47 @@ export const createTableRow = async (newRow, newCells) => {
   })
 }
 
-export const deleteTable = async (tableId) => {  
-  return axios.delete('/app/tables/' + tableId).then(response => {
+export const deleteSheet = async (sheetId) => {  
+  return axios.delete('/app/sheets/' + sheetId).then(response => {
     return response.data
   })
 }
 
-export const deleteTableBreakdown = async (breakdownId) => {  
-  return axios.delete('/app/tables/breakdowns/' + breakdownId).then(response => {
+export const deleteSheetBreakdown = async (breakdownId) => {  
+  return axios.delete('/app/sheets/breakdowns/' + breakdownId).then(response => {
     return response.data
   })
 }
 
-export const deleteTableBreakdownFormula = async (formulaId) => {  
-  return axios.delete('/app/tables/breakdowns/formulas/' + formulaId).then(response => {
+export const deleteSheetBreakdownFormula = async (formulaId) => {  
+  return axios.delete('/app/sheets/breakdowns/formulas/' + formulaId).then(response => {
     return response.data
   })
 }
 
-export const deleteTableColumn = async (columnId) => {  
-  return axios.delete('/app/tables/columns/' + columnId).then(response => {
+export const deleteSheetColumn = async (columnId) => {  
+  return axios.delete('/app/sheets/columns/' + columnId).then(response => {
     return response.data
   })
 }
 
-export const deleteTableRow = async (rowId) => {  
-  return axios.delete('/app/tables/rows/' + rowId).then(response => {
+export const deleteSheetRow = async (rowId) => {  
+  return axios.delete('/app/sheets/rows/' + rowId).then(response => {
     return response.data
   })
 }
 
-export const updateTable = async (id, table) => {  
-  return axios.patch('/app/tables/' + id, {
+export const updateSheet = async (id, sheet) => {  
+  return axios.patch('/app/sheets/' + id, {
     id: id,
-    table: table
+    sheet: sheet
   }).then(response => {
     return response.data
   })
 }
 
-export const updateTableBreakdown = async (id, breakdown) => {  
-  return axios.patch('/app/tables/breakdowns/' + id, {
+export const updateSheetBreakdown = async (id, breakdown) => {  
+  return axios.patch('/app/sheets/breakdowns/' + id, {
     id: id,
     breakdown: breakdown
   }).then(response => {
@@ -150,8 +150,8 @@ export const updateTableBreakdown = async (id, breakdown) => {
   })
 }
 
-export const updateTableBreakdownFormula = async (id, formula) => {  
-  return axios.patch('/app/tables/breakdowns/formulas/' + id, {
+export const updateSheetBreakdownFormula = async (id, formula) => {  
+  return axios.patch('/app/sheets/breakdowns/formulas/' + id, {
     id: id,
     formula: formula
   }).then(response => {
@@ -159,14 +159,14 @@ export const updateTableBreakdownFormula = async (id, formula) => {
   })
 }
 
-export const updateTableCell = async (id, updates) => {  
-  return axios.patch('/app/tables/cells/' + id, updates).then(response => {
+export const updateSheetCell = async (id, updates) => {  
+  return axios.patch('/app/sheets/cells/' + id, updates).then(response => {
     return response.data
   })
 }
 
-export const updateTableColumn = async (id, updates) => {  
-  return axios.patch('/app/tables/columns/' + id, updates).then(response => {
+export const updateSheetColumn = async (id, updates) => {  
+  return axios.patch('/app/sheets/columns/' + id, updates).then(response => {
     return response.data
   })
 }

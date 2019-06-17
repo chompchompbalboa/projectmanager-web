@@ -21,11 +21,11 @@ const Logo = ({
       <Name>
         <Build
           fontSize={fontSize}>
-          build
+          simple
         </Build>
         <That
           fontSize={fontSize}>
-          that
+          suite
         </That>
       </Name>
       {showTagline && 

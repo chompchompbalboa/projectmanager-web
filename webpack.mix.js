@@ -27,5 +27,3 @@ mix.react('resources/js/bundles/app.js', 'public/js')
   .sourceMaps();
 mix.react('resources/js/bundles/site.js', 'public/js')
   .sourceMaps();
-
-

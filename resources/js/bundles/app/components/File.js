@@ -9,18 +9,18 @@ import styled from 'styled-components'
 import {
   getCalendar,
   getNote,
-  getTable
+  getSheet
 } from 'api/queries'
 
 import { selectFiles } from '../redux/folder/folderSelectors'
 import { setCalendar as setCalendarAction } from '../redux/calendar/calendarActions'
 import { setNote as setNoteAction } from '../redux/note/noteActions'
-import { setTable as setTableAction } from '../redux/table/tableActions'
+import { setSheet as setSheetAction } from '../redux/sheet/sheetActions'
 
 import Calendar from './Calendar'
 import Loading from './Loading'
 import Note from './Note'
-import Table from './Table'
+import Sheet from './Sheet'
 
 //-----------------------------------------------------------------------------
 // Component
@@ -32,7 +32,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setCalendar: nextCalendar => dispatch(setCalendarAction(nextCalendar)),
   setNote: nextNote => dispatch(setNoteAction(nextNote)),
-  setTable: nextTable => dispatch(setTableAction(nextTable))
+  setSheet: nextSheet => dispatch(setSheetAction(nextSheet))
 })
 
 //-----------------------------------------------------------------------------
@@ -55,10 +55,10 @@ class File extends Component {
       get: getNote,
       set: this.props.setNote
     },
-    TABLE: {
-      component: Table,
-      get: getTable,
-      set: this.props.setTable
+    SHEET: {
+      component: Sheet,
+      get: getSheet,
+      set: this.props.setSheet
     }
   }
 
@@ -127,7 +127,7 @@ File.propTypes = {
   files: object,
   setCalendar: func,
   setNote: func,
-  setTable: func
+  setSheet: func
 }
 
 //-----------------------------------------------------------------------------

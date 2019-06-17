@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\NoteController;
-use App\Http\Controllers\TableController;
+use App\Http\Controllers\SheetController;
 
 use App\Models\Folder;
 
@@ -48,7 +48,7 @@ class FolderController extends Controller
           $controllerMap = [
             'CALENDAR' => 'App\Http\Controllers\CalendarController',
             'NOTE' => 'App\Http\Controllers\NoteController',
-            'TABLE' => 'App\Http\Controllers\TableController'
+            'SHEET' => 'App\Http\Controllers\SheetController'
           ];
           $controller = $controllerMap[$file->type];
           $controller::copy($file->typeId, $newFolder->id, [
